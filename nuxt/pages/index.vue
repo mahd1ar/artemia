@@ -243,7 +243,7 @@ const { result } = useQuery(FRONPAGE)
 
   <TestimonialSection class="mt-28" />
 
-  <div class="grid grid-cols-6 gap-6 mt-28">
+  <div class="grid grid-cols-6 gap-6 mt-28 container mx-auto">
     <div
       v-for="i in 6"
       :key="i"

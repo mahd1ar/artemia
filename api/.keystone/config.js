@@ -24,6 +24,34 @@ __export(keystone_exports, {
 });
 module.exports = __toCommonJS(keystone_exports);
 var import_path = require("path");
+
+// storage.ts
+var storage = {
+  file: {
+    // Images that use this store will be stored on the local machine
+    kind: "local",
+    // This store is used for the image field type
+    type: "file",
+    // The URL that is returned in the Keystone GraphQL API
+    generateUrl: (path) => `${process.env.PUBLICURL}/files${path}`,
+    // The route that will be created in Keystone's backend to serve the images
+    serverRoute: {
+      path: "/files"
+    },
+    storagePath: "public/files"
+  },
+  image: {
+    kind: "local",
+    type: "image",
+    generateUrl: (path) => `${process.env.PUBLICURL}/image${path}`,
+    serverRoute: {
+      path: "/image"
+    },
+    storagePath: "public/images"
+  }
+};
+
+// keystone.ts
 var import_core5 = require("@keystone-6/core");
 
 // schema.ts
@@ -150,7 +178,102 @@ var FrontPage = (0, import_core3.list)({
   access: import_access3.allowAll,
   isSingleton: true,
   fields: {
-    headline: (0, import_fields3.text)({ validation: { isRequired: true } })
+    headline: (0, import_fields3.text)({ validation: { isRequired: true } }),
+    ...(0, import_core3.group)({
+      label: "hero section",
+      fields: {
+        heroTitle: (0, import_fields3.text)({
+          label: "Title"
+        }),
+        heroDescription: (0, import_fields3.text)({
+          label: "Description",
+          ui: { displayMode: "textarea" }
+        }),
+        heroImage: (0, import_fields3.relationship)({
+          ref: "Resource",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "featuredImage"],
+            inlineCreate: { fields: ["title", "featuredImage"] }
+          }
+        })
+      }
+    }),
+    ...(0, import_core3.group)({
+      label: "status section",
+      fields: {
+        statusTitle: (0, import_fields3.text)({
+          label: "Title"
+        }),
+        statusDescription: (0, import_fields3.text)({
+          label: "Description",
+          ui: { displayMode: "textarea" }
+        }),
+        statistics: (0, import_fields3.relationship)({
+          ref: "Resource",
+          many: true,
+          ui: {
+            description: "max 4 items",
+            displayMode: "cards",
+            cardFields: ["title", "content", "misc"],
+            inlineCreate: { fields: ["title", "content", "misc"] }
+          }
+        })
+      }
+    }),
+    ...(0, import_core3.group)({
+      label: "sites section",
+      fields: {
+        sites: (0, import_fields3.relationship)({
+          ref: "Resource",
+          many: true,
+          ui: {
+            description: "exacltly 4 items",
+            displayMode: "cards",
+            cardFields: ["title", "featuredImage"],
+            inlineCreate: { fields: ["title", "featuredImage"] }
+          }
+        })
+      }
+    }),
+    ...(0, import_core3.group)({
+      label: "features section",
+      fields: {
+        featuresTitle: (0, import_fields3.text)({
+          label: "Title"
+        }),
+        featuresDescription: (0, import_fields3.text)({
+          label: "Description"
+        }),
+        features: (0, import_fields3.relationship)({
+          ref: "Resource",
+          many: true,
+          ui: {
+            description: "exacltly 8 items",
+            displayMode: "cards",
+            cardFields: ["title", "content", "featuredImage"],
+            inlineCreate: {
+              fields: ["title", "content", "featuredImage"]
+            }
+          }
+        })
+      }
+    }),
+    ...(0, import_core3.group)({
+      label: "testimonial section",
+      fields: {
+        testimonial: (0, import_fields3.relationship)({
+          ref: "Resource",
+          many: true,
+          ui: {
+            description: "exacltly 8 items",
+            displayMode: "cards",
+            cardFields: ["title", "featuredImage", "bannerImage"],
+            inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] }
+          }
+        })
+      }
+    })
   }
 });
 
@@ -174,6 +297,23 @@ var lists = {
   Post,
   PostTranslation,
   FrontPage,
+  Resource: (0, import_core4.list)({
+    access: import_access4.allowAll,
+    fields: {
+      title: (0, import_fields4.text)(),
+      content: (0, import_fields4.text)(),
+      featuredImage: (0, import_fields4.image)({
+        storage: "image"
+      }),
+      bannerImage: (0, import_fields4.image)({
+        storage: "image"
+      }),
+      misc: (0, import_fields4.text)(),
+      createdAt: (0, import_fields4.timestamp)({
+        defaultValue: { kind: "now" }
+      })
+    }
+  }),
   Tag: (0, import_core4.list)({
     access: import_access4.allowAll,
     ui: {
@@ -231,7 +371,8 @@ var keystone_default = withAuth(
       port: 3032
     },
     lists,
-    session
+    session,
+    storage
   })
 );
 //# sourceMappingURL=config.js.map

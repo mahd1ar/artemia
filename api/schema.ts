@@ -16,6 +16,7 @@ import {
   password,
   timestamp,
   select,
+  image,
 } from '@keystone-6/core/fields';
 
 
@@ -45,6 +46,23 @@ export const lists: Lists = {
   Post,
   PostTranslation,
   FrontPage,
+  Resource: list({
+    access: allowAll,
+    fields: {
+      title: text(),
+      content: text(),
+      featuredImage: image({
+        storage: 'image'
+      }),
+      bannerImage: image({
+        storage: 'image'
+      }),
+      misc: text(),
+      createdAt: timestamp({
+        defaultValue: { kind: 'now' },
+      })
+    }
+  }) ,
 
   Tag: list({
 

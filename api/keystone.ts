@@ -6,7 +6,7 @@ require('dotenv').config({
     process.env.NODE_ENV === 'production' ? '.env' : `.env.dev`
   ),
 });
-
+import {storage} from './storage'
 import { config } from '@keystone-6/core';
 
 // to keep this file tidy, we define our schema in a different file
@@ -30,5 +30,6 @@ export default withAuth(
     },
     lists,
     session,
+    storage
   })
 );
