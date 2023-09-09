@@ -1,21 +1,126 @@
 <script lang="ts" setup>
 import { graphql } from '@/gql'
 
+// fragment ResourceCommonParts on PostTranslation {
+
+//   title
+//       content {
+//         document
+//       }
+//       tags {
+//         id
+//         name
+//       }
+
+// }
 const FRONPAGE = graphql(`
-query FrontPage {
+
+query FrontPage($isEnLang: Boolean!) {
   frontPage {
-    headline
+    heroTitle
+    heroDescription
+    heroImage {
+      altText
+      id
+      image {
+        id
+        url
+      }
+    }
+
+    statusTitle
+    statusDescription
+    statistics {
+      id
+      title
+      content
+      misc
+    }
+
+    sites {
+      title
+      featuredImage {
+        id
+        altText
+        image {
+          url
+        }
+      }
+    }
+
+    featuresTitle
+    featuresDescription
+    features {
+      title
+      content
+      featuredImage {
+        altText
+        id
+        image {
+          url
+
+        }
+      }
+    }
+
+    testimonial {
+      title
+      featuredImage {
+        altText
+        id
+        image {
+          id
+          url
+        }
+      }
+    }
+
+    BlogTitle
+    BlogDescription
+
+  }
+
+  posts(where: { category: { equals: "blog" } }) {
+    id
+    title
+    type
+    featuredImage {
+      image {
+        url
+      }
+    }
+    en @include(if: $isEnLang) {
+      title
+      content {
+        document
+      }
+      tags {
+        id
+        name
+      }
+    }
+    fa @skip(if: $isEnLang) {
+      title
+      content {
+        document
+      }
+      tags {
+        id
+        name
+      }
+    }
   }
 }
 `)
 
-const { result } = useQuery(FRONPAGE)
+const { result, onResult } = useQuery(FRONPAGE, { isEnLang: true })
+
+// onResult((res) => {
+//   console.log(res.data.posts)
+// })
 </script>
 
 <template>
-  <pre>
-        {{ result }}
-    </pre>
   <section class="text-white relative h-[80vh] overflow-hidden flex flex-col">
     <div class="absolute w-full h-full">
       <img
@@ -23,16 +128,10 @@ const { result } = useQuery(FRONPAGE)
         src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/2021/10/freediving-e1633923358732.jpg"
         alt=""
       >
-      <div
-        aria-hidden="true"
-        style="background-color: #03062a; opacity: 0.7"
-        class="overlay"
-      />
+      <div aria-hidden="true" style="background-color: #03062a; opacity: 0.7" class="overlay" />
     </div>
 
-    <div
-      class="relative h-max container mx-auto flex justify-between border-b border-white/50"
-    >
+    <div class="relative h-max container mx-auto flex justify-between border-b border-white/50">
       <div class="flex gap-4 text-sm py-4">
         <div class="flex gap-2">
           <!-- location -->
@@ -125,9 +224,7 @@ const { result } = useQuery(FRONPAGE)
             alt=""
           >
         </div>
-        <div
-          class="absolute w-36 bottom-8 -right-8 border-[12px] border-white"
-        >
+        <div class="absolute w-36 bottom-8 -right-8 border-[12px] border-white">
           <img
             class="object-cover"
             src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/elementor/thumbs/snorkeler-framed-by-the-struts-of-a-wreck-of-a-plane-on-the-seabed--e1634535769483-peqe3vatpg6pccrr5ok0rm50g1ys3ewfqyb1m7xaxk.jpg"
@@ -138,11 +235,7 @@ const { result } = useQuery(FRONPAGE)
     </div>
     <div class="w-7/12 px-10 relative">
       <div class="relative">
-        <svg
-          v-show="false"
-          class="w-14 -translate-y-1/2 text-primary absolute"
-          viewBox="0 0 32 32"
-        >
+        <svg v-show="false" class="w-14 -translate-y-1/2 text-primary absolute" viewBox="0 0 32 32">
           <g fill="currentColor">
             <path
               d="M17.978 7.993a1.978 1.978 0 1 1-3.956 0a1.978 1.978 0 0 1 3.956 0Zm-2.118 3.975c.967 0 1.75.783 1.75 1.75v10.59a1.75 1.75 0 1 1-3.5 0v-10.59c0-.967.784-1.75 1.75-1.75Z"
@@ -153,11 +246,7 @@ const { result } = useQuery(FRONPAGE)
           </g>
         </svg>
 
-        <svg
-          class="w-14 -translate-y-1/2 absolute"
-          viewBox="0 0 24 24"
-          fill="none"
-        >
+        <svg class="w-14 -translate-y-1/2 absolute" viewBox="0 0 24 24" fill="none">
           <path
             opacity="0.5"
             d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
@@ -173,9 +262,7 @@ const { result } = useQuery(FRONPAGE)
           <circle cx="12" cy="16" r="1" fill="#1C274C" />
         </svg>
       </div>
-      <h2
-        class="text-tm-black relative text-4xl font-extrabold text-center"
-      >
+      <h2 class="text-tm-black relative text-4xl font-extrabold text-center">
         WHAT IS ARTEMIA
       </h2>
       <div class="text-center text-gray-400 mt-5 leading-7">
@@ -188,11 +275,7 @@ const { result } = useQuery(FRONPAGE)
   </section>
 
   <section class="grid grid-cols-4 pb-24">
-    <div
-      v-for="i in 4"
-      :key="i"
-      class="hover:shadow-xl gap-2 ease-out hover:scale-90 p-6 transition-all"
-    >
+    <div v-for="i in 4" :key="i" class="hover:shadow-xl gap-2 ease-out hover:scale-90 p-6 transition-all">
       <div class="flex-center">
         <img
           class="w-14"
@@ -212,24 +295,28 @@ const { result } = useQuery(FRONPAGE)
   <section class="flex">
     <div class="p-14 w-5/12 text-gray-50 bg-gray-950 flex flex-col gap-4">
       <h2 class="text-4xl font-bold">
-        WE WILL PAMPER YOUR EYES IN THE WATER
+        <!-- WE WILL PAMPER YOUR EYES IN THE WATER -->
+        {{ result?.frontPage?.statusTitle }}
       </h2>
       <span class="text-gray-400 text-sm leading-7 mb-5">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-        enim ad minim veniam, quis nostrud exercitation ullamco laboris
-        nisi ut aliquip ex ea commodo enim ad minim veniam, quis nostrud
-        exercitation.
+        <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+  enim ad minim veniam, quis nostrud exercitation ullamco laboris
+  nisi ut aliquip ex ea commodo enim ad minim veniam, quis nostrud
+  exercitation. -->
+        {{ result?.frontPage?.statusDescription }}
       </span>
       <div class="grid grid-cols-2">
-        <div v-for="i in 2" :key="i" class="flex flex-col">
-          <PieChart :percentage="88" />
+        <div v-for="i in result?.frontPage?.statistics || []" :key="i.id" class="flex flex-col">
+          <PieChart :percentage="i.misc ? +i.misc : 42" />
           <h3 class="my-4 text-2xl font-bold">
-            Dive Treavel
+            <!-- Dive Treavel -->
+            {{ i.title }}
           </h3>
           <div class="font-xs text-gray-400">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Sed vel ipsum auctor, iaculis arcu quis
+            {{ i.content }}
+            <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed vel ipsum auctor, iaculis arcu quis -->
           </div>
         </div>
       </div>
@@ -237,18 +324,16 @@ const { result } = useQuery(FRONPAGE)
     <div class="bg-cyan-400 w-7/12" />
   </section>
 
-  <ElementorSection class="mt-28" />
+  <ElementorSection :list="result?.frontPage?.sites?.map(i=>({src:i.featuredImage?.image?.url, title:i.title})) || []" class="mt-28" />
 
-  <PixelGrid />
+  <h2>{{ result?.frontPage?.featuresTitle }}</h2>
+  <p>{{ result?.frontPage?.featuresDescription }}</p>
+  <PixelGrid :list="result?.frontPage?.features?.map(i => ({ src: i.featuredImage?.image?.url, title: i.title,description: i.content})) || []" />
 
-  <TestimonialSection class="mt-28" />
+  <TestimonialSection :items="result?.frontPage?.testimonial?.map(i => ({autor: 'text',image: i.featuredImage?.image?.url,text: i.title})) " class="mt-28" />
 
   <div class="grid grid-cols-6 gap-6 mt-28 container mx-auto">
-    <div
-      v-for="i in 6"
-      :key="i"
-      class="grayscale-0 opacity-30 hover:opacity-60 transition-all duration-500 mx-6"
-    >
+    <div v-for="i in 6" :key="i" class="grayscale-0 opacity-30 hover:opacity-60 transition-all duration-500 mx-6">
       <img
         class="object-contain"
         src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/2021/10/logo2-DTBHXU.png"
@@ -257,7 +342,17 @@ const { result } = useQuery(FRONPAGE)
     </div>
   </div>
 
-  <LatestBlog class="mt-28" />
+  <LatestBlog
+    :title="result?.frontPage?.BlogTitle"
+    :description="result?.frontPage?.BlogDescription"
+    :items="result?.posts?.map( i => ({
+      title: i.en?.title || i.fa?.title || '',
+      excerpt: 'asdads',
+      image: i.featuredImage?.image?.url ||  '',
+      tag : i.en?.tags?.map( j => j.name).join(',') || i.fa?.tags?.map( j => j.name).join(',') || ''
+    })) || []"
+    class="mt-28"
+  />
 </template>
 
 <style scoped></style>

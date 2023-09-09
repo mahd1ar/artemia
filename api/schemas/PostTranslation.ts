@@ -11,7 +11,6 @@ export const PostTranslation = list({
             ref: 'Post',
             ui: {
                 // hideCreate: true
-
             }
         }),
         language: select({

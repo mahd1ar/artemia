@@ -21,13 +21,17 @@ import {
 
 
 import type { Lists } from '.keystone/types';
-import { PostTranslation, Post, FrontPage } from './schemas'
-// ListConfig<Lists.User.TypeInfo<any>, any>
-// ListConfig<BaseListTypeInfo, BaseFields<BaseListTypeInfo>>
+import { PostTranslation, Post, FrontPage, ImageStore,Resource } from './schemas'
+
+
 export const lists: Lists = {
   User: list({
     access: allowAll,
-
+    ui: {
+      isHidden() {
+        return process.env.NODE_ENV === 'production'
+      },
+    },
     fields: {
       name: text({ validation: { isRequired: true } }),
 
@@ -42,27 +46,16 @@ export const lists: Lists = {
       }),
     },
   }),
-
-  Post,
-  PostTranslation,
-  FrontPage,
-  Resource: list({
-    access: allowAll,
-    fields: {
-      title: text(),
-      content: text(),
-      featuredImage: image({
-        storage: 'image'
-      }),
-      bannerImage: image({
-        storage: 'image'
-      }),
-      misc: text(),
-      createdAt: timestamp({
-        defaultValue: { kind: 'now' },
-      })
-    }
-  }) ,
+// @ts-ignore
+Post,
+// @ts-ignore
+PostTranslation,
+// @ts-ignore
+FrontPage,
+// @ts-ignore
+ImageStore,
+// @ts-ignore
+  Resource,
 
   Tag: list({
 

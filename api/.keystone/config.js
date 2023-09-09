@@ -52,12 +52,12 @@ var storage = {
 };
 
 // keystone.ts
-var import_core5 = require("@keystone-6/core");
+var import_core7 = require("@keystone-6/core");
 
 // schema.ts
-var import_core4 = require("@keystone-6/core");
-var import_access4 = require("@keystone-6/core/access");
-var import_fields4 = require("@keystone-6/core/fields");
+var import_core6 = require("@keystone-6/core");
+var import_access6 = require("@keystone-6/core/access");
+var import_fields6 = require("@keystone-6/core/fields");
 
 // schemas/Post.ts
 var import_core = require("@keystone-6/core");
@@ -65,32 +65,108 @@ var import_access = require("@keystone-6/core/access");
 var import_fields = require("@keystone-6/core/fields");
 var Post = (0, import_core.list)({
   access: import_access.allowAll,
+  hooks: {
+    async beforeOperation(args) {
+      const { faId, enId } = args.item;
+      console.log(args.resolvedData?.fa);
+      if (faId) {
+        if (args.resolvedData?.fa?.disconnect) {
+          const sudoContext = args.context.sudo();
+          await sudoContext.query.PostTranslation.deleteOne({
+            where: {
+              id: faId
+            }
+          });
+          sudoContext.exitSudo();
+        }
+      }
+      if (enId) {
+        if (args.resolvedData?.en?.disconnect) {
+          const sudoContext = args.context.sudo();
+          await sudoContext.query.PostTranslation.deleteOne({
+            where: {
+              id: enId
+            }
+          });
+          sudoContext.exitSudo();
+        }
+      }
+    }
+  },
   fields: {
     title: (0, import_fields.text)({ validation: { isRequired: true } }),
+    featuredImage: (0, import_fields.relationship)({
+      ref: "ImageStore",
+      label: "\u0627\u0646\u062A\u062E\u0627\u0628 \u0639\u06A9\u0633 \u0634\u0627\u062E\u0635",
+      ui: {
+        displayMode: "cards",
+        cardFields: ["altText", "image"],
+        inlineCreate: { fields: ["altText", "image"] },
+        inlineConnect: true
+      }
+    }),
     type: (0, import_fields.select)({
       options: ["post", "page"],
       defaultValue: "en",
-      ui: { displayMode: "segmented-control" },
+      ui: {
+        displayMode: "segmented-control",
+        itemView: {
+          fieldPosition: "sidebar"
+        }
+      },
       type: "string",
       validation: { isRequired: true }
     }),
-    en: (0, import_fields.relationship)({
-      ref: "PostTranslation"
-      // ui: {
-      //     inlineCreate: {
-      //         fields: ['title', 'language', 'content']
-      //     },
-      //     displayMode: 'cards',
-      //     createView: {
-      //         fieldMode: 'edit'
-      //     },
-      //     cardFields: ['title', 'language'],
-      //     inlineConnect: true
-      // }
+    category: (0, import_fields.select)({
+      options: ["blog"],
+      defaultValue: "blog",
+      type: "string",
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        },
+        createView: {
+          fieldMode: "hidden"
+        }
+      }
     }),
-    fa: (0, import_fields.relationship)({ ref: "PostTranslation" }),
+    en: (0, import_fields.relationship)({
+      label: "post in english",
+      ref: "PostTranslation",
+      ui: {
+        inlineCreate: {
+          fields: ["title", "language", "content"]
+        },
+        displayMode: "cards",
+        createView: {
+          fieldMode: "edit"
+        },
+        cardFields: ["title", "language"],
+        inlineConnect: true
+      }
+    }),
+    fa: (0, import_fields.relationship)({
+      label: " \u0645\u0637\u0644\u0628 \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC",
+      ref: "PostTranslation",
+      ui: {
+        inlineCreate: {
+          fields: ["title", "language", "content"]
+        },
+        displayMode: "cards",
+        createView: {
+          fieldMode: "edit"
+        },
+        cardFields: ["title", "language"],
+        inlineConnect: true
+      }
+    }),
     createdAt: (0, import_fields.timestamp)({
-      defaultValue: { kind: "now" }
+      defaultValue: { kind: "now" },
+      ui: {
+        itemView: {
+          fieldPosition: "sidebar"
+        }
+      }
     })
   }
 });
@@ -190,11 +266,11 @@ var FrontPage = (0, import_core3.list)({
           ui: { displayMode: "textarea" }
         }),
         heroImage: (0, import_fields3.relationship)({
-          ref: "Resource",
+          ref: "ImageStore",
           ui: {
             displayMode: "cards",
-            cardFields: ["title", "featuredImage"],
-            inlineCreate: { fields: ["title", "featuredImage"] }
+            cardFields: ["image"],
+            inlineCreate: { fields: ["image"] }
           }
         })
       }
@@ -273,55 +349,98 @@ var FrontPage = (0, import_core3.list)({
           }
         })
       }
+    }),
+    ...(0, import_core3.group)({
+      label: "Blog",
+      fields: {
+        BlogTitle: (0, import_fields3.text)({
+          label: "title"
+        }),
+        BlogDescription: (0, import_fields3.text)({
+          label: "description"
+        })
+      }
+    })
+  }
+});
+
+// schemas/ImageStore.ts
+var import_core4 = require("@keystone-6/core");
+var import_access4 = require("@keystone-6/core/access");
+var import_fields4 = require("@keystone-6/core/fields");
+var ImageStore = (0, import_core4.list)({
+  access: import_access4.allowAll,
+  fields: {
+    image: (0, import_fields4.image)({
+      storage: "image"
+    }),
+    altText: (0, import_fields4.text)({ label: "name" }),
+    createdAt: (0, import_fields4.timestamp)({ defaultValue: { kind: "now" } })
+  }
+});
+
+// schemas/Resource.ts
+var import_core5 = require("@keystone-6/core");
+var import_access5 = require("@keystone-6/core/access");
+var import_fields5 = require("@keystone-6/core/fields");
+var Resource = (0, import_core5.list)({
+  access: import_access5.allowAll,
+  fields: {
+    title: (0, import_fields5.text)(),
+    content: (0, import_fields5.text)(),
+    featuredImage: (0, import_fields5.relationship)({
+      ref: "ImageStore"
+    }),
+    bannerImage: (0, import_fields5.relationship)({
+      ref: "ImageStore"
+    }),
+    misc: (0, import_fields5.text)(),
+    createdAt: (0, import_fields5.timestamp)({
+      defaultValue: { kind: "now" }
     })
   }
 });
 
 // schema.ts
 var lists = {
-  User: (0, import_core4.list)({
-    access: import_access4.allowAll,
+  User: (0, import_core6.list)({
+    access: import_access6.allowAll,
+    ui: {
+      isHidden() {
+        return process.env.NODE_ENV === "production";
+      }
+    },
     fields: {
-      name: (0, import_fields4.text)({ validation: { isRequired: true } }),
-      email: (0, import_fields4.text)({
+      name: (0, import_fields6.text)({ validation: { isRequired: true } }),
+      email: (0, import_fields6.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      password: (0, import_fields4.password)({ validation: { isRequired: true } }),
-      posts: (0, import_fields4.relationship)({ ref: "PostTranslation.author", many: true }),
-      createdAt: (0, import_fields4.timestamp)({
+      password: (0, import_fields6.password)({ validation: { isRequired: true } }),
+      posts: (0, import_fields6.relationship)({ ref: "PostTranslation.author", many: true }),
+      createdAt: (0, import_fields6.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
   }),
+  // @ts-ignore
   Post,
+  // @ts-ignore
   PostTranslation,
+  // @ts-ignore
   FrontPage,
-  Resource: (0, import_core4.list)({
-    access: import_access4.allowAll,
-    fields: {
-      title: (0, import_fields4.text)(),
-      content: (0, import_fields4.text)(),
-      featuredImage: (0, import_fields4.image)({
-        storage: "image"
-      }),
-      bannerImage: (0, import_fields4.image)({
-        storage: "image"
-      }),
-      misc: (0, import_fields4.text)(),
-      createdAt: (0, import_fields4.timestamp)({
-        defaultValue: { kind: "now" }
-      })
-    }
-  }),
-  Tag: (0, import_core4.list)({
-    access: import_access4.allowAll,
+  // @ts-ignore
+  ImageStore,
+  // @ts-ignore
+  Resource,
+  Tag: (0, import_core6.list)({
+    access: import_access6.allowAll,
     ui: {
       isHidden: true
     },
     fields: {
-      name: (0, import_fields4.text)(),
-      posts: (0, import_fields4.relationship)({ ref: "PostTranslation.tags", many: true })
+      name: (0, import_fields6.text)(),
+      posts: (0, import_fields6.relationship)({ ref: "PostTranslation.tags", many: true })
     }
   })
 };
@@ -334,7 +453,6 @@ var sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret && process.env.NODE_ENV !== "production") {
   sessionSecret = (0, import_crypto.randomBytes)(32).toString("hex");
 }
-console.log(sessionSecret);
 var { withAuth } = (0, import_auth.createAuth)({
   listKey: "User",
   identityField: "email",
@@ -355,11 +473,11 @@ require("dotenv").config({
   override: true,
   path: (0, import_path.resolve)(
     process.cwd(),
-    process.env.NODE_ENV === "production" ? ".env" : `.env.dev`
+    process.env.NODE_ENV === "production" ? ".env" : `.dev.env`
   )
 });
 var keystone_default = withAuth(
-  (0, import_core5.config)({
+  (0, import_core7.config)({
     db: {
       // we're using sqlite for the fastest startup experience
       //   for more information on what database might be appropriate for you

@@ -10,9 +10,6 @@ if (!sessionSecret && process.env.NODE_ENV !== 'production') {
   sessionSecret = randomBytes(32).toString('hex');
 }
 
-console.log(sessionSecret)
-
-
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',

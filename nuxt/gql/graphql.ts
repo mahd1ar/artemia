@@ -17,6 +17,8 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: { input: any; output: any; }
 };
 
 export type AuthenticatedItem = User;
@@ -40,17 +42,111 @@ export type DateTimeNullableFilter = {
 
 export type FrontPage = {
   __typename?: 'FrontPage';
+  BlogDescription?: Maybe<Scalars['String']['output']>;
+  BlogTitle?: Maybe<Scalars['String']['output']>;
+  features?: Maybe<Array<Resource>>;
+  featuresCount?: Maybe<Scalars['Int']['output']>;
+  featuresDescription?: Maybe<Scalars['String']['output']>;
+  featuresTitle?: Maybe<Scalars['String']['output']>;
   headline?: Maybe<Scalars['String']['output']>;
+  heroDescription?: Maybe<Scalars['String']['output']>;
+  heroImage?: Maybe<ImageStore>;
+  heroTitle?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  sites?: Maybe<Array<Resource>>;
+  sitesCount?: Maybe<Scalars['Int']['output']>;
+  statistics?: Maybe<Array<Resource>>;
+  statisticsCount?: Maybe<Scalars['Int']['output']>;
+  statusDescription?: Maybe<Scalars['String']['output']>;
+  statusTitle?: Maybe<Scalars['String']['output']>;
+  testimonial?: Maybe<Array<Resource>>;
+  testimonialCount?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type FrontPageFeaturesArgs = {
+  cursor?: InputMaybe<ResourceWhereUniqueInput>;
+  orderBy?: Array<ResourceOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ResourceWhereInput;
+};
+
+
+export type FrontPageFeaturesCountArgs = {
+  where?: ResourceWhereInput;
+};
+
+
+export type FrontPageSitesArgs = {
+  cursor?: InputMaybe<ResourceWhereUniqueInput>;
+  orderBy?: Array<ResourceOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ResourceWhereInput;
+};
+
+
+export type FrontPageSitesCountArgs = {
+  where?: ResourceWhereInput;
+};
+
+
+export type FrontPageStatisticsArgs = {
+  cursor?: InputMaybe<ResourceWhereUniqueInput>;
+  orderBy?: Array<ResourceOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ResourceWhereInput;
+};
+
+
+export type FrontPageStatisticsCountArgs = {
+  where?: ResourceWhereInput;
+};
+
+
+export type FrontPageTestimonialArgs = {
+  cursor?: InputMaybe<ResourceWhereUniqueInput>;
+  orderBy?: Array<ResourceOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ResourceWhereInput;
+};
+
+
+export type FrontPageTestimonialCountArgs = {
+  where?: ResourceWhereInput;
 };
 
 export type FrontPageCreateInput = {
+  BlogDescription?: InputMaybe<Scalars['String']['input']>;
+  BlogTitle?: InputMaybe<Scalars['String']['input']>;
+  features?: InputMaybe<ResourceRelateToManyForCreateInput>;
+  featuresDescription?: InputMaybe<Scalars['String']['input']>;
+  featuresTitle?: InputMaybe<Scalars['String']['input']>;
   headline?: InputMaybe<Scalars['String']['input']>;
+  heroDescription?: InputMaybe<Scalars['String']['input']>;
+  heroImage?: InputMaybe<ImageStoreRelateToOneForCreateInput>;
+  heroTitle?: InputMaybe<Scalars['String']['input']>;
+  sites?: InputMaybe<ResourceRelateToManyForCreateInput>;
+  statistics?: InputMaybe<ResourceRelateToManyForCreateInput>;
+  statusDescription?: InputMaybe<Scalars['String']['input']>;
+  statusTitle?: InputMaybe<Scalars['String']['input']>;
+  testimonial?: InputMaybe<ResourceRelateToManyForCreateInput>;
 };
 
 export type FrontPageOrderByInput = {
+  BlogDescription?: InputMaybe<OrderDirection>;
+  BlogTitle?: InputMaybe<OrderDirection>;
+  featuresDescription?: InputMaybe<OrderDirection>;
+  featuresTitle?: InputMaybe<OrderDirection>;
   headline?: InputMaybe<OrderDirection>;
+  heroDescription?: InputMaybe<OrderDirection>;
+  heroTitle?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
+  statusDescription?: InputMaybe<OrderDirection>;
+  statusTitle?: InputMaybe<OrderDirection>;
 };
 
 export type FrontPageUpdateArgs = {
@@ -59,15 +155,41 @@ export type FrontPageUpdateArgs = {
 };
 
 export type FrontPageUpdateInput = {
+  BlogDescription?: InputMaybe<Scalars['String']['input']>;
+  BlogTitle?: InputMaybe<Scalars['String']['input']>;
+  features?: InputMaybe<ResourceRelateToManyForUpdateInput>;
+  featuresDescription?: InputMaybe<Scalars['String']['input']>;
+  featuresTitle?: InputMaybe<Scalars['String']['input']>;
   headline?: InputMaybe<Scalars['String']['input']>;
+  heroDescription?: InputMaybe<Scalars['String']['input']>;
+  heroImage?: InputMaybe<ImageStoreRelateToOneForUpdateInput>;
+  heroTitle?: InputMaybe<Scalars['String']['input']>;
+  sites?: InputMaybe<ResourceRelateToManyForUpdateInput>;
+  statistics?: InputMaybe<ResourceRelateToManyForUpdateInput>;
+  statusDescription?: InputMaybe<Scalars['String']['input']>;
+  statusTitle?: InputMaybe<Scalars['String']['input']>;
+  testimonial?: InputMaybe<ResourceRelateToManyForUpdateInput>;
 };
 
 export type FrontPageWhereInput = {
   AND?: InputMaybe<Array<FrontPageWhereInput>>;
+  BlogDescription?: InputMaybe<StringFilter>;
+  BlogTitle?: InputMaybe<StringFilter>;
   NOT?: InputMaybe<Array<FrontPageWhereInput>>;
   OR?: InputMaybe<Array<FrontPageWhereInput>>;
+  features?: InputMaybe<ResourceManyRelationFilter>;
+  featuresDescription?: InputMaybe<StringFilter>;
+  featuresTitle?: InputMaybe<StringFilter>;
   headline?: InputMaybe<StringFilter>;
+  heroDescription?: InputMaybe<StringFilter>;
+  heroImage?: InputMaybe<ImageStoreWhereInput>;
+  heroTitle?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
+  sites?: InputMaybe<ResourceManyRelationFilter>;
+  statistics?: InputMaybe<ResourceManyRelationFilter>;
+  statusDescription?: InputMaybe<StringFilter>;
+  statusTitle?: InputMaybe<StringFilter>;
+  testimonial?: InputMaybe<ResourceManyRelationFilter>;
 };
 
 export type FrontPageWhereUniqueInput = {
@@ -83,6 +205,82 @@ export type IdFilter = {
   lte?: InputMaybe<Scalars['ID']['input']>;
   not?: InputMaybe<IdFilter>;
   notIn?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
+export enum ImageExtension {
+  Gif = 'gif',
+  Jpg = 'jpg',
+  Png = 'png',
+  Webp = 'webp'
+}
+
+export type ImageFieldInput = {
+  upload: Scalars['Upload']['input'];
+};
+
+export type ImageFieldOutput = {
+  __typename?: 'ImageFieldOutput';
+  extension: ImageExtension;
+  filesize: Scalars['Int']['output'];
+  height: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  url: Scalars['String']['output'];
+  width: Scalars['Int']['output'];
+};
+
+export type ImageStore = {
+  __typename?: 'ImageStore';
+  altText?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  image?: Maybe<ImageFieldOutput>;
+};
+
+export type ImageStoreCreateInput = {
+  altText?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  image?: InputMaybe<ImageFieldInput>;
+};
+
+export type ImageStoreOrderByInput = {
+  altText?: InputMaybe<OrderDirection>;
+  createdAt?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+};
+
+export type ImageStoreRelateToOneForCreateInput = {
+  connect?: InputMaybe<ImageStoreWhereUniqueInput>;
+  create?: InputMaybe<ImageStoreCreateInput>;
+};
+
+export type ImageStoreRelateToOneForUpdateInput = {
+  connect?: InputMaybe<ImageStoreWhereUniqueInput>;
+  create?: InputMaybe<ImageStoreCreateInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ImageStoreUpdateArgs = {
+  data: ImageStoreUpdateInput;
+  where: ImageStoreWhereUniqueInput;
+};
+
+export type ImageStoreUpdateInput = {
+  altText?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  image?: InputMaybe<ImageFieldInput>;
+};
+
+export type ImageStoreWhereInput = {
+  AND?: InputMaybe<Array<ImageStoreWhereInput>>;
+  NOT?: InputMaybe<Array<ImageStoreWhereInput>>;
+  OR?: InputMaybe<Array<ImageStoreWhereInput>>;
+  altText?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<IdFilter>;
+};
+
+export type ImageStoreWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type KeystoneAdminMeta = {
@@ -211,21 +409,29 @@ export type Mutation = {
   authenticateUserWithPassword?: Maybe<UserAuthenticationWithPasswordResult>;
   createFrontPage?: Maybe<FrontPage>;
   createFrontPages?: Maybe<Array<Maybe<FrontPage>>>;
+  createImageStore?: Maybe<ImageStore>;
+  createImageStores?: Maybe<Array<Maybe<ImageStore>>>;
   createInitialUser: UserAuthenticationWithPasswordSuccess;
   createPost?: Maybe<Post>;
   createPostTranslation?: Maybe<PostTranslation>;
   createPostTranslations?: Maybe<Array<Maybe<PostTranslation>>>;
   createPosts?: Maybe<Array<Maybe<Post>>>;
+  createResource?: Maybe<Resource>;
+  createResources?: Maybe<Array<Maybe<Resource>>>;
   createTag?: Maybe<Tag>;
   createTags?: Maybe<Array<Maybe<Tag>>>;
   createUser?: Maybe<User>;
   createUsers?: Maybe<Array<Maybe<User>>>;
   deleteFrontPage?: Maybe<FrontPage>;
   deleteFrontPages?: Maybe<Array<Maybe<FrontPage>>>;
+  deleteImageStore?: Maybe<ImageStore>;
+  deleteImageStores?: Maybe<Array<Maybe<ImageStore>>>;
   deletePost?: Maybe<Post>;
   deletePostTranslation?: Maybe<PostTranslation>;
   deletePostTranslations?: Maybe<Array<Maybe<PostTranslation>>>;
   deletePosts?: Maybe<Array<Maybe<Post>>>;
+  deleteResource?: Maybe<Resource>;
+  deleteResources?: Maybe<Array<Maybe<Resource>>>;
   deleteTag?: Maybe<Tag>;
   deleteTags?: Maybe<Array<Maybe<Tag>>>;
   deleteUser?: Maybe<User>;
@@ -233,10 +439,14 @@ export type Mutation = {
   endSession: Scalars['Boolean']['output'];
   updateFrontPage?: Maybe<FrontPage>;
   updateFrontPages?: Maybe<Array<Maybe<FrontPage>>>;
+  updateImageStore?: Maybe<ImageStore>;
+  updateImageStores?: Maybe<Array<Maybe<ImageStore>>>;
   updatePost?: Maybe<Post>;
   updatePostTranslation?: Maybe<PostTranslation>;
   updatePostTranslations?: Maybe<Array<Maybe<PostTranslation>>>;
   updatePosts?: Maybe<Array<Maybe<Post>>>;
+  updateResource?: Maybe<Resource>;
+  updateResources?: Maybe<Array<Maybe<Resource>>>;
   updateTag?: Maybe<Tag>;
   updateTags?: Maybe<Array<Maybe<Tag>>>;
   updateUser?: Maybe<User>;
@@ -257,6 +467,16 @@ export type MutationCreateFrontPageArgs = {
 
 export type MutationCreateFrontPagesArgs = {
   data: Array<FrontPageCreateInput>;
+};
+
+
+export type MutationCreateImageStoreArgs = {
+  data: ImageStoreCreateInput;
+};
+
+
+export type MutationCreateImageStoresArgs = {
+  data: Array<ImageStoreCreateInput>;
 };
 
 
@@ -282,6 +502,16 @@ export type MutationCreatePostTranslationsArgs = {
 
 export type MutationCreatePostsArgs = {
   data: Array<PostCreateInput>;
+};
+
+
+export type MutationCreateResourceArgs = {
+  data: ResourceCreateInput;
+};
+
+
+export type MutationCreateResourcesArgs = {
+  data: Array<ResourceCreateInput>;
 };
 
 
@@ -315,6 +545,16 @@ export type MutationDeleteFrontPagesArgs = {
 };
 
 
+export type MutationDeleteImageStoreArgs = {
+  where: ImageStoreWhereUniqueInput;
+};
+
+
+export type MutationDeleteImageStoresArgs = {
+  where: Array<ImageStoreWhereUniqueInput>;
+};
+
+
 export type MutationDeletePostArgs = {
   where: PostWhereUniqueInput;
 };
@@ -332,6 +572,16 @@ export type MutationDeletePostTranslationsArgs = {
 
 export type MutationDeletePostsArgs = {
   where: Array<PostWhereUniqueInput>;
+};
+
+
+export type MutationDeleteResourceArgs = {
+  where: ResourceWhereUniqueInput;
+};
+
+
+export type MutationDeleteResourcesArgs = {
+  where: Array<ResourceWhereUniqueInput>;
 };
 
 
@@ -366,6 +616,17 @@ export type MutationUpdateFrontPagesArgs = {
 };
 
 
+export type MutationUpdateImageStoreArgs = {
+  data: ImageStoreUpdateInput;
+  where: ImageStoreWhereUniqueInput;
+};
+
+
+export type MutationUpdateImageStoresArgs = {
+  data: Array<ImageStoreUpdateArgs>;
+};
+
+
 export type MutationUpdatePostArgs = {
   data: PostUpdateInput;
   where: PostWhereUniqueInput;
@@ -385,6 +646,17 @@ export type MutationUpdatePostTranslationsArgs = {
 
 export type MutationUpdatePostsArgs = {
   data: Array<PostUpdateArgs>;
+};
+
+
+export type MutationUpdateResourceArgs = {
+  data: ResourceUpdateInput;
+  where: ResourceWhereUniqueInput;
+};
+
+
+export type MutationUpdateResourcesArgs = {
+  data: Array<ResourceUpdateArgs>;
 };
 
 
@@ -435,23 +707,28 @@ export type PasswordState = {
 
 export type Post = {
   __typename?: 'Post';
+  category?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   en?: Maybe<PostTranslation>;
   fa?: Maybe<PostTranslation>;
+  featuredImage?: Maybe<ImageStore>;
   id: Scalars['ID']['output'];
   title?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
 };
 
 export type PostCreateInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   en?: InputMaybe<PostTranslationRelateToOneForCreateInput>;
   fa?: InputMaybe<PostTranslationRelateToOneForCreateInput>;
+  featuredImage?: InputMaybe<ImageStoreRelateToOneForCreateInput>;
   title?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PostOrderByInput = {
+  category?: InputMaybe<OrderDirection>;
   createdAt?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   title?: InputMaybe<OrderDirection>;
@@ -590,9 +867,11 @@ export type PostUpdateArgs = {
 };
 
 export type PostUpdateInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   en?: InputMaybe<PostTranslationRelateToOneForUpdateInput>;
   fa?: InputMaybe<PostTranslationRelateToOneForUpdateInput>;
+  featuredImage?: InputMaybe<ImageStoreRelateToOneForUpdateInput>;
   title?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
@@ -601,9 +880,11 @@ export type PostWhereInput = {
   AND?: InputMaybe<Array<PostWhereInput>>;
   NOT?: InputMaybe<Array<PostWhereInput>>;
   OR?: InputMaybe<Array<PostWhereInput>>;
+  category?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   en?: InputMaybe<PostTranslationWhereInput>;
   fa?: InputMaybe<PostTranslationWhereInput>;
+  featuredImage?: InputMaybe<ImageStoreWhereInput>;
   id?: InputMaybe<IdFilter>;
   title?: InputMaybe<StringFilter>;
   type?: InputMaybe<StringFilter>;
@@ -619,6 +900,9 @@ export type Query = {
   frontPage?: Maybe<FrontPage>;
   frontPages?: Maybe<Array<FrontPage>>;
   frontPagesCount?: Maybe<Scalars['Int']['output']>;
+  imageStore?: Maybe<ImageStore>;
+  imageStores?: Maybe<Array<ImageStore>>;
+  imageStoresCount?: Maybe<Scalars['Int']['output']>;
   keystone: KeystoneMeta;
   post?: Maybe<Post>;
   postTranslation?: Maybe<PostTranslation>;
@@ -626,6 +910,9 @@ export type Query = {
   postTranslationsCount?: Maybe<Scalars['Int']['output']>;
   posts?: Maybe<Array<Post>>;
   postsCount?: Maybe<Scalars['Int']['output']>;
+  resource?: Maybe<Resource>;
+  resources?: Maybe<Array<Resource>>;
+  resourcesCount?: Maybe<Scalars['Int']['output']>;
   tag?: Maybe<Tag>;
   tags?: Maybe<Array<Tag>>;
   tagsCount?: Maybe<Scalars['Int']['output']>;
@@ -651,6 +938,25 @@ export type QueryFrontPagesArgs = {
 
 export type QueryFrontPagesCountArgs = {
   where?: FrontPageWhereInput;
+};
+
+
+export type QueryImageStoreArgs = {
+  where: ImageStoreWhereUniqueInput;
+};
+
+
+export type QueryImageStoresArgs = {
+  cursor?: InputMaybe<ImageStoreWhereUniqueInput>;
+  orderBy?: Array<ImageStoreOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ImageStoreWhereInput;
+};
+
+
+export type QueryImageStoresCountArgs = {
+  where?: ImageStoreWhereInput;
 };
 
 
@@ -689,6 +995,25 @@ export type QueryPostsArgs = {
 
 export type QueryPostsCountArgs = {
   where?: PostWhereInput;
+};
+
+
+export type QueryResourceArgs = {
+  where: ResourceWhereUniqueInput;
+};
+
+
+export type QueryResourcesArgs = {
+  cursor?: InputMaybe<ResourceWhereUniqueInput>;
+  orderBy?: Array<ResourceOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ResourceWhereInput;
+};
+
+
+export type QueryResourcesCountArgs = {
+  where?: ResourceWhereInput;
 };
 
 
@@ -733,6 +1058,83 @@ export enum QueryMode {
   Default = 'default',
   Insensitive = 'insensitive'
 }
+
+export type Resource = {
+  __typename?: 'Resource';
+  bannerImage?: Maybe<ImageStore>;
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  featuredImage?: Maybe<ImageStore>;
+  id: Scalars['ID']['output'];
+  misc?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type ResourceCreateInput = {
+  bannerImage?: InputMaybe<ImageStoreRelateToOneForCreateInput>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  featuredImage?: InputMaybe<ImageStoreRelateToOneForCreateInput>;
+  misc?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ResourceManyRelationFilter = {
+  every?: InputMaybe<ResourceWhereInput>;
+  none?: InputMaybe<ResourceWhereInput>;
+  some?: InputMaybe<ResourceWhereInput>;
+};
+
+export type ResourceOrderByInput = {
+  content?: InputMaybe<OrderDirection>;
+  createdAt?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  misc?: InputMaybe<OrderDirection>;
+  title?: InputMaybe<OrderDirection>;
+};
+
+export type ResourceRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<ResourceWhereUniqueInput>>;
+  create?: InputMaybe<Array<ResourceCreateInput>>;
+};
+
+export type ResourceRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<ResourceWhereUniqueInput>>;
+  create?: InputMaybe<Array<ResourceCreateInput>>;
+  disconnect?: InputMaybe<Array<ResourceWhereUniqueInput>>;
+  set?: InputMaybe<Array<ResourceWhereUniqueInput>>;
+};
+
+export type ResourceUpdateArgs = {
+  data: ResourceUpdateInput;
+  where: ResourceWhereUniqueInput;
+};
+
+export type ResourceUpdateInput = {
+  bannerImage?: InputMaybe<ImageStoreRelateToOneForUpdateInput>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  featuredImage?: InputMaybe<ImageStoreRelateToOneForUpdateInput>;
+  misc?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ResourceWhereInput = {
+  AND?: InputMaybe<Array<ResourceWhereInput>>;
+  NOT?: InputMaybe<Array<ResourceWhereInput>>;
+  OR?: InputMaybe<Array<ResourceWhereInput>>;
+  bannerImage?: InputMaybe<ImageStoreWhereInput>;
+  content?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeNullableFilter>;
+  featuredImage?: InputMaybe<ImageStoreWhereInput>;
+  id?: InputMaybe<IdFilter>;
+  misc?: InputMaybe<StringFilter>;
+  title?: InputMaybe<StringFilter>;
+};
+
+export type ResourceWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
 
 export type StringFilter = {
   contains?: InputMaybe<Scalars['String']['input']>;
@@ -928,10 +1330,12 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-export type FrontPageQueryVariables = Exact<{ [key: string]: never; }>;
+export type FrontPageQueryVariables = Exact<{
+  isEnLang: Scalars['Boolean']['input'];
+}>;
 
 
-export type FrontPageQuery = { __typename?: 'Query', frontPage?: { __typename?: 'FrontPage', headline?: string | null } | null };
+export type FrontPageQuery = { __typename?: 'Query', frontPage?: { __typename?: 'FrontPage', heroTitle?: string | null, heroDescription?: string | null, statusTitle?: string | null, statusDescription?: string | null, featuresTitle?: string | null, featuresDescription?: string | null, BlogTitle?: string | null, BlogDescription?: string | null, heroImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, statistics?: Array<{ __typename?: 'Resource', id: string, title?: string | null, content?: string | null, misc?: string | null }> | null, sites?: Array<{ __typename?: 'Resource', title?: string | null, featuredImage?: { __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null }> | null, features?: Array<{ __typename?: 'Resource', title?: string | null, content?: string | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null }> | null, testimonial?: Array<{ __typename?: 'Resource', title?: string | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null }> | null } | null, posts?: Array<{ __typename?: 'Post', id: string, title?: string | null, type?: string | null, featuredImage?: { __typename?: 'ImageStore', image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null, en?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null, tags?: Array<{ __typename?: 'Tag', id: string, name?: string | null }> | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null, tags?: Array<{ __typename?: 'Tag', id: string, name?: string | null }> | null } | null }> | null };
 
 
-export const FrontPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FrontPage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"frontPage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headline"}}]}}]}}]} as unknown as DocumentNode<FrontPageQuery, FrontPageQueryVariables>;
+export const FrontPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FrontPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"frontPage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heroTitle"}},{"kind":"Field","name":{"kind":"Name","value":"heroDescription"}},{"kind":"Field","name":{"kind":"Name","value":"heroImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"statusTitle"}},{"kind":"Field","name":{"kind":"Name","value":"statusDescription"}},{"kind":"Field","name":{"kind":"Name","value":"statistics"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"misc"}}]}},{"kind":"Field","name":{"kind":"Name","value":"sites"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuresTitle"}},{"kind":"Field","name":{"kind":"Name","value":"featuresDescription"}},{"kind":"Field","name":{"kind":"Name","value":"features"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"testimonial"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"BlogTitle"}},{"kind":"Field","name":{"kind":"Name","value":"BlogDescription"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"category"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"equals"},"value":{"kind":"StringValue","value":"blog","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"en"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"include"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fa"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"skip"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<FrontPageQuery, FrontPageQueryVariables>;

@@ -6,7 +6,10 @@ export default defineNuxtConfig({
   devServer: {
     port: 5175
   },
-  // @ts-ignore
+  nitro: {
+    // port: 5175
+
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
@@ -20,7 +23,6 @@ export default defineNuxtConfig({
       { code: 'en', iso: 'en-US', dir: 'ltr', file: 'en.js' }
     ],
     defaultLocale: 'en',
-    legecy: false,
     langDir: 'i18n/'
   },
   tailwindcss: {
@@ -30,6 +32,8 @@ export default defineNuxtConfig({
     clients: {
       default: 'apollo-client.ts'
     }
+  },
+  build: {
+    transpile: ['graphql']
   }
-
 })

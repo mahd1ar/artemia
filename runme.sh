@@ -23,7 +23,7 @@ yarn
 
 yarn build
 
-pm2 start "yarn start" --name artemia-frontend
+pm2 start "yarn privew" --name artemia-frontend
 
 echo "build backend"
 

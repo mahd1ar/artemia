@@ -3,11 +3,12 @@ require('dotenv').config({
   override: true,
   path: resolve(
     process.cwd(),
-    process.env.NODE_ENV === 'production' ? '.env' : `.env.dev`
+process.env.NODE_ENV === 'production' ? '.env' : `.dev.env`
   ),
 });
 import {storage} from './storage'
 import { config } from '@keystone-6/core';
+
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from './schema';

@@ -1,4 +1,7 @@
 import { StorageConfig } from '@keystone-6/core/types';
+import { resolve } from 'path';
+
+
 
 export const storage: Record<string, StorageConfig> = {
     file: {

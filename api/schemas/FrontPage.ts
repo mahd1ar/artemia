@@ -18,11 +18,11 @@ export const FrontPage = list({
           ui: { displayMode: "textarea" },
         }),
         heroImage: relationship({
-          ref: "Resource",
+          ref: "ImageStore",
           ui: {
             displayMode: "cards",
-            cardFields: ["title", "featuredImage"],
-            inlineCreate: { fields: ["title", "featuredImage"] },
+            cardFields: ["image"],
+            inlineCreate: { fields: ["image"] },
           },
         }),
       },
@@ -97,9 +97,20 @@ export const FrontPage = list({
           ui: {
             description: "exacltly 8 items",
             displayMode: "cards",
-            cardFields: ["title", "featuredImage" ,"bannerImage"],
-            inlineCreate: { fields: ["title", "featuredImage","bannerImage"] },
+            cardFields: ["title", "featuredImage", "bannerImage"],
+            inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] },
           },
+        }),
+      },
+    }),
+    ...group({
+      label: "Blog",
+      fields: {
+        BlogTitle: text({
+          label: "title",
+        }),
+        BlogDescription: text({
+          label: "description",
         }),
       },
     }),
