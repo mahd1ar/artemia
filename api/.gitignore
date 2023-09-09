@@ -1,5 +1,7 @@
 node_modules
 .keystone/admin
+.keystone/config.js
+.keystone/configjs.map
 keystone.db
 *.log
 schema.graphql
