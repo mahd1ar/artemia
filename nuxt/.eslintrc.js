@@ -18,8 +18,8 @@ module.exports = {
   plugins: [],
   rules: {
     'vue/no-multiple-template-root': 'off',
-  
-    '@typescript-eslint/no-unused-vars': 'warn',
+
+    '@typescript-eslint/no-unused-vars': 'warn'
 
   }
 }

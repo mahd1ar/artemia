@@ -1,3 +1,4 @@
 export default {
-  HI: 'hiiii'
+  PlaceAnOrder: 'Place an Order',
+  Home: 'Home'
 }

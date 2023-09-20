@@ -15,7 +15,8 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/device',
     '@nuxtjs/i18n',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    '@pinia/nuxt'
   ],
   i18n: {
     locales: [

@@ -4,8 +4,20 @@ import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
 
 export const FrontPage = list({
   access: allowAll,
-  isSingleton: true,
   fields: {
+    lang: select({
+      options: [
+        {
+          label: 'english',
+          value: 'en'
+        },
+        {
+          label: 'فارسی',
+          value: 'fa'
+        }
+      ],
+      type: 'string'
+    }),
     headline: text({ validation: { isRequired: true } }),
     ...group({
       label: "hero section",
@@ -103,6 +115,9 @@ export const FrontPage = list({
         }),
       },
     }),
+    logos: relationship({ref : 'ImageStore' , many : true, ui: {
+      description: 'max 6 items'
+    }}) ,
     ...group({
       label: "Blog",
       fields: {

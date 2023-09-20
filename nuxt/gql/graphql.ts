@@ -23,6 +23,87 @@ export type Scalars = {
 
 export type AuthenticatedItem = User;
 
+export type ContactUs = {
+  __typename?: 'ContactUs';
+  aboutUs?: Maybe<Scalars['String']['output']>;
+  address?: Maybe<Scalars['String']['output']>;
+  addressFa?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  instagram?: Maybe<Scalars['String']['output']>;
+  lat?: Maybe<Scalars['String']['output']>;
+  long?: Maybe<Scalars['String']['output']>;
+  tel?: Maybe<Scalars['String']['output']>;
+  telegram?: Maybe<Scalars['String']['output']>;
+  whatsapp?: Maybe<Scalars['String']['output']>;
+};
+
+export type ContactUsCreateInput = {
+  aboutUs?: InputMaybe<Scalars['String']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  addressFa?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  instagram?: InputMaybe<Scalars['String']['input']>;
+  lat?: InputMaybe<Scalars['String']['input']>;
+  long?: InputMaybe<Scalars['String']['input']>;
+  tel?: InputMaybe<Scalars['String']['input']>;
+  telegram?: InputMaybe<Scalars['String']['input']>;
+  whatsapp?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ContactUsOrderByInput = {
+  aboutUs?: InputMaybe<OrderDirection>;
+  address?: InputMaybe<OrderDirection>;
+  addressFa?: InputMaybe<OrderDirection>;
+  email?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  instagram?: InputMaybe<OrderDirection>;
+  lat?: InputMaybe<OrderDirection>;
+  long?: InputMaybe<OrderDirection>;
+  tel?: InputMaybe<OrderDirection>;
+  telegram?: InputMaybe<OrderDirection>;
+  whatsapp?: InputMaybe<OrderDirection>;
+};
+
+export type ContactUsUpdateArgs = {
+  data: ContactUsUpdateInput;
+  where?: ContactUsWhereUniqueInput;
+};
+
+export type ContactUsUpdateInput = {
+  aboutUs?: InputMaybe<Scalars['String']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  addressFa?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  instagram?: InputMaybe<Scalars['String']['input']>;
+  lat?: InputMaybe<Scalars['String']['input']>;
+  long?: InputMaybe<Scalars['String']['input']>;
+  tel?: InputMaybe<Scalars['String']['input']>;
+  telegram?: InputMaybe<Scalars['String']['input']>;
+  whatsapp?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ContactUsWhereInput = {
+  AND?: InputMaybe<Array<ContactUsWhereInput>>;
+  NOT?: InputMaybe<Array<ContactUsWhereInput>>;
+  OR?: InputMaybe<Array<ContactUsWhereInput>>;
+  aboutUs?: InputMaybe<StringFilter>;
+  address?: InputMaybe<StringFilter>;
+  addressFa?: InputMaybe<StringFilter>;
+  email?: InputMaybe<StringFilter>;
+  id?: InputMaybe<IdFilter>;
+  instagram?: InputMaybe<StringFilter>;
+  lat?: InputMaybe<StringFilter>;
+  long?: InputMaybe<StringFilter>;
+  tel?: InputMaybe<StringFilter>;
+  telegram?: InputMaybe<StringFilter>;
+  whatsapp?: InputMaybe<StringFilter>;
+};
+
+export type ContactUsWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type CreateInitialUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -53,6 +134,8 @@ export type FrontPage = {
   heroImage?: Maybe<ImageStore>;
   heroTitle?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  logos?: Maybe<Array<ImageStore>>;
+  logosCount?: Maybe<Scalars['Int']['output']>;
   sites?: Maybe<Array<Resource>>;
   sitesCount?: Maybe<Scalars['Int']['output']>;
   statistics?: Maybe<Array<Resource>>;
@@ -75,6 +158,20 @@ export type FrontPageFeaturesArgs = {
 
 export type FrontPageFeaturesCountArgs = {
   where?: ResourceWhereInput;
+};
+
+
+export type FrontPageLogosArgs = {
+  cursor?: InputMaybe<ImageStoreWhereUniqueInput>;
+  orderBy?: Array<ImageStoreOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ImageStoreWhereInput;
+};
+
+
+export type FrontPageLogosCountArgs = {
+  where?: ImageStoreWhereInput;
 };
 
 
@@ -129,6 +226,7 @@ export type FrontPageCreateInput = {
   heroDescription?: InputMaybe<Scalars['String']['input']>;
   heroImage?: InputMaybe<ImageStoreRelateToOneForCreateInput>;
   heroTitle?: InputMaybe<Scalars['String']['input']>;
+  logos?: InputMaybe<ImageStoreRelateToManyForCreateInput>;
   sites?: InputMaybe<ResourceRelateToManyForCreateInput>;
   statistics?: InputMaybe<ResourceRelateToManyForCreateInput>;
   statusDescription?: InputMaybe<Scalars['String']['input']>;
@@ -164,6 +262,7 @@ export type FrontPageUpdateInput = {
   heroDescription?: InputMaybe<Scalars['String']['input']>;
   heroImage?: InputMaybe<ImageStoreRelateToOneForUpdateInput>;
   heroTitle?: InputMaybe<Scalars['String']['input']>;
+  logos?: InputMaybe<ImageStoreRelateToManyForUpdateInput>;
   sites?: InputMaybe<ResourceRelateToManyForUpdateInput>;
   statistics?: InputMaybe<ResourceRelateToManyForUpdateInput>;
   statusDescription?: InputMaybe<Scalars['String']['input']>;
@@ -185,6 +284,7 @@ export type FrontPageWhereInput = {
   heroImage?: InputMaybe<ImageStoreWhereInput>;
   heroTitle?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
+  logos?: InputMaybe<ImageStoreManyRelationFilter>;
   sites?: InputMaybe<ResourceManyRelationFilter>;
   statistics?: InputMaybe<ResourceManyRelationFilter>;
   statusDescription?: InputMaybe<StringFilter>;
@@ -242,10 +342,28 @@ export type ImageStoreCreateInput = {
   image?: InputMaybe<ImageFieldInput>;
 };
 
+export type ImageStoreManyRelationFilter = {
+  every?: InputMaybe<ImageStoreWhereInput>;
+  none?: InputMaybe<ImageStoreWhereInput>;
+  some?: InputMaybe<ImageStoreWhereInput>;
+};
+
 export type ImageStoreOrderByInput = {
   altText?: InputMaybe<OrderDirection>;
   createdAt?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
+};
+
+export type ImageStoreRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<ImageStoreWhereUniqueInput>>;
+  create?: InputMaybe<Array<ImageStoreCreateInput>>;
+};
+
+export type ImageStoreRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<ImageStoreWhereUniqueInput>>;
+  create?: InputMaybe<Array<ImageStoreCreateInput>>;
+  disconnect?: InputMaybe<Array<ImageStoreWhereUniqueInput>>;
+  set?: InputMaybe<Array<ImageStoreWhereUniqueInput>>;
 };
 
 export type ImageStoreRelateToOneForCreateInput = {
@@ -404,14 +522,62 @@ export type KeystoneMeta = {
   adminMeta: KeystoneAdminMeta;
 };
 
+export type MainMenu = {
+  __typename?: 'MainMenu';
+  en?: Maybe<Resource>;
+  fa?: Maybe<Resource>;
+  id: Scalars['ID']['output'];
+  link?: Maybe<Scalars['String']['output']>;
+};
+
+export type MainMenuCreateInput = {
+  en?: InputMaybe<ResourceRelateToOneForCreateInput>;
+  fa?: InputMaybe<ResourceRelateToOneForCreateInput>;
+  link?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MainMenuOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+  link?: InputMaybe<OrderDirection>;
+};
+
+export type MainMenuUpdateArgs = {
+  data: MainMenuUpdateInput;
+  where: MainMenuWhereUniqueInput;
+};
+
+export type MainMenuUpdateInput = {
+  en?: InputMaybe<ResourceRelateToOneForUpdateInput>;
+  fa?: InputMaybe<ResourceRelateToOneForUpdateInput>;
+  link?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MainMenuWhereInput = {
+  AND?: InputMaybe<Array<MainMenuWhereInput>>;
+  NOT?: InputMaybe<Array<MainMenuWhereInput>>;
+  OR?: InputMaybe<Array<MainMenuWhereInput>>;
+  en?: InputMaybe<ResourceWhereInput>;
+  fa?: InputMaybe<ResourceWhereInput>;
+  id?: InputMaybe<IdFilter>;
+  link?: InputMaybe<StringFilter>;
+};
+
+export type MainMenuWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateUserWithPassword?: Maybe<UserAuthenticationWithPasswordResult>;
+  createContactUs?: Maybe<ContactUs>;
+  createContactuses?: Maybe<Array<Maybe<ContactUs>>>;
   createFrontPage?: Maybe<FrontPage>;
   createFrontPages?: Maybe<Array<Maybe<FrontPage>>>;
   createImageStore?: Maybe<ImageStore>;
   createImageStores?: Maybe<Array<Maybe<ImageStore>>>;
   createInitialUser: UserAuthenticationWithPasswordSuccess;
+  createMainMenu?: Maybe<MainMenu>;
+  createMainMenus?: Maybe<Array<Maybe<MainMenu>>>;
   createPost?: Maybe<Post>;
   createPostTranslation?: Maybe<PostTranslation>;
   createPostTranslations?: Maybe<Array<Maybe<PostTranslation>>>;
@@ -422,10 +588,14 @@ export type Mutation = {
   createTags?: Maybe<Array<Maybe<Tag>>>;
   createUser?: Maybe<User>;
   createUsers?: Maybe<Array<Maybe<User>>>;
+  deleteContactUs?: Maybe<ContactUs>;
+  deleteContactuses?: Maybe<Array<Maybe<ContactUs>>>;
   deleteFrontPage?: Maybe<FrontPage>;
   deleteFrontPages?: Maybe<Array<Maybe<FrontPage>>>;
   deleteImageStore?: Maybe<ImageStore>;
   deleteImageStores?: Maybe<Array<Maybe<ImageStore>>>;
+  deleteMainMenu?: Maybe<MainMenu>;
+  deleteMainMenus?: Maybe<Array<Maybe<MainMenu>>>;
   deletePost?: Maybe<Post>;
   deletePostTranslation?: Maybe<PostTranslation>;
   deletePostTranslations?: Maybe<Array<Maybe<PostTranslation>>>;
@@ -437,10 +607,14 @@ export type Mutation = {
   deleteUser?: Maybe<User>;
   deleteUsers?: Maybe<Array<Maybe<User>>>;
   endSession: Scalars['Boolean']['output'];
+  updateContactUs?: Maybe<ContactUs>;
+  updateContactuses?: Maybe<Array<Maybe<ContactUs>>>;
   updateFrontPage?: Maybe<FrontPage>;
   updateFrontPages?: Maybe<Array<Maybe<FrontPage>>>;
   updateImageStore?: Maybe<ImageStore>;
   updateImageStores?: Maybe<Array<Maybe<ImageStore>>>;
+  updateMainMenu?: Maybe<MainMenu>;
+  updateMainMenus?: Maybe<Array<Maybe<MainMenu>>>;
   updatePost?: Maybe<Post>;
   updatePostTranslation?: Maybe<PostTranslation>;
   updatePostTranslations?: Maybe<Array<Maybe<PostTranslation>>>;
@@ -457,6 +631,16 @@ export type Mutation = {
 export type MutationAuthenticateUserWithPasswordArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationCreateContactUsArgs = {
+  data: ContactUsCreateInput;
+};
+
+
+export type MutationCreateContactusesArgs = {
+  data: Array<ContactUsCreateInput>;
 };
 
 
@@ -482,6 +666,16 @@ export type MutationCreateImageStoresArgs = {
 
 export type MutationCreateInitialUserArgs = {
   data: CreateInitialUserInput;
+};
+
+
+export type MutationCreateMainMenuArgs = {
+  data: MainMenuCreateInput;
+};
+
+
+export type MutationCreateMainMenusArgs = {
+  data: Array<MainMenuCreateInput>;
 };
 
 
@@ -535,6 +729,16 @@ export type MutationCreateUsersArgs = {
 };
 
 
+export type MutationDeleteContactUsArgs = {
+  where?: ContactUsWhereUniqueInput;
+};
+
+
+export type MutationDeleteContactusesArgs = {
+  where: Array<ContactUsWhereUniqueInput>;
+};
+
+
 export type MutationDeleteFrontPageArgs = {
   where?: FrontPageWhereUniqueInput;
 };
@@ -552,6 +756,16 @@ export type MutationDeleteImageStoreArgs = {
 
 export type MutationDeleteImageStoresArgs = {
   where: Array<ImageStoreWhereUniqueInput>;
+};
+
+
+export type MutationDeleteMainMenuArgs = {
+  where: MainMenuWhereUniqueInput;
+};
+
+
+export type MutationDeleteMainMenusArgs = {
+  where: Array<MainMenuWhereUniqueInput>;
 };
 
 
@@ -605,6 +819,17 @@ export type MutationDeleteUsersArgs = {
 };
 
 
+export type MutationUpdateContactUsArgs = {
+  data: ContactUsUpdateInput;
+  where?: ContactUsWhereUniqueInput;
+};
+
+
+export type MutationUpdateContactusesArgs = {
+  data: Array<ContactUsUpdateArgs>;
+};
+
+
 export type MutationUpdateFrontPageArgs = {
   data: FrontPageUpdateInput;
   where?: FrontPageWhereUniqueInput;
@@ -624,6 +849,17 @@ export type MutationUpdateImageStoreArgs = {
 
 export type MutationUpdateImageStoresArgs = {
   data: Array<ImageStoreUpdateArgs>;
+};
+
+
+export type MutationUpdateMainMenuArgs = {
+  data: MainMenuUpdateInput;
+  where: MainMenuWhereUniqueInput;
+};
+
+
+export type MutationUpdateMainMenusArgs = {
+  data: Array<MainMenuUpdateArgs>;
 };
 
 
@@ -751,6 +987,7 @@ export type PostTranslation = {
   author?: Maybe<User>;
   content?: Maybe<PostTranslation_Content_Document>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
+  excerpt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   language?: Maybe<Scalars['String']['output']>;
   parent?: Maybe<Post>;
@@ -897,6 +1134,9 @@ export type PostWhereUniqueInput = {
 export type Query = {
   __typename?: 'Query';
   authenticatedItem?: Maybe<AuthenticatedItem>;
+  contactUs?: Maybe<ContactUs>;
+  contactuses?: Maybe<Array<ContactUs>>;
+  contactusesCount?: Maybe<Scalars['Int']['output']>;
   frontPage?: Maybe<FrontPage>;
   frontPages?: Maybe<Array<FrontPage>>;
   frontPagesCount?: Maybe<Scalars['Int']['output']>;
@@ -904,6 +1144,9 @@ export type Query = {
   imageStores?: Maybe<Array<ImageStore>>;
   imageStoresCount?: Maybe<Scalars['Int']['output']>;
   keystone: KeystoneMeta;
+  mainMenu?: Maybe<MainMenu>;
+  mainMenus?: Maybe<Array<MainMenu>>;
+  mainMenusCount?: Maybe<Scalars['Int']['output']>;
   post?: Maybe<Post>;
   postTranslation?: Maybe<PostTranslation>;
   postTranslations?: Maybe<Array<PostTranslation>>;
@@ -919,6 +1162,25 @@ export type Query = {
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
   usersCount?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type QueryContactUsArgs = {
+  where?: ContactUsWhereUniqueInput;
+};
+
+
+export type QueryContactusesArgs = {
+  cursor?: InputMaybe<ContactUsWhereUniqueInput>;
+  orderBy?: Array<ContactUsOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ContactUsWhereInput;
+};
+
+
+export type QueryContactusesCountArgs = {
+  where?: ContactUsWhereInput;
 };
 
 
@@ -957,6 +1219,25 @@ export type QueryImageStoresArgs = {
 
 export type QueryImageStoresCountArgs = {
   where?: ImageStoreWhereInput;
+};
+
+
+export type QueryMainMenuArgs = {
+  where: MainMenuWhereUniqueInput;
+};
+
+
+export type QueryMainMenusArgs = {
+  cursor?: InputMaybe<MainMenuWhereUniqueInput>;
+  orderBy?: Array<MainMenuOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: MainMenuWhereInput;
+};
+
+
+export type QueryMainMenusCountArgs = {
+  where?: MainMenuWhereInput;
 };
 
 
@@ -1103,6 +1384,17 @@ export type ResourceRelateToManyForUpdateInput = {
   create?: InputMaybe<Array<ResourceCreateInput>>;
   disconnect?: InputMaybe<Array<ResourceWhereUniqueInput>>;
   set?: InputMaybe<Array<ResourceWhereUniqueInput>>;
+};
+
+export type ResourceRelateToOneForCreateInput = {
+  connect?: InputMaybe<ResourceWhereUniqueInput>;
+  create?: InputMaybe<ResourceCreateInput>;
+};
+
+export type ResourceRelateToOneForUpdateInput = {
+  connect?: InputMaybe<ResourceWhereUniqueInput>;
+  create?: InputMaybe<ResourceCreateInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ResourceUpdateArgs = {
@@ -1330,12 +1622,36 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
+export type TopMenuQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TopMenuQuery = { __typename?: 'Query', mainMenus?: Array<{ __typename?: 'MainMenu', id: string, link?: string | null, en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null }> | null };
+
+export type BlogFullQueryVariables = Exact<{
+  where: PostWhereUniqueInput;
+  isEn: Scalars['Boolean']['input'];
+}>;
+
+
+export type BlogFullQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, createdAt?: any | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null, en?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null } | null } | null };
+
+export type PostsQueryVariables = Exact<{
+  where: PostWhereInput;
+  isEnLang: Scalars['Boolean']['input'];
+}>;
+
+
+export type PostsQuery = { __typename?: 'Query', posts?: Array<{ __typename?: 'Post', id: string, createdAt?: any | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, en?: { __typename?: 'PostTranslation', title?: string | null, excerpt?: string | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, excerpt?: string | null } | null }> | null };
+
 export type FrontPageQueryVariables = Exact<{
   isEnLang: Scalars['Boolean']['input'];
 }>;
 
 
-export type FrontPageQuery = { __typename?: 'Query', frontPage?: { __typename?: 'FrontPage', heroTitle?: string | null, heroDescription?: string | null, statusTitle?: string | null, statusDescription?: string | null, featuresTitle?: string | null, featuresDescription?: string | null, BlogTitle?: string | null, BlogDescription?: string | null, heroImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, statistics?: Array<{ __typename?: 'Resource', id: string, title?: string | null, content?: string | null, misc?: string | null }> | null, sites?: Array<{ __typename?: 'Resource', title?: string | null, featuredImage?: { __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null }> | null, features?: Array<{ __typename?: 'Resource', title?: string | null, content?: string | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null }> | null, testimonial?: Array<{ __typename?: 'Resource', title?: string | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null }> | null } | null, posts?: Array<{ __typename?: 'Post', id: string, title?: string | null, type?: string | null, featuredImage?: { __typename?: 'ImageStore', image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null, en?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null, tags?: Array<{ __typename?: 'Tag', id: string, name?: string | null }> | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null, tags?: Array<{ __typename?: 'Tag', id: string, name?: string | null }> | null } | null }> | null };
+export type FrontPageQuery = { __typename?: 'Query', frontPage?: { __typename?: 'FrontPage', heroTitle?: string | null, heroDescription?: string | null, statusTitle?: string | null, statusDescription?: string | null, featuresTitle?: string | null, featuresDescription?: string | null, BlogTitle?: string | null, BlogDescription?: string | null, heroImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, statistics?: Array<{ __typename?: 'Resource', id: string, title?: string | null, content?: string | null, misc?: string | null }> | null, sites?: Array<{ __typename?: 'Resource', title?: string | null, featuredImage?: { __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null }> | null, features?: Array<{ __typename?: 'Resource', title?: string | null, content?: string | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null }> | null, testimonial?: Array<{ __typename?: 'Resource', title?: string | null, featuredImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null }> | null, logos?: Array<{ __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null } | null, posts?: Array<{ __typename?: 'Post', id: string, title?: string | null, type?: string | null, featuredImage?: { __typename?: 'ImageStore', image?: { __typename?: 'ImageFieldOutput', url: string } | null } | null, en?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null, tags?: Array<{ __typename?: 'Tag', id: string, name?: string | null }> | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null, tags?: Array<{ __typename?: 'Tag', id: string, name?: string | null }> | null } | null }> | null, contactUs?: { __typename?: 'ContactUs', email?: string | null, address?: string | null, addressFa?: string | null, instagram?: string | null, telegram?: string | null, whatsapp?: string | null, tel?: string | null } | null };
 
 
-export const FrontPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FrontPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"frontPage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heroTitle"}},{"kind":"Field","name":{"kind":"Name","value":"heroDescription"}},{"kind":"Field","name":{"kind":"Name","value":"heroImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"statusTitle"}},{"kind":"Field","name":{"kind":"Name","value":"statusDescription"}},{"kind":"Field","name":{"kind":"Name","value":"statistics"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"misc"}}]}},{"kind":"Field","name":{"kind":"Name","value":"sites"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuresTitle"}},{"kind":"Field","name":{"kind":"Name","value":"featuresDescription"}},{"kind":"Field","name":{"kind":"Name","value":"features"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"testimonial"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"BlogTitle"}},{"kind":"Field","name":{"kind":"Name","value":"BlogDescription"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"category"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"equals"},"value":{"kind":"StringValue","value":"blog","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"en"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"include"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fa"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"skip"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<FrontPageQuery, FrontPageQueryVariables>;
+export const TopMenuDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"topMenu"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mainMenus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"en"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fa"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}}]}}]}}]}}]} as unknown as DocumentNode<TopMenuQuery, TopMenuQueryVariables>;
+export const BlogFullDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"BlogFull"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostWhereUniqueInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isEn"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"post"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"en"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"include"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEn"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fa"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"skip"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEn"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}}]}}]}}]}}]} as unknown as DocumentNode<BlogFullQuery, BlogFullQueryVariables>;
+export const PostsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Posts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostWhereInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"en"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"include"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"excerpt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fa"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"skip"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"excerpt"}}]}}]}}]}}]} as unknown as DocumentNode<PostsQuery, PostsQueryVariables>;
+export const FrontPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FrontPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"frontPage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heroTitle"}},{"kind":"Field","name":{"kind":"Name","value":"heroDescription"}},{"kind":"Field","name":{"kind":"Name","value":"heroImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"statusTitle"}},{"kind":"Field","name":{"kind":"Name","value":"statusDescription"}},{"kind":"Field","name":{"kind":"Name","value":"statistics"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"misc"}}]}},{"kind":"Field","name":{"kind":"Name","value":"sites"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuresTitle"}},{"kind":"Field","name":{"kind":"Name","value":"featuresDescription"}},{"kind":"Field","name":{"kind":"Name","value":"features"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"testimonial"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"logos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"BlogTitle"}},{"kind":"Field","name":{"kind":"Name","value":"BlogDescription"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"category"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"equals"},"value":{"kind":"StringValue","value":"blog","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"en"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"include"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fa"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"skip"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isEnLang"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contactUs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"addressFa"}},{"kind":"Field","name":{"kind":"Name","value":"instagram"}},{"kind":"Field","name":{"kind":"Name","value":"telegram"}},{"kind":"Field","name":{"kind":"Name","value":"whatsapp"}},{"kind":"Field","name":{"kind":"Name","value":"tel"}}]}}]}}]} as unknown as DocumentNode<FrontPageQuery, FrontPageQueryVariables>;

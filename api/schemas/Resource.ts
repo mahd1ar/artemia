@@ -4,6 +4,9 @@ import { image, relationship, text, timestamp } from "@keystone-6/core/fields";
 
 export const Resource = list({
     access: allowAll,
+    ui:{
+        isHidden: process.env.NODE_ENV === 'production'
+    },
     fields: {
         title: text(),
         content: text(),

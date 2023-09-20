@@ -27,6 +27,11 @@ export default withAuth(
       url: 'file:./keystone.db',
     },
     server: {
+      cors: {
+        origin: [process.env.FRONTENDURL!],
+        credentials: true,
+    },
+    maxFileSize: 1024_000_000,
       port: 3032
     },
     lists,

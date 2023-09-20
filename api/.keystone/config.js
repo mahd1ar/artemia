@@ -52,12 +52,12 @@ var storage = {
 };
 
 // keystone.ts
-var import_core7 = require("@keystone-6/core");
+var import_core9 = require("@keystone-6/core");
 
 // schema.ts
-var import_core6 = require("@keystone-6/core");
-var import_access6 = require("@keystone-6/core/access");
-var import_fields6 = require("@keystone-6/core/fields");
+var import_core8 = require("@keystone-6/core");
+var import_access8 = require("@keystone-6/core/access");
+var import_fields8 = require("@keystone-6/core/fields");
 
 // schemas/Post.ts
 var import_core = require("@keystone-6/core");
@@ -66,12 +66,14 @@ var import_fields = require("@keystone-6/core/fields");
 var Post = (0, import_core.list)({
   access: import_access.allowAll,
   hooks: {
-    async beforeOperation(args) {
-      const { faId, enId } = args.item;
-      console.log(args.resolvedData?.fa);
+    async beforeOperation({ item, operation, context, resolvedData }) {
+      if (operation !== "delete")
+        return;
+      const { faId, enId } = item;
+      console.log(resolvedData?.fa);
       if (faId) {
-        if (args.resolvedData?.fa?.disconnect) {
-          const sudoContext = args.context.sudo();
+        if (resolvedData?.fa?.disconnect) {
+          const sudoContext = context.sudo();
           await sudoContext.query.PostTranslation.deleteOne({
             where: {
               id: faId
@@ -81,8 +83,8 @@ var Post = (0, import_core.list)({
         }
       }
       if (enId) {
-        if (args.resolvedData?.en?.disconnect) {
-          const sudoContext = args.context.sudo();
+        if (resolvedData?.en?.disconnect) {
+          const sudoContext = context.sudo();
           await sudoContext.query.PostTranslation.deleteOne({
             where: {
               id: enId
@@ -124,9 +126,6 @@ var Post = (0, import_core.list)({
       ui: {
         itemView: {
           fieldPosition: "sidebar"
-        },
-        createView: {
-          fieldMode: "hidden"
         }
       }
     }),
@@ -176,6 +175,7 @@ var import_core2 = require("@keystone-6/core");
 var import_access2 = require("@keystone-6/core/access");
 var import_fields2 = require("@keystone-6/core/fields");
 var import_fields_document = require("@keystone-6/fields-document");
+var import_schema = require("@graphql-ts/schema");
 var PostTranslation = (0, import_core2.list)({
   access: import_access2.allowAll,
   fields: {
@@ -208,6 +208,30 @@ var PostTranslation = (0, import_core2.list)({
       ],
       links: true,
       dividers: true
+    }),
+    excerpt: (0, import_fields2.virtual)({
+      field: import_schema.graphql.field({
+        type: import_schema.graphql.String,
+        async resolve(item, args, context) {
+          const { content } = item;
+          let excerpt = "";
+          function loop(data) {
+            Object.keys(data).forEach((i) => {
+              if (i === "text")
+                excerpt += " " + data[i];
+              if (typeof data[i] === "object")
+                loop(data[i]);
+            });
+          }
+          if (content) {
+            loop(
+              typeof content === "string" ? JSON.parse(content) : content
+            );
+            excerpt = excerpt.split(/\s+/g).filter(Boolean).splice(0, 45).join(" ");
+          }
+          return excerpt;
+        }
+      })
     }),
     // with this field, you can set a User as the author for a Post
     author: (0, import_fields2.relationship)({
@@ -252,8 +276,20 @@ var import_access3 = require("@keystone-6/core/access");
 var import_fields3 = require("@keystone-6/core/fields");
 var FrontPage = (0, import_core3.list)({
   access: import_access3.allowAll,
-  isSingleton: true,
   fields: {
+    lang: (0, import_fields3.select)({
+      options: [
+        {
+          label: "english",
+          value: "en"
+        },
+        {
+          label: "\u0641\u0627\u0631\u0633\u06CC",
+          value: "fa"
+        }
+      ],
+      type: "string"
+    }),
     headline: (0, import_fields3.text)({ validation: { isRequired: true } }),
     ...(0, import_core3.group)({
       label: "hero section",
@@ -350,6 +386,9 @@ var FrontPage = (0, import_core3.list)({
         })
       }
     }),
+    logos: (0, import_fields3.relationship)({ ref: "ImageStore", many: true, ui: {
+      description: "max 6 items"
+    } }),
     ...(0, import_core3.group)({
       label: "Blog",
       fields: {
@@ -385,6 +424,9 @@ var import_access5 = require("@keystone-6/core/access");
 var import_fields5 = require("@keystone-6/core/fields");
 var Resource = (0, import_core5.list)({
   access: import_access5.allowAll,
+  ui: {
+    isHidden: process.env.NODE_ENV === "production"
+  },
   fields: {
     title: (0, import_fields5.text)(),
     content: (0, import_fields5.text)(),
@@ -401,24 +443,83 @@ var Resource = (0, import_core5.list)({
   }
 });
 
+// schemas/MainMenu.ts
+var import_core6 = require("@keystone-6/core");
+var import_access6 = require("@keystone-6/core/access");
+var import_fields6 = require("@keystone-6/core/fields");
+var MainMenu = (0, import_core6.list)({
+  access: import_access6.allowAll,
+  fields: {
+    en: (0, import_fields6.relationship)({
+      ref: "Resource",
+      ui: {
+        description: "english",
+        displayMode: "cards",
+        cardFields: ["title", "content"],
+        inlineCreate: { fields: ["title", "content"] }
+      }
+    }),
+    fa: (0, import_fields6.relationship)({
+      ref: "Resource",
+      ui: {
+        description: "english",
+        displayMode: "cards",
+        cardFields: ["title", "content"],
+        inlineCreate: { fields: ["title", "content"] }
+      }
+    }),
+    link: (0, import_fields6.text)({ validation: { isRequired: true } })
+  }
+});
+
+// schemas/ContactUs.ts
+var import_core7 = require("@keystone-6/core");
+var import_access7 = require("@keystone-6/core/access");
+var import_fields7 = require("@keystone-6/core/fields");
+var ContactUs = (0, import_core7.list)({
+  access: import_access7.allowAll,
+  isSingleton: true,
+  fields: {
+    aboutUs: (0, import_fields7.text)({
+      ui: {
+        displayMode: "textarea"
+      }
+    }),
+    tel: (0, import_fields7.text)(),
+    telegram: (0, import_fields7.text)(),
+    whatsapp: (0, import_fields7.text)(),
+    instagram: (0, import_fields7.text)(),
+    email: (0, import_fields7.text)(),
+    address: (0, import_fields7.text)(),
+    addressFa: (0, import_fields7.text)(),
+    ...(0, import_core7.group)({
+      label: "lat&long",
+      fields: {
+        lat: (0, import_fields7.text)(),
+        long: (0, import_fields7.text)()
+      }
+    })
+  }
+});
+
 // schema.ts
 var lists = {
-  User: (0, import_core6.list)({
-    access: import_access6.allowAll,
+  User: (0, import_core8.list)({
+    access: import_access8.allowAll,
     ui: {
       isHidden() {
         return process.env.NODE_ENV === "production";
       }
     },
     fields: {
-      name: (0, import_fields6.text)({ validation: { isRequired: true } }),
-      email: (0, import_fields6.text)({
+      name: (0, import_fields8.text)({ validation: { isRequired: true } }),
+      email: (0, import_fields8.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      password: (0, import_fields6.password)({ validation: { isRequired: true } }),
-      posts: (0, import_fields6.relationship)({ ref: "PostTranslation.author", many: true }),
-      createdAt: (0, import_fields6.timestamp)({
+      password: (0, import_fields8.password)({ validation: { isRequired: true } }),
+      posts: (0, import_fields8.relationship)({ ref: "PostTranslation.author", many: true }),
+      createdAt: (0, import_fields8.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
@@ -433,14 +534,17 @@ var lists = {
   ImageStore,
   // @ts-ignore
   Resource,
-  Tag: (0, import_core6.list)({
-    access: import_access6.allowAll,
+  // @ts-ignore
+  MainMenu,
+  ContactUs,
+  Tag: (0, import_core8.list)({
+    access: import_access8.allowAll,
     ui: {
       isHidden: true
     },
     fields: {
-      name: (0, import_fields6.text)(),
-      posts: (0, import_fields6.relationship)({ ref: "PostTranslation.tags", many: true })
+      name: (0, import_fields8.text)(),
+      posts: (0, import_fields8.relationship)({ ref: "PostTranslation.tags", many: true })
     }
   })
 };
@@ -477,7 +581,7 @@ require("dotenv").config({
   )
 });
 var keystone_default = withAuth(
-  (0, import_core7.config)({
+  (0, import_core9.config)({
     db: {
       // we're using sqlite for the fastest startup experience
       //   for more information on what database might be appropriate for you
@@ -486,6 +590,11 @@ var keystone_default = withAuth(
       url: "file:./keystone.db"
     },
     server: {
+      cors: {
+        origin: [process.env.FRONTENDURL],
+        credentials: true
+      },
+      maxFileSize: 1024e6,
       port: 3032
     },
     lists,

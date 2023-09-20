@@ -1,23 +1,23 @@
 <script lang="ts" setup>
-import { useIntersectionObserver } from '@vueuse/core';
-import { ref } from 'vue';
+import { useIntersectionObserver } from '@vueuse/core'
+import { ref } from 'vue'
 defineProps({
   percentage: {
     type: Number,
-    default: () => 20,
+    default: () => 20
   },
   color: {
     type: String,
-    default: () => '#00dacf',
-  },
-});
+    default: () => '#00dacf'
+  }
+})
 
-const target = ref(null);
-const targetIsVisible = ref(false);
+const target = ref(null)
+const targetIsVisible = ref(false)
 
 useIntersectionObserver(target, ([{ isIntersecting }], _) => {
-  targetIsVisible.value = isIntersecting;
-});
+  targetIsVisible.value = isIntersecting
+})
 </script>
 
 <template>

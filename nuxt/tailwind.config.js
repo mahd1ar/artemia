@@ -9,8 +9,8 @@ module.exports = {
         sm: '2rem',
         lg: '4rem',
         xl: '5rem',
-        '2xl': '6rem',
-      },
+        '2xl': '6rem'
+      }
     },
     extend: {
       colors: {
@@ -21,8 +21,7 @@ module.exports = {
           black: '#151b1f'
         }
       }
-    },
+    }
   },
-  plugins: [],
+  plugins: []
 }
-

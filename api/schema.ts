@@ -21,7 +21,7 @@ import {
 
 
 import type { Lists } from '.keystone/types';
-import { PostTranslation, Post, FrontPage, ImageStore,Resource } from './schemas'
+import { PostTranslation, Post, FrontPage, ImageStore, Resource, MainMenu, ContactUs } from './schemas'
 
 
 export const lists: Lists = {
@@ -46,16 +46,20 @@ export const lists: Lists = {
       }),
     },
   }),
-// @ts-ignore
-Post,
-// @ts-ignore
-PostTranslation,
-// @ts-ignore
-FrontPage,
-// @ts-ignore
-ImageStore,
-// @ts-ignore
+  // @ts-ignore
+  Post,
+  // @ts-ignore
+  PostTranslation,
+  // @ts-ignore
+  FrontPage,
+  // @ts-ignore
+  ImageStore,
+  // @ts-ignore
   Resource,
+
+  // @ts-ignore
+  MainMenu,
+  ContactUs,
 
   Tag: list({
 

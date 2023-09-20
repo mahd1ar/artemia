@@ -5,16 +5,25 @@ import { relationship, select, text, timestamp } from '@keystone-6/core/fields'
 export const Post = list({
     access: allowAll,
     hooks: {
-        async beforeOperation(args) {
-            const { faId, enId } = args.item as unknown as {
-                faId: string
-                enId: string
-            }
+        
+        async beforeOperation({item, operation,context,resolvedData}) {
+            
+            if(operation !== 'delete')
+            return
+            
+            
 
-            console.log(args.resolvedData?.fa)
-            if (faId)
-                if (args.resolvedData?.fa?.disconnect) {
-                    const sudoContext = args.context.sudo()
+        
+        const { faId, enId } = item as unknown as {
+            faId: string
+            enId: string
+        }
+        
+        console.log(resolvedData?.fa)
+        if (faId)
+        if (resolvedData?.fa?.disconnect) {
+                    
+                    const sudoContext = context.sudo()
                     await sudoContext.query.PostTranslation.deleteOne({
                         where: {
                             id: faId
@@ -25,8 +34,8 @@ export const Post = list({
                 }
 
             if (enId)
-                if (args.resolvedData?.en?.disconnect) {
-                    const sudoContext = args.context.sudo()
+                if (resolvedData?.en?.disconnect) {
+                    const sudoContext = context.sudo()
                     await sudoContext.query.PostTranslation.deleteOne({
                         where: {
                             id: enId
@@ -73,9 +82,7 @@ export const Post = list({
                 itemView: {
                     fieldPosition : 'sidebar'
                 },
-                createView: {
-                    fieldMode: 'hidden'
-                }
+               
             }
         }),
         en: relationship({

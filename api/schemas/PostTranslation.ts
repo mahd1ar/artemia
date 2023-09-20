@@ -1,7 +1,8 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { select, text, relationship, timestamp } from "@keystone-6/core/fields";
+import { select, text, relationship, timestamp, virtual } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
+import { graphql } from '@graphql-ts/schema';
 
 export const PostTranslation = list({
     access: allowAll,
@@ -39,7 +40,45 @@ export const PostTranslation = list({
             links: true,
             dividers: true,
         }),
+        excerpt: virtual({
+            field: graphql.field({
+                type: graphql.String,
+                async resolve(item, args, context) {
+                    const { content } = item as unknown as { content: string }
 
+                    let excerpt = '';
+
+                    function loop(data: any) {
+                        Object.keys(data).forEach((i) => {
+                            if (i === 'text') excerpt += ' ' + data[i];
+
+                            if (typeof data[i] === 'object') loop(data[i]);
+                        });
+                    }
+
+
+
+                    if (content) {
+
+                        loop(
+                            typeof content === 'string'
+                                ? JSON.parse(content)
+                                : content
+                        );
+
+                        excerpt = excerpt
+                            .split(/\s+/g)
+                            .filter(Boolean)
+                            .splice(0, 45)
+                            .join(' ');
+                    }
+
+
+
+                    return excerpt
+                },
+            }),
+        }),
         // with this field, you can set a User as the author for a Post
         author: relationship({
             // we could have used 'User', but then the relationship would only be 1-way

@@ -1,3 +1,4 @@
 export default {
-  HI: 'سلام'
+  PlaceAnOrder: 'ثبت شفارش',
+  Home: 'خانه'
 }
