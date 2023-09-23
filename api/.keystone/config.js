@@ -476,11 +476,45 @@ var MainMenu = (0, import_core6.list)({
 var import_core7 = require("@keystone-6/core");
 var import_access7 = require("@keystone-6/core/access");
 var import_fields7 = require("@keystone-6/core/fields");
+var import_fields_document2 = require("@keystone-6/fields-document");
 var ContactUs = (0, import_core7.list)({
   access: import_access7.allowAll,
   isSingleton: true,
   fields: {
-    aboutUs: (0, import_fields7.text)({
+    aboutUs: (0, import_fields_document2.document)({
+      label: "about us (english)",
+      formatting: true,
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+        [2, 1],
+        [1, 2],
+        [1, 2, 1]
+      ],
+      links: true,
+      dividers: true
+    }),
+    aboutFa: (0, import_fields_document2.document)({
+      label: "\u062F\u0631\u0628\u0627\u0631\u0647 \u06CC \u0645\u0627 (\u0641\u0627\u0631\u0633\u06CC)",
+      formatting: true,
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+        [2, 1],
+        [1, 2],
+        [1, 2, 1]
+      ],
+      links: true,
+      dividers: true
+    }),
+    shortDescription: (0, import_fields7.text)({
+      label: "short description (english)",
+      ui: {
+        displayMode: "textarea"
+      }
+    }),
+    shortDescriptionFa: (0, import_fields7.text)({
+      label: "\u062A\u0648\u0636\u06CC\u062D \u06A9\u0648\u062A\u0627\u0647 (\u0641\u0627\u0631\u0633\u06CC)",
       ui: {
         displayMode: "textarea"
       }
@@ -490,8 +524,19 @@ var ContactUs = (0, import_core7.list)({
     whatsapp: (0, import_fields7.text)(),
     instagram: (0, import_fields7.text)(),
     email: (0, import_fields7.text)(),
-    address: (0, import_fields7.text)(),
-    addressFa: (0, import_fields7.text)(),
+    address: (0, import_fields7.text)({
+      label: "address (english)",
+      ui: {
+        displayMode: "textarea"
+      }
+    }),
+    addressFa: (0, import_fields7.text)({
+      label: "\u0627\u0653\u062F\u0631\u0633 (\u0641\u0627\u0631\u0633\u06CC)",
+      ui: {
+        displayMode: "textarea"
+      }
+    }),
+    bale: (0, import_fields7.text)(),
     ...(0, import_core7.group)({
       label: "lat&long",
       fields: {

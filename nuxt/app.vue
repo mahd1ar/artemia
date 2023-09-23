@@ -7,20 +7,30 @@ import { useAppState } from '@/stores/appState'
 const appState = useAppState()
 
 const MENU = graphql(`
-query topMenu {
-  mainMenus {
-  id
-  link
-  en {
-    title
-    content
-  }  
-  fa {
-    title
-    content
-  }
-  }
-}
+    query topMenu {
+      mainMenus {
+        id
+        link
+        en {
+          title
+          content
+        }  
+        fa {
+          title
+          content
+        }
+      }
+      contactUs {
+        email
+        instagram
+        tel
+        telegram
+        whatsapp
+        bale
+        address
+        addressFa
+      }
+    }
 `)
 const { onResult } = useQuery(MENU)
 
@@ -32,6 +42,8 @@ onResult(({ data }) => {
       link: menu.link || '#'
     })
   })
+
+  if (data.contactUs) { appState.setContact(data.contactUs) }
 })
 
 </script>
