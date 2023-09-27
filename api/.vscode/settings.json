@@ -1,3 +1,5 @@
 {
-    "workbench.colorTheme": "Material Theme Darker"
+    "workbench.colorTheme": "Material Theme Darker",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.typescript-language-features"
 }

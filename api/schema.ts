@@ -5,8 +5,8 @@
 // If you want to learn more about how lists are configured, please read
 // - https://keystonejs.com/docs/config/lists
 
-import { list } from '@keystone-6/core';
-import { allowAll } from '@keystone-6/core/access';
+import { list } from "@keystone-6/core";
+import { allowAll } from "@keystone-6/core/access";
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
 //   this is a few common fields for an example
@@ -17,19 +17,28 @@ import {
   timestamp,
   select,
   image,
-} from '@keystone-6/core/fields';
+} from "@keystone-6/core/fields";
 
-
-import type { Lists } from '.keystone/types';
-import { PostTranslation, Post, FrontPage, ImageStore, Resource, MainMenu, ContactUs } from './schemas'
-
+import type { Lists } from ".keystone/types";
+import {
+  PostTranslation,
+  Post,
+  FrontPage,
+  ImageStore,
+  Resource,
+  MainMenu,
+  ContactUs,
+  Category,
+  Customer,
+  Order,
+} from "./schemas";
 
 export const lists: Lists = {
   User: list({
     access: allowAll,
     ui: {
       isHidden() {
-        return process.env.NODE_ENV === 'production'
+        return process.env.NODE_ENV === "production";
       },
     },
     fields: {
@@ -37,12 +46,12 @@ export const lists: Lists = {
 
       email: text({
         validation: { isRequired: true },
-        isIndexed: 'unique',
+        isIndexed: "unique",
       }),
       password: password({ validation: { isRequired: true } }),
-      posts: relationship({ ref: 'PostTranslation.author', many: true }),
+      posts: relationship({ ref: "PostTranslation.author", many: true }),
       createdAt: timestamp({
-        defaultValue: { kind: 'now' },
+        defaultValue: { kind: "now" },
       }),
     },
   }),
@@ -59,17 +68,23 @@ export const lists: Lists = {
 
   // @ts-ignore
   MainMenu,
+  // @ts-ignore
   ContactUs,
+  // @ts-ignore
+  Category,
+  // @ts-ignore
+  Customer,
+  // @ts-ignore
+  Order,
 
   Tag: list({
-
     access: allowAll,
     ui: {
       isHidden: true,
     },
     fields: {
       name: text(),
-      posts: relationship({ ref: 'PostTranslation.tags', many: true }),
+      posts: relationship({ ref: "PostTranslation.tags", many: true }),
     },
   }),
 };

@@ -5,24 +5,22 @@ import { relationship, select, text, timestamp } from '@keystone-6/core/fields'
 export const Post = list({
     access: allowAll,
     hooks: {
-        
-        async beforeOperation({item, operation,context,resolvedData}) {
-            
-            if(operation !== 'delete')
-            return
-            
-            
 
-        
-        const { faId, enId } = item as unknown as {
-            faId: string
-            enId: string
-        }
-        
-        console.log(resolvedData?.fa)
-        if (faId)
-        if (resolvedData?.fa?.disconnect) {
-                    
+        async beforeOperation({ item, operation, context, resolvedData }) {
+
+            if (operation !== 'delete')
+                return
+
+
+            const { faId, enId } = item as unknown as {
+                faId: string
+                enId: string
+            }
+
+
+            if (faId)
+                if (resolvedData?.fa?.disconnect) {
+
                     const sudoContext = context.sudo()
                     await sudoContext.query.PostTranslation.deleteOne({
                         where: {
@@ -51,10 +49,14 @@ export const Post = list({
         }
     },
     fields: {
-        title: text({ validation: { isRequired: true } }),
+        title: text({
+            validation: { isRequired: true },
+            label: "post title for operator"
+        }),
         featuredImage: relationship({
             ref: 'ImageStore',
             label: 'انتخاب عکس شاخص',
+            many: false,
             ui: {
                 displayMode: 'cards',
                 cardFields: ['altText', 'image'],
@@ -74,15 +76,11 @@ export const Post = list({
             type: 'string',
             validation: { isRequired: true }
         }),
-        category: select({
-            options: ['blog'],
-            defaultValue: 'blog',
-            type: 'string',
+        category: relationship({
+            ref: 'Category.posts',
+            many: true,
             ui: {
-                itemView: {
-                    fieldPosition : 'sidebar'
-                },
-               
+                labelField: 'slug'
             }
         }),
         en: relationship({
@@ -90,13 +88,13 @@ export const Post = list({
             ref: 'PostTranslation',
             ui: {
                 inlineCreate: {
-                    fields: ['title', 'language', 'content']
+                    fields: ['title', 'content']
                 },
                 displayMode: 'cards',
                 createView: {
                     fieldMode: 'edit'
                 },
-                cardFields: ['title', 'language'],
+                cardFields: ['title'],
                 inlineConnect: true
             }
         }),
@@ -119,7 +117,7 @@ export const Post = list({
             defaultValue: { kind: 'now' },
             ui: {
                 itemView: {
-                    fieldPosition : 'sidebar'
+                    fieldPosition: 'sidebar'
                 }
             }
         })

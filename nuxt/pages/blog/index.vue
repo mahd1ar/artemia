@@ -2,7 +2,7 @@
 // import { useRouteQuery } from '@vueuse/router'
 import { graphql } from '~/gql'
 const i18n = useI18n()
-
+const localePath = useLocalePath()
 const QUERY = graphql(`
   query Posts($where: PostWhereInput!, $isEnLang: Boolean!) {
   posts(where: $where) {
@@ -32,7 +32,12 @@ const lang = i18n.locale.value === 'en' ? 'en' : 'fa'
 const { result } = useQuery(QUERY, {
   where: {
     category: {
-      equals: 'blog'
+      every: {
+        slug: {
+          equals: 'blog'
+        }
+      }
+      // equals: 'blog'
     }
   },
   isEnLang: i18n.locale.value === 'en'
@@ -47,7 +52,7 @@ const { result } = useQuery(QUERY, {
       class="container max-w-6xl p-6 mx-auto space-y-6 sm:space-y-12"
     >
       <nuxt-link
-        :to="`/blog/${result.posts[0].id}`"
+        :to="localePath(`/blog/${result.posts[0].id}`)"
         rel="noopener noreferrer"
         class="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-gray-50  shadow-xl shadow-slate-300/50 rounded"
       >
@@ -78,7 +83,7 @@ const { result } = useQuery(QUERY, {
             v-if="index"
             :key="blog.id"
             rel="noopener noreferrer"
-            :to="`/blog/${blog.id}`"
+            :to="localePath(`/blog/${blog.id}`)"
             class="max-w-sm mx-auto group hover:no-underline focus:no-underline bg-gray-50 border "
           >
             <img

@@ -29,6 +29,8 @@ const MENU = graphql(`
         bale
         address
         addressFa
+        shortDescription
+        shortDescriptionFa
       }
     }
 `)

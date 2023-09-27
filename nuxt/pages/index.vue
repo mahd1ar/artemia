@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { graphql } from '@/gql'
+import type { PostWhereInput, IdFilter } from '@/gql/graphql'
+
+const { locale } = useI18n()
+const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
 
 const FRONPAGE = graphql(`
-query FrontPage($isEnLang: Boolean!, $lang: String!) {
+query FrontPage( $lang: String!) {
   frontPages(where: {
     lang:{
       equals: $lang
@@ -37,30 +41,13 @@ query FrontPage($isEnLang: Boolean!, $lang: String!) {
         }
       }
     }
-    featuresTitle
-    featuresDescription
     features {
-      title
-      content
-      featuredImage {
-        altText
-        id
-        image {
-          url
-
-        }
-      }
+      id
+      slug
     }
     testimonial {
-      title
-      featuredImage {
-        altText
-        id
-        image {
-          id
-          url
-        }
-      }
+      id
+      slug
     }
     logos {
       id
@@ -69,39 +56,37 @@ query FrontPage($isEnLang: Boolean!, $lang: String!) {
         url
       }
     }
-    BlogTitle
-    BlogDescription
+
 
   }
 
-  posts(where: { category: { equals: "blog" } }) {
+}
+`)
+
+const POSTS = graphql(`
+  query PostsPrview($where: PostWhereInput!, $isEnLang: Boolean!) {
+  posts(where: $where) {
     id
-    title
-    type
     featuredImage {
+      altText
+      id
       image {
+        id
         url
       }
     }
+    category {
+      id
+      slug
+    }
+    createdAt
     en @include(if: $isEnLang) {
       title
-      content {
-        document
-      }
-      tags {
-        id
-        name
-      }
+      excerpt
     }
     fa @skip(if: $isEnLang) {
       title
-      content {
-        document
-      }
-      tags {
-        id
-        name
-      }
+      excerpt
     }
   }
 }
@@ -111,11 +96,43 @@ definePageMeta({
   layout: 'home'
 })
 
-const { result } = useQuery(FRONPAGE, { isEnLang: true, lang: 'en' })
+const { result } = useQuery(FRONPAGE, { isEnLang: lang.value === 'en', lang: lang.value })
+// console.log(result.value?.frontPages?.[0].features?.slug)
+const { result: resultPost } = useQuery(POSTS, {
+  isEnLang: lang.value === 'en',
+  where: {
+    category: {
+      some: {
+        OR: [
+          {
+            slug: {
+              equals: 'blog'
+            }
+          },
+          {
+            slug: {
+              equals: 'testimonials'
+            }
+          },
+          {
+            slug: {
+              equals: 'features'
+            }
+          }
+        ]
 
-// onResult((res) => {
-//   console.log(res.data.posts)
-// })
+        // OR: [
+        // {
+        //   slug: { equals: 'blog' }
+        // }
+        // {
+        //   id: "clmyqz1kf0002hbj8asbeev5y"
+        // }
+        // ]
+      }
+    }
+  }
+})
 
 </script>
 
@@ -212,11 +229,7 @@ const { result } = useQuery(FRONPAGE, { isEnLang: true, lang: 'en' })
         {{ result?.frontPages?.[0]?.statusTitle }}
       </h2>
       <span class="text-gray-400 text-sm leading-7 mb-5">
-        <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-  enim ad minim veniam, quis nostrud exercitation ullamco laboris
-  nisi ut aliquip ex ea commodo enim ad minim veniam, quis nostrud
-  exercitation. -->
+
         {{ result?.frontPages?.[0]?.statusDescription }}
       </span>
       <div class="grid grid-cols-2">
@@ -228,8 +241,6 @@ const { result } = useQuery(FRONPAGE, { isEnLang: true, lang: 'en' })
           </h3>
           <div class="font-xs text-gray-400">
             {{ i.content }}
-            <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Sed vel ipsum auctor, iaculis arcu quis -->
           </div>
         </div>
       </div>
@@ -237,13 +248,27 @@ const { result } = useQuery(FRONPAGE, { isEnLang: true, lang: 'en' })
     <div class="bg-cyan-400 w-7/12" />
   </section>
 
-  <ElementorSection :list="result?.frontPages?.[0]?.sites?.map(i=>({src:i.featuredImage?.image?.url, title:i.title})) || []" class="mt-28" />
+  <!-- <ElementorSection :list="result?.frontPages?.[0]?.sites?.map(i=>({src:i.featuredImage?.image?.url, title:i.title})) || []" class="mt-28" /> -->
 
-  <h2>{{ result?.frontPages?.[0]?.featuresTitle }}</h2>
-  <p>{{ result?.frontPages?.[0]?.featuresDescription }}</p>
-  <PixelGrid :list="result?.frontPages?.[0]?.features?.map(i => ({ src: i.featuredImage?.image?.url, title: i.title,description: i.content})) || []" />
+  <!-- <h2>{{ result?.frontPages?.[0]?.featuresTitle }}</h2>
+  <p>{{ result?.frontPages?.[0]?.featuresDescription }}</p> -->
 
-  <TestimonialSection :items="result?.frontPages?.[0]?.testimonial?.map(i => ({autor: 'text',image: i.featuredImage?.image?.url,text: i.title})) " class="mt-28" />
+  <PixelGrid
+    :list=" resultPost?.posts?.filter( i => i.category?.map(j => j.slug).includes('features')).map( i => ({
+      src: i.featuredImage?.image?.url, title: i?.[lang]?.title,description: i?.[lang]?.excerpt
+    })) || []"
+  />
+
+  <TestimonialSection
+    :items="
+      resultPost?.posts?.filter( i => i.category?.some(j => j.slug === 'testimonials')).map( i => ({
+        text: i?.[lang]?.title,
+        autor: '#',
+        image: i.featuredImage?.image?.url
+      })) || []
+    "
+    class="mt-28"
+  />
 
   <div class="grid grid-cols-6 gap-6 mt-28 container mx-auto">
     <div v-for="logo in result?.frontPages?.[0]?.logos || []" :key="logo.id" class="grayscale-0 opacity-30 hover:opacity-60 transition-all duration-500 mx-6">
@@ -255,16 +280,17 @@ const { result } = useQuery(FRONPAGE, { isEnLang: true, lang: 'en' })
     </div>
   </div>
 
-  <!-- @vue-ignore -->
   <LatestBlog
-    :title="result?.frontPages?.[0]?.BlogTitle"
-    :description="result?.frontPages?.[0]?.BlogDescription"
-    :items="result?.posts?.map( i => ({
-      title: i.en?.title || i.fa?.title || '',
-      excerpt: 'asdads',
-      image: i.featuredImage?.image?.url || '',
-      tag : i.en?.tags?.map( j => j.name).join(',') || i.fa?.tags?.map( j => j.name).join(',') || ''
-    })) || []"
+    title="Latest Blogs and Articlas"
+    :description="'result?.frontPages?.[0]?.BlogDescription'"
+    :items="resultPost?.posts?.filter( i => i.category?.map(j => j.slug).includes('blog')).map(i=>{
+      return {
+        title: i?.[lang]?.title || '',
+        excerpt: i?.[lang]?.excerpt || '',
+        image: i.featuredImage?.image?.url || '',
+        tag: 'blog'
+      }
+    }) || []"
     class="mt-28"
   />
   <SideNav />

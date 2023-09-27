@@ -4,12 +4,8 @@ import { graphql } from '~/gql'
 const route = useRoute()
 const i18n = useI18n()
 
-watch(i18n.locale, (newVal) => {
-  console.log(newVal)
-})
-
-const BLOG = graphql(`
-query BlogFull($where: PostWhereUniqueInput!, $isEn: Boolean!) {
+const Post = graphql(`
+query PostFull($where: PostWhereUniqueInput!, $isEn: Boolean!) {
   post(where: $where) {
     id
     createdAt
@@ -36,7 +32,7 @@ query BlogFull($where: PostWhereUniqueInput!, $isEn: Boolean!) {
 `)
 
 const lang = computed(() => i18n.locale.value === 'en' ? 'en' : 'fa')
-const { result, loading } = useQuery(BLOG, { where: { id: route.params.id as string }, isEn: lang.value === 'en' })
+const { result, loading } = useQuery(Post, { where: { id: route.params.id as string }, isEn: lang.value === 'en' })
 
 </script>
 <template>
@@ -86,7 +82,7 @@ const { result, loading } = useQuery(BLOG, { where: { id: route.params.id as str
           class="h-64 object-cover w-full"
         >
         <div class="text-gray-800">
-        <ContentViewer :content="result?.post?.[lang]?.content?.document" />
+          <ContentViewer :content="result?.post?.[lang]?.content?.document" />
         </div>
       </article>
     </LoadingIndicator>

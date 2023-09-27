@@ -1,7 +1,9 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -15,6 +17,14 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // keystone.ts
@@ -52,12 +62,12 @@ var storage = {
 };
 
 // keystone.ts
-var import_core9 = require("@keystone-6/core");
+var import_core12 = require("@keystone-6/core");
 
 // schema.ts
-var import_core8 = require("@keystone-6/core");
-var import_access8 = require("@keystone-6/core/access");
-var import_fields8 = require("@keystone-6/core/fields");
+var import_core11 = require("@keystone-6/core");
+var import_access11 = require("@keystone-6/core/access");
+var import_fields11 = require("@keystone-6/core/fields");
 
 // schemas/Post.ts
 var import_core = require("@keystone-6/core");
@@ -70,7 +80,6 @@ var Post = (0, import_core.list)({
       if (operation !== "delete")
         return;
       const { faId, enId } = item;
-      console.log(resolvedData?.fa);
       if (faId) {
         if (resolvedData?.fa?.disconnect) {
           const sudoContext = context.sudo();
@@ -96,10 +105,14 @@ var Post = (0, import_core.list)({
     }
   },
   fields: {
-    title: (0, import_fields.text)({ validation: { isRequired: true } }),
+    title: (0, import_fields.text)({
+      validation: { isRequired: true },
+      label: "post title for operator"
+    }),
     featuredImage: (0, import_fields.relationship)({
       ref: "ImageStore",
       label: "\u0627\u0646\u062A\u062E\u0627\u0628 \u0639\u06A9\u0633 \u0634\u0627\u062E\u0635",
+      many: false,
       ui: {
         displayMode: "cards",
         cardFields: ["altText", "image"],
@@ -119,14 +132,11 @@ var Post = (0, import_core.list)({
       type: "string",
       validation: { isRequired: true }
     }),
-    category: (0, import_fields.select)({
-      options: ["blog"],
-      defaultValue: "blog",
-      type: "string",
+    category: (0, import_fields.relationship)({
+      ref: "Category.posts",
+      many: true,
       ui: {
-        itemView: {
-          fieldPosition: "sidebar"
-        }
+        labelField: "slug"
       }
     }),
     en: (0, import_fields.relationship)({
@@ -134,13 +144,13 @@ var Post = (0, import_core.list)({
       ref: "PostTranslation",
       ui: {
         inlineCreate: {
-          fields: ["title", "language", "content"]
+          fields: ["title", "content"]
         },
         displayMode: "cards",
         createView: {
           fieldMode: "edit"
         },
-        cardFields: ["title", "language"],
+        cardFields: ["title"],
         inlineConnect: true
       }
     }),
@@ -348,56 +358,34 @@ var FrontPage = (0, import_core3.list)({
         })
       }
     }),
-    ...(0, import_core3.group)({
-      label: "features section",
-      fields: {
-        featuresTitle: (0, import_fields3.text)({
-          label: "Title"
-        }),
-        featuresDescription: (0, import_fields3.text)({
-          label: "Description"
-        }),
-        features: (0, import_fields3.relationship)({
-          ref: "Resource",
-          many: true,
-          ui: {
-            description: "exacltly 8 items",
-            displayMode: "cards",
-            cardFields: ["title", "content", "featuredImage"],
-            inlineCreate: {
-              fields: ["title", "content", "featuredImage"]
-            }
-          }
-        })
+    features: (0, import_fields3.relationship)({
+      ref: "Category",
+      label: "features section relative category",
+      ui: {
+        description: "exacltly 8 items",
+        labelField: "slug"
       }
     }),
-    ...(0, import_core3.group)({
-      label: "testimonial section",
-      fields: {
-        testimonial: (0, import_fields3.relationship)({
-          ref: "Resource",
-          many: true,
-          ui: {
-            description: "exacltly 8 items",
-            displayMode: "cards",
-            cardFields: ["title", "featuredImage", "bannerImage"],
-            inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] }
-          }
-        })
+    testimonial: (0, import_fields3.relationship)({
+      ref: "Category",
+      label: "testimonial section relative category",
+      ui: {
+        labelField: "slug"
       }
+      // many: true,
+      // ui: {
+      //   description: "exacltly 8 items",
+      //   displayMode: "cards",
+      //   cardFields: ["title", "featuredImage", "bannerImage"],
+      //   inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] },
+      // },
     }),
-    logos: (0, import_fields3.relationship)({ ref: "ImageStore", many: true, ui: {
-      description: "max 6 items"
-    } }),
-    ...(0, import_core3.group)({
-      label: "Blog",
-      fields: {
-        BlogTitle: (0, import_fields3.text)({
-          label: "title"
-        }),
-        BlogDescription: (0, import_fields3.text)({
-          label: "description"
-        })
+    logos: (0, import_fields3.relationship)({
+      ref: "ImageStore",
+      many: true,
+      ui: {
+        description: "max 6 items",
+        labelField: "altText"
       }
     })
   }
@@ -547,24 +535,147 @@ var ContactUs = (0, import_core7.list)({
   }
 });
 
+// schemas/Category.ts
+var import_core8 = require("@keystone-6/core");
+var import_access8 = require("@keystone-6/core/access");
+var import_fields8 = require("@keystone-6/core/fields");
+var import_schema2 = require("@graphql-ts/schema");
+var Category = (0, import_core8.list)({
+  access: import_access8.allowAll,
+  ui: {
+    isHidden: process.env.NODE_ENV === "production"
+  },
+  fields: {
+    slug: (0, import_fields8.text)({
+      validation: {
+        isRequired: true
+      }
+    }),
+    url: (0, import_fields8.virtual)({
+      field: import_schema2.graphql.field({
+        type: import_schema2.graphql.String,
+        async resolve(item, args, context) {
+          const { id } = item;
+          return `${process.env.FRONTENDURL}/category/${id}`;
+        }
+      })
+    }),
+    image: (0, import_fields8.relationship)({
+      ref: "ImageStore",
+      ui: {
+        itemView: {
+          fieldMode: "hidden"
+        },
+        labelField: "altText"
+      }
+    }),
+    en: (0, import_fields8.relationship)({
+      label: "title in english",
+      ref: "Resource",
+      ui: {
+        description: "title in english",
+        displayMode: "cards",
+        cardFields: ["title", "content"],
+        inlineCreate: { fields: ["title", "content"] },
+        inlineConnect: {
+          labelField: "title",
+          searchFields: ["title", "content"]
+        }
+      }
+    }),
+    fa: (0, import_fields8.relationship)({
+      label: "\u062A\u06CC\u062A\u0631 \u0641\u0627\u0631\u0633\u06CC",
+      ref: "Resource",
+      ui: {
+        description: "\u062A\u06CC\u062A\u0631 \u0641\u0627\u0631\u0633\u06CC",
+        displayMode: "cards",
+        cardFields: ["title", "content"],
+        inlineCreate: { fields: ["title", "content"] },
+        inlineEdit: { fields: ["title", "content"] },
+        inlineConnect: {
+          labelField: "title",
+          searchFields: ["title", "content"]
+        }
+      }
+    }),
+    posts: (0, import_fields8.relationship)({
+      ref: "Post.category",
+      many: true
+    }),
+    createdAt: (0, import_fields8.timestamp)({
+      defaultValue: { kind: "now" },
+      ui: {
+        itemView: {
+          fieldMode: "hidden"
+        }
+      }
+    })
+  }
+});
+
+// schemas/Order.ts
+var import_core9 = require("@keystone-6/core");
+var import_access9 = require("@keystone-6/core/access");
+var import_fields9 = require("@keystone-6/core/fields");
+var Order = (0, import_core9.list)({
+  access: import_access9.allowAll,
+  fields: {
+    orderContent: (0, import_fields9.text)({
+      ui: {
+        displayMode: "textarea"
+      }
+    }),
+    customerName: (0, import_fields9.text)(),
+    customer: (0, import_fields9.relationship)({
+      ref: "Customer"
+    }),
+    createdAt: (0, import_fields9.timestamp)({
+      defaultValue: { kind: "now" }
+    })
+  }
+});
+
+// schemas/Customer.ts
+var import_core10 = require("@keystone-6/core");
+var import_access10 = require("@keystone-6/core/access");
+var import_fields10 = require("@keystone-6/core/fields");
+var Customer = (0, import_core10.list)({
+  access: import_access10.allowAll,
+  fields: {
+    name: (0, import_fields10.text)(),
+    tel: (0, import_fields10.text)(),
+    postalCode: (0, import_fields10.text)(),
+    address: (0, import_fields10.text)(),
+    city: (0, import_fields10.text)(),
+    code: (0, import_fields10.text)(),
+    orders: (0, import_fields10.relationship)({
+      ref: "Order",
+      many: true
+    }),
+    createdAt: (0, import_fields10.timestamp)({
+      defaultValue: { kind: "now" }
+    })
+  }
+});
+
 // schema.ts
 var lists = {
-  User: (0, import_core8.list)({
-    access: import_access8.allowAll,
+  User: (0, import_core11.list)({
+    access: import_access11.allowAll,
     ui: {
       isHidden() {
         return process.env.NODE_ENV === "production";
       }
     },
     fields: {
-      name: (0, import_fields8.text)({ validation: { isRequired: true } }),
-      email: (0, import_fields8.text)({
+      name: (0, import_fields11.text)({ validation: { isRequired: true } }),
+      email: (0, import_fields11.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      password: (0, import_fields8.password)({ validation: { isRequired: true } }),
-      posts: (0, import_fields8.relationship)({ ref: "PostTranslation.author", many: true }),
-      createdAt: (0, import_fields8.timestamp)({
+      password: (0, import_fields11.password)({ validation: { isRequired: true } }),
+      posts: (0, import_fields11.relationship)({ ref: "PostTranslation.author", many: true }),
+      createdAt: (0, import_fields11.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
@@ -581,15 +692,22 @@ var lists = {
   Resource,
   // @ts-ignore
   MainMenu,
+  // @ts-ignore
   ContactUs,
-  Tag: (0, import_core8.list)({
-    access: import_access8.allowAll,
+  // @ts-ignore
+  Category,
+  // @ts-ignore
+  Customer,
+  // @ts-ignore
+  Order,
+  Tag: (0, import_core11.list)({
+    access: import_access11.allowAll,
     ui: {
       isHidden: true
     },
     fields: {
-      name: (0, import_fields8.text)(),
-      posts: (0, import_fields8.relationship)({ ref: "PostTranslation.tags", many: true })
+      name: (0, import_fields11.text)(),
+      posts: (0, import_fields11.relationship)({ ref: "PostTranslation.tags", many: true })
     }
   })
 };
@@ -618,6 +736,8 @@ var session = (0, import_session.statelessSessions)({
 });
 
 // keystone.ts
+var import_client = require("@prisma/client");
+var import_body_parser = __toESM(require("body-parser"));
 require("dotenv").config({
   override: true,
   path: (0, import_path.resolve)(
@@ -626,7 +746,7 @@ require("dotenv").config({
   )
 });
 var keystone_default = withAuth(
-  (0, import_core9.config)({
+  (0, import_core12.config)({
     db: {
       // we're using sqlite for the fastest startup experience
       //   for more information on what database might be appropriate for you
@@ -638,6 +758,116 @@ var keystone_default = withAuth(
       cors: {
         origin: [process.env.FRONTENDURL],
         credentials: true
+      },
+      extendExpressApp(app, context) {
+        app.get("/test", async (req, res) => {
+          res.json({
+            message: "hello world",
+            ok: false
+          });
+        });
+        app.use(import_body_parser.default.json());
+        app.post("/placeorder", async (req, res) => {
+          const {
+            address,
+            code,
+            tel,
+            city,
+            postalCode,
+            orderContent,
+            id,
+            fullname
+          } = req.body;
+          const prisma = new import_client.PrismaClient();
+          try {
+            if (!id) {
+              const customer = await prisma.customer.create({
+                data: {
+                  name: fullname,
+                  address,
+                  city,
+                  code,
+                  tel,
+                  postalCode,
+                  orders: {
+                    create: {
+                      orderContent
+                    }
+                  }
+                }
+              });
+              res.cookie("id", customer.id, {
+                maxAge: 9e5
+              });
+              res.json({
+                message: "successuly placed order",
+                payload: {
+                  id: customer.id
+                }
+              });
+            } else {
+              const order = await prisma.order.create({
+                data: {
+                  orderContent,
+                  customer: {
+                    connect: {
+                      id
+                    }
+                  }
+                }
+              });
+              res.json({
+                message: "successuly placed order",
+                payload: {
+                  id: order.id
+                }
+              });
+            }
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({
+              message: "error",
+              payload: error
+            });
+          } finally {
+            await prisma.$disconnect();
+          }
+        });
+        app.get("/getcustomer", async (req, res) => {
+          const customerid = req.query.customerid ? Array.isArray(req.query.customerid) ? req.query.customerid[0] : req.query.customerid : null;
+          if (!customerid) {
+            res.status(400).json({ message: "customer id is required", payload: {} });
+            return;
+          }
+          const prisma = new import_client.PrismaClient();
+          const customer = await prisma.customer.findUnique({
+            where: {
+              id: typeof customerid === "string" ? customerid : String(customerid)
+            }
+          });
+          if (!customer) {
+            res.status(404).json({ message: "customer not found", payload: {} });
+            return;
+          }
+          const fullname = customer?.name || "";
+          const tel = customer?.tel || "";
+          const address = customer?.address || "";
+          const city = customer?.city || "";
+          const postalCode = customer?.postalCode || "";
+          const code = customer?.code || "";
+          res.json({
+            message: "",
+            payload: {
+              fullname,
+              tel,
+              address,
+              city,
+              postalCode,
+              code
+            }
+          });
+          prisma.$disconnect();
+        });
       },
       maxFileSize: 1024e6,
       port: 3032

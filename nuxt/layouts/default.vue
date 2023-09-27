@@ -5,11 +5,13 @@ const appState = useAppState()
 const { locale, localeCodes, setLocale, t } = useI18n()
 
 const translatePanel = ref(false)
-
+const localePath = useLocalePath()
 function changeLocale (newLocale : string) {
   translatePanel.value = false
   setLocale(newLocale)
 }
+
+const baseUrl = process.env.FRONTENDURL!
 </script>
 
 <template>
@@ -124,40 +126,73 @@ function changeLocale (newLocale : string) {
 
                   </svg>
                 </div>
-                <div class="hidden md:ml-6 md:flex md:space-x-8 desktop">
+                <div class="hidden ltr:md:ml-6 rtl:md:mr-6 md:flex md:gap-8 desktop">
                   <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+
                   <NuxtLink
-                    to="/"
+                    v-for="(i , index) in appState.menuItems"
+                    :key="index"
+                    :to="localePath(i.link.replace(baseUrl, ''))"
                     class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
-                    {{ t('Home') }}
-                  </nuxtLink>
-
-                  <NuxtLink v-for="(i , index) in appState.menuItems" :key="index" :to="i.link" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     {{
                       locale === 'fa' ? i.fa : i.en }}
                   </NuxtLink>
                 </div>
               </div>
-              <div class="flex items-center">
+
+              <div class="flex items-center md:gap-4">
                 <div class="flex-shrink-0">
-                  <button type="button" class="relative inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <NuxtLink :to="localePath('/placeanorder')" class="relative gap-2 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700 ">
                     <!-- Heroicon name: mini/plus -->
-                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <svg class=" h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                       <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                     </svg>
                     <span>{{ t('PlaceAnOrder') }}</span>
-                  </button>
+                  </NuxtLink>
                 </div>
-                <div class="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
-                  <button type="button" class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="translatePanel = !translatePanel">
-                    <span class="sr-only">View notifications</span>
+                <div class="hidden  md:flex md:flex-shrink-0 md:items-center">
+                  <button type="button" class="rounded-full  relative bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="translatePanel = !translatePanel">
+                    <span class="sr-only">translate</span>
 
                     <svg class="h-7 w-7 text-gray-600" :aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="m18.5 10l4.4 11h-2.155l-1.201-3h-4.09l-1.199 3h-2.154L16.5 10h2ZM10 2v2h6v2h-1.968a18.221 18.221 0 0 1-3.62 6.301a14.865 14.865 0 0 0 2.335 1.707l-.75 1.878A17.016 17.016 0 0 1 9 13.725a16.677 16.677 0 0 1-6.201 3.548l-.536-1.929a14.7 14.7 0 0 0 5.327-3.042A18.078 18.078 0 0 1 4.767 8h2.24A16.031 16.031 0 0 0 9 10.877a16.165 16.165 0 0 0 2.91-4.876L2 6V4h6V2h2Zm7.5 10.885L16.253 16h2.492L17.5 12.885Z" /></svg>
+
+                    <ClientOnly>
+                      <Transition>
+                        <div
+                          v-show="translatePanel"
+                          class="absolute ltr:right-0 rtl:left-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="user-menu-button"
+                          tabindex="-1"
+                        >
+                          <!-- Active: "bg-gray-100", Not Active: "" -->
+
+                          <button
+                            v-for="i in localeCodes"
+                            :key="i"
+
+                            type="button"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700"
+                            :class="[locale === i && 'bg-gray-100' ]"
+                            role="menuitem"
+                            tabindex="-1"
+                            @click="changeLocale(i)"
+                          >
+                            {{
+
+                              i === 'fa' ? 'فارسی' : 'english'
+
+                            }}
+                          </button>
+                        </div>
+                      </Transition>
+                    </ClientOnly>
                   </button>
 
-                  <!-- Profile dropdown -->
-                  <div class="relative ml-3">
+                  <!-- Profile  -->
+                  <div v-if="false" class="relative ml-3">
                     <div>
                       <button id="user-menu-button" type="button" class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-expanded="false" aria-haspopup="true">
                         <span class="sr-only">Open user menu</span>
@@ -175,36 +210,6 @@ function changeLocale (newLocale : string) {
                 From: "transform opacity-100 scale-100"
                 To: "transform opacity-0 scale-95"
             -->
-                    <Transition>
-                      <div
-                        v-show="translatePanel"
-                        class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="user-menu-button"
-                        tabindex="-1"
-                      >
-                        <!-- Active: "bg-gray-100", Not Active: "" -->
-
-                        <button
-                          v-for="i in localeCodes"
-                          :key="i"
-
-                          type="button"
-                          class="block w-full text-left px-4 py-2 text-sm text-gray-700"
-                          :class="[locale === i && 'bg-gray-100' ]"
-                          role="menuitem"
-                          tabindex="-1"
-                          @click="changeLocale(i)"
-                        >
-                          {{
-
-                            i === 'fa' ? 'فارسی' : 'english'
-
-                          }}
-                        </button>
-                      </div>
-                    </Transition>
                   </div>
                 </div>
               </div>
@@ -218,7 +223,7 @@ function changeLocale (newLocale : string) {
               <a href="#" class="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700 sm:pl-5 sm:pr-6">
                 {{ t('Home') }}
               </a>
-              <NuxtLink v-for="(i , index) in appState.menuItems" :key="index" :to="i.link" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6">
+              <NuxtLink v-for="(i , index) in appState.menuItems" :key="index" :to="localePath(i.link)" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6">
                 {{
                   locale === 'fa' ? i.fa : i.en
                 }}

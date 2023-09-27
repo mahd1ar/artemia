@@ -76,58 +76,37 @@ export const FrontPage = list({
         }),
       },
     }),
-    ...group({
-      label: "features section",
-      fields: {
-        featuresTitle: text({
-          label: "Title",
-        }),
-        featuresDescription: text({
-          label: "Description",
-        }),
 
-        features: relationship({
-          ref: "Resource",
-          many: true,
-          ui: {
-            description: "exacltly 8 items",
-            displayMode: "cards",
-            cardFields: ["title", "content", "featuredImage"],
-            inlineCreate: {
-              fields: ["title", "content", "featuredImage"],
-            },
-          },
-        }),
+    features: relationship({
+      ref: "Category",
+      label: "features section relative category",
+      ui: {
+        description: "exacltly 8 items",
+        labelField: 'slug',
       },
     }),
-    ...group({
-      label: "testimonial section",
-      fields: {
-        testimonial: relationship({
-          ref: "Resource",
-          many: true,
-          ui: {
-            description: "exacltly 8 items",
-            displayMode: "cards",
-            cardFields: ["title", "featuredImage", "bannerImage"],
-            inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] },
-          },
-        }),
-      },
+    testimonial: relationship({
+      ref: "Category",
+      label: 'testimonial section relative category',
+      ui: {
+        labelField: 'slug',
+      }
+      // many: true,
+      // ui: {
+      //   description: "exacltly 8 items",
+      //   displayMode: "cards",
+      //   cardFields: ["title", "featuredImage", "bannerImage"],
+      //   inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] },
+      // },
     }),
-    logos: relationship({ref : 'ImageStore' , many : true, ui: {
-      description: 'max 6 items'
-    }}) ,
-    ...group({
-      label: "Blog",
-      fields: {
-        BlogTitle: text({
-          label: "title",
-        }),
-        BlogDescription: text({
-          label: "description",
-        }),
-      },
+
+
+    logos: relationship({
+      ref: 'ImageStore', many: true, ui: {
+        description: 'max 6 items',
+        labelField: 'altText'
+      }
     }),
+  
   },
 });
