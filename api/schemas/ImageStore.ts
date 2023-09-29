@@ -8,7 +8,9 @@ export const ImageStore = list({
         image: image({
             storage: 'image',
         }),
-        altText: text({ label: 'name' }),
+        altText: text({
+            label: 'name'
+        }),
         createdAt: timestamp({ defaultValue: { kind: 'now' } }),
     },
 })

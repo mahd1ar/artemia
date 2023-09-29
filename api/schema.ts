@@ -55,6 +55,19 @@ export const lists: Lists = {
       }),
     },
   }),
+  KeyValue: list({
+    access: allowAll,
+    ui: {
+      isHidden: process.env.NODE_ENV === "production",
+    },
+    fields: {
+      key: text({ label: 'custom field name', validation: { isRequired: true } }),
+      value: text({ validation: { isRequired: true } }),
+      createdAt: timestamp({
+        defaultValue: { kind: "now" },
+      })
+    }
+  }),
   // @ts-ignore
   Post,
   // @ts-ignore

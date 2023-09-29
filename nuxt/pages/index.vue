@@ -7,13 +7,16 @@ const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
 
 const FRONPAGE = graphql(`
 query FrontPage( $lang: String!) {
-  frontPages(where: {
-    lang:{
-      equals: $lang
+  
+  frontPage {
+    hero_en {
+      title
+      content
     }
-  }) {
-    heroTitle
-    heroDescription
+    hero_fa {
+      title
+      content
+    }
     heroImage {
       altText
       id
@@ -22,13 +25,22 @@ query FrontPage( $lang: String!) {
         url
       }
     }
-    statusTitle
-    statusDescription
+    statusTitleAndDescription_fa {
+      title
+      content
+    }
+    statusTitleAndDescription_en {
+      title
+      content
+    }
     statistics {
       id
       title
-      content
-      misc
+      misc {
+        id
+        key
+        value
+      }
     }
 
     sites {
@@ -56,10 +68,7 @@ query FrontPage( $lang: String!) {
         url
       }
     }
-
-
   }
-
 }
 `)
 

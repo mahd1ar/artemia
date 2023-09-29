@@ -122,7 +122,7 @@ var Post = (0, import_core.list)({
     }),
     type: (0, import_fields.select)({
       options: ["post", "page"],
-      defaultValue: "en",
+      defaultValue: "post",
       ui: {
         displayMode: "segmented-control",
         itemView: {
@@ -146,11 +146,14 @@ var Post = (0, import_core.list)({
         inlineCreate: {
           fields: ["title", "content"]
         },
+        inlineEdit: {
+          fields: ["title", "content"]
+        },
         displayMode: "cards",
         createView: {
           fieldMode: "edit"
         },
-        cardFields: ["title"],
+        cardFields: ["title", "content"],
         inlineConnect: true
       }
     }),
@@ -159,14 +162,32 @@ var Post = (0, import_core.list)({
       ref: "PostTranslation",
       ui: {
         inlineCreate: {
-          fields: ["title", "language", "content"]
+          fields: ["title", "content"]
+        },
+        inlineEdit: {
+          fields: ["title", "content"]
         },
         displayMode: "cards",
         createView: {
           fieldMode: "edit"
         },
-        cardFields: ["title", "language"],
+        cardFields: ["title", "content"],
         inlineConnect: true
+      }
+    }),
+    misc: (0, import_fields.relationship)({
+      ref: "KeyValue",
+      label: "custom fields",
+      many: true,
+      ui: {
+        displayMode: "cards",
+        cardFields: ["key", "value"],
+        inlineCreate: {
+          fields: ["key", "value"]
+        },
+        inlineEdit: {
+          fields: ["key", "value"]
+        }
       }
     }),
     createdAt: (0, import_fields.timestamp)({
@@ -286,59 +307,77 @@ var import_access3 = require("@keystone-6/core/access");
 var import_fields3 = require("@keystone-6/core/fields");
 var FrontPage = (0, import_core3.list)({
   access: import_access3.allowAll,
+  isSingleton: true,
   fields: {
-    lang: (0, import_fields3.select)({
-      options: [
-        {
-          label: "english",
-          value: "en"
-        },
-        {
-          label: "\u0641\u0627\u0631\u0633\u06CC",
-          value: "fa"
-        }
-      ],
-      type: "string"
-    }),
     headline: (0, import_fields3.text)({ validation: { isRequired: true } }),
     ...(0, import_core3.group)({
       label: "hero section",
       fields: {
-        heroTitle: (0, import_fields3.text)({
-          label: "Title"
-        }),
-        heroDescription: (0, import_fields3.text)({
-          label: "Description",
-          ui: { displayMode: "textarea" }
-        }),
-        heroImage: (0, import_fields3.relationship)({
-          ref: "ImageStore",
+        hero_fa: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "\u0628\u0647 \u0641\u0627\u0631\u0633\u06CC",
           ui: {
             displayMode: "cards",
-            cardFields: ["image"],
-            inlineCreate: { fields: ["image"] }
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
+          }
+        }),
+        hero_en: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "in english",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
           }
         })
+      }
+    }),
+    heroImage: (0, import_fields3.relationship)({
+      ref: "ImageStore",
+      ui: {
+        displayMode: "cards",
+        cardFields: ["image"],
+        inlineCreate: { fields: ["image", "altText"] },
+        inlineEdit: { fields: ["image", "altText"] }
       }
     }),
     ...(0, import_core3.group)({
       label: "status section",
       fields: {
-        statusTitle: (0, import_fields3.text)({
-          label: "Title"
+        statusTitleAndDescription_fa: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "\u0639\u0646\u0648\u0627\u0646 \u0648 \u062A\u0648\u0636\u06CC\u062D\u0627\u062A \u0628\u062E\u0634 \u0622\u0645\u0627\u0631 \u0628\u0647 \u0632\u0628\u0627\u0646 \u0641\u0627\u0631\u0633\u06CC",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
+          }
         }),
-        statusDescription: (0, import_fields3.text)({
-          label: "Description",
-          ui: { displayMode: "textarea" }
+        statusTitleAndDescription_en: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "title and description in english",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
+          }
         }),
         statistics: (0, import_fields3.relationship)({
-          ref: "Resource",
+          ref: "Post",
           many: true,
+          label: "statistics section relative category",
           ui: {
-            description: "max 4 items",
-            displayMode: "cards",
-            cardFields: ["title", "content", "misc"],
-            inlineCreate: { fields: ["title", "content", "misc"] }
+            description: 'max 4 items: select relative posts with custom custom field name "PERCENTAGE"',
+            labelField: "title"
           }
         })
       }
@@ -401,7 +440,9 @@ var ImageStore = (0, import_core4.list)({
     image: (0, import_fields4.image)({
       storage: "image"
     }),
-    altText: (0, import_fields4.text)({ label: "name" }),
+    altText: (0, import_fields4.text)({
+      label: "name"
+    }),
     createdAt: (0, import_fields4.timestamp)({ defaultValue: { kind: "now" } })
   }
 });
@@ -443,8 +484,10 @@ var MainMenu = (0, import_core6.list)({
       ui: {
         description: "english",
         displayMode: "cards",
-        cardFields: ["title", "content"],
-        inlineCreate: { fields: ["title", "content"] }
+        cardFields: ["title"],
+        inlineCreate: { fields: ["title"] },
+        inlineEdit: { fields: ["title"] },
+        removeMode: "none"
       }
     }),
     fa: (0, import_fields6.relationship)({
@@ -452,8 +495,10 @@ var MainMenu = (0, import_core6.list)({
       ui: {
         description: "english",
         displayMode: "cards",
-        cardFields: ["title", "content"],
-        inlineCreate: { fields: ["title", "content"] }
+        cardFields: ["title"],
+        inlineCreate: { fields: ["title"] },
+        inlineEdit: { fields: ["title"] },
+        removeMode: "none"
       }
     }),
     link: (0, import_fields6.text)({ validation: { isRequired: true } })
@@ -675,6 +720,19 @@ var lists = {
       }),
       password: (0, import_fields11.password)({ validation: { isRequired: true } }),
       posts: (0, import_fields11.relationship)({ ref: "PostTranslation.author", many: true }),
+      createdAt: (0, import_fields11.timestamp)({
+        defaultValue: { kind: "now" }
+      })
+    }
+  }),
+  KeyValue: (0, import_core11.list)({
+    access: import_access11.allowAll,
+    ui: {
+      isHidden: process.env.NODE_ENV === "production"
+    },
+    fields: {
+      key: (0, import_fields11.text)({ label: "custom field name", validation: { isRequired: true } }),
+      value: (0, import_fields11.text)({ validation: { isRequired: true } }),
       createdAt: (0, import_fields11.timestamp)({
         defaultValue: { kind: "now" }
       })

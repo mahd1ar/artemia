@@ -4,60 +4,85 @@ import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
 
 export const FrontPage = list({
   access: allowAll,
+  isSingleton: true,
   fields: {
-    lang: select({
-      options: [
-        {
-          label: 'english',
-          value: 'en'
-        },
-        {
-          label: 'فارسی',
-          value: 'fa'
-        }
-      ],
-      type: 'string'
-    }),
+
     headline: text({ validation: { isRequired: true } }),
+
+
     ...group({
       label: "hero section",
       fields: {
-        heroTitle: text({
-          label: "Title",
-        }),
-        heroDescription: text({
-          label: "Description",
-          ui: { displayMode: "textarea" },
-        }),
-        heroImage: relationship({
-          ref: "ImageStore",
+        hero_fa: relationship({
+          ref: 'Resource',
+          label: 'به فارسی',
           ui: {
             displayMode: "cards",
-            cardFields: ["image"],
-            inlineCreate: { fields: ["image"] },
-          },
+            cardFields: ["title", "content",],
+            inlineCreate: { fields: ["title", "content",] },
+            inlineEdit: { fields: ["title", "content",] },
+            removeMode: 'none',
+          }
         }),
+
+        hero_en: relationship({
+          ref: 'Resource',
+          label: 'in english',
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content",],
+            inlineCreate: { fields: ["title", "content",] },
+            inlineEdit: { fields: ["title", "content",] },
+            removeMode: 'none',
+          }
+        }),
+      }
+    }),
+    heroImage: relationship({
+      ref: "ImageStore",
+      ui: {
+        displayMode: "cards",
+        cardFields: ["image"],
+        inlineCreate: { fields: ["image", 'altText'] },
+        inlineEdit: { fields: ["image", 'altText'] },
       },
     }),
+
+
     ...group({
       label: "status section",
       fields: {
-        statusTitle: text({
-          label: "Title",
-        }),
-        statusDescription: text({
-          label: "Description",
-          ui: { displayMode: "textarea" },
+        statusTitleAndDescription_fa: relationship({
+          ref: "Resource",
+          label: "عنوان و توضیحات بخش آمار به زبان فارسی",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content",],
+            inlineCreate: { fields: ["title", "content",] },
+            inlineEdit: { fields: ["title", "content",] },
+            removeMode: 'none',
+          }
+        })
+        ,
+        statusTitleAndDescription_en: relationship({
+          ref: "Resource",
+          label: "title and description in english",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content",],
+            inlineCreate: { fields: ["title", "content",] },
+            inlineEdit: { fields: ["title", "content",] },
+            removeMode: 'none',
+          }
         }),
         statistics: relationship({
-          ref: "Resource",
+          ref: "Post",
           many: true,
+          label: "statistics section relative category",
           ui: {
-            description: "max 4 items",
-            displayMode: "cards",
-            cardFields: ["title", "content", "misc"],
-            inlineCreate: { fields: ["title", "content", "misc"] },
-          },
+            description: "max 4 items: select relative posts with custom custom field name \"PERCENTAGE\"",
+            labelField: 'title',
+          }
         }),
       },
     }),
@@ -107,6 +132,6 @@ export const FrontPage = list({
         labelField: 'altText'
       }
     }),
-  
+
   },
 });

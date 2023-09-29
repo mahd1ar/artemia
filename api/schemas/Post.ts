@@ -10,7 +10,7 @@ export const Post = list({
 
             if (operation !== 'delete')
                 return
-
+            // TODO
 
             const { faId, enId } = item as unknown as {
                 faId: string
@@ -66,7 +66,7 @@ export const Post = list({
         }),
         type: select({
             options: ['post', 'page'],
-            defaultValue: 'en',
+            defaultValue: 'post',
             ui: {
                 displayMode: 'segmented-control',
                 itemView: {
@@ -90,11 +90,14 @@ export const Post = list({
                 inlineCreate: {
                     fields: ['title', 'content']
                 },
+                inlineEdit: {
+                    fields: ['title', 'content']
+                },
                 displayMode: 'cards',
                 createView: {
                     fieldMode: 'edit'
                 },
-                cardFields: ['title'],
+                cardFields: ['title', 'content'],
                 inlineConnect: true
             }
         }),
@@ -103,21 +106,39 @@ export const Post = list({
             ref: 'PostTranslation',
             ui: {
                 inlineCreate: {
-                    fields: ['title', 'language', 'content']
+                    fields: ['title', 'content']
+                },
+                inlineEdit: {
+                    fields: ['title', 'content']
                 },
                 displayMode: 'cards',
                 createView: {
                     fieldMode: 'edit'
                 },
-                cardFields: ['title', 'language'],
+                cardFields: ['title', 'content'],
                 inlineConnect: true
+            }
+        }),
+        misc: relationship({
+            ref: 'KeyValue',
+            label: 'custom fields',
+            many: true,
+            ui: {
+                displayMode: 'cards',
+                cardFields: ['key', 'value'],
+                inlineCreate: {
+                    fields: ['key', 'value']
+                },
+                inlineEdit: {
+                    fields: ['key', 'value']
+                }
             }
         }),
         createdAt: timestamp({
             defaultValue: { kind: 'now' },
             ui: {
                 itemView: {
-                    fieldPosition: 'sidebar'
+                    fieldPosition: 'sidebar',
                 }
             }
         })
