@@ -51,6 +51,7 @@ export default withAuth(
             city,
             postalCode,
             orderContent,
+            orderType,
             id,
             fullname,
           } = req.body;
@@ -71,19 +72,24 @@ export default withAuth(
                   orders: {
                     create: {
                       orderContent,
+                      orderType: orderType ? JSON.stringify(orderType) : "",
                     },
                   },
                 },
+                include: {
+                  orders: true,
+                },
               });
-
-              res.cookie("id", customer.id, {
-                maxAge: 900000,
-              });
+              console.log(customer);
+              // res.cookie("id", customer.id, {
+              //   maxAge: 900000,
+              // });
 
               res.json({
                 message: "successuly placed order",
                 payload: {
-                  id: customer.id,
+                  customerid: customer.id,
+                  orderid: customer.orders[0].id,
                 },
               });
             } else {
@@ -101,7 +107,7 @@ export default withAuth(
               res.json({
                 message: "successuly placed order",
                 payload: {
-                  id: order.id,
+                  orderid: order.id,
                 },
               });
             }
@@ -114,60 +120,6 @@ export default withAuth(
           } finally {
             await prisma.$disconnect();
           }
-        });
-        app.get<{}, Response>("/getcustomer", async (req, res) => {
-          const customerid = req.query.customerid
-            ? Array.isArray(req.query.customerid)
-              ? req.query.customerid[0]
-              : req.query.customerid
-            : null;
-
-          if (!customerid) {
-            res
-              .status(400)
-              .json({ message: "customer id is required", payload: {} });
-            return;
-          }
-
-          const prisma = new PrismaClient();
-
-          const customer = await prisma.customer.findUnique({
-            where: {
-              id:
-                typeof customerid === "string"
-                  ? customerid
-                  : String(customerid),
-            },
-          });
-
-          if (!customer) {
-            res
-              .status(404)
-              .json({ message: "customer not found", payload: {} });
-
-            return;
-          }
-
-          const fullname = customer?.name || "";
-          const tel = customer?.tel || "";
-          const address = customer?.address || "";
-          const city = customer?.city || "";
-          const postalCode = customer?.postalCode || "";
-          const code = customer?.code || "";
-
-          res.json({
-            message: "",
-            payload: {
-              fullname,
-              tel,
-              address,
-              city,
-              postalCode,
-              code,
-            },
-          });
-
-          prisma.$disconnect();
         });
       },
       maxFileSize: 1024_000_000,

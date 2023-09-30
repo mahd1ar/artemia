@@ -665,6 +665,7 @@ var import_fields9 = require("@keystone-6/core/fields");
 var Order = (0, import_core9.list)({
   access: import_access9.allowAll,
   fields: {
+    orderType: (0, import_fields9.json)(),
     orderContent: (0, import_fields9.text)({
       ui: {
         displayMode: "textarea"
@@ -672,7 +673,7 @@ var Order = (0, import_core9.list)({
     }),
     customerName: (0, import_fields9.text)(),
     customer: (0, import_fields9.relationship)({
-      ref: "Customer"
+      ref: "Customer.orders"
     }),
     createdAt: (0, import_fields9.timestamp)({
       defaultValue: { kind: "now" }
@@ -687,15 +688,58 @@ var import_fields10 = require("@keystone-6/core/fields");
 var Customer = (0, import_core10.list)({
   access: import_access10.allowAll,
   fields: {
-    name: (0, import_fields10.text)(),
-    tel: (0, import_fields10.text)(),
-    postalCode: (0, import_fields10.text)(),
-    address: (0, import_fields10.text)(),
-    city: (0, import_fields10.text)(),
-    code: (0, import_fields10.text)(),
+    name: (0, import_fields10.text)({
+      ui: {
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
+    tel: (0, import_fields10.text)({
+      ui: {
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
+    postalCode: (0, import_fields10.text)({
+      ui: {
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
+    address: (0, import_fields10.text)({
+      ui: {
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
+    city: (0, import_fields10.text)({
+      ui: {
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
+    code: (0, import_fields10.text)({
+      ui: {
+        itemView: {
+          fieldMode: "read"
+        }
+      }
+    }),
     orders: (0, import_fields10.relationship)({
-      ref: "Order",
+      ref: "Order.customer",
       many: true
+      // ui: {
+      //   displayMode: "cards",
+      //   cardFields: ["orderContent", "orderType"],
+      // itemView: {
+      //   fieldMode: "read",
+      // },
+      // },
     }),
     createdAt: (0, import_fields10.timestamp)({
       defaultValue: { kind: "now" }
@@ -833,6 +877,7 @@ var keystone_default = withAuth(
             city,
             postalCode,
             orderContent,
+            orderType,
             id,
             fullname
           } = req.body;
@@ -849,18 +894,21 @@ var keystone_default = withAuth(
                   postalCode,
                   orders: {
                     create: {
-                      orderContent
+                      orderContent,
+                      orderType: orderType ? JSON.stringify(orderType) : ""
                     }
                   }
+                },
+                include: {
+                  orders: true
                 }
               });
-              res.cookie("id", customer.id, {
-                maxAge: 9e5
-              });
+              console.log(customer);
               res.json({
                 message: "successuly placed order",
                 payload: {
-                  id: customer.id
+                  customerid: customer.id,
+                  orderid: customer.orders[0].id
                 }
               });
             } else {
@@ -877,7 +925,7 @@ var keystone_default = withAuth(
               res.json({
                 message: "successuly placed order",
                 payload: {
-                  id: order.id
+                  orderid: order.id
                 }
               });
             }
@@ -890,41 +938,6 @@ var keystone_default = withAuth(
           } finally {
             await prisma.$disconnect();
           }
-        });
-        app.get("/getcustomer", async (req, res) => {
-          const customerid = req.query.customerid ? Array.isArray(req.query.customerid) ? req.query.customerid[0] : req.query.customerid : null;
-          if (!customerid) {
-            res.status(400).json({ message: "customer id is required", payload: {} });
-            return;
-          }
-          const prisma = new import_client.PrismaClient();
-          const customer = await prisma.customer.findUnique({
-            where: {
-              id: typeof customerid === "string" ? customerid : String(customerid)
-            }
-          });
-          if (!customer) {
-            res.status(404).json({ message: "customer not found", payload: {} });
-            return;
-          }
-          const fullname = customer?.name || "";
-          const tel = customer?.tel || "";
-          const address = customer?.address || "";
-          const city = customer?.city || "";
-          const postalCode = customer?.postalCode || "";
-          const code = customer?.code || "";
-          res.json({
-            message: "",
-            payload: {
-              fullname,
-              tel,
-              address,
-              city,
-              postalCode,
-              code
-            }
-          });
-          prisma.$disconnect();
         });
       },
       maxFileSize: 1024e6,

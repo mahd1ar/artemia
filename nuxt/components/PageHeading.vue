@@ -84,8 +84,12 @@ function chengeLang (newLang : string) {
         </div>
         <div class="flex gap-4 ">
           <div class="tracking-widest flex items-center gap-2">
-            <button type="button" @click="chengeLang('fa')">FA</button>
-            <button type="button" @click="chengeLang('en')">EN</button>
+            <button type="button" @click="chengeLang('fa')">
+              FA
+            </button>
+            <button type="button" @click="chengeLang('en')">
+              EN
+            </button>
           </div>
 
           <div @click="openNav">

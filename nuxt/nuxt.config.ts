@@ -10,6 +10,11 @@ export default defineNuxtConfig({
     // port: 5175
 
   },
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.NUXT_API_URL
+    }
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',

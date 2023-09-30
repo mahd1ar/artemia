@@ -90,11 +90,17 @@ const { result, loading } = useQuery(CATEGORY, {
             <div class="flex flex-1 flex-col justify-between bg-white p-6">
               <div class="flex-1">
                 <p class="text-sm font-medium text-indigo-600">
-                  <NuxtLink href="#" class="hover:underline">Article</NuxtLink>
+                  <NuxtLink href="#" class="hover:underline">
+                    Article
+                  </NuxtLink>
                 </p>
                 <NuxtLink href="#" class="mt-2 block">
-                  <p class="text-xl font-semibold text-gray-900">Boost your conversion rate</p>
-                  <p class="mt-3 text-base text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto accusantium praesentium eius, ut atque fuga culpa, similique sequi cum eos quis dolorum.</p>
+                  <p class="text-xl font-semibold text-gray-900">
+                    Boost your conversion rate
+                  </p>
+                  <p class="mt-3 text-base text-gray-500">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto accusantium praesentium eius, ut atque fuga culpa, similique sequi cum eos quis dolorum.
+                  </p>
                 </NuxtLink>
               </div>
               <div class="mt-6 flex items-center">
@@ -106,7 +112,9 @@ const { result, loading } = useQuery(CATEGORY, {
                 </div>
                 <div class="ml-3">
                   <p class="text-sm font-medium text-gray-900">
-                    <NuxtLink href="#" class="hover:underline">Roel Aufderehar</NuxtLink>
+                    <NuxtLink href="#" class="hover:underline">
+                      Roel Aufderehar
+                    </NuxtLink>
                   </p>
                   <div class="flex space-x-1 text-sm text-gray-500">
                     <time datetime="2020-03-16">Mar 16, 2020</time>
