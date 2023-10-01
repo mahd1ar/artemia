@@ -84,6 +84,10 @@ export const FrontPage = list({
             labelField: 'title',
           }
         }),
+
+        introVideo: relationship({
+          ref: "FileStore"
+        })
       },
     }),
     ...group({

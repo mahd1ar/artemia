@@ -6,14 +6,14 @@ const { locale } = useI18n()
 const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
 
 const FRONPAGE = graphql(`
-query FrontPage( $lang: String!) {
+query FrontPage( $isEn: Boolean!) {
   
   frontPage {
-    hero_en {
+     hero_en @include(if: $isEn) {
       title
       content
     }
-    hero_fa {
+    hero_fa @skip(if: $isEn) {
       title
       content
     }
@@ -25,24 +25,41 @@ query FrontPage( $lang: String!) {
         url
       }
     }
-    statusTitleAndDescription_fa {
+    statusTitleAndDescription_fa @skip(if: $isEn) {
       title
       content
     }
-    statusTitleAndDescription_en {
+    statusTitleAndDescription_en @include(if: $isEn) {
       title
       content
     }
     statistics {
       id
       title
+      en @include(if: $isEn) {
+        title
+        content {
+          document
+        }
+      }
+      fa @skip(if: $isEn) {
+        title
+        content {
+          document
+        }
+      }
       misc {
         id
         key
         value
       }
+      
     }
-
+    introVideo {
+      file {
+        url
+      }
+    }
     sites {
       title
       featuredImage {
@@ -105,7 +122,7 @@ definePageMeta({
   layout: 'home'
 })
 
-const { result } = useQuery(FRONPAGE, { isEnLang: lang.value === 'en', lang: lang.value })
+const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
 // console.log(result.value?.frontPages?.[0].features?.slug)
 const { result: resultPost } = useQuery(POSTS, {
   isEnLang: lang.value === 'en',
@@ -235,26 +252,38 @@ const { result: resultPost } = useQuery(POSTS, {
     <div class="p-14 w-5/12 text-gray-50 bg-gray-950 flex flex-col gap-4">
       <h2 class="text-4xl font-bold">
         <!-- WE WILL PAMPER YOUR EYES IN THE WATER -->
-        {{ result?.frontPages?.[0]?.statusTitle }}
+        {{ result?.frontPage?.[ lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa' ]?.title }}
       </h2>
       <span class="text-gray-400 text-sm leading-7 mb-5">
+        {{ result?.frontPage?.[ lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa' ]?.content }}
 
-        {{ result?.frontPages?.[0]?.statusDescription }}
       </span>
       <div class="grid grid-cols-2">
-        <div v-for="i in result?.frontPages?.[0]?.statistics || []" :key="i.id" class="flex flex-col">
+        <div v-for="i in result?.frontPage?.statistics || []" :key="i.id" class="flex flex-col">
           <PieChart :percentage="i.misc ? +i.misc : 42" />
           <h3 class="my-4 text-2xl font-bold">
             <!-- Dive Treavel -->
-            {{ i.title }}
+            {{ i[lang]?.title }}
           </h3>
           <div class="font-xs text-gray-400">
-            {{ i.content }}
+            <!-- {{ i[lang]?.content }} -->
+            <ContentViewer v-if="i[lang]?.content?.document" :content="i[lang]?.content?.document" />
           </div>
         </div>
       </div>
     </div>
-    <div class="bg-cyan-400 w-7/12" />
+    <div class="bg-cyan-400 w-7/12 relative">
+      <video
+        v-if="result?.frontPage?.introVideo?.file?.url"
+        class="absolute h-full w-full object-cover "
+        autoplay
+        muted
+        loop
+      >
+        <source :src="result.frontPage.introVideo.file.url" type="video/mp4">
+      </video>
+      <div class="bg-gradient-to-r from-cyan-400 to-teal-500/50 mix-blend-multiply absolute top-0 left-0 w-full h-full" />
+    </div>
   </section>
 
   <!-- <ElementorSection :list="result?.frontPages?.[0]?.sites?.map(i=>({src:i.featuredImage?.image?.url, title:i.title})) || []" class="mt-28" /> -->

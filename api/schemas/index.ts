@@ -8,3 +8,4 @@ export { ContactUs } from "./ContactUs";
 export { Category } from "./Category";
 export { Order } from "./Order";
 export { Customer } from "./Customer";
+export { FileStore } from './FileStore'

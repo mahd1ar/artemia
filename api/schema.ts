@@ -15,8 +15,6 @@ import {
   relationship,
   password,
   timestamp,
-  select,
-  image,
 } from "@keystone-6/core/fields";
 
 import type { Lists } from ".keystone/types";
@@ -31,6 +29,7 @@ import {
   Category,
   Customer,
   Order,
+  FileStore
 } from "./schemas";
 
 export const lists: Lists = {
@@ -89,6 +88,8 @@ export const lists: Lists = {
   Customer,
   // @ts-ignore
   Order,
+  // @ts-ignore
+  FileStore,
 
   Tag: list({
     access: allowAll,

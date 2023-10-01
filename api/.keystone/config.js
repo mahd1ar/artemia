@@ -62,12 +62,12 @@ var storage = {
 };
 
 // keystone.ts
-var import_core12 = require("@keystone-6/core");
+var import_core13 = require("@keystone-6/core");
 
 // schema.ts
-var import_core11 = require("@keystone-6/core");
-var import_access11 = require("@keystone-6/core/access");
-var import_fields11 = require("@keystone-6/core/fields");
+var import_core12 = require("@keystone-6/core");
+var import_access12 = require("@keystone-6/core/access");
+var import_fields12 = require("@keystone-6/core/fields");
 
 // schemas/Post.ts
 var import_core = require("@keystone-6/core");
@@ -379,6 +379,9 @@ var FrontPage = (0, import_core3.list)({
             description: 'max 4 items: select relative posts with custom custom field name "PERCENTAGE"',
             labelField: "title"
           }
+        }),
+        introVideo: (0, import_fields3.relationship)({
+          ref: "FileStore"
         })
       }
     }),
@@ -747,37 +750,62 @@ var Customer = (0, import_core10.list)({
   }
 });
 
+// schemas/FileStore.ts
+var import_core11 = require("@keystone-6/core");
+var import_access11 = require("@keystone-6/core/access");
+var import_fields11 = require("@keystone-6/core/fields");
+var FileStore = (0, import_core11.list)({
+  access: import_access11.allowAll,
+  hooks: {
+    resolveInput(args) {
+      console.log(args.resolvedData);
+      if (!args.resolvedData.title && args.resolvedData.file.filename)
+        args.resolvedData.title = args.resolvedData.file.filename;
+      return args.resolvedData;
+    }
+  },
+  fields: {
+    title: (0, import_fields11.text)({
+      label: "name"
+    }),
+    file: (0, import_fields11.file)({
+      storage: "file"
+    }),
+    createdAt: (0, import_fields11.timestamp)({ defaultValue: { kind: "now" } })
+  }
+});
+
 // schema.ts
 var lists = {
-  User: (0, import_core11.list)({
-    access: import_access11.allowAll,
+  User: (0, import_core12.list)({
+    access: import_access12.allowAll,
     ui: {
       isHidden() {
         return process.env.NODE_ENV === "production";
       }
     },
     fields: {
-      name: (0, import_fields11.text)({ validation: { isRequired: true } }),
-      email: (0, import_fields11.text)({
+      name: (0, import_fields12.text)({ validation: { isRequired: true } }),
+      email: (0, import_fields12.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      password: (0, import_fields11.password)({ validation: { isRequired: true } }),
-      posts: (0, import_fields11.relationship)({ ref: "PostTranslation.author", many: true }),
-      createdAt: (0, import_fields11.timestamp)({
+      password: (0, import_fields12.password)({ validation: { isRequired: true } }),
+      posts: (0, import_fields12.relationship)({ ref: "PostTranslation.author", many: true }),
+      createdAt: (0, import_fields12.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
   }),
-  KeyValue: (0, import_core11.list)({
-    access: import_access11.allowAll,
+  KeyValue: (0, import_core12.list)({
+    access: import_access12.allowAll,
     ui: {
       isHidden: process.env.NODE_ENV === "production"
     },
     fields: {
-      key: (0, import_fields11.text)({ label: "custom field name", validation: { isRequired: true } }),
-      value: (0, import_fields11.text)({ validation: { isRequired: true } }),
-      createdAt: (0, import_fields11.timestamp)({
+      key: (0, import_fields12.text)({ label: "custom field name", validation: { isRequired: true } }),
+      value: (0, import_fields12.text)({ validation: { isRequired: true } }),
+      createdAt: (0, import_fields12.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
@@ -802,14 +830,16 @@ var lists = {
   Customer,
   // @ts-ignore
   Order,
-  Tag: (0, import_core11.list)({
-    access: import_access11.allowAll,
+  // @ts-ignore
+  FileStore,
+  Tag: (0, import_core12.list)({
+    access: import_access12.allowAll,
     ui: {
       isHidden: true
     },
     fields: {
-      name: (0, import_fields11.text)(),
-      posts: (0, import_fields11.relationship)({ ref: "PostTranslation.tags", many: true })
+      name: (0, import_fields12.text)(),
+      posts: (0, import_fields12.relationship)({ ref: "PostTranslation.tags", many: true })
     }
   })
 };
@@ -848,7 +878,7 @@ require("dotenv").config({
   )
 });
 var keystone_default = withAuth(
-  (0, import_core12.config)({
+  (0, import_core13.config)({
     db: {
       // we're using sqlite for the fastest startup experience
       //   for more information on what database might be appropriate for you
