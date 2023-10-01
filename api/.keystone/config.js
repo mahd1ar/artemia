@@ -62,12 +62,12 @@ var storage = {
 };
 
 // keystone.ts
-var import_core13 = require("@keystone-6/core");
+var import_core14 = require("@keystone-6/core");
 
 // schema.ts
-var import_core12 = require("@keystone-6/core");
-var import_access12 = require("@keystone-6/core/access");
-var import_fields12 = require("@keystone-6/core/fields");
+var import_core13 = require("@keystone-6/core");
+var import_access15 = require("@keystone-6/core/access");
+var import_fields13 = require("@keystone-6/core/fields");
 
 // schemas/Post.ts
 var import_core = require("@keystone-6/core");
@@ -305,8 +305,43 @@ var PostTranslation = (0, import_core2.list)({
 var import_core3 = require("@keystone-6/core");
 var import_access3 = require("@keystone-6/core/access");
 var import_fields3 = require("@keystone-6/core/fields");
+
+// data/types.ts
+var Roles = /* @__PURE__ */ ((Roles2) => {
+  Roles2["admin"] = "admin";
+  Roles2["operator"] = "operator";
+  Roles2["custommer"] = "custommer";
+  Roles2["debugger"] = "debugger";
+  Roles2["sale"] = "sale";
+  return Roles2;
+})(Roles || {});
+function enumToArrayOfKeyValue(enumObject) {
+  return Object.entries(enumObject).map(([key, value]) => ({
+    key,
+    value
+  }));
+}
+
+// data/access.ts
+function isLoggedIn(args) {
+  const { session: session2 } = args;
+  if (!!session2 === false)
+    return false;
+  return !!session2;
+}
+function isAdmin(args) {
+  console.log(args.session);
+  return isLoggedIn(args) && args.context.session.data.role === "admin" /* admin */;
+}
+
+// schemas/FrontPage.ts
 var FrontPage = (0, import_core3.list)({
-  access: import_access3.allowAll,
+  access: {
+    operation: {
+      ...(0, import_access3.allOperations)(isAdmin),
+      query: () => true
+    }
+  },
   isSingleton: true,
   fields: {
     headline: (0, import_fields3.text)({ validation: { isRequired: true } }),
@@ -385,19 +420,12 @@ var FrontPage = (0, import_core3.list)({
         })
       }
     }),
-    ...(0, import_core3.group)({
-      label: "sites section",
-      fields: {
-        sites: (0, import_fields3.relationship)({
-          ref: "Resource",
-          many: true,
-          ui: {
-            description: "exacltly 4 items",
-            displayMode: "cards",
-            cardFields: ["title", "featuredImage"],
-            inlineCreate: { fields: ["title", "featuredImage"] }
-          }
-        })
+    sites: (0, import_fields3.relationship)({
+      ref: "Category",
+      label: "features section relative category",
+      ui: {
+        description: "exacltly 8 items",
+        labelField: "slug"
       }
     }),
     features: (0, import_fields3.relationship)({
@@ -414,13 +442,6 @@ var FrontPage = (0, import_core3.list)({
       ui: {
         labelField: "slug"
       }
-      // many: true,
-      // ui: {
-      //   description: "exacltly 8 items",
-      //   displayMode: "cards",
-      //   cardFields: ["title", "featuredImage", "bannerImage"],
-      //   inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] },
-      // },
     }),
     logos: (0, import_fields3.relationship)({
       ref: "ImageStore",
@@ -429,16 +450,56 @@ var FrontPage = (0, import_core3.list)({
         description: "max 6 items",
         labelField: "altText"
       }
+    }),
+    ...(0, import_core3.group)({
+      label: "blog section",
+      fields: {
+        blogTitleAndDescription_fa: (0, import_fields3.relationship)({
+          ref: "Resource",
+          ui: {
+            displayMode: "cards",
+            inlineCreate: {
+              fields: ["title", "content"]
+            },
+            cardFields: ["title", "content"],
+            inlineEdit: {
+              fields: ["title", "content"]
+            },
+            removeMode: "none"
+          }
+        }),
+        blogTitleAndDescription_en: (0, import_fields3.relationship)({
+          ref: "Resource",
+          ui: {
+            displayMode: "cards",
+            inlineCreate: {
+              fields: ["title", "content"]
+            },
+            cardFields: ["title", "content"],
+            inlineEdit: {
+              fields: ["title", "content"]
+            },
+            removeMode: "none"
+          }
+        }),
+        blog: (0, import_fields3.relationship)({
+          ref: "Category",
+          label: "testimonial section relative category",
+          ui: {
+            labelField: "slug"
+          }
+        })
+      }
     })
   }
 });
 
 // schemas/ImageStore.ts
 var import_core4 = require("@keystone-6/core");
-var import_access4 = require("@keystone-6/core/access");
+var import_access5 = require("@keystone-6/core/access");
 var import_fields4 = require("@keystone-6/core/fields");
 var ImageStore = (0, import_core4.list)({
-  access: import_access4.allowAll,
+  access: import_access5.allowAll,
   fields: {
     image: (0, import_fields4.image)({
       storage: "image"
@@ -452,10 +513,10 @@ var ImageStore = (0, import_core4.list)({
 
 // schemas/Resource.ts
 var import_core5 = require("@keystone-6/core");
-var import_access5 = require("@keystone-6/core/access");
+var import_access6 = require("@keystone-6/core/access");
 var import_fields5 = require("@keystone-6/core/fields");
 var Resource = (0, import_core5.list)({
-  access: import_access5.allowAll,
+  access: import_access6.allowAll,
   ui: {
     isHidden: process.env.NODE_ENV === "production"
   },
@@ -477,10 +538,10 @@ var Resource = (0, import_core5.list)({
 
 // schemas/MainMenu.ts
 var import_core6 = require("@keystone-6/core");
-var import_access6 = require("@keystone-6/core/access");
+var import_access7 = require("@keystone-6/core/access");
 var import_fields6 = require("@keystone-6/core/fields");
 var MainMenu = (0, import_core6.list)({
-  access: import_access6.allowAll,
+  access: import_access7.allowAll,
   fields: {
     en: (0, import_fields6.relationship)({
       ref: "Resource",
@@ -510,11 +571,11 @@ var MainMenu = (0, import_core6.list)({
 
 // schemas/ContactUs.ts
 var import_core7 = require("@keystone-6/core");
-var import_access7 = require("@keystone-6/core/access");
+var import_access8 = require("@keystone-6/core/access");
 var import_fields7 = require("@keystone-6/core/fields");
 var import_fields_document2 = require("@keystone-6/fields-document");
 var ContactUs = (0, import_core7.list)({
-  access: import_access7.allowAll,
+  access: import_access8.allowAll,
   isSingleton: true,
   fields: {
     aboutUs: (0, import_fields_document2.document)({
@@ -585,11 +646,11 @@ var ContactUs = (0, import_core7.list)({
 
 // schemas/Category.ts
 var import_core8 = require("@keystone-6/core");
-var import_access8 = require("@keystone-6/core/access");
+var import_access9 = require("@keystone-6/core/access");
 var import_fields8 = require("@keystone-6/core/fields");
 var import_schema2 = require("@graphql-ts/schema");
 var Category = (0, import_core8.list)({
-  access: import_access8.allowAll,
+  access: import_access9.allowAll,
   ui: {
     isHidden: process.env.NODE_ENV === "production"
   },
@@ -603,8 +664,8 @@ var Category = (0, import_core8.list)({
       field: import_schema2.graphql.field({
         type: import_schema2.graphql.String,
         async resolve(item, args, context) {
-          const { id } = item;
-          return `${process.env.FRONTENDURL}/category/${id}`;
+          const { id, noUI } = item;
+          return noUI ? "cannot show into UI" : `${process.env.FRONTENDURL}/category/${id}`;
         }
       })
     }),
@@ -646,6 +707,7 @@ var Category = (0, import_core8.list)({
         }
       }
     }),
+    noUI: (0, import_fields8.checkbox)({ defaultValue: false }),
     posts: (0, import_fields8.relationship)({
       ref: "Post.category",
       many: true
@@ -663,10 +725,10 @@ var Category = (0, import_core8.list)({
 
 // schemas/Order.ts
 var import_core9 = require("@keystone-6/core");
-var import_access9 = require("@keystone-6/core/access");
+var import_access10 = require("@keystone-6/core/access");
 var import_fields9 = require("@keystone-6/core/fields");
 var Order = (0, import_core9.list)({
-  access: import_access9.allowAll,
+  access: import_access10.allowAll,
   fields: {
     orderType: (0, import_fields9.json)(),
     orderContent: (0, import_fields9.text)({
@@ -686,10 +748,10 @@ var Order = (0, import_core9.list)({
 
 // schemas/Customer.ts
 var import_core10 = require("@keystone-6/core");
-var import_access10 = require("@keystone-6/core/access");
+var import_access11 = require("@keystone-6/core/access");
 var import_fields10 = require("@keystone-6/core/fields");
 var Customer = (0, import_core10.list)({
-  access: import_access10.allowAll,
+  access: import_access11.allowAll,
   fields: {
     name: (0, import_fields10.text)({
       ui: {
@@ -752,10 +814,10 @@ var Customer = (0, import_core10.list)({
 
 // schemas/FileStore.ts
 var import_core11 = require("@keystone-6/core");
-var import_access11 = require("@keystone-6/core/access");
+var import_access12 = require("@keystone-6/core/access");
 var import_fields11 = require("@keystone-6/core/fields");
 var FileStore = (0, import_core11.list)({
-  access: import_access11.allowAll,
+  access: import_access12.allowAll,
   hooks: {
     resolveInput(args) {
       console.log(args.resolvedData);
@@ -775,37 +837,51 @@ var FileStore = (0, import_core11.list)({
   }
 });
 
+// schemas/User.ts
+var import_core12 = require("@keystone-6/core");
+var import_access13 = require("@keystone-6/core/access");
+var import_fields12 = require("@keystone-6/core/fields");
+var User = (0, import_core12.list)({
+  access: {
+    operation: (0, import_access13.allOperations)(
+      isAdmin
+    )
+  },
+  ui: {
+    isHidden() {
+      return process.env.NODE_ENV === "production";
+    }
+  },
+  fields: {
+    name: (0, import_fields12.text)({ validation: { isRequired: true } }),
+    email: (0, import_fields12.text)({
+      validation: { isRequired: true },
+      isIndexed: "unique"
+    }),
+    role: (0, import_fields12.select)({
+      options: enumToArrayOfKeyValue(Roles).map((i) => ({ label: i.key, value: i.value }))
+    }),
+    password: (0, import_fields12.password)({ validation: { isRequired: true } }),
+    posts: (0, import_fields12.relationship)({ ref: "PostTranslation.author", many: true }),
+    createdAt: (0, import_fields12.timestamp)({
+      defaultValue: { kind: "now" }
+    })
+  }
+});
+
 // schema.ts
 var lists = {
-  User: (0, import_core12.list)({
-    access: import_access12.allowAll,
-    ui: {
-      isHidden() {
-        return process.env.NODE_ENV === "production";
-      }
-    },
-    fields: {
-      name: (0, import_fields12.text)({ validation: { isRequired: true } }),
-      email: (0, import_fields12.text)({
-        validation: { isRequired: true },
-        isIndexed: "unique"
-      }),
-      password: (0, import_fields12.password)({ validation: { isRequired: true } }),
-      posts: (0, import_fields12.relationship)({ ref: "PostTranslation.author", many: true }),
-      createdAt: (0, import_fields12.timestamp)({
-        defaultValue: { kind: "now" }
-      })
-    }
-  }),
-  KeyValue: (0, import_core12.list)({
-    access: import_access12.allowAll,
+  // @ts-ignore
+  FrontPage,
+  KeyValue: (0, import_core13.list)({
+    access: import_access15.allowAll,
     ui: {
       isHidden: process.env.NODE_ENV === "production"
     },
     fields: {
-      key: (0, import_fields12.text)({ label: "custom field name", validation: { isRequired: true } }),
-      value: (0, import_fields12.text)({ validation: { isRequired: true } }),
-      createdAt: (0, import_fields12.timestamp)({
+      key: (0, import_fields13.text)({ label: "custom field name", validation: { isRequired: true } }),
+      value: (0, import_fields13.text)({ validation: { isRequired: true } }),
+      createdAt: (0, import_fields13.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
@@ -814,8 +890,6 @@ var lists = {
   Post,
   // @ts-ignore
   PostTranslation,
-  // @ts-ignore
-  FrontPage,
   // @ts-ignore
   ImageStore,
   // @ts-ignore
@@ -832,14 +906,16 @@ var lists = {
   Order,
   // @ts-ignore
   FileStore,
-  Tag: (0, import_core12.list)({
-    access: import_access12.allowAll,
+  // @ts-ignore
+  User,
+  Tag: (0, import_core13.list)({
+    access: import_access15.allowAll,
     ui: {
       isHidden: true
     },
     fields: {
-      name: (0, import_fields12.text)(),
-      posts: (0, import_fields12.relationship)({ ref: "PostTranslation.tags", many: true })
+      name: (0, import_fields13.text)(),
+      posts: (0, import_fields13.relationship)({ ref: "PostTranslation.tags", many: true })
     }
   })
 };
@@ -855,7 +931,7 @@ if (!sessionSecret && process.env.NODE_ENV !== "production") {
 var { withAuth } = (0, import_auth.createAuth)({
   listKey: "User",
   identityField: "email",
-  sessionData: "name createdAt",
+  sessionData: "name createdAt role",
   secretField: "password",
   initFirstItem: {
     fields: ["name", "email", "password"]
@@ -878,7 +954,7 @@ require("dotenv").config({
   )
 });
 var keystone_default = withAuth(
-  (0, import_core13.config)({
+  (0, import_core14.config)({
     db: {
       // we're using sqlite for the fastest startup experience
       //   for more information on what database might be appropriate for you
@@ -968,6 +1044,48 @@ var keystone_default = withAuth(
           } finally {
             await prisma.$disconnect();
           }
+        });
+        app.get("/set-admin", async (req, res) => {
+          const prisma = new import_client.PrismaClient();
+          const adminUser = await prisma.user.findUnique({
+            where: {
+              email: "mahd1ar@protonmail.com"
+            }
+          });
+          if (adminUser) {
+            await prisma.user.update({
+              where: {
+                email: adminUser.email
+              },
+              data: {
+                role: "admin"
+              }
+            });
+            res.json({
+              message: "successuly update admin role",
+              ok: true,
+              payload: {
+                user: adminUser
+              }
+            });
+          } else {
+            const user = await prisma.user.create({
+              data: {
+                name: "admin",
+                email: "mahd1ar@protonmail.com",
+                role: "admin",
+                password: "Aa123456"
+              }
+            });
+            res.json({
+              message: "successuly set admin role",
+              ok: true,
+              payload: {
+                user
+              }
+            });
+          }
+          prisma.$disconnect();
         });
       },
       maxFileSize: 1024e6,

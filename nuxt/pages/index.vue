@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import { graphql } from '@/gql'
-import type { PostWhereInput, IdFilter } from '@/gql/graphql'
+// import { home } from '~/gql/graphql'
 
 const { locale } = useI18n()
 const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
 
 const FRONPAGE = graphql(`
-query FrontPage( $isEn: Boolean!) {
-  
+query HomePage( $isEn: Boolean!) {
   frontPage {
      hero_en @include(if: $isEn) {
       title
@@ -53,7 +52,6 @@ query FrontPage( $isEn: Boolean!) {
         key
         value
       }
-      
     }
     introVideo {
       file {
@@ -61,22 +59,67 @@ query FrontPage( $isEn: Boolean!) {
       }
     }
     sites {
-      title
-      featuredImage {
-        id
-        altText
-        image {
-          url
+      posts {
+        fa @skip(if: $isEn) {
+          id
+          title
+          excerpt
+        }
+        en @include(if: $isEn){
+          id
+          title
+          excerpt
+        }
+        featuredImage {
+          id
+          image {
+            id
+            url
+          }
         }
       }
     }
     features {
-      id
-      slug
+      posts {
+        fa @skip(if: $isEn) {
+          id
+          title
+          excerpt
+        }
+        en @include(if: $isEn) {
+          id
+          title
+          excerpt
+        }
+        featuredImage {
+          id
+          image {
+            id
+            url
+          }
+        }
+      }
     }
     testimonial {
-      id
-      slug
+      posts {
+        fa @skip(if: $isEn) {
+          id
+          title
+          excerpt
+        }
+        en @include(if: $isEn) {
+          id
+          title
+          excerpt
+        }
+        featuredImage {
+          id
+          image {
+            id
+            url
+          }
+        }
+      }
     }
     logos {
       id
@@ -85,86 +128,47 @@ query FrontPage( $isEn: Boolean!) {
         url
       }
     }
-  }
-}
-`)
-
-const POSTS = graphql(`
-  query PostsPrview($where: PostWhereInput!, $isEnLang: Boolean!) {
-  posts(where: $where) {
-    id
-    featuredImage {
-      altText
-      id
-      image {
+    blogTitleAndDescription_en @include(if: $isEn) {
+      title
+      content
+    }
+    blogTitleAndDescription_fa @skip(if: $isEn) {
+      title
+      content
+    }
+    blog {
+      posts {
         id
-        url
+        featuredImage {
+          id
+          image {
+            id
+            url
+          }
+        }
+        fa @skip(if: $isEn) {
+          title
+          excerpt
+        }
+        en @include(if: $isEn) {
+          title
+          excerpt
+        }
       }
     }
-    category {
-      id
-      slug
-    }
-    createdAt
-    en @include(if: $isEnLang) {
-      title
-      excerpt
-    }
-    fa @skip(if: $isEnLang) {
-      title
-      excerpt
-    }
   }
-}
-`)
+}`)
 
 definePageMeta({
   layout: 'home'
 })
 
-const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
-// console.log(result.value?.frontPages?.[0].features?.slug)
-const { result: resultPost } = useQuery(POSTS, {
-  isEnLang: lang.value === 'en',
-  where: {
-    category: {
-      some: {
-        OR: [
-          {
-            slug: {
-              equals: 'blog'
-            }
-          },
-          {
-            slug: {
-              equals: 'testimonials'
-            }
-          },
-          {
-            slug: {
-              equals: 'features'
-            }
-          }
-        ]
-
-        // OR: [
-        // {
-        //   slug: { equals: 'blog' }
-        // }
-        // {
-        //   id: "clmyqz1kf0002hbj8asbeev5y"
-        // }
-        // ]
-      }
-    }
-  }
-})
+const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' }, { fetchPolicy: 'no-cache' })
 
 </script>
 
 <template>
   <PageHeading />
-
   <section class="container mx-auto my-24 text-tm-black flex">
     <div class="w-5/12 relative">
       <div>
@@ -252,10 +256,12 @@ const { result: resultPost } = useQuery(POSTS, {
     <div class="p-14 w-5/12 text-gray-50 bg-gray-950 flex flex-col gap-4">
       <h2 class="text-4xl font-bold">
         <!-- WE WILL PAMPER YOUR EYES IN THE WATER -->
-        {{ result?.frontPage?.[ lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa' ]?.title }}
+        {{ result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.title
+        }}
       </h2>
       <span class="text-gray-400 text-sm leading-7 mb-5">
-        {{ result?.frontPage?.[ lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa' ]?.content }}
+        {{ result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.content
+        }}
 
       </span>
       <div class="grid grid-cols-2">
@@ -292,52 +298,49 @@ const { result: resultPost } = useQuery(POSTS, {
   <p>{{ result?.frontPages?.[0]?.featuresDescription }}</p> -->
 
   <PixelGrid
-    :list=" resultPost?.posts?.filter( i => i.category?.map(j => j.slug).includes('features')).map( i => ({
-      src: i.featuredImage?.image?.url, title: i?.[lang]?.title,description: i?.[lang]?.excerpt
+    :list="result?.frontPage?.features?.posts?.map(i => ({
+      src: i.featuredImage?.image?.url, title: i?.[lang]?.title, description: i?.[lang]?.excerpt
     })) || []"
   />
 
   <TestimonialSection
-    :items="
-      resultPost?.posts?.filter( i => i.category?.some(j => j.slug === 'testimonials')).map( i => ({
-        text: i?.[lang]?.title,
-        autor: '#',
-        image: i.featuredImage?.image?.url
-      })) || []
+    :items="result?.frontPage?.testimonial?.posts?.map(i => ({
+      text: i?.[lang]?.title,
+      autor: '#',
+      image: i.featuredImage?.image?.url
+    })) || []
     "
     class="mt-28"
   />
 
   <div class="grid grid-cols-6 gap-6 mt-28 container mx-auto">
-    <div v-for="logo in result?.frontPages?.[0]?.logos || []" :key="logo.id" class="grayscale-0 opacity-30 hover:opacity-60 transition-all duration-500 mx-6">
-      <img
-        class="object-contain"
-        :src="logo.image?.url"
-        alt=""
-      >
+    <div
+      v-for="logo in result?.frontPage?.logos || []"
+      :key="logo.id"
+      class="grayscale-0 opacity-30 hover:opacity-60 transition-all duration-500 mx-6"
+    >
+      <img class="object-contain" :src="logo.image?.url" alt="">
     </div>
   </div>
 
   <LatestBlog
-    title="Latest Blogs and Articlas"
-    :description="'result?.frontPages?.[0]?.BlogDescription'"
-    :items="resultPost?.posts?.filter( i => i.category?.map(j => j.slug).includes('blog')).map(i=>{
-      return {
-        title: i?.[lang]?.title || '',
-        excerpt: i?.[lang]?.excerpt || '',
-        image: i.featuredImage?.image?.url || '',
-        tag: 'blog'
-      }
-    }) || []"
-    class="mt-28"
+  class="mt-28"
+    :title="result?.frontPage?.[lang ? 'blogTitleAndDescription_en' : 'blogTitleAndDescription_fa']?.title || 'Latest Blogs and Articlas'"
+    :description="result?.frontPage?.[lang ? 'blogTitleAndDescription_en' : 'blogTitleAndDescription_fa']?.content || '' "
+    :items="result?.frontPage?.blog?.posts?.map( i => ({
+      title: i?.[lang]?.title || '',
+      excerpt: i?.[lang]?.excerpt || '',
+      image: i.featuredImage?.image?.url || '',
+      tag: 'blog'
+    }))"
   />
+
   <SideNav />
 </template>
 
 <style scoped>
-
 .router-link-active {
-  color: #00dacf ;
+  color: #00dacf;
   font-weight: 600;
 }
 </style>

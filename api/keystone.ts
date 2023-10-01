@@ -121,6 +121,57 @@ export default withAuth(
             await prisma.$disconnect();
           }
         });
+
+        app.get<{}, Response>("/set-admin", async (req, res) => {
+          const prisma = new PrismaClient()
+
+          const adminUser = await prisma.user.findUnique({
+            where: {
+              email: 'mahd1ar@protonmail.com'
+            },
+          })
+
+          if (adminUser) {
+            await prisma.user.update({
+              where: {
+                email: adminUser.email
+              },
+              data: {
+                role: "admin",
+              }
+            })
+
+            res.json({
+              message: "successuly update admin role",
+              ok: true,
+              payload: {
+                user: adminUser
+              }
+            })
+
+          } else {
+            const user = await prisma.user.create({
+              data: {
+                name: "admin",
+                email: "mahd1ar@protonmail.com",
+                role: "admin",
+                password: 'Aa123456'
+              }
+            })
+
+            res.json({
+              message: "successuly set admin role",
+              ok: true,
+              payload: {
+                user
+              }
+            })
+          }
+
+          prisma.$disconnect()
+
+
+        })
       },
       maxFileSize: 1024_000_000,
       port: 3032,

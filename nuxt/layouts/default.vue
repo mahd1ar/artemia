@@ -10,8 +10,8 @@ function changeLocale (newLocale : string) {
   translatePanel.value = false
   setLocale(newLocale)
 }
+const config = useRuntimeConfig()
 
-const baseUrl = process.env.FRONTENDURL!
 </script>
 
 <template>
@@ -132,7 +132,7 @@ const baseUrl = process.env.FRONTENDURL!
                   <NuxtLink
                     v-for="(i , index) in appState.menuItems"
                     :key="index"
-                    :to="localePath(i.link.replace(baseUrl, ''))"
+                    :to="localePath(i.link.replace(config.public.frontendUrl, ''))"
                     class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     {{

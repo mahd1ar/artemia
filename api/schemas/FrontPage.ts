@@ -1,9 +1,15 @@
 import { group, list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
+import { allowAll, allOperations } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { isAdmin } from "../data/access";
 
 export const FrontPage = list({
-  access: allowAll,
+  access: {
+    operation: {
+      ...allOperations(isAdmin),
+      query: () => true
+    }
+  },
   isSingleton: true,
   fields: {
 
@@ -90,19 +96,14 @@ export const FrontPage = list({
         })
       },
     }),
-    ...group({
-      label: "sites section",
-      fields: {
-        sites: relationship({
-          ref: "Resource",
-          many: true,
-          ui: {
-            description: "exacltly 4 items",
-            displayMode: "cards",
-            cardFields: ["title", "featuredImage"],
-            inlineCreate: { fields: ["title", "featuredImage"] },
-          },
-        }),
+
+
+    sites: relationship({
+      ref: "Category",
+      label: "features section relative category",
+      ui: {
+        description: "exacltly 8 items",
+        labelField: 'slug',
       },
     }),
 
@@ -114,21 +115,14 @@ export const FrontPage = list({
         labelField: 'slug',
       },
     }),
+
     testimonial: relationship({
       ref: "Category",
       label: 'testimonial section relative category',
       ui: {
         labelField: 'slug',
       }
-      // many: true,
-      // ui: {
-      //   description: "exacltly 8 items",
-      //   displayMode: "cards",
-      //   cardFields: ["title", "featuredImage", "bannerImage"],
-      //   inlineCreate: { fields: ["title", "featuredImage", "bannerImage"] },
-      // },
     }),
-
 
     logos: relationship({
       ref: 'ImageStore', many: true, ui: {
@@ -136,6 +130,47 @@ export const FrontPage = list({
         labelField: 'altText'
       }
     }),
+    ...group({
+      label: 'blog section',
+      fields: {
+        blogTitleAndDescription_fa: relationship({
+          ref: 'Resource',
+          ui: {
+            displayMode: 'cards',
+            inlineCreate: {
+              fields: ['title', 'content']
+            },
+            cardFields: ['title', 'content'],
+            inlineEdit: {
+              fields: ['title', 'content']
+            },
+            removeMode: 'none'
+          }
+        }),
+        blogTitleAndDescription_en: relationship({
+          ref: 'Resource',
+          ui: {
+            displayMode: 'cards',
+            inlineCreate: {
+              fields: ['title', 'content']
+            },
+            cardFields: ['title', 'content'],
+            inlineEdit: {
+              fields: ['title', 'content']
+            },
+            removeMode: 'none'
+          }
+        }),
+
+        blog: relationship({
+          ref: "Category",
+          label: 'testimonial section relative category',
+          ui: {
+            labelField: 'slug',
+          }
+        }),
+      }
+    })
 
   },
 });

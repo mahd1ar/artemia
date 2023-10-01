@@ -1,6 +1,6 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { image, relationship, text, timestamp, virtual } from "@keystone-6/core/fields";
+import { checkbox, image, relationship, text, timestamp, virtual } from "@keystone-6/core/fields";
 import { graphql } from '@graphql-ts/schema';
 
 export const Category = list({
@@ -18,8 +18,8 @@ export const Category = list({
             field: graphql.field({
                 type: graphql.String,
                 async resolve(item, args, context) {
-                    const { id } = item as unknown as { id: string }
-                    return `${process.env.FRONTENDURL}/category/${id}`
+                    const { id, noUI } = item as unknown as { id: string, noUI: boolean }
+                    return noUI ? 'cannot show into UI' : `${process.env.FRONTENDURL}/category/${id}`
                 },
             }),
         }),
@@ -62,6 +62,8 @@ export const Category = list({
                 }
             },
         }),
+
+        noUI: checkbox({ defaultValue: false }),
 
         posts: relationship({
             ref: 'Post.category',

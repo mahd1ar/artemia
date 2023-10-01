@@ -12,7 +12,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiUrl: process.env.NUXT_API_URL
+      apiUrl: process.env.NUXT_API_URL,
+      frontendUrl: process.env.FRONTENDURL
     }
   },
   modules: [

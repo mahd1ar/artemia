@@ -6,7 +6,7 @@
 // - https://keystonejs.com/docs/config/lists
 
 import { list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
+import { allowAll, allOperations } from "@keystone-6/core/access";
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
 //   this is a few common fields for an example
@@ -15,6 +15,7 @@ import {
   relationship,
   password,
   timestamp,
+  select,
 } from "@keystone-6/core/fields";
 
 import type { Lists } from ".keystone/types";
@@ -29,31 +30,15 @@ import {
   Category,
   Customer,
   Order,
-  FileStore
+  FileStore, User
 } from "./schemas";
+import { Roles, Session, enumToArrayOfKeyValue } from "./data/types";
+import { isAdmin } from "./data/access";
 
 export const lists: Lists = {
-  User: list({
-    access: allowAll,
-    ui: {
-      isHidden() {
-        return process.env.NODE_ENV === "production";
-      },
-    },
-    fields: {
-      name: text({ validation: { isRequired: true } }),
+  // @ts-ignore
+  FrontPage,
 
-      email: text({
-        validation: { isRequired: true },
-        isIndexed: "unique",
-      }),
-      password: password({ validation: { isRequired: true } }),
-      posts: relationship({ ref: "PostTranslation.author", many: true }),
-      createdAt: timestamp({
-        defaultValue: { kind: "now" },
-      }),
-    },
-  }),
   KeyValue: list({
     access: allowAll,
     ui: {
@@ -72,12 +57,9 @@ export const lists: Lists = {
   // @ts-ignore
   PostTranslation,
   // @ts-ignore
-  FrontPage,
-  // @ts-ignore
   ImageStore,
   // @ts-ignore
   Resource,
-
   // @ts-ignore
   MainMenu,
   // @ts-ignore
@@ -90,6 +72,9 @@ export const lists: Lists = {
   Order,
   // @ts-ignore
   FileStore,
+
+  // @ts-ignore
+  User,
 
   Tag: list({
     access: allowAll,
