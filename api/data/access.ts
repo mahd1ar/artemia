@@ -3,16 +3,13 @@ import { Roles, Session } from "./types";
 import { BaseListTypeInfo } from "@keystone-6/core/types";
 
 export function isLoggedIn(args: BaseAccessArgs<BaseListTypeInfo>) {
-    const { session }: Partial<{ session: Session }> = args;
+  const { session }: Partial<{ session: Session }> = args;
 
-    if (!!session === false)
-        return false;
+  if (!!session === false) return false;
 
-
-    return !!session;
+  return !!session;
 }
 
 export function isAdmin(args: BaseAccessArgs<BaseListTypeInfo>) {
-    console.log(args.session)
-    return isLoggedIn(args) && args.context.session!.data.role === Roles.admin;
+  return isLoggedIn(args) && args.context.session!.data.role === Roles.admin;
 }

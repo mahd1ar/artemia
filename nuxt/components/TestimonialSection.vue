@@ -23,7 +23,7 @@ defineProps({
       >
     </div>
     <div class="relative container flex flex-col items-end justify-end">
-      <div>
+      <div class="w-full" >
         <Splide
           class="w-7/12 absolute bottom-4"
           :options="{

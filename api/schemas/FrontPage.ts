@@ -7,53 +7,124 @@ export const FrontPage = list({
   access: {
     operation: {
       ...allOperations(isAdmin),
-      query: () => true
-    }
+      query: () => true,
+    },
   },
   isSingleton: true,
   fields: {
-
-    headline: text({ validation: { isRequired: true } }),
-
+    // ...group({
+    //   label: "headline section",
+    //   fields: {
+    //     headline_bg_image: relationship({
+    //       ref: "ImageStore",
+    //       ui: {
+    //         labelField: "altText",
+    //       },
+    //     }),
+    //     headline_fa: relationship({
+    //       ref: "Resource",
+    //       label: "بخش تیتر به زبان فارسی",
+    //       ui: {
+    //         displayMode: "cards",
+    //         cardFields: ["title", "content"],
+    //         inlineCreate: { fields: ["title", "content"] },
+    //         inlineEdit: { fields: ["title", "content"] },
+    //         removeMode: "none",
+    //       },
+    //     }),
+    //     headline_en: relationship({
+    //       ref: "Resource",
+    //       label: "headline section in english",
+    //       ui: {
+    //         displayMode: "cards",
+    //         cardFields: ["title", "content"],
+    //         inlineCreate: { fields: ["title", "content"] },
+    //         inlineEdit: { fields: ["title", "content"] },
+    //         removeMode: "none",
+    //       },
+    //     }),
+    //   },
+    // }),
 
     ...group({
       label: "hero section",
       fields: {
         hero_fa: relationship({
-          ref: 'Resource',
-          label: 'به فارسی',
+          ref: "Resource",
+          label: "به فارسی",
           ui: {
             displayMode: "cards",
-            cardFields: ["title", "content",],
-            inlineCreate: { fields: ["title", "content",] },
-            inlineEdit: { fields: ["title", "content",] },
-            removeMode: 'none',
-          }
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
         }),
 
         hero_en: relationship({
-          ref: 'Resource',
-          label: 'in english',
+          ref: "Resource",
+          label: "in english",
           ui: {
             displayMode: "cards",
-            cardFields: ["title", "content",],
-            inlineCreate: { fields: ["title", "content",] },
-            inlineEdit: { fields: ["title", "content",] },
-            removeMode: 'none',
-          }
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
         }),
-      }
+      },
     }),
     heroImage: relationship({
       ref: "ImageStore",
       ui: {
         displayMode: "cards",
         cardFields: ["image"],
-        inlineCreate: { fields: ["image", 'altText'] },
-        inlineEdit: { fields: ["image", 'altText'] },
+        inlineCreate: { fields: ["image", "altText"] },
+        inlineEdit: { fields: ["image", "altText"] },
       },
     }),
 
+    ...group({
+      label: "iranartemia Consortium",
+      fields: {
+        consortiumImages: relationship({
+          ref: "ImageStore",
+          many: true,
+          ui: {
+            labelField: "altText",
+          },
+        }),
+        consortiumIntro_fa: relationship({
+          ref: "Resource",
+          label: "توضیحات کنسرسیوم به فارسی",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
+        }),
+        consortiumIntro_en: relationship({
+          ref: "Resource",
+          label: "introduction in english",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
+        }),
+        consortiumCEOSignatureImage: relationship({
+          ref: "ImageStore",
+          label: "امضای اقای هاشمی😎",
+          ui: {
+            labelField: "altText",
+          },
+        }),
+      },
+    }),
 
     ...group({
       label: "status section",
@@ -63,47 +134,46 @@ export const FrontPage = list({
           label: "عنوان و توضیحات بخش آمار به زبان فارسی",
           ui: {
             displayMode: "cards",
-            cardFields: ["title", "content",],
-            inlineCreate: { fields: ["title", "content",] },
-            inlineEdit: { fields: ["title", "content",] },
-            removeMode: 'none',
-          }
-        })
-        ,
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
+        }),
         statusTitleAndDescription_en: relationship({
           ref: "Resource",
           label: "title and description in english",
           ui: {
             displayMode: "cards",
-            cardFields: ["title", "content",],
-            inlineCreate: { fields: ["title", "content",] },
-            inlineEdit: { fields: ["title", "content",] },
-            removeMode: 'none',
-          }
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
         }),
         statistics: relationship({
           ref: "Post",
           many: true,
           label: "statistics section relative category",
           ui: {
-            description: "max 4 items: select relative posts with custom custom field name \"PERCENTAGE\"",
-            labelField: 'title',
-          }
+            description:
+              'max 4 items: select relative posts with custom custom field name "PERCENTAGE"',
+            labelField: "title",
+          },
         }),
 
         introVideo: relationship({
-          ref: "FileStore"
-        })
+          ref: "FileStore",
+        }),
       },
     }),
-
 
     sites: relationship({
       ref: "Category",
       label: "features section relative category",
       ui: {
         description: "exacltly 8 items",
-        labelField: 'slug',
+        labelField: "slug",
       },
     }),
 
@@ -112,65 +182,77 @@ export const FrontPage = list({
       label: "features section relative category",
       ui: {
         description: "exacltly 8 items",
-        labelField: 'slug',
+        labelField: "slug",
       },
     }),
 
-    testimonial: relationship({
-      ref: "Category",
-      label: 'testimonial section relative category',
-      ui: {
-        labelField: 'slug',
-      }
+    ...group({
+      label: "testimonial section",
+      fields: {
+        testimonial_bg_image: relationship({
+          ref: "ImageStore",
+          ui: {
+            labelField: "altText",
+          },
+        }),
+        testimonial: relationship({
+          ref: "Category",
+          label: "testimonial section relative category",
+          ui: {
+            labelField: "slug",
+          },
+        }),
+      },
     }),
 
     logos: relationship({
-      ref: 'ImageStore', many: true, ui: {
-        description: 'max 6 items',
-        labelField: 'altText'
-      }
+      ref: "ImageStore",
+      many: true,
+      ui: {
+        description: "max 6 items",
+        labelField: "altText",
+      },
     }),
     ...group({
-      label: 'blog section',
+      label: "Blog section",
       fields: {
         blogTitleAndDescription_fa: relationship({
-          ref: 'Resource',
+          ref: "Resource",
           ui: {
-            displayMode: 'cards',
+            displayMode: "cards",
             inlineCreate: {
-              fields: ['title', 'content']
+              fields: ["title", "content"],
             },
-            cardFields: ['title', 'content'],
+            cardFields: ["title", "content"],
             inlineEdit: {
-              fields: ['title', 'content']
+              fields: ["title", "content"],
             },
-            removeMode: 'none'
-          }
+            removeMode: "none",
+          },
         }),
         blogTitleAndDescription_en: relationship({
-          ref: 'Resource',
+          ref: "Resource",
           ui: {
-            displayMode: 'cards',
+            displayMode: "cards",
             inlineCreate: {
-              fields: ['title', 'content']
+              fields: ["title", "content"],
             },
-            cardFields: ['title', 'content'],
+            cardFields: ["title", "content"],
             inlineEdit: {
-              fields: ['title', 'content']
+              fields: ["title", "content"],
             },
-            removeMode: 'none'
-          }
+            removeMode: "none",
+          },
         }),
 
         blog: relationship({
           ref: "Category",
-          label: 'testimonial section relative category',
+          label: "testimonial section relative category",
           ui: {
-            labelField: 'slug',
-          }
+            labelField: "slug",
+          },
         }),
-      }
-    })
-
+      },
+    }),
   },
 });

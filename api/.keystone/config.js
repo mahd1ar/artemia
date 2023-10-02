@@ -330,7 +330,6 @@ function isLoggedIn(args) {
   return !!session2;
 }
 function isAdmin(args) {
-  console.log(args.session);
   return isLoggedIn(args) && args.context.session.data.role === "admin" /* admin */;
 }
 
@@ -344,7 +343,39 @@ var FrontPage = (0, import_core3.list)({
   },
   isSingleton: true,
   fields: {
-    headline: (0, import_fields3.text)({ validation: { isRequired: true } }),
+    // ...group({
+    //   label: "headline section",
+    //   fields: {
+    //     headline_bg_image: relationship({
+    //       ref: "ImageStore",
+    //       ui: {
+    //         labelField: "altText",
+    //       },
+    //     }),
+    //     headline_fa: relationship({
+    //       ref: "Resource",
+    //       label: "بخش تیتر به زبان فارسی",
+    //       ui: {
+    //         displayMode: "cards",
+    //         cardFields: ["title", "content"],
+    //         inlineCreate: { fields: ["title", "content"] },
+    //         inlineEdit: { fields: ["title", "content"] },
+    //         removeMode: "none",
+    //       },
+    //     }),
+    //     headline_en: relationship({
+    //       ref: "Resource",
+    //       label: "headline section in english",
+    //       ui: {
+    //         displayMode: "cards",
+    //         cardFields: ["title", "content"],
+    //         inlineCreate: { fields: ["title", "content"] },
+    //         inlineEdit: { fields: ["title", "content"] },
+    //         removeMode: "none",
+    //       },
+    //     }),
+    //   },
+    // }),
     ...(0, import_core3.group)({
       label: "hero section",
       fields: {
@@ -379,6 +410,47 @@ var FrontPage = (0, import_core3.list)({
         cardFields: ["image"],
         inlineCreate: { fields: ["image", "altText"] },
         inlineEdit: { fields: ["image", "altText"] }
+      }
+    }),
+    ...(0, import_core3.group)({
+      label: "iranartemia Consortium",
+      fields: {
+        consortiumImages: (0, import_fields3.relationship)({
+          ref: "ImageStore",
+          many: true,
+          ui: {
+            labelField: "altText"
+          }
+        }),
+        consortiumIntro_fa: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "\u062A\u0648\u0636\u06CC\u062D\u0627\u062A \u06A9\u0646\u0633\u0631\u0633\u06CC\u0648\u0645 \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
+          }
+        }),
+        consortiumIntro_en: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "introduction in english",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
+          }
+        }),
+        consortiumCEOSignatureImage: (0, import_fields3.relationship)({
+          ref: "ImageStore",
+          label: "\u0627\u0645\u0636\u0627\u06CC \u0627\u0642\u0627\u06CC \u0647\u0627\u0634\u0645\u06CC\u{1F60E}",
+          ui: {
+            labelField: "altText"
+          }
+        })
       }
     }),
     ...(0, import_core3.group)({
@@ -436,11 +508,22 @@ var FrontPage = (0, import_core3.list)({
         labelField: "slug"
       }
     }),
-    testimonial: (0, import_fields3.relationship)({
-      ref: "Category",
-      label: "testimonial section relative category",
-      ui: {
-        labelField: "slug"
+    ...(0, import_core3.group)({
+      label: "testimonial section",
+      fields: {
+        testimonial_bg_image: (0, import_fields3.relationship)({
+          ref: "ImageStore",
+          ui: {
+            labelField: "altText"
+          }
+        }),
+        testimonial: (0, import_fields3.relationship)({
+          ref: "Category",
+          label: "testimonial section relative category",
+          ui: {
+            labelField: "slug"
+          }
+        })
       }
     }),
     logos: (0, import_fields3.relationship)({
@@ -452,7 +535,7 @@ var FrontPage = (0, import_core3.list)({
       }
     }),
     ...(0, import_core3.group)({
-      label: "blog section",
+      label: "Blog section",
       fields: {
         blogTitleAndDescription_fa: (0, import_fields3.relationship)({
           ref: "Resource",
@@ -820,7 +903,8 @@ var FileStore = (0, import_core11.list)({
   access: import_access12.allowAll,
   hooks: {
     resolveInput(args) {
-      console.log(args.resolvedData);
+      if (args.inputData.title !== void 0 || args?.item?.title !== void 0)
+        return args.resolvedData;
       if (!args.resolvedData.title && args.resolvedData.file.filename)
         args.resolvedData.title = args.resolvedData.file.filename;
       return args.resolvedData;

@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 import { useAppState } from '~/stores/appState'
 
+defineProps({
+  title: String,
+  description: String,
+  sections: Array as PropType<{title:string, href:string}[]>
+})
+
 const { locale, setLocale } = useI18n()
 const localePath = useLocalePath()
 
@@ -21,7 +27,7 @@ function chengeLang (newLang : string) {
     <div class="absolute w-full h-full">
       <img
         class="h-full object-cover w-full"
-        src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/2021/10/freediving-e1633923358732.jpg"
+        src="https://picsum.photos/1072/696"
         alt=""
       >
       <div aria-hidden="true" style="background-color: #03062a; opacity: 0.7" class="overlay" />
@@ -109,30 +115,19 @@ function chengeLang (newLang : string) {
       <div class="h-full flex-center justify-between w-full">
         <div class="w-1/3">
           <ol class="flex items-start gap-5 flex-col capitalize">
-            <li class="pb-1 pr-2 border-primary border-b-2">
-              Section 1
-            </li>
-            <li class="pb-1 pr-2 border-primary border-b-2">
-              section 2
-            </li>
-            <li class="pb-1 pr-2 border-primary border-b-2">
-              section 3
-            </li>
-            <li class="pb-1 pr-2 border-primary border-b-2">
-              section 4
+            <li v-for="i in sections" :key="i.href" class="pb-1 pr-2 border-primary border-b-2">
+              <a :href="i.href">
+                {{ i.title }}
+              </a>
             </li>
           </ol>
         </div>
         <div class="text-right w-2/3">
           <h1 class="text-5xl font-bold">
-            IRAN ARTEMIA
+            {{ title }}
           </h1>
           <div class="text-gray-200 mt-10 italic font-bold">
-            Lorem ipsum dolor sit, amet consectetur adipisicing
-            elit. Aliquam tenetur deserunt, neque vitae dolorum
-            fugiat mollitia expedita cupiditate, blanditiis
-            provident inventore necessitatibus voluptatibus rerum a
-            libero quod impedit, modi reiciendis!
+            {{ description }}
           </div>
         </div>
       </div>

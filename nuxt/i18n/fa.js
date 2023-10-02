@@ -14,4 +14,6 @@ export default {
   orderhasbeenplaced: 'سفارش شما با موفقیت ثبت شد، کارشناسان ما در اسرع وقت با شما تماس می‌گیرند.',
   successful: ' با موفقیت ثبت شد.',
   ok: 'باشه',
+  'frontPage:CEO': 'امید هاشمی',
+  'frontPage:CEOTitle': 'مدیرعامل ایران آرتمیا'
 }

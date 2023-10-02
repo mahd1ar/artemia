@@ -14,4 +14,6 @@ export default {
   orderhasbeenplaced: 'Your order has been placed, our staff will contact you soon.',
   successful: 'successful',
   ok: 'OK',
+  'frontPage:CEO': 'Omid Hashemi',
+  'frontPage:CEOTitle': 'CEO of IranArtemia'
 }

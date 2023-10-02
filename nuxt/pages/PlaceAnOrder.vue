@@ -129,8 +129,8 @@ async function submitOrder () {
     onResponseError: (error) => {
       alert('an error has occured')
       console.error(error)
-    },
-    
+    }
+
   })
 
   if (data?.payload?.customerid) { customerID.value = data.payload.customerid }

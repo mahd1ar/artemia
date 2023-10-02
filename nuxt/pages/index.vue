@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+import { useIntervalFn } from '@vueuse/core'
 import { graphql } from '@/gql'
 // import { home } from '~/gql/graphql'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
+
 const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
 
 const FRONPAGE = graphql(`
@@ -18,6 +20,28 @@ query HomePage( $isEn: Boolean!) {
     }
     heroImage {
       altText
+      id
+      image {
+        id
+        url
+      }
+    }
+    consortiumImages {
+      id
+      image {
+        id
+        url
+      }
+    }
+    consortiumIntro_en @include(if: $isEn) {
+      title
+      content
+    }
+    consortiumIntro_fa @skip(if: $isEn) {
+      title
+      content
+    }
+    consortiumCEOSignatureImage {
       id
       image {
         id
@@ -163,73 +187,120 @@ definePageMeta({
   layout: 'home'
 })
 
-const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' }, { fetchPolicy: 'no-cache' })
+const { result , loading  } = useQuery(FRONPAGE, { isEn: lang.value === 'en' }, { fetchPolicy: 'no-cache' })
+const conCounter = ref(0)
+const conImages = computed(() => {
+  return result.value?.frontPage?.consortiumImages?.map(i => i.image?.url || '')
+})
 
+// const sampleImage = 'https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/elementor/thumbs/snorkeler-framed-by-the-struts-of-a-wreck-of-a-plane-on-the-seabed--e1634535769483-peqe3vatpg6pccrr5ok0rm50g1ys3ewfqyb1m7xaxk.jpg'
+
+useIntervalFn(() => {
+  if (conCounter.value + 1 < (conImages.value?.length || 0)) {
+    conCounter.value++
+  } else {
+    conCounter.value = 0
+  }
+}, 5000)
 </script>
 
 <template>
-  <PageHeading />
+  <!-- <div v-if="!loading" > -->
+
+
+  <PageHeading
+    :title="result?.frontPage?.[lang === 'en' ? 'hero_en' : 'hero_fa']?.title || '' "
+    :description="result?.frontPage?.[lang === 'en' ? 'hero_en' : 'hero_fa']?.content || ''"
+
+    :sections="[
+      {
+      href: '#consortium',
+      title: result?.frontPage?.[lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.title || ''
+    },
+      // {
+      //   href: '#features',
+      //   title: result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.title || ''
+      // },
+    ]"
+  />
+
   <section class="container mx-auto my-24 text-tm-black flex">
     <div class="w-5/12 relative">
       <div>
-        <img
-          class="px-8 object-cover"
-          src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/elementor/thumbs/snorkeler-framed-by-the-struts-of-a-wreck-of-a-plane-on-the-seabed--e1634535769483-peqe3vatpg6pccrr5ok0rm50g1ys3ewfqyb1m7xaxk.jpg"
-          alt=""
-        >
-        <div class="absolute w-32 top-8 border-[12px] border-white">
-          <img
-            class="object-cover"
-            src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/elementor/thumbs/snorkeler-framed-by-the-struts-of-a-wreck-of-a-plane-on-the-seabed--e1634535769483-peqe3vatpg6pccrr5ok0rm50g1ys3ewfqyb1m7xaxk.jpg"
-            alt=""
+        <div class="relative    h-[463px] overflow-hidden w-full ">
+          <div
+            class="flex w-full h-full transition duration-700 delay-150"
+            :style="{transform: 'translateX(-'+100 * conCounter+'%)'}"
           >
+            <img
+              v-for="(image,index) in conImages"
+              :key="index"
+              class="w-full h-full object-cover"
+              :src="image"
+              alt=""
+            >
+          </div>
         </div>
-        <div class="absolute w-36 bottom-8 -right-8 border-[12px] border-white">
-          <img
-            class="object-cover"
-            src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/elementor/thumbs/snorkeler-framed-by-the-struts-of-a-wreck-of-a-plane-on-the-seabed--e1634535769483-peqe3vatpg6pccrr5ok0rm50g1ys3ewfqyb1m7xaxk.jpg"
-            alt=""
+        <div class="absolute w-32 h-44 top-8 border-[12px] border-white overflow-hidden">
+          <div
+            v-if="conImages"
+            class="flex h-full transition duration-700 "
+            :style="{transform: 'translateX(-'+100 * conCounter+'%)'}"
           >
+            <img
+
+              v-for="(_,index) in conImages"
+              :key="index"
+              class="object-cover w-full h-full"
+              :src="conImages[(index+2)%conImages?.length]"
+              alt=""
+            >
+          </div>
+        </div>
+        <div class="absolute w-36 h-44 bottom-8 -right-8 border-[12px] border-white overflow-hidden">
+          <div
+            v-if="conImages"
+            class="flex h-full transition duration-700 delay-300"
+            :style="{transform: 'translateX(-'+100 * conCounter+'%)'}"
+          >
+            <img
+              v-for="(_,index) in conImages"
+              :key="index"
+              class="object-cover w-full h-full"
+              :src="conImages[(index+1)%conImages?.length]"
+              alt=""
+            >
+          </div>
         </div>
       </div>
     </div>
     <div class="w-7/12 px-10 relative">
-      <div class="relative">
-        <svg v-show="false" class="w-14 -translate-y-1/2 text-primary absolute" viewBox="0 0 32 32">
-          <g fill="currentColor">
-            <path
-              d="M17.978 7.993a1.978 1.978 0 1 1-3.956 0a1.978 1.978 0 0 1 3.956 0Zm-2.118 3.975c.967 0 1.75.783 1.75 1.75v10.59a1.75 1.75 0 1 1-3.5 0v-10.59c0-.967.784-1.75 1.75-1.75Z"
-            />
-            <path
-              d="M6 1a5 5 0 0 0-5 5v20a5 5 0 0 0 5 5h20a5 5 0 0 0 5-5V6a5 5 0 0 0-5-5H6ZM3 6a3 3 0 0 1 3-3h20a3 3 0 0 1 3 3v20a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Z"
-            />
-          </g>
+      <div class="relative h-full flex flex-col">
+        <svg class="w-32 -translate-y-1/2 text-primary absolute" viewBox="0 0 24 24">
+          <path fill="none" stroke="currentColor" d="M6.5 10c-.223 0-.437.034-.65.065c.069-.232.14-.468.254-.68c.114-.308.292-.575.469-.844c.148-.291.409-.488.601-.737c.201-.242.475-.403.692-.604c.213-.21.492-.315.714-.463c.232-.133.434-.28.65-.35l.539-.222l.474-.197l-.485-1.938l-.597.144c-.191.048-.424.104-.689.171c-.271.05-.56.187-.882.312c-.318.142-.686.238-1.028.466c-.344.218-.741.4-1.091.692c-.339.301-.748.562-1.05.945c-.33.358-.656.734-.909 1.162c-.293.408-.492.856-.702 1.299c-.19.443-.343.896-.468 1.336c-.237.882-.343 1.72-.384 2.437c-.034.718-.014 1.315.028 1.747c.015.204.043.402.063.539l.025.168l.026-.006A4.5 4.5 0 1 0 6.5 10zm11 0c-.223 0-.437.034-.65.065c.069-.232.14-.468.254-.68c.114-.308.292-.575.469-.844c.148-.291.409-.488.601-.737c.201-.242.475-.403.692-.604c.213-.21.492-.315.714-.463c.232-.133.434-.28.65-.35l.539-.222l.474-.197l-.485-1.938l-.597.144c-.191.048-.424.104-.689.171c-.271.05-.56.187-.882.312c-.317.143-.686.238-1.028.467c-.344.218-.741.4-1.091.692c-.339.301-.748.562-1.05.944c-.33.358-.656.734-.909 1.162c-.293.408-.492.856-.702 1.299c-.19.443-.343.896-.468 1.336c-.237.882-.343 1.72-.384 2.437c-.034.718-.014 1.315.028 1.747c.015.204.043.402.063.539l.025.168l.026-.006A4.5 4.5 0 1 0 17.5 10z" />
         </svg>
 
-        <svg class="w-14 -translate-y-1/2 absolute" viewBox="0 0 24 24" fill="none">
-          <path
-            opacity="0.5"
-            d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
-            stroke="#00dacf"
-            stroke-width="1.5"
-          />
-          <path
-            d="M10.125 8.875C10.125 7.83947 10.9645 7 12 7C13.0355 7 13.875 7.83947 13.875 8.875C13.875 9.56245 13.505 10.1635 12.9534 10.4899C12.478 10.7711 12 11.1977 12 11.75V13"
-            stroke="#1C274C"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-          <circle cx="12" cy="16" r="1" fill="#1C274C" />
-        </svg>
-      </div>
-      <h2 class="text-tm-black relative text-4xl font-extrabold text-center">
-        WHAT IS ARTEMIA
-      </h2>
-      <div class="text-center text-gray-400 mt-5 leading-7">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Delectus neque perspiciatis optio itaque nihil iste asperiores
-        placeat voluptatibus enim necessitatibus odio consequuntur,
-        maxime laboriosam eos numquam earum corrupti, sint quo.
+        <h2 class="text-tm-black relative text-4xl font-extrabold text-center">
+          {{ result?.frontPage?.[ lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.title || 'IRAN Artemia Consortium' }}
+        </h2>
+        <div class="text-center text-gray-400 mt-5 leading-7">
+          {{
+            result?.frontPage?.[ lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.content || 'lorem ipsom'
+          }}
+        </div>
+        <div class="h-full w-full  flex flex-col justify-center items-center">
+          <div class="w-full h-full flex-center p-6" aria-hidden="true">
+            <div class="bg-primary w-0.5 rounded-sm h-full" />
+          </div>
+          <div class="flex flex-col items-center justify-center">
+            <h2 class="font-bold text-xl uppercase">
+              {{ t('frontPage:CEO') }}
+            </h2>
+            <p class="text-gray-400">
+              {{ t('frontPage:CEOTitle') }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -324,7 +395,8 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' }, { fetchPoli
   </div>
 
   <LatestBlog
-  class="mt-28"
+  v-if="(result?.frontPage?.blog?.posts?.length || 0) > 0"
+    class="mt-28"
     :title="result?.frontPage?.[lang ? 'blogTitleAndDescription_en' : 'blogTitleAndDescription_fa']?.title || 'Latest Blogs and Articlas'"
     :description="result?.frontPage?.[lang ? 'blogTitleAndDescription_en' : 'blogTitleAndDescription_fa']?.content || '' "
     :items="result?.frontPage?.blog?.posts?.map( i => ({
@@ -332,10 +404,11 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' }, { fetchPoli
       excerpt: i?.[lang]?.excerpt || '',
       image: i.featuredImage?.image?.url || '',
       tag: 'blog'
-    }))"
+    })||[])"
   />
 
   <SideNav />
+  <!-- </div> -->
 </template>
 
 <style scoped>
