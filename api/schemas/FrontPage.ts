@@ -165,14 +165,36 @@ export const FrontPage = list({
         introVideo: relationship({
           ref: "FileStore",
         }),
+        introVideoTitle_en: relationship({
+          ref: "Resource",
+          label: "video title in english",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          }
+        }),
+        introVideoTitle_fa: relationship({
+          ref: "Resource",
+          label: "تیتر ویدو به زبان فارسی",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          }
+        }),
       },
     }),
 
     sites: relationship({
       ref: "Category",
-      label: "features section relative category",
+      label: "sites section relative category",
       ui: {
-        description: "exacltly 8 items",
+        description: "a category with 4 items",
         labelField: "slug",
       },
     }),

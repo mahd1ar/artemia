@@ -2,9 +2,10 @@
 import { useAppState } from '~/stores/appState'
 
 defineProps({
-  title: String,
-  description: String,
-  sections: Array as PropType<{title:string, href:string}[]>
+  title: { type: String, default: () => '' },
+  description: { type: String, default: () => '' },
+  sections: { type: Array as PropType<{title:string, href:string}[]>, default: () => [] },
+  heroBackgroundImage: { type: String, default: () => '' }
 })
 
 const { locale, setLocale } = useI18n()
@@ -27,10 +28,10 @@ function chengeLang (newLang : string) {
     <div class="absolute w-full h-full">
       <img
         class="h-full object-cover w-full"
-        src="https://picsum.photos/1072/696"
+        :src="heroBackgroundImage || 'https://picsum.photos/1072/696'"
         alt=""
       >
-      <div aria-hidden="true" style="background-color: #03062a; opacity: 0.7" class="overlay" />
+      <div aria-hidden="true" style="background-color: #03062a; opacity: 0.7 " class="overlay" />
     </div>
 
     <div class="relative h-max container mx-auto flex justify-between border-b border-white/50">
@@ -89,7 +90,7 @@ function chengeLang (newLang : string) {
           </ul>
         </div>
         <div class="flex gap-4 ">
-          <div class="tracking-widest flex items-center gap-2">
+          <div class="tracking-widest flex items-center gap-3">
             <button type="button" @click="chengeLang('fa')">
               FA
             </button>

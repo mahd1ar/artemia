@@ -45,7 +45,7 @@ const defaultImage = 'https://images.unsplash.com/photo-1683009427666-340595e57e
         <div
           class="transition-all w-full absolute top-0 bg-white text-2xl flex-center z-10 font-bold duration-500 overflow-hidden ease-out h-0 group-hover:h-44"
         >
-          <div class="flex-center absolute top-0 h-44 w-full tracking-widest">
+          <div class="flex-center  absolute top-0 h-44 w-full tracking-widest">
             <!-- SHALLOW DIVE -->
             {{ i.title }}
           </div>
@@ -53,7 +53,7 @@ const defaultImage = 'https://images.unsplash.com/photo-1683009427666-340595e57e
 
         <div class="bg-black/60 h-full group-hover:bg-black/70">
           <div
-            class="transition-all w-full absolute top-0 flex-center text-2xl tracking-widest font-bold text-white overflow-hidden h-44"
+            class="transition-all w-full  absolute top-0 flex-center text-2xl tracking-widest font-bold text-white overflow-hidden h-44"
           >
             {{ i.title }}
             <!-- SHALLOW DIVE -->

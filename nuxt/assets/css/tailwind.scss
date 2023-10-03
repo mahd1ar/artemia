@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 
-
 @layer components {
-    .flex-center {
-      @apply flex items-center justify-center;
-    }
-    .overlay {
-      @apply absolute inset-0 h-full w-full;
-    }
+  .flex-center {
+    @apply flex items-center justify-center;
   }
-  
-  @for $i from 0 through 9 {
-    .--#{$i} {
-      --count: #{$i};
-    }
+
+  .overlay {
+    @apply absolute inset-0 h-full w-full;
+
   }
-  
+}
+
+@for $i from 0 through 9 {
+  .--#{$i} {
+    --count: #{$i};
+  }
+}

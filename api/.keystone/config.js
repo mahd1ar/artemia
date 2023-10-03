@@ -109,36 +109,6 @@ var Post = (0, import_core.list)({
       validation: { isRequired: true },
       label: "post title for operator"
     }),
-    featuredImage: (0, import_fields.relationship)({
-      ref: "ImageStore",
-      label: "\u0627\u0646\u062A\u062E\u0627\u0628 \u0639\u06A9\u0633 \u0634\u0627\u062E\u0635",
-      many: false,
-      ui: {
-        displayMode: "cards",
-        cardFields: ["altText", "image"],
-        inlineCreate: { fields: ["altText", "image"] },
-        inlineConnect: true
-      }
-    }),
-    type: (0, import_fields.select)({
-      options: ["post", "page"],
-      defaultValue: "post",
-      ui: {
-        displayMode: "segmented-control",
-        itemView: {
-          fieldPosition: "sidebar"
-        }
-      },
-      type: "string",
-      validation: { isRequired: true }
-    }),
-    category: (0, import_fields.relationship)({
-      ref: "Category.posts",
-      many: true,
-      ui: {
-        labelField: "slug"
-      }
-    }),
     en: (0, import_fields.relationship)({
       label: "post in english",
       ref: "PostTranslation",
@@ -173,6 +143,36 @@ var Post = (0, import_core.list)({
         },
         cardFields: ["title", "content"],
         inlineConnect: true
+      }
+    }),
+    featuredImage: (0, import_fields.relationship)({
+      ref: "ImageStore",
+      label: "\u0627\u0646\u062A\u062E\u0627\u0628 \u0639\u06A9\u0633 \u0634\u0627\u062E\u0635",
+      many: false,
+      ui: {
+        displayMode: "cards",
+        cardFields: ["altText", "image"],
+        inlineCreate: { fields: ["altText", "image"] },
+        inlineConnect: true
+      }
+    }),
+    type: (0, import_fields.select)({
+      options: ["post", "page"],
+      defaultValue: "post",
+      ui: {
+        displayMode: "segmented-control",
+        itemView: {
+          fieldPosition: "sidebar"
+        }
+      },
+      type: "string",
+      validation: { isRequired: true }
+    }),
+    category: (0, import_fields.relationship)({
+      ref: "Category.posts",
+      many: true,
+      ui: {
+        labelField: "slug"
       }
     }),
     misc: (0, import_fields.relationship)({
@@ -489,14 +489,36 @@ var FrontPage = (0, import_core3.list)({
         }),
         introVideo: (0, import_fields3.relationship)({
           ref: "FileStore"
+        }),
+        introVideoTitle_en: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "video title in english",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
+          }
+        }),
+        introVideoTitle_fa: (0, import_fields3.relationship)({
+          ref: "Resource",
+          label: "\u062A\u06CC\u062A\u0631 \u0648\u06CC\u062F\u0648 \u0628\u0647 \u0632\u0628\u0627\u0646 \u0641\u0627\u0631\u0633\u06CC",
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none"
+          }
         })
       }
     }),
     sites: (0, import_fields3.relationship)({
       ref: "Category",
-      label: "features section relative category",
+      label: "sites section relative category",
       ui: {
-        description: "exacltly 8 items",
+        description: "a category with 4 items",
         labelField: "slug"
       }
     }),
@@ -583,6 +605,15 @@ var import_access5 = require("@keystone-6/core/access");
 var import_fields4 = require("@keystone-6/core/fields");
 var ImageStore = (0, import_core4.list)({
   access: import_access5.allowAll,
+  hooks: {
+    resolveInput(args) {
+      if (args.inputData.altText !== void 0 || args?.item?.altText !== void 0)
+        return args.resolvedData;
+      if (!args.resolvedData.altText && args.resolvedData.image.filename)
+        args.resolvedData.altText = args.resolvedData.image.filename;
+      return args.resolvedData;
+    }
+  },
   fields: {
     image: (0, import_fields4.image)({
       storage: "image"

@@ -4,6 +4,18 @@ import { text, timestamp, image } from "@keystone-6/core/fields";
 
 export const ImageStore = list({
     access: allowAll,
+    hooks: {
+        resolveInput(args) {
+            // TODO review this shit
+            if (args.inputData.altText !== undefined || args?.item?.altText !== undefined)
+                return args.resolvedData;
+
+            if (!args.resolvedData.altText && args.resolvedData.image.filename)
+                args.resolvedData.altText = args.resolvedData.image.filename;
+
+            return args.resolvedData;
+        },
+    },
     fields: {
         image: image({
             storage: 'image',

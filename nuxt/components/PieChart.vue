@@ -3,8 +3,11 @@ import { useIntersectionObserver } from '@vueuse/core'
 import { ref } from 'vue'
 defineProps({
   percentage: {
-    type: Number,
-    default: () => 20
+    type: [Number, String],
+    default: () => 20,
+    validator (value : string|number) {
+      return !isNaN(+value)
+    }
   },
   color: {
     type: String,

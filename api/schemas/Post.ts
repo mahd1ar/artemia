@@ -53,36 +53,6 @@ export const Post = list({
             validation: { isRequired: true },
             label: "post title for operator"
         }),
-        featuredImage: relationship({
-            ref: 'ImageStore',
-            label: 'انتخاب عکس شاخص',
-            many: false,
-            ui: {
-                displayMode: 'cards',
-                cardFields: ['altText', 'image'],
-                inlineCreate: { fields: ['altText', 'image'] },
-                inlineConnect: true,
-            }
-        }),
-        type: select({
-            options: ['post', 'page'],
-            defaultValue: 'post',
-            ui: {
-                displayMode: 'segmented-control',
-                itemView: {
-                    fieldPosition: 'sidebar'
-                }
-            },
-            type: 'string',
-            validation: { isRequired: true }
-        }),
-        category: relationship({
-            ref: 'Category.posts',
-            many: true,
-            ui: {
-                labelField: 'slug'
-            }
-        }),
         en: relationship({
             label: 'post in english',
             ref: 'PostTranslation',
@@ -119,6 +89,37 @@ export const Post = list({
                 inlineConnect: true
             }
         }),
+        featuredImage: relationship({
+            ref: 'ImageStore',
+            label: 'انتخاب عکس شاخص',
+            many: false,
+            ui: {
+                displayMode: 'cards',
+                cardFields: ['altText', 'image'],
+                inlineCreate: { fields: ['altText', 'image'] },
+                inlineConnect: true,
+            }
+        }),
+        type: select({
+            options: ['post', 'page'],
+            defaultValue: 'post',
+            ui: {
+                displayMode: 'segmented-control',
+                itemView: {
+                    fieldPosition: 'sidebar'
+                }
+            },
+            type: 'string',
+            validation: { isRequired: true }
+        }),
+        category: relationship({
+            ref: 'Category.posts',
+            many: true,
+            ui: {
+                labelField: 'slug'
+            }
+        }),
+
         misc: relationship({
             ref: 'KeyValue',
             label: 'custom fields',

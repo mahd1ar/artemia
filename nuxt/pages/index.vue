@@ -82,6 +82,14 @@ query HomePage( $isEn: Boolean!) {
         url
       }
     }
+    introVideoTitle_en @include(if: $isEn) {
+      title
+      content
+    }
+    introVideoTitle_fa @skip(if: $isEn) {
+      title
+      content
+    }
     sites {
       posts {
         fa @skip(if: $isEn) {
@@ -145,6 +153,15 @@ query HomePage( $isEn: Boolean!) {
         }
       }
     }
+    testimonial_bg_image {
+      id
+      altText
+      image {
+        url
+        id
+        url
+      }
+    }
     logos {
       id
       altText
@@ -181,13 +198,14 @@ query HomePage( $isEn: Boolean!) {
       }
     }
   }
-}`)
+}
+`)
 
 definePageMeta({
   layout: 'home'
 })
 
-const { result , loading  } = useQuery(FRONPAGE, { isEn: lang.value === 'en' }, { fetchPolicy: 'no-cache' })
+const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' }, { fetchPolicy: 'no-cache' })
 const conCounter = ref(0)
 const conImages = computed(() => {
   return result.value?.frontPage?.consortiumImages?.map(i => i.image?.url || '')
@@ -207,21 +225,21 @@ useIntervalFn(() => {
 <template>
   <!-- <div v-if="!loading" > -->
 
-
   <PageHeading
     :title="result?.frontPage?.[lang === 'en' ? 'hero_en' : 'hero_fa']?.title || '' "
     :description="result?.frontPage?.[lang === 'en' ? 'hero_en' : 'hero_fa']?.content || ''"
 
     :sections="[
       {
-      href: '#consortium',
-      title: result?.frontPage?.[lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.title || ''
-    },
+        href: '#consortium',
+        title: result?.frontPage?.[lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.title || ''
+      },
       // {
       //   href: '#features',
       //   title: result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.title || ''
       // },
     ]"
+    :hero-background-image="result?.frontPage?.heroImage?.image?.url || ''"
   />
 
   <section class="container mx-auto my-24 text-tm-black flex">
@@ -235,7 +253,7 @@ useIntervalFn(() => {
             <img
               v-for="(image,index) in conImages"
               :key="index"
-              class="w-full h-full object-cover"
+              class="w-full h-full object-cover shrink-0"
               :src="image"
               alt=""
             >
@@ -251,7 +269,7 @@ useIntervalFn(() => {
 
               v-for="(_,index) in conImages"
               :key="index"
-              class="object-cover w-full h-full"
+              class="object-cover w-full h-full shrink-0"
               :src="conImages[(index+2)%conImages?.length]"
               alt=""
             >
@@ -266,7 +284,7 @@ useIntervalFn(() => {
             <img
               v-for="(_,index) in conImages"
               :key="index"
-              class="object-cover w-full h-full"
+              class="object-cover w-full h-full shrink-0"
               :src="conImages[(index+1)%conImages?.length]"
               alt=""
             >
@@ -292,11 +310,14 @@ useIntervalFn(() => {
           <div class="w-full h-full flex-center p-6" aria-hidden="true">
             <div class="bg-primary w-0.5 rounded-sm h-full" />
           </div>
-          <div class="flex flex-col items-center justify-center">
+          <div class="flex flex-col items-center justify-center relative">
+            <div class="absolute w-52 opacity-50 top-0 ">
+              <img class="" :src="result?.frontPage?.consortiumCEOSignatureImage?.image?.url" alt="">
+            </div>
             <h2 class="font-bold text-xl uppercase">
               {{ t('frontPage:CEO') }}
             </h2>
-            <p class="text-gray-400">
+            <p class="text-primary">
               {{ t('frontPage:CEOTitle') }}
             </p>
           </div>
@@ -324,7 +345,7 @@ useIntervalFn(() => {
   </section>
 
   <section class="flex">
-    <div class="p-14 w-5/12 text-gray-50 bg-gray-950 flex flex-col gap-4">
+    <div class="p-14 w-5/12 text-gray-50  flex flex-col gap-4 bg-tm-black">
       <h2 class="text-4xl font-bold">
         <!-- WE WILL PAMPER YOUR EYES IN THE WATER -->
         {{ result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.title
@@ -337,12 +358,12 @@ useIntervalFn(() => {
       </span>
       <div class="grid grid-cols-2">
         <div v-for="i in result?.frontPage?.statistics || []" :key="i.id" class="flex flex-col">
-          <PieChart :percentage="i.misc ? +i.misc : 42" />
-          <h3 class="my-4 text-2xl font-bold">
+          <PieChart :percentage="i.misc?.find(i => i.key?.toLowerCase() === 'percentage')?.value || 0" />
+          <h3 class="my-4 text-2xl font-bold text-center">
             <!-- Dive Treavel -->
             {{ i[lang]?.title }}
           </h3>
-          <div class="font-xs text-gray-400">
+          <div class="font-xs text-gray-400 ">
             <!-- {{ i[lang]?.content }} -->
             <ContentViewer v-if="i[lang]?.content?.document" :content="i[lang]?.content?.document" />
           </div>
@@ -359,11 +380,24 @@ useIntervalFn(() => {
       >
         <source :src="result.frontPage.introVideo.file.url" type="video/mp4">
       </video>
-      <div class="bg-gradient-to-r from-cyan-400 to-teal-500/50 mix-blend-multiply absolute top-0 left-0 w-full h-full" />
+      <div class="bg-gradient-to-r from-cyan-400 to-teal-500/50  mix-blend-multiply absolute top-0 left-0 w-full h-full" />
+      <div class=" absolute bottom-10 ltr:border-r-4 rtl:border-r-4 border-cyan-500 right-10 bg-tm-black  p-3 py-4">
+        <h2 class="font-semibold text-2xl text-white">
+          {{ result?.frontPage?.[lang === 'en' ? 'introVideoTitle_en' : 'introVideoTitle_fa']?.title }}
+        </h2>
+        <span class="text-gray-400">{{ result?.frontPage?.[lang === 'en' ? 'introVideoTitle_en' : 'introVideoTitle_fa']?.content }}</span>
+      </div>
     </div>
   </section>
 
-  <!-- <ElementorSection :list="result?.frontPages?.[0]?.sites?.map(i=>({src:i.featuredImage?.image?.url, title:i.title})) || []" class="mt-28" /> -->
+  <ElementorSection
+    :list="result?.frontPage?.sites?.posts?.map(i=>(
+      {
+        src:i.featuredImage?.image?.url,
+        title:i[lang]?.title
+      })) || []"
+    class="mt-28"
+  />
 
   <!-- <h2>{{ result?.frontPages?.[0]?.featuresTitle }}</h2>
   <p>{{ result?.frontPages?.[0]?.featuresDescription }}</p> -->
@@ -375,12 +409,14 @@ useIntervalFn(() => {
   />
 
   <TestimonialSection
+    v-if="(result?.frontPage?.testimonial?.posts?.length || 0) > 0"
     :items="result?.frontPage?.testimonial?.posts?.map(i => ({
       text: i?.[lang]?.title,
       autor: '#',
       image: i.featuredImage?.image?.url
     })) || []
     "
+    :testemonial-background-image="result?.frontPage?.testimonial_bg_image?.image?.url"
     class="mt-28"
   />
 
@@ -395,7 +431,7 @@ useIntervalFn(() => {
   </div>
 
   <LatestBlog
-  v-if="(result?.frontPage?.blog?.posts?.length || 0) > 0"
+    v-if="(result?.frontPage?.blog?.posts?.length || 0) > 0"
     class="mt-28"
     :title="result?.frontPage?.[lang ? 'blogTitleAndDescription_en' : 'blogTitleAndDescription_fa']?.title || 'Latest Blogs and Articlas'"
     :description="result?.frontPage?.[lang ? 'blogTitleAndDescription_en' : 'blogTitleAndDescription_fa']?.content || '' "

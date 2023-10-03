@@ -9,6 +9,10 @@ defineProps({
     image: string | null | undefined
         }[]>,
     default: () => []
+  },
+  testemonialBackgroundImage: {
+    type: String,
+    default: () => ''
   }
 })
 </script>
@@ -17,13 +21,13 @@ defineProps({
   <section class="relative flex flec-col h-screen">
     <div class="overlay">
       <img
-        src="https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/2021/10/scuba-diver-poses-amid-a-plethora-of-marine-life-vibrant-soft-corals-dendronephthya-sp-and-e1634535977885.jpg"
+        :src="testemonialBackgroundImage || 'https://picsum.photos/951/701'"
         alt=""
         class="w-full h-full object-cover"
       >
     </div>
     <div class="relative container flex flex-col items-end justify-end">
-      <div class="w-full" >
+      <div class="w-full">
         <Splide
           class="w-7/12 absolute bottom-4"
           :options="{
