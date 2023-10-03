@@ -1,7 +1,8 @@
 import { defineApolloClient } from '@nuxtjs/apollo'
 
 export default defineApolloClient({
-  httpEndpoint: process.env.NODE_ENV === 'production' ? 'http://localhost:3032/api/graphql' : 'http://localhost:3032/api/graphql',
+  httpEndpoint: process.env.NODE_ENV === 'production' ? 'https://iranartemia.com/api/api/graphql' : 'http://localhost:3032/api/graphql'
+  ,
   httpLinkOptions: {
     credentials: 'include'
 
@@ -9,7 +10,7 @@ export default defineApolloClient({
   cookieAttributes: {
 
     path: '/',
-    domain: 'localhost:5173',
+    domain: process.env.NODE_ENV === 'production' ? 'iranartemia.com' : 'localhost:5173',
     secure: false
   }
 

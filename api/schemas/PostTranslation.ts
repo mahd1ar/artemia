@@ -6,7 +6,7 @@ import { graphql } from '@graphql-ts/schema';
 
 export const PostTranslation = list({
     access: allowAll,
-
+    ui: {isHidden: process.env.NODE_ENV === 'production'} ,
     fields: {
         parent: relationship({
             ref: 'Post',

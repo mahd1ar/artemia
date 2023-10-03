@@ -5,9 +5,6 @@ import { graphql } from '@graphql-ts/schema';
 
 export const Category = list({
     access: allowAll,
-    ui: {
-        isHidden: process.env.NODE_ENV === 'production'
-    },
     fields: {
         slug: text({
             validation: {
