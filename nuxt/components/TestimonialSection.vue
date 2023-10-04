@@ -19,7 +19,7 @@ defineProps({
 </script>
 
 <template>
-  <section class="relative flex flec-col h-screen">
+  <section class="relative flex  h-[600px]">
     <div class="overlay">
       <img
         :src="testemonialBackgroundImage || 'https://picsum.photos/951/701'"
@@ -44,7 +44,7 @@ defineProps({
           <SplideSlide
             v-for="(i, idx) in items"
             :key="idx"
-            class="bg-white w-full p-6 ring-1 rounded-sm"
+            class="bg-white/80  w-full p-6 ring-1 rounded-sm"
           >
             <blockquote class="text-lg text-gray-700 relative">
               <span
