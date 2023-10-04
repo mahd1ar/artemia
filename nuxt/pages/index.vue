@@ -151,6 +151,10 @@ query HomePage( $isEn: Boolean!) {
             url
           }
         }
+        misc {
+          key
+          value
+        }
       }
     }
     testimonial_bg_image {
@@ -411,20 +415,21 @@ useIntervalFn(() => {
   <TestimonialSection
     v-if="(result?.frontPage?.testimonial?.posts?.length || 0) > 0"
     :items="result?.frontPage?.testimonial?.posts?.map(i => ({
-      text: i?.[lang]?.title,
-      autor: '#',
-      image: i.featuredImage?.image?.url
+      quote: i[lang]?.excerpt ,
+      name: i?.[lang]?.title,
+      image: i.featuredImage?.image?.url,
+      post: i.misc?.find(i => i.key?.toLowerCase() === 'rank_'+ lang)?.value
     })) || []
     "
     :testemonial-background-image="result?.frontPage?.testimonial_bg_image?.image?.url"
     class="mt-28"
   />
 
-  <div class="grid grid-cols-6 gap-6 mt-28 container mx-auto">
+  <div class="md:flex mt-28 justify-evenly w-full items-center grid grid-cols-3 sm:grid-cols-6 gap-6">
     <div
       v-for="logo in result?.frontPage?.logos || []"
       :key="logo.id"
-      class="grayscale-0 opacity-30 hover:opacity-60 transition-all duration-500 mx-6"
+      class="grayscale-0 opacity-30 hover:opacity-60  transition-all w-24 sm:w-full duration-500 md:w-28 lg:w-36"
     >
       <img class="object-contain" :src="logo.image?.url" alt="">
     </div>

@@ -4,9 +4,10 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide'
 defineProps({
   items: {
     type: Array as PropType<{
-            text: string | null | undefined,
-    autor: string | null | undefined,
-    image: string | null | undefined
+    name: string | null | undefined,
+    image: string | null | undefined,
+    quote : string | null | undefined,
+    post: string | null | undefined,
         }[]>,
     default: () => []
   },
@@ -60,8 +61,8 @@ defineProps({
                   />
                 </svg>
               </span>
-              <p class="relative py-4">
-                {{ i.text }}
+              <p class="relative py-4 font-light">
+                {{ i.quote }}
               </p>
             </blockquote>
             <div class="overflow-hidden mt-4 flex">
@@ -73,9 +74,9 @@ defineProps({
               >
               <div class="px-4">
                 <p class="text-lg">
-                  {{ i.autor }}
+                  {{ i.name }}
                 </p>
-                <strong class="text-primary text-sm uppercase">manager</strong>
+                <strong class="text-primary text-sm uppercase">{{i.post}}</strong>
               </div>
             </div>
           </SplideSlide>

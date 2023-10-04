@@ -221,6 +221,7 @@ export const FrontPage = list({
           ref: "Category",
           label: "testimonial section relative category",
           ui: {
+            description: "a category with 4 posts containing a custom field named 'rank_en' and 'rank_fa' ",
             labelField: "slug",
           },
         }),

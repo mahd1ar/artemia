@@ -1,9 +1,15 @@
 import { list } from '@keystone-6/core'
-import { allowAll } from '@keystone-6/core/access'
+import { allowAll, allOperations } from '@keystone-6/core/access'
 import { relationship, select, text, timestamp } from '@keystone-6/core/fields'
+import { isAdmin } from '../data/access'
 
 export const Post = list({
-    access: allowAll,
+    access: {
+        operation: {
+            ...allOperations(isAdmin),
+            query: () => true
+        }
+    },
     hooks: {
 
         async beforeOperation({ item, operation, context, resolvedData }) {
@@ -51,7 +57,7 @@ export const Post = list({
     fields: {
         title: text({
             validation: { isRequired: true },
-            label: "post title for operator"
+            label: "post slug"
         }),
         en: relationship({
             label: 'post in english',
@@ -97,6 +103,7 @@ export const Post = list({
                 displayMode: 'cards',
                 cardFields: ['altText', 'image'],
                 inlineCreate: { fields: ['altText', 'image'] },
+                inlineEdit: { fields: ['altText', 'image'] },
                 inlineConnect: true,
             }
         }),
