@@ -12,7 +12,12 @@ module.exports = {
         '2xl': '6rem'
       }
     },
+
     extend: {
+      fontFamily: {
+        josefin: ['"Josefin Sans"', 'sans-serif'],
+        samim: ['Samim', 'sans-serif']
+      },
       colors: {
         primary: {
           DEFAULT: '#00dacf'

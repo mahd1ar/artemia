@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "fonts";
 
 @layer components {
   .flex-center {
@@ -18,4 +19,8 @@
   .--#{$i} {
     --count: #{$i};
   }
+}
+
+h1,h2,h3,h4,h5{
+  @apply ltr:font-josefin rtl:font-samim;
 }

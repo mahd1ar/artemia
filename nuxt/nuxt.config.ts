@@ -16,6 +16,15 @@ export default defineNuxtConfig({
       frontendUrl: process.env.FRONTENDURL
     }
   },
+  app: {
+    head: {
+      link: [{
+        href: 'https://cdn.jsdelivr.net/gh/rastikerdar/samim-font@v4.0.5/dist/font-face.css',
+        rel: 'stylesheet',
+        type: 'text/css'
+      }]
+    }
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',

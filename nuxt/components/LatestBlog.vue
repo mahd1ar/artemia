@@ -25,7 +25,7 @@ defineProps({
     <h2 class="text-center text-3xl">
       {{ title || 'Latest Blogs and Articlas' }}
     </h2>
-    <p class="px-48 text-center text-gray-500 mt-4 leading-7">
+    <p class="px-10 max-w-3xl mx-auto text-center text-gray-500 mt-4 leading-7">
       {{ description }}
     </p>
 

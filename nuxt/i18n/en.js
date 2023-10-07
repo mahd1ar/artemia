@@ -15,5 +15,6 @@ export default {
   successful: 'successful',
   ok: 'OK',
   'frontPage:CEO': 'Omid Hashemi',
-  'frontPage:CEOTitle': 'CEO of IranArtemia'
+  'frontPage:CEOTitle': 'CEO of IranArtemia',
+  ourproducts: 'our products'
 }

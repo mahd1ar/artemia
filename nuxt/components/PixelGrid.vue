@@ -7,6 +7,7 @@ const props = defineProps({
     required: true
   }
 })
+const sampleImage = 'https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/2021/10/exploring-under-the-water-e1634535900542.jpg'
 
 type ImageItem = {
     type: 'image';
@@ -47,49 +48,48 @@ const items = computed(() => {
     : []
 })
 
-const smitems = computed(() => {
-  return props.list.map((i, index) => {
-    return index % 2 === 0 ? makeImageItem(i.src) : makeTextItem(i.title, i.description)
-  })
-})
-
 </script>
 
 <template>
-  <section class="mt-28 container grid md:grid-cols-4 grid-cols-2">
-    <div v-for="(i, index) in smitems || []" :key="index" class="h-44 md:hidden">
-      <img
-        v-if="i.type === 'image'"
-        :src="i.src"
-        class="h-full object-cover w-full"
-        alt=""
-      >
-      <div v-else class="p-1 px-2 h-full text-center">
-        <strong>{{ i.title }}</strong>
-        <p>
-          {{ i.body }}
-        </p>
-      </div>
-    </div>
+  <section class=" container mx-auto max-w-6xl">
+    <div class=" ">
+      <div v-for="(i, index) in list || []" :key="index" class="h-44 flex w-full md:hidden " :class="[index%2 || 'flex-row-reverse']">
+        <img
 
-    <div
-      v-for="(i, index) in items"
-      :key="index"
-      class="aspect-square flex-center relative hidden md:block"
-    >
-      <img
-        v-if="i.type === 'image'"
-        :src="i.src"
-        alt=""
-        class="w-full h-full object-cover relative"
-      >
-      <div v-else class="h-full w-full text-center p-1">
-        <strong class="font-bold relative">
-          {{ i.title }}
-        </strong>
-        <p class="mt-2 text-gray-600">
-          {{ i.body }}
-        </p>
+          :src="i.src || sampleImage"
+          class="h-full object-cover w-1/2 "
+          alt=""
+        >
+        <div class="p-3 pt-4 w-1/2 h-full text-center">
+          <strong class="text-lg">{{ i.title }}</strong>
+          <p class="text-gray-700 line-clamp-6">
+            {{ i.description }}
+          </p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-4 grid-cols-2" >
+
+        <div
+          v-for="(i, index) in items"
+          :key="index"
+          class="aspect-square flex-center relative hidden md:block"
+        >
+          <img
+            v-if="i.type === 'image'"
+            :src="i.src"
+            alt=""
+            class="w-full h-full object-cover relative"
+          >
+          <div v-else class="h-full w-full text-center p-3 lg:p-6">
+            <strong class="font-bold relative text-lg lg:text-xl">
+              {{ i.title }}
+            </strong>
+            <p class="mt-2 text-gray-600 italic lg:text-base text-ms line-clamp-6">
+              {{ i.body }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </section>

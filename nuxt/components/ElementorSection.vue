@@ -32,7 +32,7 @@ const defaultImage = 'https://images.unsplash.com/photo-1683009427666-340595e57e
         >
       </TransitionGroup>
     </div>
-    <div class="text-black h-full divide-gray-300 divide-x-[1px] relative w-full grid grid-cols-4">
+    <div class="text-black h-full divide-gray-300 divide-x-[1px] relative w-full grid md:grid-cols-4 grid-cols-2">
       <div
         v-for="(i, index) in list"
         :key="index"

@@ -15,5 +15,6 @@ export default {
   successful: ' با موفقیت ثبت شد.',
   ok: 'باشه',
   'frontPage:CEO': 'امید هاشمی',
-  'frontPage:CEOTitle': 'مدیرعامل ایران آرتمیا'
+  'frontPage:CEOTitle': 'مدیرعامل ایران آرتمیا',
+  ourproducts: 'محصولات ما'
 }

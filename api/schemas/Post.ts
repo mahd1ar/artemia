@@ -57,7 +57,10 @@ export const Post = list({
     fields: {
         title: text({
             validation: { isRequired: true },
-            label: "post slug"
+            label: "post slug",
+            ui: {
+                description: 'این مقدار در وبسایت نشان داده نمیشود'
+            }
         }),
         en: relationship({
             label: 'post in english',

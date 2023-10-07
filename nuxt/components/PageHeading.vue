@@ -77,9 +77,10 @@ function chengeLang (newLang : string) {
 
     <div class="relative h-full container mx-auto flex flex-col">
       <div class="flex shrink-0 justify-between items-center">
-        <div class="p-2 py-1 text-3xl border-2 my-2">
+        <!-- <div class="p-2 py-1 text-3xl border-2 my-2">
           lorem
-        </div>
+        </div> -->
+        <GovarKavirLogo dark class="p-1" />
         <div>
           <ul class="flex-center gap-10 capitalize">
             <li v-for="(mi,index) in appState.menuItems" :key="index">
