@@ -81,7 +81,7 @@ const items = computed(() => {
             alt=""
             class="w-full h-full object-cover relative"
           >
-          <div v-else class="h-full w-full text-center p-3 lg:p-6">
+          <div v-else class="h-full w-full text-center p-3 lg:p-6 overflow-hidden">
             <strong class="font-bold relative text-lg lg:text-xl">
               {{ i.title }}
             </strong>

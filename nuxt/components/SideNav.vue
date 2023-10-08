@@ -28,7 +28,7 @@ watch(() => appStore.isMenuOpen, (isMenuOpen) => {
 <template>
   <dialog
     ref="dialog"
-    class="fixed top-0 h-full w-96 bg-gray-50 p-0 m-0 ml-auto  z-10 ease-in-out transition-transform duration-150 delay-75   right-0"
+    class="fixed top-0 h-full w-96 border-2 bg-gray-50 p-0 m-0 ml-auto  z-10 ease-in-out transition-transform duration-150 delay-75   right-0"
     :class="appStore.isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
   >
     <div class="px-12 overflow-auto">

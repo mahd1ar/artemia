@@ -9,6 +9,14 @@ const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
 const FRONPAGE = graphql(`
 query HomePage( $isEn: Boolean!) {
   frontPage {
+     meta_en @include(if: $isEn) {
+      title
+      content
+    }
+    meta_fa @skip(if: $isEn) {
+      title
+      content
+    }
      hero_en @include(if: $isEn) {
       title
       content
@@ -215,7 +223,13 @@ const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
 </script>
 
 <template>
-  <!-- <div v-if="!loading" > -->
+  <Head>
+    <Title>{{ result?.frontPage?.[lang === 'en' ? 'meta_en' : 'meta_fa']?.title }} | {{ t('sitename') }} </Title>
+    <Meta name="description" :content="result?.frontPage?.[lang === 'en' ? 'meta_en' : 'meta_fa']?.content || '' " />
+    <Meta property="og:locale" :content="locale" />
+  </Head>
+
+  <SideNav />
 
   <PageHeading
     :title="result?.frontPage?.[lang === 'en' ? 'hero_en' : 'hero_fa']?.title || '' "
@@ -274,11 +288,11 @@ const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
       <div class="grid grid-cols-2">
         <div v-for="i in result?.frontPage?.statistics || []" :key="i.id" class="flex flex-col">
           <PieChart :percentage="i.misc?.find(i => i.key?.toLowerCase() === 'percentage')?.value || 0" />
-          <h3 class="my-4 text-2xl font-bold text-center">
+          <h3 class="my-4 text-2xl font-bold capitalize">
             <!-- Dive Treavel -->
             {{ i[lang]?.title }}
           </h3>
-          <div class="font-xs text-gray-400 ">
+          <div class="text-sm text-gray-400 ltr:pl-2 ltr:pr-2">
             <!-- {{ i[lang]?.content }} -->
             <ContentViewer v-if="i[lang]?.content?.document" :content="i[lang]?.content?.document" />
           </div>
@@ -314,9 +328,9 @@ const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
       })) || []"
     class="mt-28"
   />
-    <h1 class="text-black font-bold mt-20 mb-12 uppercase text-center text-4xl">
-      {{ t("ourproducts") }}
-    </h1>
+  <h1 class="text-black font-bold mt-20 mb-12 uppercase text-center text-4xl">
+    {{ t("ourproducts") }}
+  </h1>
   <PixelGrid
 
     :list="result?.frontPage?.features?.posts?.map(i => ({
@@ -347,9 +361,7 @@ const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
       <img class="object-contain" :src="logo.image?.url" alt="">
     </div>
   </div>
-  <div class="text-4xl text-center font-josefin">
-    mahdi
-  </div>
+
   <LatestBlog
     v-if="(result?.frontPage?.blog?.posts?.length || 0) > 0"
 
@@ -364,7 +376,7 @@ const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
     })||[])"
   />
 
-  <SideNav />
+  
   <!-- </div> -->
 </template>
 

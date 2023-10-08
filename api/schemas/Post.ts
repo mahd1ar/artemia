@@ -10,6 +10,14 @@ export const Post = list({
             query: () => true
         }
     },
+    ui: {
+        listView: {
+            initialSort: {
+                field: 'createdAt',
+                direction: 'DESC'
+            }
+        }
+    },
     hooks: {
 
         async beforeOperation({ item, operation, context, resolvedData }) {

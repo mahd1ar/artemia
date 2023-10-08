@@ -1,4 +1,5 @@
 export default {
+  sitename: 'ایران آرتمیا',
   PlaceAnOrder: 'ثبت شفارش',
   Home: 'خانه',
   NameAndSurnameOfTheRecipient: 'نام و نام خانوادگی گیرنده',

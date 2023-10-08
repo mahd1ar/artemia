@@ -11,6 +11,7 @@ const MENU = graphql(`
       mainMenus {
         id
         link
+        priority
         en {
           title
           content
@@ -37,11 +38,22 @@ const MENU = graphql(`
 const { onResult } = useQuery(MENU)
 
 onResult(({ data }) => {
-  data?.mainMenus?.forEach((menu) => {
-    appState.addMenuItem({
+  const menuItems = data?.mainMenus?.map((menu) => {
+    return {
       en: menu.en?.title || 'undefined',
       fa: menu.fa?.title || 'مشخص نشده',
-      link: menu.link || '#'
+      link: menu.link || '#',
+      priority: menu.priority ?? 1000
+    }
+  }) || []
+
+  menuItems.sort((a, b) => a.priority - b.priority)
+
+  menuItems.forEach(({ fa, en, link }) => {
+    appState.addMenuItem({
+      fa,
+      en,
+      link
     })
   })
 

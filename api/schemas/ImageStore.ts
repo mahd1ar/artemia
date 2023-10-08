@@ -4,6 +4,14 @@ import { text, timestamp, image } from "@keystone-6/core/fields";
 
 export const ImageStore = list({
     access: allowAll,
+    ui: {
+        listView: {
+            initialSort: {
+                field: 'createdAt',
+                direction: 'DESC'
+            }
+        }
+    },
     hooks: {
         resolveInput(args) {
             // TODO review this shit

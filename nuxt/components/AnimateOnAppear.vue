@@ -14,11 +14,9 @@ const { stop } = useIntersectionObserver(
 </script>
 
 <template>
-  <div  :data-animation="isVisible" class="w-full overflow-hidden" >
+  <div :data-animation="isVisible" class="w-full overflow-hidden">
     <div ref="target" class="transition-all duration-500 " :class="[isVisible ? 'target-visible' : 'target-not-visible' ]">
-
-      <slot  
-       />
+      <slot />
     </div>
   </div>
 </template>

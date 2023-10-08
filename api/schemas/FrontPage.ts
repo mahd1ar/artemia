@@ -13,6 +13,34 @@ export const FrontPage = list({
   isSingleton: true,
   fields: {
     ...group({
+      label: 'Site Title',
+      description: "site title and description for seo",
+      fields: {
+        meta_fa: relationship({
+          ref: "Resource",
+          label: 'به فارسی',
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
+        }),
+        meta_en: relationship({
+          ref: "Resource",
+          label: 'به انگلیسی',
+          ui: {
+            displayMode: "cards",
+            cardFields: ["title", "content"],
+            inlineCreate: { fields: ["title", "content"] },
+            inlineEdit: { fields: ["title", "content"] },
+            removeMode: "none",
+          },
+        })
+      }
+    }),
+    ...group({
       label: "hero section",
       fields: {
         hero_fa: relationship({
@@ -167,9 +195,9 @@ export const FrontPage = list({
 
     features: relationship({
       ref: "Category",
-      label: "features section relative category",
+      label: "productions section relative category",
       ui: {
-        description: "exacltly 8 items",
+        description: "category with exacltly 6 items",
         labelField: "slug",
       },
     }),

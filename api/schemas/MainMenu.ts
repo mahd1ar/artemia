@@ -1,6 +1,6 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 
 export const MainMenu = list({
   access: allowAll,
@@ -28,7 +28,7 @@ export const MainMenu = list({
         removeMode: "none",
       },
     }),
-    link: text({ validation: { isRequired: true } })
-
+    link: text({ validation: { isRequired: true } }),
+    priority: integer()
   },
 })

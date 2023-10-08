@@ -1,4 +1,5 @@
 export default {
+  sitename: 'Iran artemia',
   PlaceAnOrder: 'Place an Order',
   Home: 'Home',
   NameAndSurnameOfTheRecipient: 'Full name of The Recipient',
