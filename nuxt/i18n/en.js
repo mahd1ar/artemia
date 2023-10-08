@@ -8,6 +8,9 @@ export default {
   City: 'City',
   PostalCode: 'Postal Code',
   submit: 'Submit',
+  areYouSure: 'Are you sure?',
+  yes: 'Yes',
+  no: 'No',
   NationalCode: 'SSN',
   NationalID: 'National ID',
   OrderTpe: 'Order Type',
@@ -16,5 +19,7 @@ export default {
   ok: 'OK',
   'frontPage:CEO': 'Omid Hashemi',
   'frontPage:CEOTitle': 'CEO of IranArtemia',
-  ourproducts: 'our products'
+  ourproducts: 'our products',
+  quickAccess: 'quick access',
+  contactUs: 'Contact Us'
 }

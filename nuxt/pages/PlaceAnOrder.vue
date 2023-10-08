@@ -5,6 +5,7 @@ import { ChevronRightIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import InputMultiSelect from '@/components/inputs/MultiSelect.vue'
 
 const config = useRuntimeConfig()
+const i18n = useI18n()
 
 function ssnValidator (val : string) {
   const allDigitEqual = ['0000000000', '1111111111', '2222222222', '3333333333', '4444444444', '5555555555', '6666666666', '7777777777', '8888888888', '9999999999']
@@ -60,7 +61,6 @@ const orderContent = ref('text order ' + String(~~(Math.random() * 10)))
 const ordersTypes = ref<string[]>([
 
 ])
-const i18n = useI18n()
 
 function validatePersonalData () {
   if (
@@ -101,6 +101,12 @@ function validateOrder () {
 }
 
 async function submitOrder () {
+  const answer = confirm(i18n.t('areYouSure'))
+
+  if (!answer) {
+    return
+  }
+
   if (validateOrder() === false || validatePersonalData() === false) {
     return
   }
@@ -153,7 +159,12 @@ const types = computed(() => {
 
 <template>
   <!-- component -->
-  <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+  <div class=" p-6 flex items-center justify-center">
+    <ClientOnly>
+      <Teleport to="#background">
+        <div class="bg-gray-100 h-full" />
+      </Teleport>
+    </ClientOnly>
     <div class="container max-w-screen-lg mx-auto">
       <div>
         <h2 class="font-semibold text-xl text-gray-600">
@@ -320,10 +331,11 @@ const types = computed(() => {
                   <div class="inline-flex items-end">
                     <button
                       type="button"
-                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded gap-2 flex-center"
                       @click="submitOrder"
                     >
                       {{ i18n.t('submit') }}
+                      <svg class=" w-4" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M2.345 2.245a1 1 0 0 1 1.102-.14l18 9a1 1 0 0 1 0 1.79l-18 9a1 1 0 0 1-1.396-1.211L4.613 13H10a1 1 0 1 0 0-2H4.613L2.05 3.316a1 1 0 0 1 .294-1.071z" clip-rule="evenodd" /></svg>
                     </button>
                   </div>
                 </div>

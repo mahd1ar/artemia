@@ -15,7 +15,8 @@ const config = useRuntimeConfig()
 </script>
 
 <template>
-  <section class="min-h-screen grid text-black">
+  <section class="min-h-screen grid text-black relative">
+    <div class="absolute w-full h-full " id="background" aria-hidden="true" ></div>
     <div
       class="relative min-full flex flex-col justify-between w-full overflow-hidden"
     >

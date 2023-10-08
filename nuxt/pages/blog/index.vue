@@ -70,7 +70,7 @@ const posts = computed(() => {
       class="container max-w-6xl p-6 mx-auto space-y-6 sm:space-y-12"
     >
       <nuxt-link
-        :to="localePath(`/blog/${posts[0].id }`)"
+        :to="localePath(`/post/${posts[0].id }`)"
         rel="noopener noreferrer"
         class="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-gray-50  shadow-xl shadow-slate-300/50 rounded"
       >
@@ -90,7 +90,6 @@ const posts = computed(() => {
         </div>
       </nuxt-link>
       <div
-        
         class="grid justify-center grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         <template
@@ -101,7 +100,7 @@ const posts = computed(() => {
             v-if="index"
             :key="blog.id"
             rel="noopener noreferrer"
-            :to="localePath(`/blog/${blog.id}`)"
+            :to="localePath(`/post/${blog.id}`)"
             class="max-w-sm mx-auto group hover:no-underline focus:no-underline bg-gray-50 border "
           >
             <img
@@ -122,7 +121,7 @@ const posts = computed(() => {
                 }).format(new Date(blog.createdAt))
               }}</span>
               <p class="line-clamp-3">
-                {{ blog[lang]?.excerpt }}
+                {{ blog.excerpt }}
               </p>
             </div>
           </nuxt-link>
