@@ -5,7 +5,7 @@ import { ChevronRightIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import InputMultiSelect from '@/components/inputs/MultiSelect.vue'
 
 const config = useRuntimeConfig()
-const i18n = useI18n()
+const { t, locale } = useI18n()
 
 function ssnValidator (val : string) {
   const allDigitEqual = ['0000000000', '1111111111', '2222222222', '3333333333', '4444444444', '5555555555', '6666666666', '7777777777', '8888888888', '9999999999']
@@ -48,12 +48,12 @@ const currentStep = useRouteQuery('step', '0', {
 const steps = computed(() => {
   return [
     {
-      title: i18n.locale.value === 'fa' ? 'اطلاعات شخصی' : 'Personal Details',
-      description: i18n.locale.value === 'fa' ? 'لطفا تمام فیلدها را پر کنید' : 'Please fill out all the fields.'
+      title: locale.value === 'fa' ? 'اطلاعات شخصی' : 'Personal Details',
+      description: locale.value === 'fa' ? 'لطفا تمام فیلدها را پر کنید' : 'Please fill out all the fields.'
     },
     {
-      title: i18n.locale.value === 'fa' ? 'اطلاعات خرید' : 'Order Details',
-      description: i18n.locale.value === 'fa' ? 'لطفا نوع سفارش و مقدار آنرا مشخص کنید تا در اسرع وقت با شما تماس بگیریم' : 'Please select the type of order and the amount of this order.'
+      title: locale.value === 'fa' ? 'اطلاعات خرید' : 'Order Details',
+      description: locale.value === 'fa' ? 'لطفا نوع سفارش و مقدار آنرا مشخص کنید تا در اسرع وقت با شما تماس بگیریم' : 'Please select the type of order and the amount of this order.'
     }
   ]
 })
@@ -101,7 +101,7 @@ function validateOrder () {
 }
 
 async function submitOrder () {
-  const answer = confirm(i18n.t('areYouSure'))
+  const answer = confirm(t('areYouSure'))
 
   if (!answer) {
     return
@@ -150,8 +150,8 @@ const tabindex = useRouteQuery('tabindex', '0', {
 
 const types = computed(() => {
   return [
-    { value: 'personal', title: i18n.locale.value === 'fa' ? 'شخص حقیقی' : 'Personal' },
-    { value: 'legal', title: i18n.locale.value === 'fa' ? 'شخص حقوقی' : 'Legal' }
+    { value: 'personal', title: locale.value === 'fa' ? 'شخص حقیقی' : 'Personal' },
+    { value: 'legal', title: locale.value === 'fa' ? 'شخص حقوقی' : 'Legal' }
   ]
 })
 
@@ -194,10 +194,10 @@ const types = computed(() => {
               </div>
             </div>
 
-            <div class="lg:col-span-2">
-              <div v-if="currentStep === 0" class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+            <div class="lg:col-span-2  border-t pt-5 lg:pt-0 lg:border-t-0">
+              <div v-if="currentStep === 0" class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5 border-t pt-5 lg:pt-0 lg:border-t-0">
                 <div class="md:col-span-2">
-                  <label for="soda">How many soda pops?</label>
+                  <!-- <label for="soda">How many soda pops?</label> -->
                   <div
                     class="h-10  gap-4 bg-gray-50 grid grid-cols-2  border border-gray-200 rounded items-center mt-1 p-1"
                   >
@@ -217,7 +217,7 @@ const types = computed(() => {
 
                 <div class="md:col-span-5">
                   <label for="full_name">
-                    {{ types[tabindex].value === 'personal' ? i18n.t('FullName') : i18n.t('NameAndSurnameOfTheRecipient')
+                    {{ types[tabindex].value === 'personal' ? t('FullName') : t('NameAndSurnameOfTheRecipient')
                     }}
                   </label>
                   <input
@@ -241,7 +241,7 @@ const types = computed(() => {
                 </div>
 
                 <div class="md:col-span-3">
-                  <label for="address">{{ i18n.t('Address') }}</label>
+                  <label for="address">{{ t('Address') }}</label>
                   <input
                     id="address"
                     v-model="cr.address"
@@ -253,7 +253,7 @@ const types = computed(() => {
 
                 <div class="md:col-span-2">
                   <label for="city">
-                    {{ i18n.t('City') }}
+                    {{ t('City') }}
                   </label>
                   <input
                     id="city"
@@ -266,7 +266,7 @@ const types = computed(() => {
 
                 <div class="md:col-span-3">
                   <label for="code">
-                    {{ types[tabindex].value === 'personal' ? i18n.t('NationalCode') : i18n.t('NationalID') }}
+                    {{ types[tabindex].value === 'personal' ? t('NationalCode') : t('NationalID') }}
                   </label>
                   <input
                     id="code"
@@ -279,7 +279,7 @@ const types = computed(() => {
 
                 <div class="md:col-span-2">
                   <label for="postalCode">
-                    {{ i18n.t('PostalCode') }}
+                    {{ t('PostalCode') }}
                   </label>
                   <input
                     id="postalCode"
@@ -304,22 +304,21 @@ const types = computed(() => {
                   </div>
                 </div>
               </div>
-              <div v-else class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+              <div v-else class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5 ">
                 <div class="md:col-span-5">
                   <label>
-                    {{ i18n.t('OrderTpe') }}
+                    {{ t('OrderTpe') }}
                   </label>
                   <InputMultiSelect v-model:modelValue="ordersTypes" />
                 </div>
 
                 <div class="md:col-span-5">
                   <label for="order_content">
-                    {{ types[tabindex].value === 'personal' ? i18n.t('FullName') : i18n.t('NameAndSurnameOfTheRecipient')
-                    }}
+                    {{t('Order')  }}
                   </label>
                   <textarea
                     id="order_content"
-                    v-model="cr.fullname"
+                    v-model="orderContent"
                     rows="5"
                     type="text"
                     name="order_content"
@@ -334,7 +333,7 @@ const types = computed(() => {
                       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded gap-2 flex-center"
                       @click="submitOrder"
                     >
-                      {{ i18n.t('submit') }}
+                      {{ t('submit') }}
                       <svg class=" w-4" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M2.345 2.245a1 1 0 0 1 1.102-.14l18 9a1 1 0 0 1 0 1.79l-18 9a1 1 0 0 1-1.396-1.211L4.613 13H10a1 1 0 1 0 0-2H4.613L2.05 3.316a1 1 0 0 1 .294-1.071z" clip-rule="evenodd" /></svg>
                     </button>
                   </div>
@@ -344,18 +343,6 @@ const types = computed(() => {
           </div>
         </div>
       </div>
-
-      <a
-        href="https://www.buymeacoffee.com/dgauderman"
-        target="_blank"
-        class="md:absolute bottom-0 right-0 p-4 float-right"
-      >
-        <img
-          src="https://www.buymeacoffee.com/assets/img/guidelines/logo-mark-3.svg"
-          alt="Buy Me A Coffee"
-          class="transition-all rounded-full w-14 -rotate-45 hover:shadow-sm shadow-lg ring hover:ring-4 ring-white"
-        >
-      </a>
     </div>
     <div v-if="open" class="flex-center fixed h-full w-full  top-0 z-40">
       <div class="bg-black/50 w-full h-full absolute top-0" />
@@ -365,15 +352,15 @@ const types = computed(() => {
         </i>
         <h1 class="text-xl flex items-center gap-2">
           <CheckIcon class="h-6 w-6 text-green-300" />
-          {{ i18n.t("successful") }}
+          {{ t("successful") }}
         </h1>
         <p class="mt-4 text-white">
           {{
-            i18n.t("orderhasbeenplaced") }}
+            t("orderhasbeenplaced") }}
         </p>
         <div class="mt-4 rtl:text-left">
           <button type="button" class="text-green-200 font-bold   hover:bg-green-800 px-4 py-1 rounded-md" @click="open = false">
-            {{ i18n.t("ok") }}
+            {{ t("ok") }}
           </button>
         </div>
       </div>

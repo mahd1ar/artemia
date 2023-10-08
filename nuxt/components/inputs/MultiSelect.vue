@@ -25,12 +25,20 @@ const emit = defineEmits(['update:modelValue'])
 const data = useVModel(props, 'modelValue', emit)
 
 const people = [
-  'Wade Cooper',
-  'Arlene Mccoy',
-  'Devon Webb',
-  'Tom Cook',
-  'Tanya Fox',
-  'Hellen Schmidt'
+  'سیست خشک گرید ۱',
+  'سیست خشک گرید ۲',
+  'سیست خشک گرید ۳',
+  'سیست مرطوب گرید ۱',
+  'سیست مرطوب گرید ۲',
+  'سیست مرطوب گرید ۳',
+  'سیست مرطوب هچ ۳۰-۱۰ درصد',
+  'سیست مرطوب غیرقابل هچ',
+  'سیست دکپسوله خشک',
+  'سیست دکپسوله مرطوب',
+  'بیومس منجمد',
+  'بیومس خشک',
+  'بیومس زنده',
+  'شیرونومیده'
 ]
 
 </script>

@@ -12,40 +12,6 @@ export const FrontPage = list({
   },
   isSingleton: true,
   fields: {
-    // ...group({
-    //   label: "headline section",
-    //   fields: {
-    //     headline_bg_image: relationship({
-    //       ref: "ImageStore",
-    //       ui: {
-    //         labelField: "altText",
-    //       },
-    //     }),
-    //     headline_fa: relationship({
-    //       ref: "Resource",
-    //       label: "بخش تیتر به زبان فارسی",
-    //       ui: {
-    //         displayMode: "cards",
-    //         cardFields: ["title", "content"],
-    //         inlineCreate: { fields: ["title", "content"] },
-    //         inlineEdit: { fields: ["title", "content"] },
-    //         removeMode: "none",
-    //       },
-    //     }),
-    //     headline_en: relationship({
-    //       ref: "Resource",
-    //       label: "headline section in english",
-    //       ui: {
-    //         displayMode: "cards",
-    //         cardFields: ["title", "content"],
-    //         inlineCreate: { fields: ["title", "content"] },
-    //         inlineEdit: { fields: ["title", "content"] },
-    //         removeMode: "none",
-    //       },
-    //     }),
-    //   },
-    // }),
-
     ...group({
       label: "hero section",
       fields: {
@@ -174,7 +140,7 @@ export const FrontPage = list({
             inlineCreate: { fields: ["title", "content"] },
             inlineEdit: { fields: ["title", "content"] },
             removeMode: "none",
-          }
+          },
         }),
         introVideoTitle_fa: relationship({
           ref: "Resource",
@@ -185,7 +151,7 @@ export const FrontPage = list({
             inlineCreate: { fields: ["title", "content"] },
             inlineEdit: { fields: ["title", "content"] },
             removeMode: "none",
-          }
+          },
         }),
       },
     }),
@@ -221,7 +187,8 @@ export const FrontPage = list({
           ref: "Category",
           label: "testimonial section relative category",
           ui: {
-            description: "a category with 4 posts containing a custom field named 'rank_en' and 'rank_fa' ",
+            description:
+              "a category with 4 posts containing a custom field named 'rank_en' and 'rank_fa' ",
             labelField: "slug",
           },
         }),
