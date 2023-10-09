@@ -15,6 +15,7 @@ export default {
   NationalCode: 'کد ملی',
   NationalID: 'شناسه ملی',
   OrderTpe: 'نوع سفارش',
+  orderDescription: 'توضیحات سفارش',
   orderhasbeenplaced: 'سفارش شما با موفقیت ثبت شد، کارشناسان ما در اسرع وقت با شما تماس می‌گیرند.',
   successful: ' با موفقیت ثبت شد.',
   ok: 'باشه',
@@ -22,5 +23,8 @@ export default {
   'frontPage:CEOTitle': 'مدیرعامل ایران آرتمیا',
   ourproducts: 'محصولات ما',
   quickAccess: 'دسترسی سریع',
-  contactUs: 'تماس با ما'
+  contactUs: 'تماس با ما',
+  orderconfirm: 'سفارش خود را تایید کنید',
+  orderIsCorrect: 'اطلاعات سفارش درست است',
+  close: 'بستن'
 }

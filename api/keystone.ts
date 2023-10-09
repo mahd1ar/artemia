@@ -1,4 +1,5 @@
 import { resolve } from "path";
+import axios from "axios";
 require("dotenv").config({
   override: true,
   path: resolve(
@@ -13,6 +14,7 @@ import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import { PrismaClient } from "@prisma/client";
 import bodyParser from "body-parser";
+import { SendMessageToTelegram } from "./data/utils";
 
 type Response = {
   message: string;
@@ -43,6 +45,7 @@ export default withAuth(
         });
         // add body parser
         app.use(bodyParser.json());
+
         app.post<{}, Response>("/placeorder", async (req, res) => {
           const {
             address,
@@ -80,10 +83,26 @@ export default withAuth(
                   orders: true,
                 },
               });
-              console.log(customer);
-              // res.cookie("id", customer.id, {
-              //   maxAge: 900000,
-              // });
+
+              const notifyMessage = `🔔 <b>new order</b> from: ${customer.name}
+
+📦 order message:  <b>${customer.orders[0].orderContent}</b>
+✨ order type: <b>${
+                customer.orders[0].orderType
+                  ? JSON.parse(customer.orders[0].orderType).join(", ")
+                  : "undefind"
+              }</b>
+
+📞 phone number: <b>${customer.tel || "undefined"}</b>
+
+🔭 <a href="https://iranartemia.com/order/${
+                customer.orders[0].id
+              }"> click to view in website</a>
+
+🐟🐠🐟🐠🐟
+              `;
+
+              SendMessageToTelegram(encodeURIComponent(notifyMessage));
 
               res.json({
                 message: "successuly placed order",
@@ -123,55 +142,52 @@ export default withAuth(
         });
 
         app.get<{}, Response>("/set-admin", async (req, res) => {
-          const prisma = new PrismaClient()
+          const prisma = new PrismaClient();
 
           const adminUser = await prisma.user.findUnique({
             where: {
-              email: 'mahd1ar@protonmail.com'
+              email: "mahd1ar@protonmail.com",
             },
-          })
+          });
 
           if (adminUser) {
             await prisma.user.update({
               where: {
-                email: adminUser.email
+                email: adminUser.email,
               },
               data: {
                 role: "admin",
-              }
-            })
+              },
+            });
 
             res.json({
               message: "successuly update admin role",
               ok: true,
               payload: {
-                user: adminUser
-              }
-            })
-
+                user: adminUser,
+              },
+            });
           } else {
             const user = await prisma.user.create({
               data: {
                 name: "admin",
                 email: "mahd1ar@protonmail.com",
                 role: "admin",
-                password: 'Aa123456'
-              }
-            })
+                password: "Aa123456",
+              },
+            });
 
             res.json({
               message: "successuly set admin role",
               ok: true,
               payload: {
-                user
-              }
-            })
+                user,
+              },
+            });
           }
 
-          prisma.$disconnect()
-
-
-        })
+          prisma.$disconnect();
+        });
       },
       maxFileSize: 1024_000_000,
       port: 3032,

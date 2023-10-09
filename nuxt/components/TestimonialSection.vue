@@ -76,7 +76,7 @@ defineProps({
                 <p class="text-lg">
                   {{ i.name }}
                 </p>
-                <strong class="text-primary text-sm uppercase">{{i.post}}</strong>
+                <strong class="text-primary text-sm uppercase">{{ i.post }}</strong>
               </div>
             </div>
           </SplideSlide>

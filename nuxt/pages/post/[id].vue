@@ -36,7 +36,7 @@ const { result, loading } = useQuery(Post, { where: { id: route.params.id as str
 
 </script>
 <template>
-  <div class="p-2 " >
+  <div class="p-2 ">
     <LoadingIndicator :is-loading="loading">
       <article
         class="max-w-2xl border px-6 py-24 mx-auto space-y-12 bg-gray-100 text-gray-800 "

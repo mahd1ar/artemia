@@ -294,7 +294,7 @@ const { result, loading } = useQuery(CONTACT, { isEn: lang.value === 'en' })
             <circle cx="97" cy="112" r="5" fill="#99BAFB" fill-opacity="0.32" />
           </svg>
         </div>
-        
+
         <div class="  mt-10 -mb-20 w-full ">
           <div
             class="w-full p-8 border shadow-sm  bg-gray-50   rounded-2xl"
@@ -304,9 +304,8 @@ const { result, loading } = useQuery(CONTACT, { isEn: lang.value === 'en' })
             </h2>
             <p class="pb-4 mb-4 text-gray-600  ">
               <ContentViewer
-              :content="result?.contactUs?.[lang === 'en' ? 'aboutUs' :'aboutFa']?.document"
+                :content="result?.contactUs?.[lang === 'en' ? 'aboutUs' :'aboutFa']?.document"
               />
-              
             </p>
             <a
               href="#"

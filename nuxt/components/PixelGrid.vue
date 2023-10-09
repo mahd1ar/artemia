@@ -68,8 +68,7 @@ const items = computed(() => {
         </div>
       </div>
 
-      <div class="grid md:grid-cols-4 grid-cols-2" >
-
+      <div class="grid md:grid-cols-4 grid-cols-2">
         <div
           v-for="(i, index) in items"
           :key="index"

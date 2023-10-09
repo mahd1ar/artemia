@@ -17,7 +17,7 @@ const mobilePanel = ref(false)
 
 <template>
   <section class="min-h-screen grid text-black relative">
-    <div class="absolute w-full h-full " id="background" aria-hidden="true" ></div>
+    <div id="background" class="absolute w-full h-full " aria-hidden="true" />
     <div
       class="relative min-full flex flex-col justify-between w-full overflow-hidden"
     >
@@ -30,7 +30,7 @@ const mobilePanel = ref(false)
               <div class="flex">
                 <div class="-ml-2 mr-2 flex items-center md:hidden">
                   <!-- Mobile menu button -->
-              <button @click="mobilePanel = !mobilePanel" type="button" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
+                  <button type="button" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false" @click="mobilePanel = !mobilePanel">
                     <span class="sr-only">Open main menu</span>
                     <!--
               Icon when menu is closed.
@@ -222,7 +222,7 @@ const mobilePanel = ref(false)
           <div v-show="mobilePanel" id="mobile-menu" class="md:hidden">
             <div class="space-y-1 pt-2 pb-3">
               <!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
-              
+
               <NuxtLink v-for="(i , index) in appState.menuItems" :key="index" :to="localePath(i.link)" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6">
                 {{
                   locale === 'fa' ? i.fa : i.en

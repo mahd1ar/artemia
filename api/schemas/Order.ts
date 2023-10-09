@@ -10,6 +10,17 @@ import {
 
 export const Order = list({
   access: allowAll,
+  ui: {
+    listView: {
+      initialColumns: [
+        "orderType",
+        "orderContent",
+        "customerName",
+        "createdAt",
+      ],
+      initialSort: { field: "createdAt", direction: "DESC" },
+    },
+  },
   fields: {
     orderType: json(),
     orderContent: text({

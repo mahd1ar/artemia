@@ -2,8 +2,23 @@
 import { useRouteQuery } from '@vueuse/router'
 import { useLocalStorage } from '@vueuse/core'
 import { ChevronRightIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog as Modal,
+  DialogPanel,
+  DialogTitle
+} from '@headlessui/vue'
 import InputMultiSelect from '@/components/inputs/MultiSelect.vue'
 
+const isOpen = ref(false)
+
+function closeModal () {
+  isOpen.value = false
+}
+function openModal () {
+  isOpen.value = true
+}
 const config = useRuntimeConfig()
 const { t, locale } = useI18n()
 
@@ -57,10 +72,8 @@ const steps = computed(() => {
     }
   ]
 })
-const orderContent = ref('text order ' + String(~~(Math.random() * 10)))
-const ordersTypes = ref<string[]>([
-
-])
+const orderContent = ref('')
+const ordersTypes = ref<string[]>([])
 
 function validatePersonalData () {
   if (
@@ -100,17 +113,7 @@ function validateOrder () {
   return true
 }
 
-async function submitOrder () {
-  const answer = confirm(t('areYouSure'))
-
-  if (!answer) {
-    return
-  }
-
-  if (validateOrder() === false || validatePersonalData() === false) {
-    return
-  }
-
+async function submit () {
   type NuxtFetchResponse = {
     message: string,
     payload: {
@@ -130,7 +133,7 @@ async function submitOrder () {
       tel: cr.value.tel,
       postalCode: cr.value.postalCode,
       orderContent: orderContent.value,
-      orderTypes: ordersTypes.value
+      orderType: ordersTypes.value
     },
     onResponseError: (error) => {
       alert('an error has occured')
@@ -142,6 +145,16 @@ async function submitOrder () {
   if (data?.payload?.customerid) { customerID.value = data.payload.customerid }
 
   open.value = true
+
+  closeModal()
+}
+
+function trySubmit () {
+  if (validateOrder() === false || validatePersonalData() === false) {
+    return
+  }
+
+  openModal()
 }
 
 const tabindex = useRouteQuery('tabindex', '0', {
@@ -152,6 +165,32 @@ const types = computed(() => {
   return [
     { value: 'personal', title: locale.value === 'fa' ? 'شخص حقیقی' : 'Personal' },
     { value: 'legal', title: locale.value === 'fa' ? 'شخص حقوقی' : 'Legal' }
+  ]
+})
+
+const summeryInfo = computed(() => {
+  return [
+    {
+      key: cr.value.fullname,
+      val: t('FullName')
+    },
+    {
+      key: cr.value.city + ' , ' + cr.value.address,
+      val: t('Address')
+    },
+    {
+      key: cr.value.tel,
+      val: t('Tel')
+    },
+    {
+      key: ordersTypes.value.length ? ordersTypes.value.join(', ') : '---',
+      val: t('OrderTpe')
+    },
+    {
+      key: orderContent.value || '---',
+      val: t('orderDescription')
+    }
+
   ]
 })
 
@@ -199,7 +238,7 @@ const types = computed(() => {
                 <div class="md:col-span-2">
                   <!-- <label for="soda">How many soda pops?</label> -->
                   <div
-                    class="h-10  gap-4 bg-gray-50 grid grid-cols-2  border border-gray-200 rounded items-center mt-1 p-1"
+                    class=" gap-4 bg-gray-50 grid grid-cols-2  border border-gray-200 rounded items-center mt-1 p-1"
                   >
                     <button
                       v-for="(i, index) in types"
@@ -295,7 +334,7 @@ const types = computed(() => {
                   <div class="inline-flex items-end">
                     <button
                       type="button"
-                      class="bg-blue-500 hover:bg-blue-700 flex-center gap-1 text-white font-bold py-2 px-4 rounded-sm"
+                      class="bg-blue-500 hover:bg-blue-700 justify-center items-center gap-1 text-white font-bold py-2 px-4 rounded-sm flex rtl:flex-row-reverse"
                       @click="validatePersonalData() && currentStep++"
                     >
                       Order details
@@ -314,7 +353,7 @@ const types = computed(() => {
 
                 <div class="md:col-span-5">
                   <label for="order_content">
-                    {{t('Order')  }}
+                    {{ t('Order') }}
                   </label>
                   <textarea
                     id="order_content"
@@ -330,8 +369,8 @@ const types = computed(() => {
                   <div class="inline-flex items-end">
                     <button
                       type="button"
-                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded gap-2 flex-center"
-                      @click="submitOrder"
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded gap-2 flex rtl:flex-row-reverse justify-center items-center"
+                      @click="trySubmit"
                     >
                       {{ t('submit') }}
                       <svg class=" w-4" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M2.345 2.245a1 1 0 0 1 1.102-.14l18 9a1 1 0 0 1 0 1.79l-18 9a1 1 0 0 1-1.396-1.211L4.613 13H10a1 1 0 1 0 0-2H4.613L2.05 3.316a1 1 0 0 1 .294-1.071z" clip-rule="evenodd" /></svg>
@@ -365,5 +404,111 @@ const types = computed(() => {
         </div>
       </div>
     </div>
+
+    <TransitionRoot appear :show="isOpen" as="template">
+      <Modal as="div" class="relative z-10" @close="closeModal">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div
+            class="flex min-h-full items-center justify-center p-4 text-center"
+          >
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel
+                class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              >
+                <DialogTitle
+                  as="h3"
+                  class="text-lg font-medium leading-6 text-gray-900 rtl:text-right"
+                >
+                  {{ t('orderconfirm') }}
+                </DialogTitle>
+                <div class="mt-2">
+                  <div class="flex flex-col justify-center h-full">
+                    <!-- Table -->
+                    <div class="w-full max-w-2xl mx-auto   ">
+                      <div class="p-3">
+                        <div class="overflow-x-auto">
+                          <table class="table-auto w-full">
+                            <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                              <tr>
+                                <th class="p-2 whitespace-nowrap">
+                                  <div class="font-semibold text-left">
+                                    Name
+                                  </div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                  <div class="font-semibold text-left">
+                                    Email
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                              <tr v-for="(val,key) in summeryInfo" :key="key">
+                                <td class="p-2 whitespace-nowrap">
+                                  <div class="flex items-center">
+                                    <div class=" text-gray-800">
+                                      {{ val.val }}
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                  <div class="text-left font-medium">
+                                    {{ val.key }}
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex justify-between">
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    @click="submit"
+                  >
+                    {{ t(
+
+                      "orderIsCorrect"
+                    ) }}
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent  px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    @click="closeModal"
+                  >
+                    {{ t("close") }}
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Modal>
+    </TransitionRoot>
   </div>
 </template>

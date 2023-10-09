@@ -376,7 +376,6 @@ const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
     })||[])"
   />
 
-  
   <!-- </div> -->
 </template>
 

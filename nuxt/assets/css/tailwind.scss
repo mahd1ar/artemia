@@ -24,3 +24,6 @@
 h1,h2,h3,h4,h5{
   @apply ltr:font-josefin rtl:font-samim;
 }
+p,div,span,button{
+  @apply rtl:font-samim;
+}

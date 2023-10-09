@@ -3,7 +3,7 @@ export default {
   PlaceAnOrder: 'Place an Order',
   Home: 'Home',
   NameAndSurnameOfTheRecipient: 'Full name of The Recipient',
-  FullName: 'Full Name',
+  FullName: 'Full name',
   Tel: 'Tel',
   Address: 'Address / Street ',
   City: 'City',
@@ -14,7 +14,8 @@ export default {
   no: 'No',
   NationalCode: 'SSN',
   NationalID: 'National ID',
-  OrderTpe: 'Order Type',
+  OrderTpe: 'Order type',
+  orderDescription: 'Order description',
   orderhasbeenplaced: 'Your order has been placed, our staff will contact you soon.',
   successful: 'successful',
   ok: 'OK',
@@ -22,5 +23,8 @@ export default {
   'frontPage:CEOTitle': 'CEO of IranArtemia',
   ourproducts: 'our products',
   quickAccess: 'quick access',
-  contactUs: 'Contact Us'
+  contactUs: 'Contact Us',
+  orderconfirm: 'Confirm your order!',
+  orderIsCorrect: 'Order info is correct',
+  close: 'Close'
 }
