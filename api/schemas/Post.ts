@@ -31,32 +31,23 @@ export const Post = list({
                 enId: string
             }
 
+            console.log(item)
+
+            const sudo = context.sudo()
 
             if (faId)
-                if (resolvedData?.fa?.disconnect) {
-
-                    const sudoContext = context.sudo()
-                    await sudoContext.query.PostTranslation.deleteOne({
-                        where: {
-                            id: faId
-                        }
-                    })
-
-                    sudoContext.exitSudo()
-                }
+                await sudo.query.PostTranslation.deleteOne({
+                    where: {
+                        id: faId
+                    }
+                })
 
             if (enId)
-                if (resolvedData?.en?.disconnect) {
-                    const sudoContext = context.sudo()
-                    await sudoContext.query.PostTranslation.deleteOne({
-                        where: {
-                            id: enId
-                        }
-                    })
-
-                    sudoContext.exitSudo()
-                }
-
+                await sudo.query.PostTranslation.deleteOne({
+                    where: {
+                        id: enId
+                    }
+                })
 
 
             // TODO after deleting post
@@ -116,6 +107,7 @@ export const Post = list({
                 inlineCreate: { fields: ['altText', 'image'] },
                 inlineEdit: { fields: ['altText', 'image'] },
                 inlineConnect: true,
+
             }
         }),
         type: select({

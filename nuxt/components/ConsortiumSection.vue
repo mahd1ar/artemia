@@ -98,7 +98,7 @@ useIntervalFn(() => {
         </svg>
 
         <h2
-          class="text-tm-black relative text-4xl font-extrabold text-center"
+          class="text-tm-black relative text-4xl capitalize font-extrabold text-center"
         >
           {{ title }}
         </h2>

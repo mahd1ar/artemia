@@ -70,3 +70,21 @@ onResult(({ data }) => {
     </NuxtLayout>
   </div>
 </template>
+
+<style>
+
+.home-enter-active,
+.home-leave-active {
+  transition: all 0.4s;
+}
+.home-enter-from {
+
+  opacity: 0;
+  transform: translateX(-10px);
+}
+.home-leave-to {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+</style>

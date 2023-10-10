@@ -65,11 +65,11 @@ const posts = computed(() => {
 
 <template>
   <section class=" text-gray-800">
-    <client-only>
+    <!-- <client-only>
       <Teleport to="#background">
         <div class="bg-gray-100 h-full" />
       </Teleport>
-    </client-only>
+    </client-only> -->
     <div
       v-if="posts.length > 0"
       class="container max-w-6xl p-6 mx-auto space-y-6 sm:space-y-12"

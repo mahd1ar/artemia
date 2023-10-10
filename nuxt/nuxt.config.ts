@@ -23,6 +23,10 @@ export default defineNuxtConfig({
         rel: 'stylesheet',
         type: 'text/css'
       }]
+    },
+    layoutTransition: {
+      name: 'home',
+      mode: 'out-in' // default
     }
   },
   modules: [
