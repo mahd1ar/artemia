@@ -22,7 +22,9 @@ watch(() => appStore.isMenuOpen, (isMenuOpen) => {
       : 150)
   }
 })
-
+function closePanle () {
+  appStore.toggleMenu(false)
+}
 </script>
 
 <template>
@@ -35,9 +37,9 @@ watch(() => appStore.isMenuOpen, (isMenuOpen) => {
       <div class="mx-auto w-full flex-col ">
         <!-- close button -->
         <div class="mt-6 w-full text-right">
-          <div class="bg-gray-100 text-gray-500 flex items-center justify-center w-10 h-10 rounded flex-col inline-flex" @click="appStore.toggleMenu(false)">
+          <button class="bg-white border border-gray-100 text-gray-500  items-center justify-center w-10 h-10 rounded flex-col inline-flex" @click="appStore.toggleMenu(false)">
             <svg class="inline-block" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z" /></svg>
-          </div>
+          </button>
         </div>
         <div class=" inline-block mt-10">
           <GovarKavirLogo />
@@ -54,9 +56,9 @@ watch(() => appStore.isMenuOpen, (isMenuOpen) => {
         <strong class="text-lg py-4 inline-block mt-5 uppercase tracking-widest">
           {{ t('quickAccess') }}
         </strong>
-        <ul class="w-full text-gray-500 flex flex-col gap-4 ">
-          <li v-for="i in appStore.menuItems" :key="i.link" class="flex items-center gap-3">
-            <NuxtLink :to="localePath('/contact')">
+        <ul class="w-full text-gray-500 flex flex-col  ">
+          <li v-for="i in appStore.menuItems" :key="i.link" class="flex items-center gap-3 w-full hover:text-black">
+            <NuxtLink  :to="localePath(i.link)" class="w-full py-2" @click="closePanle">
               {{ locale === 'en' ? i.en : i.fa }}
             </NuxtLink>
           </li>

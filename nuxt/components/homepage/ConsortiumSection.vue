@@ -109,7 +109,7 @@ useIntervalFn(() => {
           class="h-full w-full flex flex-col justify-center items-center"
         >
           <div
-            class="w-full h-full flex-center p-6"
+            class="w-full h-28 md:h-full flex-center p-4 md:p-6"
             aria-hidden="true"
           >
             <div class="bg-primary w-0.5 rounded-sm h-full" />
@@ -135,7 +135,7 @@ useIntervalFn(() => {
 
 <style scoped lang="scss">
 .qut {
-    @apply w-20 opacity-75 lg:w-32 -translate-y-1/2;
+    @apply w-16 -translate-y-2 opacity-75 lg:w-32 sm:-translate-y-1/2;
 }
 
 .frame {

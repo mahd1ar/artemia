@@ -85,7 +85,7 @@ const { result, loading } = useQuery(CATEGORY, {
                   class="h-48 w-full object-cover "
                   :src="post.featuredImage?.image?.url"
                   alt=""
-                />
+                >
               </div>
 
               <NuxtLink :to="localePath(`/post/${post.id}`)" class="flex flex-1 flex-col justify-between bg-white p-6">
