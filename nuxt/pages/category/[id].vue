@@ -61,143 +61,75 @@ const { result, loading } = useQuery(CATEGORY, {
 
 <template>
   <div>
-    <!-- This example requires Tailwind CSS v2.0+ -->
-    <div class="relative bg-gray-50 px-4 pt-16 pb-20 sm:px-6 lg:px-8 lg:pt-24 lg:pb-28">
-      <div class="absolute inset-0">
-        <div class="h-1/3 bg-white sm:h-2/3" />
-      </div>
-      <div class="relative mx-auto max-w-7xl">
-        <div class="text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            <!-- From the blog -->
-            {{ result?.category?.[lang]?.title }}
-          </h2>
-          <p class="mx-auto mt-3 max-w-2xl text-xl text-gray-500 sm:mt-4">
-            <!-- Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa libero labore natus atque, ducimus sed. -->
-            {{ result?.category?.[lang]?.content }}
-          </p>
+    <LoadingIndicator :is-loading="loading">
+      <div class="relative bg-gray-50 px-4 pt-16 pb-20 sm:px-6 lg:px-8 lg:pt-24 lg:pb-28">
+        <div class="absolute inset-0">
+          <div class="h-1/3 bg-white sm:h-2/3" />
         </div>
-        <LoadingIndicator v-if="loading" />
-        <div v-else class="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
-          <NuxtLink v-for="post in result?.category?.posts || []" :key="post.id" :to="localePath(`/post/${post.id}`)" class="flex flex-col overflow-hidden rounded-lg shadow-lg">
-            <div class="flex-shrink-0">
-              <img
-                class="h-48 w-full object-cover"
-                :src="post.featuredImage?.image?.url"
-                alt=""
-              >
-            </div>
-            <div class="flex flex-1 flex-col justify-between bg-white p-6">
-              <div class="flex-1">
-                <p class="text-sm font-medium text-indigo-600">
-                  <NuxtLink href="#" class="hover:underline">
-                    Article
-                  </NuxtLink>
-                </p>
-                <NuxtLink href="#" class="mt-2 block">
-                  <p class="text-xl font-semibold text-gray-900">
-                    Boost your conversion rate
-                  </p>
-                  <p class="mt-3 text-base text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto accusantium praesentium eius, ut atque fuga culpa, similique sequi cum eos quis dolorum.
-                  </p>
-                </NuxtLink>
+        <div class="relative mx-auto max-w-7xl">
+          <div class="text-center">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <!-- From the blog -->
+              {{ result?.category?.[lang]?.title }}
+            </h2>
+            <p class="mx-auto mt-3 max-w-2xl text-xl text-gray-500 sm:mt-4">
+              <!-- Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa libero labore natus atque, ducimus sed. -->
+              {{ result?.category?.[lang]?.content }}
+            </p>
+          </div>
+          <LoadingIndicator v-if="loading" />
+          <div v-else class="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
+            <div v-for="post in result?.category?.posts || []" :key="post.id" class="flex flex-col overflow-hidden rounded-lg shadow-lg">
+              <div class="flex-shrink-0">
+                <img
+                  class="h-48 w-full object-cover "
+                  :src="post.featuredImage?.image?.url"
+                  alt=""
+                />
               </div>
-              <div class="mt-6 flex items-center">
-                <div class="flex-shrink-0">
-                  <a href="#">
-                    <span class="sr-only">Roel Aufderehar</span>
-                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-                  </a>
-                </div>
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">
-                    <NuxtLink href="#" class="hover:underline">
-                      Roel Aufderehar
-                    </NuxtLink>
-                  </p>
-                  <div class="flex space-x-1 text-sm text-gray-500">
-                    <time datetime="2020-03-16">Mar 16, 2020</time>
-                    <span aria-hidden="true">&middot;</span>
-                    <span>6 min read</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </NuxtLink>
 
-          <!-- <div class="flex flex-col overflow-hidden rounded-lg shadow-lg">
-            <div class="flex-shrink-0">
-              <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80" alt="">
-            </div>
-            <div class="flex flex-1 flex-col justify-between bg-white p-6">
-              <div class="flex-1">
-                <p class="text-sm font-medium text-indigo-600">
-                  <a href="#" class="hover:underline">Video</a>
-                </p>
-                <a href="#" class="mt-2 block">
-                  <p class="text-xl font-semibold text-gray-900">How to use search engine optimization to drive sales</p>
-                  <p class="mt-3 text-base text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit facilis asperiores porro quaerat doloribus, eveniet dolore. Adipisci tempora aut inventore optio animi., tempore temporibus quo laudantium.</p>
-                </a>
-              </div>
-              <div class="mt-6 flex items-center">
-                <div class="flex-shrink-0">
-                  <a href="#">
-                    <span class="sr-only">Brenna Goyette</span>
-                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-                  </a>
-                </div>
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">
-                    <a href="#" class="hover:underline">Brenna Goyette</a>
+              <NuxtLink :to="localePath(`/post/${post.id}`)" class="flex flex-1 flex-col justify-between bg-white p-6">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-indigo-600">
+                    <span class="hover:underline">
+                      Article
+                    </span>
                   </p>
-                  <div class="flex space-x-1 text-sm text-gray-500">
-                    <time datetime="2020-03-10">Mar 10, 2020</time>
-                    <span aria-hidden="true">&middot;</span>
-                    <span>4 min read</span>
+                  <span class="mt-2 block">
+                    <p class="text-xl font-semibold text-gray-900">
+                      Boost your conversion rate
+                    </p>
+                    <p class="mt-3 text-base text-gray-500">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto accusantium praesentium eius, ut atque fuga culpa, similique sequi cum eos quis dolorum.
+                    </p>
+                  </span>
+                </div>
+                <div class="mt-6 flex items-center">
+                  <div class="flex-shrink-0">
+                    <span>
+                      <span class="sr-only">Roel Aufderehar</span>
+                      <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                    </span>
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-900">
+                      <span class="hover:underline">
+                        Roel Aufderehar
+                      </span>
+                    </p>
+                    <div class="flex space-x-1 text-sm text-gray-500">
+                      <time datetime="2020-03-16">Mar 16, 2020</time>
+                      <span aria-hidden="true">&middot;</span>
+                      <span>6 min read</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </NuxtLink>
             </div>
           </div>
-
-          <div class="flex flex-col overflow-hidden rounded-lg shadow-lg">
-            <div class="flex-shrink-0">
-              <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80" alt="">
-            </div>
-            <div class="flex flex-1 flex-col justify-between bg-white p-6">
-              <div class="flex-1">
-                <p class="text-sm font-medium text-indigo-600">
-                  <a href="#" class="hover:underline">Case Study</a>
-                </p>
-                <a href="#" class="mt-2 block">
-                  <p class="text-xl font-semibold text-gray-900">Improve your customer experience</p>
-                  <p class="mt-3 text-base text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint harum rerum voluptatem quo recusandae magni placeat saepe molestiae, sed excepturi cumque corporis perferendis hic.</p>
-                </a>
-              </div>
-              <div class="mt-6 flex items-center">
-                <div class="flex-shrink-0">
-                  <a href="#">
-                    <span class="sr-only">Daniela Metz</span>
-                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-                  </a>
-                </div>
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">
-                    <a href="#" class="hover:underline">Daniela Metz</a>
-                  </p>
-                  <div class="flex space-x-1 text-sm text-gray-500">
-                    <time datetime="2020-02-12">Feb 12, 2020</time>
-                    <span aria-hidden="true">&middot;</span>
-                    <span>11 min read</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
-    </div>
+    </LoadingIndicator>
   </div>
 </template>
 

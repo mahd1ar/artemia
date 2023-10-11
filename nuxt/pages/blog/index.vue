@@ -42,7 +42,7 @@ query Blogs($isEn: Boolean!) {
 `)
 const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
 
-const { result, onResult } = useQuery(QUERY, {
+const { result } = useQuery(QUERY, {
   slug: 'blog',
   isEn: lang.value === 'en'
 })
@@ -65,11 +65,6 @@ const posts = computed(() => {
 
 <template>
   <section class=" text-gray-800">
-    <!-- <client-only>
-      <Teleport to="#background">
-        <div class="bg-gray-100 h-full" />
-      </Teleport>
-    </client-only> -->
     <div
       v-if="posts.length > 0"
       class="container max-w-6xl p-6 mx-auto space-y-6 sm:space-y-12"
@@ -142,6 +137,7 @@ const posts = computed(() => {
       </div>
     </div>
   </section>
+  <div class="gap"></div>
 </template>
 
 <style scoped></style>

@@ -1,0 +1,22 @@
+.home-enter-active{
+
+    transition: all 0.7s ease-out;
+    clip-path: circle(110% at 50% 50%);
+    height: 100vh;
+    overflow-y: scroll;
+}
+.home-leave-active {
+  transition: all 0.4s;
+//   clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+}
+.home-enter-from {
+
+  opacity: 0;
+  transform: translateX(-50px);
+  clip-path: circle(0% at 0% 50%);
+
+}
+.home-leave-to {
+  opacity: 0;
+//   transform: translateX(10px);
+}

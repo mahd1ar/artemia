@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "fonts";
+@import "transitions";
 
 @layer components {
   .flex-center {
@@ -26,4 +27,8 @@ h1,h2,h3,h4,h5{
 }
 p,div,span,button{
   @apply rtl:font-samim;
+}
+
+.gap{
+  @apply mt-28;
 }

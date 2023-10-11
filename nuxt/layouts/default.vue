@@ -17,7 +17,6 @@ const mobilePanel = ref(false)
 
 <template>
   <section class="min-h-screen grid text-black relative">
-    <div id="background" class="absolute w-full h-full " aria-hidden="true" />
     <div
       class="relative min-full flex flex-col justify-between w-full overflow-hidden"
     >
@@ -135,7 +134,7 @@ const mobilePanel = ref(false)
                     v-for="(i , index) in appState.menuItems"
                     :key="index"
                     :to="localePath(i.link.replace(config.public.frontendUrl, ''))"
-                    class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    class="inline-flex capitalize items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     {{
                       locale === 'fa' ? i.fa : i.en }}
@@ -267,11 +266,11 @@ const mobilePanel = ref(false)
           </div>
         </nav>
 
-        <main class="mt-10">
+        <main>
           <slot />
         </main>
       </div>
-      <FooterSection class="mt-28" />
+      <FooterSection  />
     </div>
   </section>
 </template>

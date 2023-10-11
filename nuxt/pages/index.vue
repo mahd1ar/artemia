@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { graphql } from '@/gql'
-// import { home } from '~/gql/graphql'
+import ElementorSection from '~/components/homepage/ElementorSection.vue'
+import LatestBlog from '~/components/homepage/LatestBlog.vue'
+import PixelGrid from '~/components/homepage/PixelGrid.vue'
+import ConsortiumSection from '~/components/homepage/ConsortiumSection.vue'
+import TestimonialSection from '~/components/homepage/TestimonialSection.vue'
 
 const { locale, t } = useI18n()
 
@@ -216,7 +220,7 @@ definePageMeta({
   layout: 'home'
 })
 
-const { result, loading } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
+const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
 
 // const sampleImage = 'https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/elementor/thumbs/snorkeler-framed-by-the-struts-of-a-wreck-of-a-plane-on-the-seabed--e1634535769483-peqe3vatpg6pccrr5ok0rm50g1ys3ewfqyb1m7xaxk.jpg'
 

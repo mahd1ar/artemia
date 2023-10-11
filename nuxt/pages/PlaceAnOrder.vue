@@ -198,12 +198,7 @@ const summeryInfo = computed(() => {
 
 <template>
   <!-- component -->
-  <div class=" p-6 flex items-center justify-center">
-    <ClientOnly>
-      <Teleport to="#background">
-        <div class="bg-gray-100 h-full" />
-      </Teleport>
-    </ClientOnly>
+  <div class=" p-6 flex bg-gray-100 mt-10 items-center justify-center">
     <div class="container max-w-screen-lg mx-auto">
       <div>
         <h2 class="font-semibold text-xl text-gray-600">

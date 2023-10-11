@@ -22,7 +22,11 @@ export default defineNuxtConfig({
         href: 'https://cdn.jsdelivr.net/gh/rastikerdar/samim-font@v4.0.5/dist/font-face.css',
         rel: 'stylesheet',
         type: 'text/css'
-      }]
+      },
+      { rel: 'icon', type: 'image/png', href: '/LOGO-FINAL-150x150.png', sizes: '32x32' },
+      { rel: 'icon', type: 'image/png', href: '/LOGO-FINAL-300x300.png', sizes: '192x192' }
+      ]
+
     },
     layoutTransition: {
       name: 'home',
