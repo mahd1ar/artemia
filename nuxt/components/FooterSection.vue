@@ -70,7 +70,7 @@ const appState = useAppState()
           </div>
         </div>
       </div>
-      <div class="lg:h-60 p-10 pr-0  w-full grid grid-cols-2  sm:grid-cols-7">
+      <div class="lg:h-60 p-10 pt-0 lg:pt-10 pr-0  w-full grid grid-cols-2  sm:grid-cols-7">
         <div class=" sm:col-span-2">
           <h6 class="text-xl font-semibold  tracking-wide capitalize">
             Quick links

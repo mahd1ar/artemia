@@ -75,13 +75,16 @@ function chengeLang (newLang : string) {
       </div>
 
       <div class=" tracking-widest flex md:hidden items-center gap-3">
-            <button type="button" @click="chengeLang('fa')">
-              FA
-            </button>
-            <button type="button" @click="chengeLang('en')">
-              EN
-            </button>
-          </div>
+        <button
+          v-for="lang in ['fa','en']"
+          :key="lang"
+          type="button"
+          :class="[lang === locale && 'text-primary']"
+          @click="chengeLang(lang)"
+        >
+          {{ lang.toUpperCase() }}
+        </button>
+      </div>
     </div>
 
     <div class="relative h-full container mx-auto flex flex-col">
@@ -89,8 +92,12 @@ function chengeLang (newLang : string) {
         <!-- <div class="p-2 py-1 text-3xl border-2 my-2">
           lorem
         </div> -->
-        <GovarKavirLogo dark class="p-1" />
-        <div class="hidden lg:block" >
+        <GovarKavirLogo dark class="hidden lg:block p-1" />
+
+        <div class="border-white mt-0.5 text-white lg:hidden uppercase p-2 py-3 inline-flex border-2 font-semibold " data-v-inspector="components/GovarKavirLogo.vue:9:5">
+          <div> GOvarKAvir Aria </div>
+        </div>
+        <div class="hidden lg:block">
           <ul class="flex-center gap-10 capitalize">
             <li v-for="(mi,index) in appState.menuItems" :key="index">
               <NuxtLink :to="localePath(mi.link)">
@@ -100,7 +107,7 @@ function chengeLang (newLang : string) {
           </ul>
         </div>
         <div class="flex gap-4 ">
-          <div class="tracking-widest flex items-center gap-3">
+          <div class="tracking-widest hidden md:flex items-center gap-3">
             <button type="button" @click="chengeLang('fa')">
               FA
             </button>
@@ -109,8 +116,8 @@ function chengeLang (newLang : string) {
             </button>
           </div>
 
-          <div @click="openNav">
-            <svg class="w-10" viewBox="0 0 24 24">
+          <button type="button" @click="openNav">
+            <!-- <svg class="w-10" viewBox="0 0 24 24">
               <path
                 fill="none"
                 stroke="currentColor"
@@ -119,8 +126,9 @@ function chengeLang (newLang : string) {
                 stroke-width="2"
                 d="M12 17h7M5 12h14M5 7h14"
               />
-            </svg>
-          </div>
+            </svg> -->
+            <svg class="w-10" viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4zm4 5h12v2H8zm5 5h7v2h-7z"/></svg>
+          </button>
         </div>
       </div>
       <div class="h-full flex-center justify-between w-full">

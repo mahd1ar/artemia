@@ -26,9 +26,9 @@ useIntervalFn(() => {
   <section
     class="container mx-auto my-24 text-tm-black flex flex-col md:flex-row w-full items-center md:items-stretch"
   >
-    <div dir="ltr" class="sm:w-1/2 flex-shrink-0 lg:w-5/12 relative">
+    <div dir="ltr" class="sm:w-full md:px-10 px-4 flex-shrink-0 lg:w-5/12 relative">
       <div class="flex-center">
-        <div class="relative frame_main overflow-hidden w-full">
+        <div class="relative frame_main rounded overflow-hidden w-full">
           <div
             class="flex w-full h-full transition duration-700 delay-150"
             :style="{
@@ -135,11 +135,11 @@ useIntervalFn(() => {
 
 <style scoped lang="scss">
 .qut {
-    @apply w-16 -translate-y-2 opacity-75 lg:w-32 sm:-translate-y-1/2;
+    @apply w-16 -translate-y-2 opacity-40 lg:w-24 sm:-translate-y-1/2;
 }
 
 .frame {
-    @apply w-40 h-48 border-[12px];
+    @apply w-40 h-48 border-[12px] rounded-sm ;
 }
 .frame_1 {
     @apply top-6 sm:-left-8 left-0;
@@ -149,6 +149,6 @@ useIntervalFn(() => {
 }
 
 .frame_main {
-    @apply h-[600px] w-9/12 md:w-full md:h-[463px];
+    @apply h-[600px] w-full shadow-xl md:h-[463px];
 }
 </style>

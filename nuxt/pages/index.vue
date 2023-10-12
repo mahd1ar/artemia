@@ -259,7 +259,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
     :signature-image="result?.frontPage?.consortiumCEOSignatureImage?.image?.url"
   />
 
-  <section class="grid grid-cols-4 pb-24">
+  <section class="grid grid-cols-1 lg:grid-cols-4 pb-24">
     <div v-for="i in 4" :key="i" class="hover:shadow-xl gap-2 ease-out hover:scale-90 p-6 transition-all">
       <div class="flex-center">
         <img
@@ -278,7 +278,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
   </section>
 
   <section class="flex flex-col md:flex-row">
-    <div class="p-14 md:w-5/12 text-gray-50  flex flex-col gap-4 bg-tm-black">
+    <div class="p-5 md:p-10 xl:p-14 md:w-5/12 text-gray-50  flex flex-col gap-4 bg-tm-black">
       <h2 class="text-4xl font-bold">
         <!-- WE WILL PAMPER YOUR EYES IN THE WATER -->
         {{ result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.title
@@ -289,7 +289,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
         }}
 
       </span>
-      <div class="grid grid-cols-2">
+      <div class="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-2">
         <div v-for="i in result?.frontPage?.statistics || []" :key="i.id" class="flex flex-col">
           <PieChart :percentage="i.misc?.find(i => i.key?.toLowerCase() === 'percentage')?.value || 0" />
           <h3 class="my-4 text-2xl font-bold capitalize">

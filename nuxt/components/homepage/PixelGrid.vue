@@ -52,19 +52,27 @@ const items = computed(() => {
 
 <template>
   <section class=" container mx-auto max-w-6xl">
-    <div class=" ">
-      <div v-for="(i, index) in list || []" :key="index" class="h-44 flex w-full md:hidden " :class="[index%2 || 'flex-row-reverse']">
+    <div class=" space-y-4">
+      <div
+        v-for="(i, index) in list || []"
+        :key="index"
+        class="h-44 flex w-full md:hidden  rounded"
+        :class="[index%2 || 'flex-row-reverse shadow-lg']"
+      >
         <img
 
           :src="i.src || sampleImage"
           class="h-full object-cover w-1/2 "
+          :class="[index%2 ? 'rounded-l-md' : 'rounded-r-md']"
           alt=""
         >
-        <div class="p-3 pt-4 w-1/2 h-full text-center">
-          <strong class="text-lg">{{ i.title }}</strong>
-          <p class="text-gray-700 line-clamp-6">
-            {{ i.description }}
-          </p>
+        <div class="w-1/2 h-full p-3 overflow-hidden">
+          <div class="  h-full text-center flex flex-col justify-evenly">
+            <strong class="text-lg  inline-block  relative">{{ i.title }}</strong>
+            <p class="text-gray-700 line-clamp-5 text-sm">
+              {{ i.description }}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -73,6 +81,7 @@ const items = computed(() => {
           v-for="(i, index) in items"
           :key="index"
           class="aspect-square flex-center relative hidden md:block"
+          :class="[i.type === 'text' && 'p-3 lg:p-6' ]"
         >
           <img
             v-if="i.type === 'image'"
@@ -80,11 +89,11 @@ const items = computed(() => {
             alt=""
             class="w-full h-full object-cover relative"
           >
-          <div v-else class="h-full w-full text-center p-3 lg:p-6 overflow-hidden">
+          <div v-else class="h-full w-full text-center  overflow-hidden">
             <strong class="font-bold relative text-lg lg:text-xl">
               {{ i.title }}
             </strong>
-            <p class="mt-2 text-gray-600 italic lg:text-base text-ms line-clamp-6">
+            <p class="mt-2 text-gray-600 italic lg:text-base text-ms line-clamp-5">
               {{ i.body }}
             </p>
           </div>

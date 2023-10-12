@@ -29,7 +29,7 @@ defineProps({
       {{ description }}
     </p>
 
-    <div class="grid grid-cols-3 gap-4 mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
       <div v-for="(i, idx) in items" :key="idx" class="flex flex-col">
         <div class="relative">
           <img v-if="i.image" :src="i.image " class="rounded-md shadow object-center h-44 object-cover w-full" alt="">

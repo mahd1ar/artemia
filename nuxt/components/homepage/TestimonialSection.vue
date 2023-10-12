@@ -30,7 +30,7 @@ defineProps({
     <div class="relative container flex flex-col items-end justify-end">
       <div class="w-full">
         <Splide
-          class="w-7/12 absolute bottom-4"
+          class="lg:w-7/12  absolute bottom-4"
           :options="{
             rewind: true,
             gap: '1rem',
@@ -44,11 +44,11 @@ defineProps({
           <SplideSlide
             v-for="(i, idx) in items"
             :key="idx"
-            class="bg-white/80  w-full p-6 ring-1 rounded-sm"
+            class=" backdrop-blur bg-white/50  w-full p-6 ring-1 rounded-sm"
           >
             <blockquote class="text-lg text-gray-700 relative">
               <span
-                class="absolute w-32 h-32 right-0 bottom-0 opacity-10 text-gray-500"
+                class="absolute w-32 h-32 right-0 text-primary bottom-0 opacity-20 "
               >
                 <svg class="w-full h-full" viewBox="0 0 16 16">
                   <path

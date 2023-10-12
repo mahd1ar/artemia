@@ -30,7 +30,7 @@ function closePanle () {
 <template>
   <dialog
     ref="dialog"
-    class="fixed top-0 h-full w-96 border-2 bg-gray-50 p-0 m-0 ml-auto  z-10 ease-in-out transition-transform duration-150 delay-75   right-0"
+    class="fixed top-0 h-full max-w-screen-sm max-h-screen sm:w-96 w-full border-2 bg-gray-50 p-0 m-0 ml-auto z-10 ease-in-out transition-transform duration-150 delay-75 right-0"
     :class="appStore.isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
   >
     <div class="px-12 overflow-auto">
@@ -58,7 +58,7 @@ function closePanle () {
         </strong>
         <ul class="w-full text-gray-500 flex flex-col  ">
           <li v-for="i in appStore.menuItems" :key="i.link" class="flex items-center gap-3 w-full hover:text-black">
-            <NuxtLink  :to="localePath(i.link)" class="w-full py-2" @click="closePanle">
+            <NuxtLink :to="localePath(i.link)" class="w-full capitalize py-2" @click="closePanle">
               {{ locale === 'en' ? i.en : i.fa }}
             </NuxtLink>
           </li>
