@@ -26,5 +26,6 @@ export default {
   contactUs: 'تماس با ما',
   orderconfirm: 'سفارش خود را تایید کنید',
   orderIsCorrect: 'اطلاعات سفارش درست است',
-  close: 'بستن'
+  close: 'بستن',
+  readMore: 'ادامه ی مطلب'
 }

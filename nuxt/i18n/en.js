@@ -26,5 +26,6 @@ export default {
   contactUs: 'Contact Us',
   orderconfirm: 'Confirm your order!',
   orderIsCorrect: 'Order info is correct',
-  close: 'Close'
+  close: 'Close',
+  readMore: 'Read More'
 }

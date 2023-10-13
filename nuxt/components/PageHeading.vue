@@ -35,8 +35,8 @@ function chengeLang (newLang : string) {
     </div>
 
     <div class="relative h-max container mx-auto flex   justify-between border-b border-white/50">
-      <div class="md:flex gap-4 text-sm py-4 hidden ">
-        <div class="flex gap-2">
+      <div class="md:flex gap-2 text-sm py-4 hidden ">
+        <div class="flex gap-2 max-w-sm line-clamp-2 max-h-10">
           <!-- location -->
           <svg class="w-5 h-5 flex-shrink-0 text-primary" viewBox="0 0 24 24">
             <path
@@ -106,13 +106,16 @@ function chengeLang (newLang : string) {
             </li>
           </ul>
         </div>
-        <div class="flex gap-4 ">
+        <div class="flex gap-4">
           <div class="tracking-widest hidden md:flex items-center gap-3">
-            <button type="button" @click="chengeLang('fa')">
-              FA
-            </button>
-            <button type="button" @click="chengeLang('en')">
-              EN
+            <button
+              v-for="lang in ['fa','en']"
+              :key="lang"
+              type="button"
+              :class="lang === locale && 'border-b-2 border-primary pointer-events-none px-0.5'"
+              @click="chengeLang(lang)"
+            >
+              {{ lang.toUpperCase() }}
             </button>
           </div>
 
@@ -127,7 +130,7 @@ function chengeLang (newLang : string) {
                 d="M12 17h7M5 12h14M5 7h14"
               />
             </svg> -->
-            <svg class="w-10" viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4zm4 5h12v2H8zm5 5h7v2h-7z"/></svg>
+            <svg class="w-10" viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4zm4 5h12v2H8zm5 5h7v2h-7z" /></svg>
           </button>
         </div>
       </div>

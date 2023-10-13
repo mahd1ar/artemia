@@ -270,7 +270,7 @@ const mobilePanel = ref(false)
           <slot />
         </main>
       </div>
-      <FooterSection  />
+      <FooterSection />
     </div>
   </section>
 </template>

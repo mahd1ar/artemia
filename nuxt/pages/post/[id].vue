@@ -86,6 +86,6 @@ const { result, loading } = useQuery(Post, { where: { id: route.params.id as str
         </div>
       </article>
     </LoadingIndicator>
-    <div class="gap" ></div>
+    <div class="gap" />
   </div>
 </template>

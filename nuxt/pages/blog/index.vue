@@ -137,7 +137,7 @@ const posts = computed(() => {
       </div>
     </div>
   </section>
-  <div class="gap"></div>
+  <div class="gap" />
 </template>
 
 <style scoped></style>

@@ -149,6 +149,6 @@ useIntervalFn(() => {
 }
 
 .frame_main {
-    @apply h-[600px] w-full shadow-xl md:h-[463px];
+    @apply h-[475px] sm:h-[600px] w-full shadow-xl md:h-[463px];
 }
 </style>

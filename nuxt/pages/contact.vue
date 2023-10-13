@@ -38,17 +38,15 @@ const ismounted = useMounted()
     <div class="justify-center mt-6 flex-1 max-w-6xl px-4 py-4 mx-auto lg:py-6 md:px-6">
       <div class="relative max-w-3xl gap-6 mx-auto flex">
         <div class="relative z-20 border-2 object-cover w-full rounded-2xl h-96 overflow-hidden ">
-      
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d6471.94316710709!2d51.48499475375823!3d35.80063093109602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde!4v1696771920001!5m2!1sen!2sde"
-              width="600"
-              height="450"
-              style="border:0;"
-              :allowfullscreen="true"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            />
-        
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d6471.94316710709!2d51.48499475375823!3d35.80063093109602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde!4v1696771920001!5m2!1sen!2sde"
+            width="600"
+            height="450"
+            style="border:0;"
+            :allowfullscreen="true"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          />
         </div>
 
         <div class="absolute top-0 left-0 items-center justify-center hidden -ml-16 -mt-14 lg:inline-flex">

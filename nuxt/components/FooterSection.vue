@@ -33,9 +33,7 @@ const lang = computed(() => {
         </span>
 
         <p class="text-center py-4">
-          Sed ut perspiciatis unde omnis iste natus delavirot
-          voluptatem accusantium doloremque laudanti totam delavirot
-          voluptatem.
+          {{ lang === 'en' ? appState.contact.shortDescription : appState.contact.shortDescriptionFa }}
         </p>
         <div class="flex gap-1">
           <div class="w-10 text-white flex-center h-10 bg-black">
@@ -74,7 +72,7 @@ const lang = computed(() => {
           </div>
         </div>
       </div>
-      <div class="lg:h-60 p-10 pt-0 lg:pt-10 pr-0  w-full grid grid-cols-2  sm:grid-cols-7">
+      <div class="p-10 pt-0 lg:pt-10 w-full footer__links-section ">
         <div class=" sm:col-span-2">
           <h6 class="text-xl font-semibold  tracking-wide capitalize">
             Quick links
@@ -221,7 +219,7 @@ const lang = computed(() => {
                 </g>
               </g>
             </svg>
-            <div class="ml-3 flex flex-col justify-center">
+            <div class="ltr:ml-3 rtl:mr-3 flex flex-col justify-center">
               <h4 class="uppercase text-white text-lg">
                 phone
               </h4>
@@ -350,11 +348,11 @@ const lang = computed(() => {
                 </g>
               </g>
             </svg>
-            <div class="ml-3 flex flex-col justify-center">
+            <div class="ltr:ml-3 rtl:mr-3 flex flex-col justify-center">
               <h4 class="uppercase text-white text-lg">
                 email
               </h4>
-              <p class="text-gray-400 -mt-2 text-sm whitespace-nowrap">
+              <p class="text-gray-400 -mt-1 text-sm whitespace-nowrap">
                 {{ appState.contact?.email }}
               </p>
             </div>
@@ -463,11 +461,11 @@ const lang = computed(() => {
                 </g>
               </g>
             </svg>
-            <div class="ml-3 flex flex-col justify-center">
+            <div class="ltr:ml-3 rtl:mr-3 flex flex-col justify-center">
               <h4 class="uppercase text-white text-lg">
                 location
               </h4>
-              <p class="text-gray-400 -mt-2 text-sm">
+              <p class="text-gray-400 -mt-1 text-sm">
                 {{ appState.contact?.address }}
               </p>
             </div>
@@ -478,4 +476,10 @@ const lang = computed(() => {
   </footer>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+
+.footer__links-section{
+  @apply ltr:pr-0 rtl:pl-0 w-full grid grid-cols-2 lg:h-60 sm:grid-cols-7;
+}
+
+</style>

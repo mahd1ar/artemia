@@ -244,6 +244,18 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
         href: '#consortium',
         title: result?.frontPage?.[lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.title || ''
       },
+      {
+        href: '#sites',
+        title: lang === 'fa' ? 'سایت ها' : 'sites'
+      },
+      {
+        href: '#prod',
+        title: lang === 'fa' ? 'محصولات' : 'products'
+      },
+      {
+        href: '#blog',
+        title: lang === 'fa' ? 'وبلاگ و اخبار' : 'blogs'
+      }
       // {
       //   href: '#features',
       //   title: result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.title || ''
@@ -356,15 +368,10 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
     class="mt-28"
   />
 
-  <div class="md:flex mt-28 justify-evenly w-full items-center grid grid-cols-3 sm:grid-cols-6 gap-6">
-    <div
-      v-for="(logo) in result?.frontPage?.logos || []"
-      :key="logo.id"
-      class="grayscale-0 opacity-30 hover:opacity-60 transition-all w-24 sm:w-full duration-500 md:w-28 lg:w-36"
-    >
-      <image  class="object-contain" :src="logo.image?.url" alt="" />
-    </div>
-  </div>
+  <ImageMarquee
+    class="mt-28"
+    :items="result?.frontPage?.logos?.map(i=>({ src: i.image?.url , alt: i.altText}))"
+  />
 
   <LatestBlog
     v-if="(result?.frontPage?.blog?.posts?.length || 0) > 0"
