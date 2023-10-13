@@ -2,7 +2,11 @@
 import { useAppState } from '~/stores/appState'
 
 const appState = useAppState()
+const i18n = useI18n()
 
+const lang = computed(() => {
+  return i18n.locale.value === 'en' ? 'en' : 'fa'
+})
 </script>
 
 <template>
@@ -22,10 +26,10 @@ const appState = useAppState()
         <span
           class="inline-block text-center p-2 font-bold text-2xl border-2 px-4 border-black"
         >
-        <NuxtLink to="/test" >
+          <NuxtLink to="/test">
 
-          GOVAR KAVIR
-        </NuxtLink>
+            GOVAR KAVIR
+          </NuxtLink>
         </span>
 
         <p class="text-center py-4">
@@ -76,13 +80,13 @@ const appState = useAppState()
             Quick links
           </h6>
           <ul class="text-gray-300 list-inside mt-4">
-            <li v-for="i in 6" :key="i" class="mt-1.5 flex items-center gap-4">
-              <i class="w-3 h-0.5  bg-primary relative inline-block rounded " />
-
-              <span class="text-gray-400 capitalize text-[13px]">
-
-                about
-              </span>
+            <li v-for="(i,index) in appState.menuItems" :key="index" class="mt-1.5">
+              <NuxtLink :to="i.link" class="flex items-center gap-4">
+                <i class="w-3 h-0.5  bg-primary relative inline-block rounded " />
+                <span class="text-gray-400 capitalize text-[13px]">
+                  {{ i[lang] }}
+                </span>
+              </NuxtLink>
             </li>
           </ul>
         </div>

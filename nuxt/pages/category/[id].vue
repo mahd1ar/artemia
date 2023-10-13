@@ -97,10 +97,10 @@ const { result, loading } = useQuery(CATEGORY, {
                   </p>
                   <span class="mt-2 block">
                     <p class="text-xl font-semibold text-gray-900">
-                      Boost your conversion rate
+                      {{ post[lang]?.title }}
                     </p>
-                    <p class="mt-3 text-base text-gray-500">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto accusantium praesentium eius, ut atque fuga culpa, similique sequi cum eos quis dolorum.
+                    <p class="mt-3 text-base text-gray-500 line-clamp-5">
+                      {{ post[lang]?.excerpt }}
                     </p>
                   </span>
                 </div>

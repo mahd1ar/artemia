@@ -83,12 +83,13 @@ const items = computed(() => {
           class="aspect-square flex-center relative hidden md:block"
           :class="[i.type === 'text' && 'p-3 lg:p-6' ]"
         >
-          <img
+          <ImageAnime
             v-if="i.type === 'image'"
             :src="i.src"
             alt=""
+            :delay=" index * 100 "
             class="w-full h-full object-cover relative"
-          >
+          />
           <div v-else class="h-full w-full text-center  overflow-hidden">
             <strong class="font-bold relative text-lg lg:text-xl">
               {{ i.title }}

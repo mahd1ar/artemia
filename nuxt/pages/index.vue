@@ -358,11 +358,11 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
 
   <div class="md:flex mt-28 justify-evenly w-full items-center grid grid-cols-3 sm:grid-cols-6 gap-6">
     <div
-      v-for="logo in result?.frontPage?.logos || []"
+      v-for="(logo) in result?.frontPage?.logos || []"
       :key="logo.id"
-      class="grayscale-0 opacity-30 hover:opacity-60  transition-all w-24 sm:w-full duration-500 md:w-28 lg:w-36"
+      class="grayscale-0 opacity-30 hover:opacity-60 transition-all w-24 sm:w-full duration-500 md:w-28 lg:w-36"
     >
-      <img class="object-contain" :src="logo.image?.url" alt="">
+      <image  class="object-contain" :src="logo.image?.url" alt="" />
     </div>
   </div>
 

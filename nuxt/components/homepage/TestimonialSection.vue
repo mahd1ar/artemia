@@ -44,7 +44,7 @@ defineProps({
           <SplideSlide
             v-for="(i, idx) in items"
             :key="idx"
-            class=" backdrop-blur bg-white/50  w-full p-6 ring-1 rounded-sm"
+            class="  bg-white  w-full p-6 ring-1 rounded-sm"
           >
             <blockquote class="text-lg text-gray-700 relative">
               <span
