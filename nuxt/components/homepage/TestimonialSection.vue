@@ -16,15 +16,19 @@ defineProps({
     default: () => ''
   }
 })
+
+const backgroundImage = ref<HTMLImageElement | null>(null)
+
 </script>
 
 <template>
-  <section class="relative flex  h-[600px]">
+  <section class="relative flex h-[600px] border-y-2">
     <div class="overlay">
       <img
+        ref="backgroundImage"
         :src="testemonialBackgroundImage || 'https://picsum.photos/951/701'"
         alt=""
-        class="w-full h-full object-cover"
+        class="w-full h-full object-cover "
       >
     </div>
     <div class="relative container flex flex-col items-end justify-end">

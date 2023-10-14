@@ -102,7 +102,7 @@ useIntervalFn(() => {
         >
           {{ title }}
         </h2>
-        <div class="text-center text-gray-400 mt-5 leading-7">
+        <div class="text-center text-gray-400 mt-5 leading-7 max-w-sm mx-auto">
           {{ content }}
         </div>
         <div

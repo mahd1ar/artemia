@@ -507,6 +507,5 @@ const summeryInfo = computed(() => {
         </div>
       </Modal>
     </TransitionRoot>
-    
   </div>
 </template>

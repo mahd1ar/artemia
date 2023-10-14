@@ -100,7 +100,7 @@ function chengeLang (newLang : string) {
         <div class="hidden lg:block">
           <ul class="flex-center gap-10 capitalize">
             <li v-for="(mi,index) in appState.menuItems" :key="index">
-              <NuxtLink :to="localePath(mi.link)">
+              <NuxtLink v-show="localePath(mi.link) !== $route.path" :to="localePath(mi.link)">
                 {{ locale === 'en' ? mi.en : mi.fa }}
               </NuxtLink>
             </li>

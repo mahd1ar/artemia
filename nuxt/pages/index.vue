@@ -9,7 +9,7 @@ import TestimonialSection from '~/components/homepage/TestimonialSection.vue'
 const { locale, t } = useI18n()
 
 const lang = computed(() => locale.value === 'en' ? 'en' : 'fa')
-
+// TODO get posts in reverse
 const FRONPAGE = graphql(`
 query HomePage( $isEn: Boolean!) {
   frontPage {
@@ -256,15 +256,12 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
         href: '#blog',
         title: lang === 'fa' ? 'وبلاگ و اخبار' : 'blogs'
       }
-      // {
-      //   href: '#features',
-      //   title: result?.frontPage?.[lang === 'en' ? 'statusTitleAndDescription_en' : 'statusTitleAndDescription_fa']?.title || ''
-      // },
     ]"
     :hero-background-image="result?.frontPage?.heroImage?.image?.url || ''"
   />
 
   <ConsortiumSection
+    id="consortium"
     :title="result?.frontPage?.[ lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.title || 'IRAN Artemia Consortium' "
     :content=" result?.frontPage?.[ lang === 'en' ? 'consortiumIntro_en' : 'consortiumIntro_fa']?.content || 'lorem ipsom'"
     :con-images=" result?.frontPage?.consortiumImages?.map(i => i.image?.url || '')"
@@ -336,6 +333,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
   </section>
 
   <ElementorSection
+    id="sites"
 
     :list="result?.frontPage?.sites?.posts?.map(i=>(
       {
@@ -348,7 +346,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
     {{ t("ourproducts") }}
   </h1>
   <PixelGrid
-
+    id="prod"
     :list="result?.frontPage?.features?.posts?.map(i => ({
       src: i.featuredImage?.image?.url, title: i?.[lang]?.title, description: i?.[lang]?.excerpt
     })) || []"
@@ -356,6 +354,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
 
   <TestimonialSection
     v-if="(result?.frontPage?.testimonial?.posts?.length || 0) > 0"
+    id="testemonial"
 
     :items="result?.frontPage?.testimonial?.posts?.map(i => ({
       quote: i[lang]?.excerpt ,
@@ -375,6 +374,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
 
   <LatestBlog
     v-if="(result?.frontPage?.blog?.posts?.length || 0) > 0"
+    id="blog"
 
     class="mt-28"
     :title="result?.frontPage?.[lang ? 'blogTitleAndDescription_en' : 'blogTitleAndDescription_fa']?.title || 'Latest Blogs and Articlas'"

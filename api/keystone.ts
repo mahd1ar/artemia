@@ -95,7 +95,7 @@ export default withAuth(
 
 📞 phone number: <b>${customer.tel || "undefined"}</b>
 
-🔭 <a href="https://iranartemia.com/order/${
+🔭 <a href="https://admin.iranartemia.com/order/${
                 customer.orders[0].id
               }"> click to view in website</a>
 
