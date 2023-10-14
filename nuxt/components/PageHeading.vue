@@ -144,11 +144,11 @@ function chengeLang (newLang : string) {
             </li>
           </ol>
         </div>
-        <div class="text-right w-2/3">
+        <div class="text-right w-2/3 flex flex-col justify-start">
           <h1 class="text-5xl font-bold">
             {{ title }}
           </h1>
-          <div class="text-gray-200 mt-10 italic font-bold">
+          <div class="text-gray-200 mt-7 leading-8 italic text-xl ml-auto max-w-sm">
             {{ description }}
           </div>
         </div>

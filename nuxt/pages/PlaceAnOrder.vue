@@ -198,14 +198,16 @@ const summeryInfo = computed(() => {
 
 <template>
   <!-- component -->
-  <div class=" p-6 flex bg-gray-100 mt-10 items-center justify-center">
+  <div class=" flex bg-gray-100 pt-10 pb-20 items-center justify-center">
     <div class="container max-w-screen-lg mx-auto">
       <div>
         <h2 class="font-semibold text-xl text-gray-600">
-          Responsive Form
+          <!-- submit new order -->
+          {{ t('PlaceAnOrder') }}
         </h2>
         <p class="text-gray-500 mb-6">
-          Form is mobile responsive. Give it a try.
+          <!-- description of the order -->
+          {{ t('submitNewOrder') }}
         </p>
 
         <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -505,5 +507,6 @@ const summeryInfo = computed(() => {
         </div>
       </Modal>
     </TransitionRoot>
+    
   </div>
 </template>

@@ -383,7 +383,8 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
       title: i?.[lang]?.title || '',
       excerpt: i?.[lang]?.excerpt || '',
       image: i.featuredImage?.image?.url || '',
-      tag: 'blog'
+      tag: 'blog',
+      link: '/post/' +i.id
     })||[])"
   />
 

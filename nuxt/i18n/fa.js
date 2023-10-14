@@ -27,5 +27,6 @@ export default {
   orderconfirm: 'سفارش خود را تایید کنید',
   orderIsCorrect: 'اطلاعات سفارش درست است',
   close: 'بستن',
-  readMore: 'ادامه ی مطلب'
+  readMore: 'ادامه ی مطلب',
+  submitNewOrder: 'ارسال سفارش جدید به فروشگاه ایران آرتمیا'
 }

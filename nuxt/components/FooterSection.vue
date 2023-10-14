@@ -26,7 +26,7 @@ const lang = computed(() => {
         <span
           class="inline-block text-center p-2 font-bold text-2xl border-2 px-4 border-black"
         >
-          <NuxtLink to="/test">
+          <NuxtLink to="/">
 
             GOVAR KAVIR
           </NuxtLink>

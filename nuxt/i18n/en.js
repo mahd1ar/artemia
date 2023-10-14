@@ -27,5 +27,6 @@ export default {
   orderconfirm: 'Confirm your order!',
   orderIsCorrect: 'Order info is correct',
   close: 'Close',
-  readMore: 'Read More'
+  readMore: 'Read More',
+  submitNewOrder: "Submit a new order to Iran Artemia's store"
 }
