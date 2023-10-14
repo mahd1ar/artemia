@@ -36,7 +36,7 @@ const lang = computed(() => {
           {{ lang === 'en' ? appState.contact.shortDescription : appState.contact.shortDescriptionFa }}
         </p>
         <div class="flex gap-1">
-          <div class="w-10 text-white flex-center h-10 bg-black">
+          <a title="telegram" :href="appState.contact.telegram || '#'" target="_blank" class="w-10 text-white flex-center h-10 bg-black">
             <!-- telegram icon -->
             <svg class="w-5 h-5" viewBox="0 0 256 256">
               <path
@@ -44,24 +44,25 @@ const lang = computed(() => {
                 d="M236.88 26.19a9 9 0 0 0-9.16-1.57L25.06 103.93a14.22 14.22 0 0 0 2.43 27.21L80 141.45V200a15.92 15.92 0 0 0 10 14.83a15.91 15.91 0 0 0 17.51-3.73l25.32-26.26L173 220a15.88 15.88 0 0 0 10.51 4a16.3 16.3 0 0 0 5-.79a15.85 15.85 0 0 0 10.67-11.63L239.77 35a9 9 0 0 0-2.89-8.81ZM183.53 208l-82.68-72.5l119-85.29Z"
               />
             </svg>
-          </div>
+          </a>
           <!-- whats app -->
-          <div class="w-10 h-10 border flex-center border-black/60">
+          <a title="whatsapp" :href="appState.contact.whatsapp || '#'" target="_blank" class="w-10 h-10 border flex-center border-black/60">
             <svg class="w-6 h-6" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
                 d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91c0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18l-3.12.82l.83-3.04l-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24c2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81c-.23-.08-.39-.12-.56.12c-.17.25-.64.81-.78.97c-.14.17-.29.19-.54.06c-.25-.12-1.05-.39-1.99-1.23c-.74-.66-1.23-1.47-1.38-1.72c-.14-.25-.02-.38.11-.51c.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31c-.22.25-.86.85-.86 2.07c0 1.22.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74c.59.26 1.05.41 1.41.52c.59.19 1.13.16 1.56.1c.48-.07 1.47-.6 1.67-1.18c.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"
               />
             </svg>
-          </div>
-          <div class="w-10 h-10 flex-center border border-black/60">
+          </a>
+          <!-- instagram -->
+          <a title="instagram" :href="appState.contact.instagram || '#'" target="_blank" class="w-10 h-10 flex-center border border-black/60">
             <svg class="w-6 h-6" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
                 d="M17.34 5.46a1.2 1.2 0 1 0 1.2 1.2a1.2 1.2 0 0 0-1.2-1.2Zm4.6 2.42a7.59 7.59 0 0 0-.46-2.43a4.94 4.94 0 0 0-1.16-1.77a4.7 4.7 0 0 0-1.77-1.15a7.3 7.3 0 0 0-2.43-.47C15.06 2 14.72 2 12 2s-3.06 0-4.12.06a7.3 7.3 0 0 0-2.43.47a4.78 4.78 0 0 0-1.77 1.15a4.7 4.7 0 0 0-1.15 1.77a7.3 7.3 0 0 0-.47 2.43C2 8.94 2 9.28 2 12s0 3.06.06 4.12a7.3 7.3 0 0 0 .47 2.43a4.7 4.7 0 0 0 1.15 1.77a4.78 4.78 0 0 0 1.77 1.15a7.3 7.3 0 0 0 2.43.47C8.94 22 9.28 22 12 22s3.06 0 4.12-.06a7.3 7.3 0 0 0 2.43-.47a4.7 4.7 0 0 0 1.77-1.15a4.85 4.85 0 0 0 1.16-1.77a7.59 7.59 0 0 0 .46-2.43c0-1.06.06-1.4.06-4.12s0-3.06-.06-4.12ZM20.14 16a5.61 5.61 0 0 1-.34 1.86a3.06 3.06 0 0 1-.75 1.15a3.19 3.19 0 0 1-1.15.75a5.61 5.61 0 0 1-1.86.34c-1 .05-1.37.06-4 .06s-3 0-4-.06a5.73 5.73 0 0 1-1.94-.3a3.27 3.27 0 0 1-1.1-.75a3 3 0 0 1-.74-1.15a5.54 5.54 0 0 1-.4-1.9c0-1-.06-1.37-.06-4s0-3 .06-4a5.54 5.54 0 0 1 .35-1.9A3 3 0 0 1 5 5a3.14 3.14 0 0 1 1.1-.8A5.73 5.73 0 0 1 8 3.86c1 0 1.37-.06 4-.06s3 0 4 .06a5.61 5.61 0 0 1 1.86.34a3.06 3.06 0 0 1 1.19.8a3.06 3.06 0 0 1 .75 1.1a5.61 5.61 0 0 1 .34 1.9c.05 1 .06 1.37.06 4s-.01 3-.06 4ZM12 6.87A5.13 5.13 0 1 0 17.14 12A5.12 5.12 0 0 0 12 6.87Zm0 8.46A3.33 3.33 0 1 1 15.33 12A3.33 3.33 0 0 1 12 15.33Z"
               />
             </svg>
-          </div>
+          </a>
           <div class="w-10 h-10 border flex-center border-black/60">
             <svg class="w-6 h-6" viewBox="0 0 1200 1200">
               <path
@@ -104,7 +105,7 @@ const lang = computed(() => {
           </ul>
         </div>
         <div class="flex flex-col gap-4 col-span-3 mt-10 sm:mt-0">
-          <div class="flex">
+          <a :href="'tel:'+ appState.contact?.tel" class="flex">
             <!-- 24 hour -->
             <svg
               fill="currentColor"
@@ -227,8 +228,8 @@ const lang = computed(() => {
                 {{ appState.contact?.tel }}
               </p>
             </div>
-          </div>
-          <div class="flex">
+          </a>
+          <a href="mailto:{{ appState.contact?.email }}" target="_blank" class="flex">
             <!-- mail -->
             <svg fill="currentColor" class="text-primary w-12 flex-shrink-0" version="1.1" viewBox="0 0 512 512" xml:space="preserve">
               <g>
@@ -356,8 +357,8 @@ const lang = computed(() => {
                 {{ appState.contact?.email }}
               </p>
             </div>
-          </div>
-          <div class="flex">
+          </a>
+          <a href="https://maps.app.goo.gl/cn3hxrNrLK7EH5fk6" target="_blank" class="flex">
             <!-- location -->
             <svg fill="currentColor" class="text-primary w-12 flex-shrink-0" viewBox="0 0 511.999 511.999" xml:space="preserve">
               <g>
@@ -469,7 +470,7 @@ const lang = computed(() => {
                 {{ appState.contact?.address }}
               </p>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>

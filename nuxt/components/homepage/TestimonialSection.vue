@@ -48,7 +48,7 @@ const backgroundImage = ref<HTMLImageElement | null>(null)
           <SplideSlide
             v-for="(i, idx) in items"
             :key="idx"
-            class="  bg-white  w-full p-6 ring-1 rounded-sm"
+            class="splider-bg w-full p-6 ring-1 rounded-sm"
           >
             <blockquote class="text-lg text-gray-700 relative">
               <span
@@ -89,3 +89,10 @@ const backgroundImage = ref<HTMLImageElement | null>(null)
     </div>
   </section>
 </template>
+
+<style lang="scss" scoped>
+.splider-bg {
+  @apply bg-gradient-to-l from-white to-white/60 lg:bg-white backdrop-blur;
+}
+
+</style>
