@@ -257,7 +257,7 @@ const { result } = useQuery(FRONPAGE, { isEn: lang.value === 'en' })
         title: lang === 'fa' ? 'وبلاگ و اخبار' : 'blogs'
       }
     ]"
-    :hero-background-image="result?.frontPage?.heroImage?.image?.url || ''"
+    :hero-background-image="result?.frontPage?.heroImage?.map(i => i?.image?.url || '').filter(Boolean)"
   />
 
   <ConsortiumSection

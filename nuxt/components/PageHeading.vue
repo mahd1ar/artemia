@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { useAppState } from '~/stores/appState'
 
-defineProps({
+const props = defineProps({
   title: { type: String, default: () => '' },
   description: { type: String, default: () => '' },
   sections: { type: Array as PropType<{title:string, href:string}[]>, default: () => [] },
-  heroBackgroundImage: { type: String, default: () => '' }
+  heroBackgroundImage: { type: Array as PropType<string[]>, default: () => [] }
 })
 
 const { locale, setLocale } = useI18n()
@@ -20,6 +20,10 @@ function openNav () {
 function chengeLang (newLang : string) {
   setLocale(newLang)
 }
+const counter = ref(0)
+useIntervalFn(() => {
+  counter.value = (counter.value + 1) % props.heroBackgroundImage.length
+}, 5000)
 
 </script>
 
@@ -27,8 +31,11 @@ function chengeLang (newLang : string) {
   <section class="text-white relative h-[80vh] overflow-hidden flex flex-col">
     <div class="absolute w-full h-full">
       <img
+        v-for="(himg,indx) in heroBackgroundImage"
+        v-show="indx === counter"
+        :key="indx"
         class="h-full object-cover w-full"
-        :src="heroBackgroundImage || 'https://picsum.photos/1072/696'"
+        :src="himg || 'https://picsum.photos/1072/696'"
         alt=""
       >
       <div aria-hidden="true" style="background-color: #03062a; opacity: 0.7 " class="overlay" />

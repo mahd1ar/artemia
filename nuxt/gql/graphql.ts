@@ -442,7 +442,8 @@ export type FrontPage = {
   consortiumIntro_en?: Maybe<Resource>;
   consortiumIntro_fa?: Maybe<Resource>;
   features?: Maybe<Category>;
-  heroImage?: Maybe<ImageStore>;
+  heroImage?: Maybe<Array<ImageStore>>;
+  heroImageCount?: Maybe<Scalars['Int']['output']>;
   hero_en?: Maybe<Resource>;
   hero_fa?: Maybe<Resource>;
   id: Scalars['ID']['output'];
@@ -473,6 +474,20 @@ export type FrontPageConsortiumImagesArgs = {
 
 
 export type FrontPageConsortiumImagesCountArgs = {
+  where?: ImageStoreWhereInput;
+};
+
+
+export type FrontPageHeroImageArgs = {
+  cursor?: InputMaybe<ImageStoreWhereUniqueInput>;
+  orderBy?: Array<ImageStoreOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: ImageStoreWhereInput;
+};
+
+
+export type FrontPageHeroImageCountArgs = {
   where?: ImageStoreWhereInput;
 };
 
@@ -513,7 +528,7 @@ export type FrontPageCreateInput = {
   consortiumIntro_en?: InputMaybe<ResourceRelateToOneForCreateInput>;
   consortiumIntro_fa?: InputMaybe<ResourceRelateToOneForCreateInput>;
   features?: InputMaybe<CategoryRelateToOneForCreateInput>;
-  heroImage?: InputMaybe<ImageStoreRelateToOneForCreateInput>;
+  heroImage?: InputMaybe<ImageStoreRelateToManyForCreateInput>;
   hero_en?: InputMaybe<ResourceRelateToOneForCreateInput>;
   hero_fa?: InputMaybe<ResourceRelateToOneForCreateInput>;
   introVideo?: InputMaybe<FileStoreRelateToOneForCreateInput>;
@@ -548,7 +563,7 @@ export type FrontPageUpdateInput = {
   consortiumIntro_en?: InputMaybe<ResourceRelateToOneForUpdateInput>;
   consortiumIntro_fa?: InputMaybe<ResourceRelateToOneForUpdateInput>;
   features?: InputMaybe<CategoryRelateToOneForUpdateInput>;
-  heroImage?: InputMaybe<ImageStoreRelateToOneForUpdateInput>;
+  heroImage?: InputMaybe<ImageStoreRelateToManyForUpdateInput>;
   hero_en?: InputMaybe<ResourceRelateToOneForUpdateInput>;
   hero_fa?: InputMaybe<ResourceRelateToOneForUpdateInput>;
   introVideo?: InputMaybe<FileStoreRelateToOneForUpdateInput>;
@@ -577,7 +592,7 @@ export type FrontPageWhereInput = {
   consortiumIntro_en?: InputMaybe<ResourceWhereInput>;
   consortiumIntro_fa?: InputMaybe<ResourceWhereInput>;
   features?: InputMaybe<CategoryWhereInput>;
-  heroImage?: InputMaybe<ImageStoreWhereInput>;
+  heroImage?: InputMaybe<ImageStoreManyRelationFilter>;
   hero_en?: InputMaybe<ResourceWhereInput>;
   hero_fa?: InputMaybe<ResourceWhereInput>;
   id?: InputMaybe<IdFilter>;
@@ -2441,7 +2456,7 @@ export type HomePageQueryVariables = Exact<{
 }>;
 
 
-export type HomePageQuery = { __typename?: 'Query', frontPage?: { __typename?: 'FrontPage', meta_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, meta_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, hero_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, hero_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, heroImage?: { __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, consortiumImages?: Array<{ __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null }> | null, consortiumIntro_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, consortiumIntro_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, consortiumCEOSignatureImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, statusTitleAndDescription_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, statusTitleAndDescription_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, statistics?: Array<{ __typename?: 'Post', id: string, title?: string | null, en?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null } | null, misc?: Array<{ __typename?: 'KeyValue', id: string, key?: string | null, value?: string | null }> | null }> | null, introVideo?: { __typename?: 'FileStore', file?: { __typename?: 'FileFieldOutput', url: string } | null } | null, introVideoTitle_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, introVideoTitle_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, sites?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', fa?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null }> | null } | null, features?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', fa?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null }> | null } | null, testimonial?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', fa?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, misc?: Array<{ __typename?: 'KeyValue', key?: string | null, value?: string | null }> | null }> | null } | null, testimonial_bg_image?: { __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string, id: string } | null } | null, logos?: Array<{ __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, blogTitleAndDescription_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, blogTitleAndDescription_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, blog?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', id: string, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', title?: string | null, excerpt?: string | null } | null }> | null } | null } | null };
+export type HomePageQuery = { __typename?: 'Query', frontPage?: { __typename?: 'FrontPage', meta_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, meta_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, hero_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, hero_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, heroImage?: Array<{ __typename?: 'ImageStore', altText?: string | null, id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null }> | null, consortiumImages?: Array<{ __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null }> | null, consortiumIntro_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, consortiumIntro_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, consortiumCEOSignatureImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, statusTitleAndDescription_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, statusTitleAndDescription_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, statistics?: Array<{ __typename?: 'Post', id: string, title?: string | null, en?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, content?: { __typename?: 'PostTranslation_content_Document', document: any } | null } | null, misc?: Array<{ __typename?: 'KeyValue', id: string, key?: string | null, value?: string | null }> | null }> | null, introVideo?: { __typename?: 'FileStore', file?: { __typename?: 'FileFieldOutput', url: string } | null } | null, introVideoTitle_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, introVideoTitle_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, sites?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', fa?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null }> | null } | null, features?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', fa?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null }> | null } | null, testimonial?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', fa?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', id: string, title?: string | null, excerpt?: string | null } | null, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, misc?: Array<{ __typename?: 'KeyValue', key?: string | null, value?: string | null }> | null }> | null } | null, testimonial_bg_image?: { __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string, id: string } | null } | null, logos?: Array<{ __typename?: 'ImageStore', id: string, altText?: string | null, image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, blogTitleAndDescription_en?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, blogTitleAndDescription_fa?: { __typename?: 'Resource', title?: string | null, content?: string | null } | null, blog?: { __typename?: 'Category', posts?: Array<{ __typename?: 'Post', id: string, featuredImage?: { __typename?: 'ImageStore', id: string, image?: { __typename?: 'ImageFieldOutput', id: string, url: string } | null } | null, fa?: { __typename?: 'PostTranslation', title?: string | null, excerpt?: string | null } | null, en?: { __typename?: 'PostTranslation', title?: string | null, excerpt?: string | null } | null }> | null } | null } | null };
 
 export type PostFullQueryVariables = Exact<{
   where: PostWhereUniqueInput;
