@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useIntersectionObserver } from '@vueuse/core'
-import { ref } from 'vue'
 defineProps({
   percentage: {
     type: [Number, String],

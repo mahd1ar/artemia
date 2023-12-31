@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { PropType } from 'nuxt/dist/app/compat/capi'
+
 const { t } = useI18n()
-const localePath = useLocalePath()
+
 // image: 'https://templatekit.jegtheme.com/findive/wp-content/uploads/sites/185/2021/10/partial-view-of-man-diving-in-ocean-alone-e1634536085170.jpg',
 
 defineProps({
@@ -51,12 +51,12 @@ defineProps({
           {{ i.excerpt }}
         </p>
 
-        <NuxtLink
-          :to=" localePath( i.link)"
+        <NuxtLinkLocale
+          :to=" i.link"
           class="text-primary font-bold text-center text-sm my-4 tracking-widest opacity-75 uppercase"
         >
           {{ t('readMore') }}
-        </NuxtLink>
+        </NuxtLinkLocale>
       </div>
     </div>
   </section>

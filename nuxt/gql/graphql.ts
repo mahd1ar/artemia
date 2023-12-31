@@ -984,6 +984,7 @@ export type Mutation = {
   createKeyValues?: Maybe<Array<Maybe<KeyValue>>>;
   createMainMenu?: Maybe<MainMenu>;
   createMainMenus?: Maybe<Array<Maybe<MainMenu>>>;
+  createNikans?: Maybe<Array<Maybe<Nikan>>>;
   createOrder?: Maybe<Order>;
   createOrders?: Maybe<Array<Maybe<Order>>>;
   createPost?: Maybe<Post>;
@@ -996,6 +997,7 @@ export type Mutation = {
   createTags?: Maybe<Array<Maybe<Tag>>>;
   createUser?: Maybe<User>;
   createUsers?: Maybe<Array<Maybe<User>>>;
+  createnikan?: Maybe<Nikan>;
   deleteCategories?: Maybe<Array<Maybe<Category>>>;
   deleteCategory?: Maybe<Category>;
   deleteContactUs?: Maybe<ContactUs>;
@@ -1012,6 +1014,7 @@ export type Mutation = {
   deleteKeyValues?: Maybe<Array<Maybe<KeyValue>>>;
   deleteMainMenu?: Maybe<MainMenu>;
   deleteMainMenus?: Maybe<Array<Maybe<MainMenu>>>;
+  deleteNikans?: Maybe<Array<Maybe<Nikan>>>;
   deleteOrder?: Maybe<Order>;
   deleteOrders?: Maybe<Array<Maybe<Order>>>;
   deletePost?: Maybe<Post>;
@@ -1024,6 +1027,7 @@ export type Mutation = {
   deleteTags?: Maybe<Array<Maybe<Tag>>>;
   deleteUser?: Maybe<User>;
   deleteUsers?: Maybe<Array<Maybe<User>>>;
+  deletenikan?: Maybe<Nikan>;
   endSession: Scalars['Boolean']['output'];
   updateCategories?: Maybe<Array<Maybe<Category>>>;
   updateCategory?: Maybe<Category>;
@@ -1041,6 +1045,7 @@ export type Mutation = {
   updateKeyValues?: Maybe<Array<Maybe<KeyValue>>>;
   updateMainMenu?: Maybe<MainMenu>;
   updateMainMenus?: Maybe<Array<Maybe<MainMenu>>>;
+  updateNikans?: Maybe<Array<Maybe<Nikan>>>;
   updateOrder?: Maybe<Order>;
   updateOrders?: Maybe<Array<Maybe<Order>>>;
   updatePost?: Maybe<Post>;
@@ -1053,6 +1058,7 @@ export type Mutation = {
   updateTags?: Maybe<Array<Maybe<Tag>>>;
   updateUser?: Maybe<User>;
   updateUsers?: Maybe<Array<Maybe<User>>>;
+  updatenikan?: Maybe<Nikan>;
 };
 
 
@@ -1147,6 +1153,11 @@ export type MutationCreateMainMenusArgs = {
 };
 
 
+export type MutationCreateNikansArgs = {
+  data: Array<NikanCreateInput>;
+};
+
+
 export type MutationCreateOrderArgs = {
   data: OrderCreateInput;
 };
@@ -1204,6 +1215,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateUsersArgs = {
   data: Array<UserCreateInput>;
+};
+
+
+export type MutationCreatenikanArgs = {
+  data: NikanCreateInput;
 };
 
 
@@ -1287,6 +1303,11 @@ export type MutationDeleteMainMenusArgs = {
 };
 
 
+export type MutationDeleteNikansArgs = {
+  where: Array<NikanWhereUniqueInput>;
+};
+
+
 export type MutationDeleteOrderArgs = {
   where: OrderWhereUniqueInput;
 };
@@ -1344,6 +1365,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationDeleteUsersArgs = {
   where: Array<UserWhereUniqueInput>;
+};
+
+
+export type MutationDeletenikanArgs = {
+  where: NikanWhereUniqueInput;
 };
 
 
@@ -1435,6 +1461,11 @@ export type MutationUpdateMainMenusArgs = {
 };
 
 
+export type MutationUpdateNikansArgs = {
+  data: Array<NikanUpdateArgs>;
+};
+
+
 export type MutationUpdateOrderArgs = {
   data: OrderUpdateInput;
   where: OrderWhereUniqueInput;
@@ -1498,6 +1529,12 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateUsersArgs = {
   data: Array<UserUpdateArgs>;
+};
+
+
+export type MutationUpdatenikanArgs = {
+  data: NikanUpdateInput;
+  where: NikanWhereUniqueInput;
 };
 
 export type NestedStringFilter = {
@@ -1864,6 +1901,9 @@ export type Query = {
   mainMenu?: Maybe<MainMenu>;
   mainMenus?: Maybe<Array<MainMenu>>;
   mainMenusCount?: Maybe<Scalars['Int']['output']>;
+  nikan?: Maybe<Nikan>;
+  nikans?: Maybe<Array<Nikan>>;
+  nikansCount?: Maybe<Scalars['Int']['output']>;
   order?: Maybe<Order>;
   orders?: Maybe<Array<Order>>;
   ordersCount?: Maybe<Scalars['Int']['output']>;
@@ -2034,6 +2074,25 @@ export type QueryMainMenusArgs = {
 
 export type QueryMainMenusCountArgs = {
   where?: MainMenuWhereInput;
+};
+
+
+export type QueryNikanArgs = {
+  where: NikanWhereUniqueInput;
+};
+
+
+export type QueryNikansArgs = {
+  cursor?: InputMaybe<NikanWhereUniqueInput>;
+  orderBy?: Array<NikanOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: NikanWhereInput;
+};
+
+
+export type QueryNikansCountArgs = {
+  where?: NikanWhereInput;
 };
 
 
@@ -2421,6 +2480,57 @@ export type UserWhereInput = {
 
 export type UserWhereUniqueInput = {
   email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type Nikan = {
+  __typename?: 'nikan';
+  gen?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  nameAndLastname?: Maybe<Scalars['String']['output']>;
+  paymentStatus?: Maybe<Scalars['Int']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+};
+
+export type NikanCreateInput = {
+  gen?: InputMaybe<Scalars['String']['input']>;
+  nameAndLastname?: InputMaybe<Scalars['String']['input']>;
+  paymentStatus?: InputMaybe<Scalars['Int']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type NikanOrderByInput = {
+  gen?: InputMaybe<OrderDirection>;
+  id?: InputMaybe<OrderDirection>;
+  nameAndLastname?: InputMaybe<OrderDirection>;
+  paymentStatus?: InputMaybe<OrderDirection>;
+  phone?: InputMaybe<OrderDirection>;
+};
+
+export type NikanUpdateArgs = {
+  data: NikanUpdateInput;
+  where: NikanWhereUniqueInput;
+};
+
+export type NikanUpdateInput = {
+  gen?: InputMaybe<Scalars['String']['input']>;
+  nameAndLastname?: InputMaybe<Scalars['String']['input']>;
+  paymentStatus?: InputMaybe<Scalars['Int']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type NikanWhereInput = {
+  AND?: InputMaybe<Array<NikanWhereInput>>;
+  NOT?: InputMaybe<Array<NikanWhereInput>>;
+  OR?: InputMaybe<Array<NikanWhereInput>>;
+  gen?: InputMaybe<StringFilter>;
+  id?: InputMaybe<IdFilter>;
+  nameAndLastname?: InputMaybe<StringFilter>;
+  paymentStatus?: InputMaybe<IntNullableFilter>;
+  phone?: InputMaybe<StringFilter>;
+};
+
+export type NikanWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 

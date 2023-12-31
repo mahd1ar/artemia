@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { graphql } from '~/gql'
 
-const localePath = useLocalePath()
-
 const CATEGORY = graphql(`
 query CategoryByID($id: ID!,$isEn: Boolean!) {
   category(where: {
@@ -88,7 +86,7 @@ const { result, loading } = useQuery(CATEGORY, {
                 >
               </div>
 
-              <NuxtLink :to="localePath(`/post/${post.id}`)" class="flex flex-1 flex-col justify-between bg-white p-6">
+              <NuxtLinkLocale :to="`/post/${post.id}`" class="flex flex-1 flex-col justify-between bg-white p-6">
                 <div class="flex-1">
                   <p class="text-sm font-medium text-indigo-600">
                     <span class="hover:underline">
@@ -124,7 +122,7 @@ const { result, loading } = useQuery(CATEGORY, {
                     </div>
                   </div>
                 </div>
-              </NuxtLink>
+              </NuxtLinkLocale>
             </div>
           </div>
         </div>

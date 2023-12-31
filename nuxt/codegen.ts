@@ -2,7 +2,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   schema: 'http://localhost:3032/api/graphql',
-  documents: ['./**/*.vue', 'app.vue'],
+  documents: ['./**/*.vue', 'app.vue', './middleware/*.ts'],
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {
     './gql/': {

@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-// import { useRouteQuery } from '@vueuse/router'
 import { graphql } from '~/gql'
 const { locale } = useI18n()
-const localePath = useLocalePath()
+
 const QUERY = graphql(`
 query Blogs($isEn: Boolean!) {
   categories (where: {
@@ -69,8 +68,8 @@ const posts = computed(() => {
       v-if="posts.length > 0"
       class="container max-w-6xl p-6 mx-auto space-y-6 sm:space-y-12"
     >
-      <nuxt-link
-        :to="localePath(`/post/${posts[0].id }`)"
+      <NuxtLinkLocale
+        :to="`/post/${posts[0].id }`"
         rel="noopener noreferrer"
         class="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-gray-50  shadow-xl shadow-slate-300/50 rounded"
       >
@@ -88,7 +87,7 @@ const posts = computed(() => {
           <span class="text-xs text-gray-50">February 19, 2021</span>
           <p>{{ posts[0].excerpt }}</p>
         </div>
-      </nuxt-link>
+      </NuxtLinkLocale>
       <div
         class="grid justify-center grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
@@ -96,11 +95,11 @@ const posts = computed(() => {
 
           v-for="(blog, index) in posts || []"
         >
-          <nuxt-link
+          <NuxtLinkLocale
             v-if="index"
             :key="blog.id"
             rel="noopener noreferrer"
-            :to="localePath(`/post/${blog.id}`)"
+            :to="`/post/${blog.id}`"
             class="max-w-sm mx-auto group hover:no-underline focus:no-underline bg-gray-50 border "
           >
             <img
@@ -124,7 +123,7 @@ const posts = computed(() => {
                 {{ blog.excerpt }}
               </p>
             </div>
-          </nuxt-link>
+          </NuxtLinkLocale>
         </template>
       </div>
       <div v-show="false" class="flex justify-center">

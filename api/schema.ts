@@ -89,6 +89,9 @@ export const lists: Lists = {
 
   nikan: list({
     access: allowAll,
+    ui: {
+      isHidden: true,
+    },
     hooks: {
       afterOperation(args) {
         if (args.operation === 'create') {

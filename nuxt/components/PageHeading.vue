@@ -9,7 +9,6 @@ const props = defineProps({
 })
 
 const { locale, setLocale } = useI18n()
-const localePath = useLocalePath()
 
 const appState = useAppState()
 
@@ -107,9 +106,9 @@ useIntervalFn(() => {
         <div class="hidden lg:block">
           <ul class="flex-center gap-10 capitalize">
             <li v-for="(mi,index) in appState.menuItems" :key="index">
-              <NuxtLink v-show="localePath(mi.link) !== $route.path" :to="localePath(mi.link)">
+              <NuxtLinkLocale v-show="mi.link !== $route.path" :to="mi.link">
                 {{ locale === 'en' ? mi.en : mi.fa }}
-              </NuxtLink>
+              </NuxtLinkLocale>
             </li>
           </ul>
         </div>
@@ -141,8 +140,8 @@ useIntervalFn(() => {
           </button>
         </div>
       </div>
-      <div class="h-full flex-center justify-between w-full">
-        <div class="w-1/3">
+      <div class=" px-6 sm:px-0 h-full flex flex-col-reverse sm:flex-row items-center justify-around sm:justify-between w-full">
+        <div class="w-full sm:w-1/3">
           <ol class="flex items-start gap-5 flex-col capitalize">
             <li v-for="i in sections" :key="i.href" class="pb-1 pr-2 border-primary border-b-2">
               <a :href="i.href">
@@ -151,7 +150,7 @@ useIntervalFn(() => {
             </li>
           </ol>
         </div>
-        <div class="text-right w-2/3 flex flex-col justify-start">
+        <div class="w-full text-right sm:w-2/3 flex flex-col justify-start">
           <h1 class="text-5xl font-bold">
             {{ title }}
           </h1>

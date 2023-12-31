@@ -4,8 +4,6 @@ import { useAppState } from '@/stores/appState'
 const appStore = useAppState()
 const { locale, t } = useI18n()
 
-const localePath = useLocalePath()
-
 const dialog = ref<HTMLDialogElement|null>(null)
 
 watch(() => appStore.isMenuOpen, (isMenuOpen) => {
@@ -58,9 +56,9 @@ function closePanle () {
         </strong>
         <ul class="w-full text-gray-500 flex flex-col  ">
           <li v-for="i in appStore.menuItems" :key="i.link" class="flex items-center gap-3 w-full hover:text-black">
-            <NuxtLink :to="localePath(i.link)" class="w-full capitalize py-2" @click="closePanle">
+            <NuxtLinkLocale :to="i.link" class="w-full capitalize py-2" @click="closePanle">
               {{ locale === 'en' ? i.en : i.fa }}
-            </NuxtLink>
+            </NuxtLinkLocale>
           </li>
         </ul>
         <strong class="text-lg py-4 inline-block mt-5 uppercase tracking-widest">

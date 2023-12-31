@@ -5,7 +5,7 @@ const appState = useAppState()
 const { locale, localeCodes, setLocale, t } = useI18n()
 
 const translatePanel = ref(false)
-const localePath = useLocalePath()
+
 function changeLocale (newLocale : string) {
   translatePanel.value = false
   setLocale(newLocale)
@@ -130,27 +130,27 @@ const mobilePanel = ref(false)
                 <div class="hidden ltr:md:ml-6 rtl:md:mr-6 md:flex md:gap-8 desktop">
                   <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
 
-                  <NuxtLink
+                  <NuxtLinkLocale
                     v-for="(i , index) in appState.menuItems"
                     :key="index"
-                    :to="localePath(i.link.replace(config.public.frontendUrl, ''))"
+                    :to="i.link.replace(config.public.frontendUrl, '')"
                     class="inline-flex capitalize items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     {{
                       locale === 'fa' ? i.fa : i.en }}
-                  </NuxtLink>
+                  </NuxtLinkLocale>
                 </div>
               </div>
 
               <div class="flex items-center md:gap-4">
                 <div class="flex-shrink-0">
-                  <NuxtLink :to="localePath('/placeanorder')" class="relative gap-2 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700 ">
+                  <NuxtLinkLocale to="/placeanorder" class="relative gap-2 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700 ">
                     <!-- Heroicon name: mini/plus -->
                     <svg class=" h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                       <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                     </svg>
                     <span>{{ t('PlaceAnOrder') }}</span>
-                  </NuxtLink>
+                  </NuxtLinkLocale>
                 </div>
                 <div class="hidden  md:flex md:flex-shrink-0 md:items-center">
                   <button type="button" class="rounded-full  relative bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="translatePanel = !translatePanel">
@@ -222,11 +222,11 @@ const mobilePanel = ref(false)
             <div class="space-y-1 pt-2 pb-3">
               <!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
 
-              <NuxtLink v-for="(i , index) in appState.menuItems" :key="index" :to="localePath(i.link)" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6">
+              <NuxtLinkLocale v-for="(i , index) in appState.menuItems" :key="index" :to="i.link" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6">
                 {{
                   locale === 'fa' ? i.fa : i.en
                 }}
-              </NuxtLink>
+              </NuxtLinkLocale>
             </div>
             <div v-if="false" class="border-t border-gray-200 pt-4 pb-3">
               <div class="flex items-center px-4 sm:px-6">

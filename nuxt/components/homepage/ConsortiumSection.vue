@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useIntervalFn } from '@vueuse/core'
-import { PropType } from 'nuxt/dist/app/compat/capi'
 
 const { t } = useI18n()
 
@@ -117,7 +116,7 @@ useIntervalFn(() => {
           <div
             class="flex flex-col items-center justify-center relative"
           >
-            <div class="absolute w-52 opacity-50 top-0">
+            <div class="absolute w-52 opacity-25 top-0">
               <img class="" :src="signatureImage" alt="">
             </div>
             <h2 class="font-bold text-xl uppercase">

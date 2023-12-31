@@ -26,10 +26,10 @@ const lang = computed(() => {
         <span
           class="inline-block text-center p-2 font-bold text-2xl border-2 px-4 border-black"
         >
-          <NuxtLink to="/">
+          <NuxtLinkLocale to="/">
 
             GOVAR KAVIR
-          </NuxtLink>
+          </NuxtLinkLocale>
         </span>
 
         <p class="text-center py-4">
@@ -80,12 +80,12 @@ const lang = computed(() => {
           </h6>
           <ul class="text-gray-300 list-inside mt-4">
             <li v-for="(i,index) in appState.menuItems" :key="index" class="mt-1.5">
-              <NuxtLink :to="i.link" class="flex items-center gap-4">
+              <NuxtLinkLocale :to="i.link" class="flex items-center gap-4">
                 <i class="w-3 h-0.5  bg-primary relative inline-block rounded " />
                 <span class="text-gray-400 capitalize text-[13px]">
                   {{ i[lang] }}
                 </span>
-              </NuxtLink>
+              </NuxtLinkLocale>
             </li>
           </ul>
         </div>

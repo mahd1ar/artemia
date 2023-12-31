@@ -1,48 +1,43 @@
 <script lang="ts" setup>
+import { Splide, SplideSlide } from '@splidejs/vue-splide'
+import { AutoScroll } from '@splidejs/splide-extension-auto-scroll'
 
 defineProps({
   items: { type: Array as PropType<{src: string | null | undefined, alt: string | null | undefined }[]>, default: () => [] }
 })
 
+const device = useDevice()
+
 </script>
 
 <template>
-  <div class="overflow-hidden">
-    <div
-      :style="{
-        '--animation-duration' : 14
+  <div dir="ltr">
+    <Splide
+
+      :auto-scroll="{ speed: 1}"
+      :options="{
+        type : 'loop',
+        drag : 'free',
+        focus : 'center',
+        arrows: false,
+        perPage: device.isMobile?3: 6,
+        gap: '30px',
+        pagination: false
       }"
-      class="flex flex-nowrap marquee "
+      :extensions="{AutoScroll}"
+      aria-label="My Favorite Images"
     >
-      <div v-for="j in 2" :key="j" class=" inline-flex flex-nowrap justify-between w-full items-center">
-        <div
-          v-for="(i, index) in items.filter(Boolean) || []"
-          :key="index"
-          class="grayscale-0 opacity-30 hover:opacity-60 transition-all mx-5 w-28 md:w-28 lg:w-32 duration-500 "
+      <SplideSlide
+        v-for="(i, inx) in items"
+        :key="inx"
+        class="rounded-xl flex-center grayscale-0 opacity-30 hover:opacity-60  md:scale-90"
+      >
+        <img
+          class="w-full"
+          :src="i.src || ''"
+          :alt="i.alt || ''"
         >
-          <img class="object-contain w-full" :src="i.src || ''" :alt="i.alt || ''">
-        </div>
-      </div>
-    </div>
+      </SplideSlide>
+    </Splide>
   </div>
 </template>
-
-<style scoped>
-
-.marquee{
-  width: fit-content;
-  min-width: 100vw;
-  animation: marquee-anime 5000ms linear 0s infinite forwards;
-  animation-duration: calc(var( --animation-duration , 4) * 1000ms ) ;
-}
-
-@keyframes marquee-anime {
-  0%{
-    transform: translateX(0%);
-  }
-  100%{
-    transform: translateX(-50%);
-  }
-}
-
-</style>

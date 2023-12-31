@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from 'vue'
 import { vElementHover } from '@vueuse/components'
-import { PropType } from 'nuxt/dist/app/compat/capi'
 
 defineProps({
   list: Array as PropType<{
@@ -55,7 +53,7 @@ const defaultImage = 'https://images.unsplash.com/photo-1683009427666-340595e57e
           <div
             class="transition-all w-full  absolute top-0 flex-center text-2xl tracking-widest font-bold text-white overflow-hidden h-44"
           >
-      <AnimeInText :delay="index * 400" :duration="1000" :text="i.title" />
+            <AnimeInText :delay="index * 400" :duration="1000" :text="i.title" />
             <!-- SHALLOW DIVE -->
           </div>
         </div>

@@ -7,7 +7,6 @@ import {
   ListboxOption
 } from '@headlessui/vue'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
-import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 
 const props = defineProps({
