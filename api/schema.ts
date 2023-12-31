@@ -34,7 +34,7 @@ import {
 } from "./schemas";
 import { Roles, Session, enumToArrayOfKeyValue } from "./data/types";
 import { isAdmin } from "./data/access";
-
+import axios from 'axios'
 export const lists: Lists = {
   // @ts-ignore
   FrontPage,
@@ -86,4 +86,58 @@ export const lists: Lists = {
       posts: relationship({ ref: "PostTranslation.tags", many: true }),
     },
   }),
+
+  nikan: list({
+    access: allowAll,
+    hooks: {
+      afterOperation(args) {
+        if (args.operation === 'create') {
+          const name = args.inputData.nameAndLastname
+          const phone = args.inputData.phone
+
+          const endpoint = `http://ippanel.com:8080`;
+
+          axios.get(endpoint, {
+            params: {
+              apikey: "Ex1gjOBmIPZKgg1MMUz4hqSDHVLuHcCVg-L3IoXbx3U=",
+              pid: "tyto2qr9ydmp97a",
+              fnum: '3000505',
+              tnum: phone,
+              p1: "name",
+              v1: name
+            }
+          })
+            .then(item => {
+              console.log(item)
+            })
+            .catch(err => {
+              console.error(err)
+            })
+        }
+      },
+    },
+    fields: {
+      nameAndLastname: text({ validation: { isRequired: true } }),
+      phone: text({ validation: { isRequired: true } }),
+      gen: text(),
+      paymentStatus: select({
+        options: [
+          {
+            label: 'maybe later',
+            value: -1
+          },
+          {
+            label: 'undefined',
+            value: 0
+          },
+          {
+            label: 'payed',
+            value: 1
+          }
+        ],
+        type: 'integer',
+        defaultValue: 0
+      })
+    },
+  })
 };
