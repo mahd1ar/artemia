@@ -3,6 +3,7 @@ import { allowAll } from "@keystone-6/core/access";
 import { select, text, relationship, timestamp, virtual } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { graphql } from '@graphql-ts/schema';
+import {componentBlocks } from '../document-field-customisation'
 
 export const PostTranslation = list({
     access: allowAll,
@@ -39,16 +40,23 @@ export const PostTranslation = list({
             ],
             links: true,
             dividers: true,
+            ui: {
+                views: './document-field-customisation',
+              },
+              componentBlocks ,
         }),
         excerpt: virtual({
             field: graphql.field({
                 type: graphql.String,
                 async resolve(item, args, context) {
+                    
                     const { content } = item as unknown as { content: string }
 
                     let excerpt = '';
 
                     function loop(data: any) {
+                 
+                        if(data)
                         Object.keys(data).forEach((i) => {
                             if (i === 'text') excerpt += ' ' + data[i];
 

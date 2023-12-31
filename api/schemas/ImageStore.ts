@@ -1,6 +1,6 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { text, timestamp, image } from "@keystone-6/core/fields";
+import { text, timestamp, image, virtual } from "@keystone-6/core/fields";
 
 export const ImageStore = list({
   access: allowAll,
@@ -29,6 +29,16 @@ export const ImageStore = list({
     },
   },
   fields: {
+    url: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item, args, context) {
+          const { image_extension, image_id } = item as unknown as { image_extension: string; image_id: string };
+
+          return `${process.env.FRONTENDURL}/image/${image_id}.${image_extension}`
+        },
+      }),
+    }),
     image: image({
       storage: "image",
     }),

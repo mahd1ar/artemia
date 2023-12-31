@@ -68,6 +68,9 @@ function renderListItem (obj: BaseObject) {
     .map(i => `<li > ${renderTextBlock(i as TextObject)} </li>`)
     .join('')
 }
+function renderImage (src: string) {
+  return `<img src="${src}" />`
+}
 
 function renderDivider () {
   return '<hr />'
@@ -143,6 +146,9 @@ function renderBlock (blocks: BaseObject | BaseObject[]) {
 
       case 'divider':
         renderd += renderDivider()
+        break
+      case 'component-block':
+        if (blocks.component === 'hero') { renderd += renderImage(blocks.props.imageSrc) }
         break
 
       case 'layout-area':
@@ -230,6 +236,10 @@ const renderdContent = renderBlock(content)
 
   blockquote {
     @apply my-2 border-r-4 border-gray-500 bg-gray-200 py-6 px-2 font-bold text-gray-700;
+  }
+
+  img {
+    @apply max-h-80 object-cover;
   }
 
   [data-slate-layout] {
