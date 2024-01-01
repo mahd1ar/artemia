@@ -20,12 +20,14 @@ query PostFull($where: PostWhereUniqueInput!, $isEn: Boolean!) {
       content {
         document
       }
+      excerpt
     }
     fa @skip(if: $isEn) {
       title
       content {
         document
       }
+      excerpt
     }
   }
 }
@@ -33,6 +35,41 @@ query PostFull($where: PostWhereUniqueInput!, $isEn: Boolean!) {
 
 const lang = computed(() => i18n.locale.value === 'en' ? 'en' : 'fa')
 const { result, loading } = useQuery(Post, { where: { id: route.params.id as string }, isEn: lang.value === 'en' })
+
+const seo = computed(() => {
+  const title = `${result.value?.post?.[lang.value]?.title || ''} | ${i18n.t('sitename')}`
+  const description = `${result.value?.post?.[lang.value]?.excerpt || ''} | ${i18n.t('sitename')}`
+
+  return {
+    title, description
+  }
+})
+
+useSeoMeta({
+  title: () => seo.value.title,
+  description: () => seo.value.description,
+  ogTitle: () => seo.value.title,
+  ogDescription: () => seo.value.description,
+  ogImage: () => result.value?.post?.featuredImage?.image?.url,
+  // ogUrl: '[og:url]',
+  twitterTitle: seo.value.title,
+  twitterDescription: seo.value.description,
+  twitterImage: () => result.value?.post?.featuredImage?.image?.url,
+  twitterCard: 'summary'
+})
+
+useHead({
+  htmlAttrs: {
+    lang: lang.value
+  }
+  // link: [
+  //   {
+  //     rel: 'icon',
+  //     type: 'image/png',
+  //     href: '/favicon.png'
+  //   }
+  // ]
+})
 
 </script>
 <template>

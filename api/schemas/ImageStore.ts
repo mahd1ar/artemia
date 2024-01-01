@@ -35,7 +35,7 @@ export const ImageStore = list({
         async resolve(item, args, context) {
           const { image_extension, image_id } = item as unknown as { image_extension: string; image_id: string };
 
-          return `${process.env.FRONTENDURL}/image/${image_id}.${image_extension}`
+          return `${process.env.PUBLICURL}/image/${image_id}.${image_extension}`
         },
       }),
     }),
