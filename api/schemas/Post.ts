@@ -102,7 +102,10 @@ export const Post = list({
         cardFields: ["altText", "image"],
         inlineCreate: { fields: ["altText", "image"] },
         inlineEdit: { fields: ["altText", "image"] },
-        inlineConnect: true,
+        inlineConnect: {
+          labelField: 'altText',
+          searchFields: ['altText']
+        },
       },
     }),
     type: select({

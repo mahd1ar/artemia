@@ -193,7 +193,7 @@ query HomePage( $isEn: Boolean!) {
       content
     }
     blog {
-      posts {
+      posts(orderBy: {createdAt: desc}) {
         id
         featuredImage {
           id
