@@ -11,11 +11,6 @@ export const User = list({
     )
 
   },
-  ui: {
-    isHidden() {
-      return process.env.NODE_ENV === "production";
-    },
-  },
   fields: {
     name: text({ validation: { isRequired: true } }),
     email: text({

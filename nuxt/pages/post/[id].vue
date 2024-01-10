@@ -115,7 +115,7 @@ useHead({
         </div>
         <img
           :src="result?.post?.featuredImage?.image?.url"
-          alt=""
+          :alt="result?.post?.featuredImage?.altText || ''"
           class="h-64 object-cover w-full"
         >
         <div class="text-gray-800">
