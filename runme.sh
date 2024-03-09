@@ -13,7 +13,7 @@ cd ~/public_html/artemia || exit
 
 unset GIT_DIR
 
-git pull origin master
+git pull origin hub
 
 echo "build frontend"
 
@@ -34,3 +34,11 @@ yarn
 yarn build
 
 pm2 start "yarn start" --name artemia-api
+
+cd ../saba
+
+yarn
+
+yarn build
+
+pm2 start "yarn start" --name saba
