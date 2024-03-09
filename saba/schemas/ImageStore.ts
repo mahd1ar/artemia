@@ -4,7 +4,9 @@ import { text, timestamp, image, virtual } from "@keystone-6/core/fields";
 
 export const ImageStore = list({
   access: allowAll,
+
   ui: {
+    isHidden: true,
     listView: {
       initialSort: {
         field: "createdAt",

@@ -13,9 +13,7 @@ export type Session = {
 export enum Roles {
     admin = "admin",
     operator = "operator",
-    custommer = "custommer",
-    debugger = "debugger",
-    sale = "sale",
+    supervisor = "supervisor",
 }
 
 export function enumToArrayOfKeyValue(enumObject: Record<string, string>) {

@@ -4,6 +4,9 @@ import { text, timestamp, file } from "@keystone-6/core/fields";
 
 export const FileStore = list({
   access: allowAll,
+  ui: {
+    isHidden: true,
+  },
   hooks: {
     resolveInput(args) {
       if (args.inputData.title !== undefined || args?.item?.title !== undefined)
@@ -22,6 +25,12 @@ export const FileStore = list({
     file: file({
       storage: "file",
     }),
-    createdAt: timestamp({ defaultValue: { kind: "now" } }),
+    createdAt: timestamp({
+      defaultValue: { kind: "now" },
+      ui: {
+        createView: { fieldMode: "hidden" },
+
+      }
+    }),
   },
 });

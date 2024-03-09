@@ -13,6 +13,7 @@ import { graphql } from "@graphql-ts/schema";
 export const Category = list({
   access: allowAll,
   ui: {
+    label: 'شرح مصوبه',
     listView: {
       initialColumns: ["slug", "url"],
     },
@@ -43,42 +44,8 @@ export const Category = list({
         labelField: "altText",
       },
     }),
-    en: relationship({
-      label: "title in english",
-      ref: "Resource",
-      ui: {
-        description: "title in english",
-        displayMode: "cards",
-        cardFields: ["title", "content"],
-        inlineCreate: { fields: ["title", "content"] },
-        inlineConnect: {
-          labelField: "title",
-          searchFields: ["title", "content"],
-        },
-      },
-    }),
-    fa: relationship({
-      label: "تیتر فارسی",
-      ref: "Resource",
-      ui: {
-        description: "تیتر فارسی",
-        displayMode: "cards",
-        cardFields: ["title", "content"],
-        inlineCreate: { fields: ["title", "content"] },
-        inlineEdit: { fields: ["title", "content"] },
-        inlineConnect: {
-          labelField: "title",
-          searchFields: ["title", "content"],
-        },
-      },
-    }),
 
     noUI: checkbox({ defaultValue: false }),
-
-    posts: relationship({
-      ref: "Post.category",
-      many: true,
-    }),
 
     createdAt: timestamp({
       defaultValue: { kind: "now" },

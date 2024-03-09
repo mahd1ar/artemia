@@ -20,16 +20,14 @@ import {
 
 import type { Lists } from ".keystone/types";
 import {
-  PostTranslation,
-  Post,
   ImageStore,
-  Resource,
-  MainMenu,
+  Description,
+  Approval,
   Payment,
   Category,
-  Customer,
-  Order,
-  FileStore, User
+  Constractor,
+  FileStore, User,
+  Statement, StatementItem, Contract
 } from "./schemas";
 import { Roles, Session, enumToArrayOfKeyValue } from "./data/types";
 import { isAdmin } from "./data/access";
@@ -37,38 +35,21 @@ import axios from 'axios'
 export const lists: Lists = {
 
   // @ts-ignore
-  payment,
-  KeyValue: list({
-    access: allowAll,
-    ui: {
-      isHidden: process.env.NODE_ENV === "production",
-    },
-    fields: {
-      key: text({ label: 'custom field name', validation: { isRequired: true } }),
-      value: text({ validation: { isRequired: true } }),
-      createdAt: timestamp({
-        defaultValue: { kind: "now" },
-      })
-    }
-  }),
+  Approval,
   // @ts-ignore
-  Post,
+  Description,
   // @ts-ignore
-  PostTranslation,
+  Statement, StatementItem, Payment,
   // @ts-ignore
   ImageStore,
   // @ts-ignore
-  Resource,
-  // @ts-ignore
-  MainMenu,
-  // @ts-ignore
   Category,
   // @ts-ignore
-  Customer,
-  // @ts-ignore
-  Order,
+  Constractor,
   // @ts-ignore
   FileStore,
+  // @ts-ignore
+  Contract,
 
   // @ts-ignore
   User,
@@ -80,64 +61,7 @@ export const lists: Lists = {
     },
     fields: {
       name: text(),
-      posts: relationship({ ref: "PostTranslation.tags", many: true }),
     },
   }),
 
-  nikan: list({
-    access: allowAll,
-    ui: {
-      isHidden: true,
-    },
-    hooks: {
-      afterOperation(args) {
-        if (args.operation === 'create') {
-          const name = args.inputData.nameAndLastname
-          const phone = args.inputData.phone
-
-          const endpoint = `http://ippanel.com:8080`;
-
-          axios.get(endpoint, {
-            params: {
-              apikey: "Ex1gjOBmIPZKgg1MMUz4hqSDHVLuHcCVg-L3IoXbx3U=",
-              pid: "tyto2qr9ydmp97a",
-              fnum: '3000505',
-              tnum: phone,
-              p1: "name",
-              v1: name
-            }
-          })
-            .then(item => {
-              console.log(item)
-            })
-            .catch(err => {
-              console.error(err)
-            })
-        }
-      },
-    },
-    fields: {
-      nameAndLastname: text({ validation: { isRequired: true } }),
-      phone: text({ validation: { isRequired: true } }),
-      gen: text(),
-      paymentStatus: select({
-        options: [
-          {
-            label: 'maybe later',
-            value: -1
-          },
-          {
-            label: 'undefined',
-            value: 0
-          },
-          {
-            label: 'payed',
-            value: 1
-          }
-        ],
-        type: 'integer',
-        defaultValue: 0
-      })
-    },
-  })
 };
