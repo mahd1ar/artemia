@@ -2,66 +2,30 @@ import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
 
-export const Customer = list({
+export const Constractor = list({
   access: allowAll,
+  ui: {
+    label: 'پیمانکار',
+  },
   fields: {
     name: text({
       ui: {
         itemView: {
-          fieldMode: "read",
         },
       },
     }),
-    tel: text({
+    type: select({
+      options: ['individual', 'company'],
+      defaultValue: 'individual',
       ui: {
-        itemView: {
-          fieldMode: "read",
-        },
+        displayMode: 'segmented-control',
       },
+      type: 'string',
     }),
-    postalCode: text({
-      ui: {
-        itemView: {
-          fieldMode: "read",
-        },
-      },
-    }),
-    address: text({
-      ui: {
-        itemView: {
-          fieldMode: "read",
-        },
-      },
-    }),
-    city: text({
-      ui: {
-        itemView: {
-          fieldMode: "read",
-        },
-      },
-    }),
-    code: text({
-      ui: {
-        itemView: {
-          fieldMode: "read",
-        },
-      },
-    }),
-    orders: relationship({
-      ref: "Order.customer",
+    contracts: relationship({
+      ref: 'Contract.contractor.',
       many: true,
-
-      // ui: {
-      //   displayMode: "cards",
-      //   cardFields: ["orderContent", "orderType"],
-
-      // itemView: {
-      //   fieldMode: "read",
-      // },
-      // },
-    }),
-    createdAt: timestamp({
-      defaultValue: { kind: "now" },
+      ui: { createView: { fieldMode: 'hidden' } }
     }),
   },
 });

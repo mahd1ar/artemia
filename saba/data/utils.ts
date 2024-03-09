@@ -15,3 +15,18 @@ export async function SendMessageToTelegram(
     return [null, error];
   }
 }
+
+export namespace NumUtils {
+  export function format(number: number | BigInt) {
+    if (typeof number === 'number') {
+      return Intl.NumberFormat('en-US').format(number);
+    } else
+      if (typeof number === 'bigint') {
+        return Intl.NumberFormat('en-US').format(number);
+      }
+  }
+
+  export function deformat(number: string) {
+    return BigInt(number.replace(/,/g, ''));
+  }
+}
