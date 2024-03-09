@@ -6,6 +6,7 @@ echo "kill current process"
 
 pm2 delete artemia-api || echo "no keyston process"
 pm2 delete artemia-frontend || echo "no keyston process"
+pm2 delete saba || echo "no keyston process"
 
 sleep 2
 
@@ -13,7 +14,7 @@ cd ~/public_html/artemia || exit
 
 unset GIT_DIR
 
-git pull origin hub
+git pull hub master
 
 echo "build frontend"
 
