@@ -25,6 +25,15 @@ export const Statement = list({
       ui: {
         itemView: {
           fieldMode: 'hidden'
+        },
+        createView: {
+          fieldMode(args) {
+            // TODO abstract this to function
+            const reff = new URL((args.context.res?.req.headers.referer as string))
+            const referer = (reff.pathname.split('/').filter(Boolean).at(0))
+
+            return referer === 'descriptions' ? 'hidden' : 'edit'
+          },
         }
       }
     }),
