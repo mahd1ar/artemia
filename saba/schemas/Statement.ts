@@ -20,18 +20,23 @@ export const Statement = list({
   fields: {
     title: text(),
     description: relationship({
+      label: ' شرح مصوبه متناظر',
       ref: 'Description.statements',
       many: false,
       ui: {
         itemView: {
-          fieldMode: 'hidden'
+          // TOD if user role is operator
+          fieldMode: 'edit',
+          fieldPosition(args) {
+            return 'sidebar'
+          },
         },
         createView: {
           fieldMode(args) {
             // TODO abstract this to function
             const reff = new URL((args.context.res?.req.headers.referer as string))
             const referer = (reff.pathname.split('/').filter(Boolean).at(0))
-
+            console.log(reff.pathname.split('/'))
             return referer === 'descriptions' ? 'hidden' : 'edit'
           },
         }
@@ -196,7 +201,6 @@ export const Statement = list({
       },
       hooks: {
         resolveInput(args) {
-          console.log(args.resolvedData)
           const session = args.context.session as Session
           args.resolvedData.createdBy = { connect: { id: session?.itemId } }
 
