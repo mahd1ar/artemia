@@ -3,8 +3,9 @@ import { allowAll } from "@keystone-6/core/access";
 import { file, image, integer, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
 import { document } from "@keystone-6/fields-document";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
-import { NumUtils } from "../data/utils";
+import { NumUtils, setPermitions } from "../data/utils";
 import { Roles, Session } from "../data/types";
+
 export const Statement = list({
   access: allowAll,
   ui: {
@@ -33,10 +34,10 @@ export const Statement = list({
         },
         createView: {
           fieldMode(args) {
+
             // TODO abstract this to function
             const reff = new URL((args.context.res?.req.headers.referer as string))
             const referer = (reff.pathname.split('/').filter(Boolean).at(0))
-            console.log(reff.pathname.split('/'))
             return referer === 'descriptions' ? 'hidden' : 'edit'
           },
         }
@@ -49,8 +50,12 @@ export const Statement = list({
         itemView: {
           fieldPosition: 'sidebar',
           fieldMode(args) {
-            // TODO fix DRY here
-            return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
+
+
+            return setPermitions(args, [
+              { role: Roles.supervisor, fieldMode: 'read' },
+            ], 'edit')
+
           },
         }
       }
@@ -61,7 +66,6 @@ export const Statement = list({
       ui: {
         itemView: {
           fieldMode(args) {
-
             return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
           },
         },

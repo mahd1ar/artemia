@@ -1,6 +1,7 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import {
+  bigInt,
   integer,
   relationship,
   select,
@@ -8,19 +9,22 @@ import {
   timestamp,
 } from "@keystone-6/core/fields";
 import { Roles, Session } from "../data/types";
+import { editIfAdmin, setPermitions } from "../data/utils";
 
 export const Approval = list({
   access: allowAll,
   ui: {
     label: 'مصوبات',
     listView: {
-      initialColumns: ['title'],
+      initialColumns: ["code", 'title', 'estimatedBudget'],
     }
   },
   fields: {
+    code: text(),
     title: text({
       label: 'عنوان',
     }),
+    estimatedBudget: bigInt({}),
     description: relationship({
       ref: 'Description.approvals',
       many: true,
@@ -31,8 +35,7 @@ export const Approval = list({
         },
         itemView: {
           fieldMode(args) {
-
-            return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
+            return setPermitions(args, [{ role: Roles.operator, fieldMode: 'read' }], 'read')
           },
 
         }
@@ -44,7 +47,7 @@ export const Approval = list({
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldMode: 'read',
+          fieldMode(args) { return editIfAdmin(args) },
           fieldPosition: 'sidebar'
         }
       }
@@ -55,7 +58,7 @@ export const Approval = list({
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldMode: 'read',
+          fieldMode(args) { return editIfAdmin(args) },
           fieldPosition: 'sidebar'
         }
       },
