@@ -66,7 +66,9 @@ export const Statement = list({
       ui: {
         itemView: {
           fieldMode(args) {
-            return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
+            return setPermitions(args, [
+              { role: Roles.supervisor, fieldMode: 'read' },
+            ], 'edit')
           },
         },
         displayMode: 'cards',
@@ -94,8 +96,9 @@ export const Statement = list({
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
-            // TODO fix DRY here
-            return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
+            return setPermitions(args, [
+              { role: Roles.supervisor, fieldMode: 'read' },
+            ], 'edit')
           },
         }
       }
@@ -147,8 +150,9 @@ export const Statement = list({
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
-            // TODO fix DRY here
-            return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
+            return setPermitions(args, [
+              { role: Roles.supervisor, fieldMode: 'read' },
+            ], 'edit')
           },
         }
       }
