@@ -16,7 +16,7 @@ const { withAuth } = createAuth({
   sessionData: 'name createdAt role',
   secretField: 'password',
   initFirstItem: {
-    fields: ['name', 'email', 'password'],
+    fields: ['name', 'email', 'password', 'role'],
 
   },
 });
