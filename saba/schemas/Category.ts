@@ -1,59 +1,33 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import {
-  checkbox,
-  image,
-  relationship,
-  text,
-  timestamp,
-  virtual,
-} from "@keystone-6/core/fields";
-import { graphql } from "@graphql-ts/schema";
+import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
 
 export const Category = list({
-  access: allowAll,
-  ui: {
-    label: 'شرح مصوبه',
-    listView: {
-      initialColumns: ["slug", "url"],
+    access: {
+        operation: allowAll
     },
-  },
-  fields: {
-    slug: text({
-      validation: {
-        isRequired: true,
-      },
-    }),
-    url: virtual({
-      field: graphql.field({
-        type: graphql.String,
-        async resolve(item, args, context) {
-          const { id, noUI } = item as unknown as { id: string; noUI: boolean };
-          return noUI
-            ? "cannot show into UI"
-            : `${process.env.FRONTENDURL}/category/${id}`;
-        },
-      }),
-    }),
-    image: relationship({
-      ref: "ImageStore",
-      ui: {
-        itemView: {
-          fieldMode: "hidden",
-        },
-        labelField: "altText",
-      },
-    }),
-
-    noUI: checkbox({ defaultValue: false }),
-
-    createdAt: timestamp({
-      defaultValue: { kind: "now" },
-      ui: {
-        itemView: {
-          fieldMode: "hidden",
-        },
-      },
-    }),
-  },
-});
+    fields: {
+        title: text({
+            validation: { isRequired: true },
+            label: 'عنوان'
+        }),
+        description: text({ ui: { displayMode: 'textarea' } }),
+        children: relationship({
+            ui: {
+                createView: {
+                    fieldMode: 'hidden'
+                }
+            },
+            ref: 'Category.parent',
+            many: true
+        }),
+        parent: relationship({
+            ui: {
+                createView: {
+                    fieldMode: 'hidden'
+                }
+            },
+            ref: 'Category.children'
+        })
+    },
+})

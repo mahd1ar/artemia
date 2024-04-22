@@ -2,10 +2,12 @@ export { ImageStore } from "./ImageStore";
 export { Description } from "./Description";
 export { Approval } from "./Approval";
 export { Payment } from "./Payment";
-export { Category } from "./Category";
+export { DescriptionOfApproval } from "./DescriptionOfApproval";
 export { Constractor } from "./Customer";
 export { FileStore } from './FileStore';
 export { User } from './User';
 export { Statement } from './Statement';
 export { StatementItem } from './StatementItem';
 export { Contract } from './Contract';
+export { Design } from "./Design"
+export { Category } from "./Category"

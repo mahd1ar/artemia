@@ -24,10 +24,10 @@ import {
   Description,
   Approval,
   Payment,
-  Category,
+  DescriptionOfApproval,
   Constractor,
-  FileStore, User,
-  Statement, StatementItem, Contract
+  FileStore, User, Category,
+  Statement, StatementItem, Contract, Design
 } from "./schemas";
 import { Roles, Session, enumToArrayOfKeyValue } from "./data/types";
 import { isAdmin } from "./data/access";
@@ -43,7 +43,7 @@ export const lists: Lists = {
   // @ts-ignore
   ImageStore,
   // @ts-ignore
-  Category,
+  DescriptionOfApproval,
   // @ts-ignore
   Constractor,
   // @ts-ignore
@@ -52,8 +52,10 @@ export const lists: Lists = {
   Contract,
 
   // @ts-ignore
-  User,
+  Design,
 
+  // @ts-ignore
+  User, Category,
   Tag: list({
     access: allowAll,
     ui: {
