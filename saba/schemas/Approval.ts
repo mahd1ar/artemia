@@ -17,6 +17,11 @@ export const Approval = list({
     label: 'مصوبات',
     listView: {
       initialColumns: ["code", 'title', 'estimatedBudget'],
+    },
+    itemView: {
+      defaultFieldMode(args) {
+        return setPermitions(args, [{ role: Roles.operator, fieldMode: 'edit' }], 'read')
+      },
     }
   },
   fields: {
@@ -33,13 +38,6 @@ export const Approval = list({
         createView: {
           fieldMode: 'hidden',
         },
-        itemView: {
-          fieldMode(args) {
-            return setPermitions(args, [{ role: Roles.operator, fieldMode: 'read' }], 'read')
-          },
-
-        }
-
       }
     }),
     createdAt: timestamp({
@@ -47,7 +45,6 @@ export const Approval = list({
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldMode(args) { return editIfAdmin(args) },
           fieldPosition: 'sidebar'
         }
       }
