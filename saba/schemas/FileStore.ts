@@ -1,6 +1,8 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { text, timestamp, file } from "@keystone-6/core/fields";
+import { text, timestamp, file, relationship } from "@keystone-6/core/fields";
+import { editIfAdmin } from "../data/utils";
+import { Session } from "../data/types";
 
 export const FileStore = list({
   access: allowAll,
@@ -9,11 +11,11 @@ export const FileStore = list({
   },
   hooks: {
     resolveInput(args) {
-      if (args.inputData.title !== undefined || args?.item?.title !== undefined)
-        return args.resolvedData;
 
-      if (!args.resolvedData.title && args.resolvedData.file.filename)
+      if (args.operation === 'create' && !args.inputData.title) {
+
         args.resolvedData.title = args.resolvedData.file.filename;
+      }
 
       return args.resolvedData;
     },
@@ -30,6 +32,26 @@ export const FileStore = list({
       ui: {
         createView: { fieldMode: "hidden" },
 
+      }
+    }),
+    createdBy: relationship({
+      ref: "User",
+      many: false,
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode(args) { return editIfAdmin(args) },
+          fieldPosition: 'sidebar'
+        }
+      },
+      hooks: {
+        resolveInput(args) {
+          if (args.operation === 'create') {
+            const session = args.context.session as Session
+            args.resolvedData.createdBy = { connect: { id: session?.itemId } }
+          }
+          return args.resolvedData.createdBy
+        },
       }
     }),
   },

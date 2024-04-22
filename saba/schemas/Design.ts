@@ -12,6 +12,7 @@ import {
 } from "@keystone-6/core/fields";
 import { Roles, Session } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
+import { sendResetPasswordEmail } from "../src/custom-fields/link-viewer";
 
 export const Design = list({
   access: allowAll,
@@ -21,51 +22,19 @@ export const Design = list({
       initialColumns: ['title', 'extension'],
     }
   },
-  hooks: {
-    async resolveInput(args) {
-      if (args.operation === 'create' && !args.inputData.title) {
-
-        try {
-
-
-          args.resolvedData.title = args.resolvedData.design.filename.split(".")[0]
-
-        } catch (error) {
-
-          console.error(error)
-        }
-      }
-      return args.resolvedData
-    },
-  },
   fields: {
     title: text(),
-    design: file({
-      storage: "file",
-    }),
-    extension: virtual({
+    design: relationship({
+      ref: 'FileStore',
+      many: true,
       ui: {
-        itemView: {
-          fieldPosition: 'sidebar'
-        }
-      },
-      field: graphql.field({
-        type: graphql.String,
-        async resolve(item, args, context) {
-
-          let ext = ''
-
-          try {
-            // @ts-ignore
-            ext = item.design_filename.split(".").at(-1) || ''
-          } catch (error) {
-            console.error(error)
-          }
-
-          return ext
-        }
-      })
+        displayMode: 'cards',
+        inlineCreate: { fields: ['file'] },
+        inlineEdit: { fields: ['file'] },
+        cardFields: ['title'],
+      }
     }),
+    maps: sendResetPasswordEmail(),
     category: relationship({
       label: 'tags',
       ref: 'Category',
