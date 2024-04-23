@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTheme } from '@keystone-ui/core';
+import { Link } from '@keystone-ui/core';
 import { Button } from '@keystone-ui/button';
 import { useToasts } from "@keystone-ui/toast"
 // import { gql, useMutation } from '@keystone-6/core/admin-ui/apollo';
@@ -55,13 +56,16 @@ export function UtilsBar(props: UtilsBarProps) {
         {JSON.stringify(data?.design.design || {}, null, 2)}
       </pre> */}
       {
-        data?.design.design.map((d) => (
-          <div>
+        data?.design.design.map((d: any) => (
 
-            <a href={d.file.url} download={d.file.filename} target="_blank" rel="noreferrer">
-              {d.file.filename}
-            </a>
-          </div>
+          d?.file?.url && (
+            <div>
+
+              <Link href={d?.file?.url} download={d?.file?.filename} target="_blank" rel="noreferrer" >
+                {d?.file?.filename}
+              </Link>
+            </div>
+          )
         ))
       }
 
