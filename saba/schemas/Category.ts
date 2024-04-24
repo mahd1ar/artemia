@@ -1,8 +1,17 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { Roles } from "../data/types";
+import { setPermitions } from "../data/utils";
 
 export const Category = list({
+    ui: {
+        itemView: {
+            defaultFieldMode(args) {
+                return setPermitions(args, [{ role: Roles.admin, fieldMode: 'edit' }], 'hidden')
+            },
+        }
+    },
     access: {
         operation: allowAll
     },

@@ -20,6 +20,14 @@ export const Design = list({
     label: 'نقشه',
     listView: {
       initialColumns: ['title', 'extension'],
+    },
+    itemView: {
+      defaultFieldMode(args) {
+        return setPermitions(args, [
+          { role: Roles.operator, fieldMode: 'edit' },
+          { role: Roles.admin, fieldMode: 'edit' },
+        ], 'read')
+      },
     }
   },
   fields: {
@@ -28,6 +36,16 @@ export const Design = list({
       ref: 'FileStore',
       many: true,
       ui: {
+        itemView: {
+          fieldMode(args) {
+            const role = (args.context.session as Session)?.data.role
+            console.log(role)
+            if (role)
+              return [Roles.admin, Roles.operator].includes(role) ? 'read' : 'hidden'
+            else
+              return 'hidden'
+          },
+        },
         displayMode: 'cards',
         inlineCreate: { fields: ['file'] },
         inlineEdit: { fields: ['file'] },
