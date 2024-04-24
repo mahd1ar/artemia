@@ -55,6 +55,20 @@ export function UtilsBar(props: UtilsBarProps) {
       <pre>
         {JSON.stringify(data?.design.design || {}, null, 2)}
       </pre> */}
+      <div dir="rtl" >
+
+
+        <span>
+          نقشه های بارگذاری شده:
+        </span>
+
+        <b>
+          {data?.design?.design?.length || 0}
+        </b>
+        <span>
+          عدد
+        </span>
+      </div>
       {
         data?.design.design.map((d: any) => (
 
@@ -62,6 +76,7 @@ export function UtilsBar(props: UtilsBarProps) {
             <div>
 
               <Link href={d?.file?.url} download={d?.file?.filename} target="_blank" rel="noreferrer" >
+
                 {d?.file?.filename}
               </Link>
             </div>
