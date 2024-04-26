@@ -18,9 +18,14 @@ export const Approval = list({
     listView: {
       initialColumns: ["code", 'title', 'estimatedBudget'],
     },
+    isHidden(args) {
+      return (args.session as Session)?.data.role === Roles.mobayen
+    },
     itemView: {
       defaultFieldMode(args) {
-        return setPermitions(args, [{ role: Roles.operator, fieldMode: 'edit' }], 'read')
+        return setPermitions(args, [
+          { role: Roles.operator, fieldMode: 'edit' },
+        ], 'read')
       },
     }
   },
