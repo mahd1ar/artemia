@@ -16,11 +16,13 @@ import { PrismaClient } from "@prisma/client";
 import bodyParser from "body-parser";
 import { SendMessageToTelegram } from "./data/utils";
 
+
 type Response = {
   message: string;
   ok?: boolean;
   payload?: any;
 };
+
 
 export default withAuth(
   config({
@@ -37,9 +39,15 @@ export default withAuth(
         credentials: true,
       },
       extendExpressApp(app, context) {
-       
+
         // add body parser
         app.use(bodyParser.json());
+
+        app.use(async (req, res, next) => {
+          if (req.path === '/')
+            res.redirect('/admin')
+          next()
+        })
 
       },
       maxFileSize: 1024_000_000,
@@ -50,3 +58,5 @@ export default withAuth(
     storage,
   })
 );
+
+

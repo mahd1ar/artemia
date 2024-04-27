@@ -5,9 +5,58 @@ import { document } from "@keystone-6/fields-document";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
 import { NumUtils, setPermitions } from "../data/utils";
 import { Roles, Session } from "../data/types";
+import { isMobayen } from "../data/access";
+import { PrismaClient } from '@prisma/client'
 
 export const Statement = list({
   access: allowAll,
+  hooks: {
+    async afterOperation(args) {
+      const prisma = args.context.prisma as PrismaClient
+      if (args.operation === 'delete') {
+
+        const itemId = args.originalItem.id
+
+        const x = await prisma.statementItem.deleteMany({
+          where: {
+            statement: {
+              id: {
+                equals: String(itemId)
+              }
+            }
+          }
+        })
+
+        console.log(x)
+
+        // TODO DELETE PAYMENT
+      } else {
+
+        if (args.inputData.peyments) {
+
+          if (args.item!.id) {
+            await prisma.payment.updateMany({
+              where: {
+                statement: {
+                  id: {
+                    equals: String(args.item!.id)
+                  }
+                }
+              },
+              data: {
+                // TODO check this on create item (operation===create)
+                title: (args.originalItem!.title || args.resolvedData.title) + ' رسید '
+              }
+            })
+          }
+        }
+
+      }
+
+
+
+    },
+  },
   ui: {
     label: 'صورت وضعیت',
     listView: {
@@ -16,10 +65,13 @@ export const Statement = list({
         field: 'dateOfPayment',
         direction: 'DESC',
       },
-    }
+    },
+    hideDelete(args) {
+      return isMobayen(args)
+    },
   },
   fields: {
-    title: text(),
+    title: text({ validation: { isRequired: true } }),
     description: relationship({
       label: ' شرح مصوبه متناظر',
       ref: 'Description.statements',
@@ -87,7 +139,12 @@ export const Statement = list({
             // TODO fix DRY here
             return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
           },
-        }
+        },
+        cardFields: ['attachment', 'price', 'dateOfPayment'],
+        displayMode: 'cards',
+        inlineConnect: false,
+        inlineCreate: { fields: ['attachment', 'price', 'dateOfPayment'] },
+        inlineEdit: { fields: ['attachment', 'price', 'dateOfPayment'] }
       }
     }),
 
@@ -219,7 +276,7 @@ export const Statement = list({
   },
 });
 
-// 
+//
 //   field: graphql.field({
 //     type: graphql.Float,
 //     resolve(item) {

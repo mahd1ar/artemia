@@ -1,5 +1,5 @@
 import { graphql, list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
+import { allOperations, allowAll } from "@keystone-6/core/access";
 import {
   bigInt,
   file,
@@ -13,13 +13,27 @@ import {
 import { Roles, Session } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
 import { sendResetPasswordEmail } from "../src/custom-fields/link-viewer";
+import { isAdmin, isMobayen } from "../data/access";
 
 export const Design = list({
-  access: allowAll,
+  access: {
+    operation: {
+      create: (args) => !isMobayen(args),
+      delete: (args) => !isMobayen(args),
+      update: (args) => !isMobayen(args),
+      query: () => true,
+    }
+  },
   ui: {
     label: 'نقشه',
     listView: {
       initialColumns: ['title', 'extension'],
+    },
+    hideDelete(args) {
+      return isMobayen(args)
+    },
+    hideCreate(args) {
+      return isMobayen(args)
     },
     itemView: {
       defaultFieldMode(args) {
@@ -28,7 +42,7 @@ export const Design = list({
           { role: Roles.admin, fieldMode: 'edit' },
         ], 'read')
       },
-    }
+    },
   },
   fields: {
     title: text(),
