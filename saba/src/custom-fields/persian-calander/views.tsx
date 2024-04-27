@@ -49,7 +49,7 @@ export const CardValue: CardValueComponent = ({ item, field }) => {
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
-      {item[field.path]}
+      {item[field.path] ? new Date(item[field.path] * 1000).toLocaleDateString('fa-IR') : '-'}
     </FieldContainer>
   )
 }
