@@ -55,9 +55,9 @@ export const sendResetPasswordEmail =
                 // },
 
                 output: graphql.field({
-                    type: graphql.JSON, // returns an object
+                    type: graphql.Boolean, // returns an object
                     resolve(args) {
-                        return args.item.id
+                        return true
 
                     },
 

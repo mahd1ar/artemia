@@ -1,16 +1,19 @@
 import { graphql, group, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { file, image, integer, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
+import { bigInt, checkbox, file, image, integer, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
 import { document } from "@keystone-6/fields-document";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
+import { bigInt as customBigInt } from "../src/custom-fields/custom-big-int";
 import { NumUtils, setPermitions } from "../data/utils";
 import { Roles, Session } from "../data/types";
 import { isMobayen } from "../data/access";
 import { PrismaClient } from '@prisma/client'
+import { ConfirmedBy } from "../src/custom-fields/confirm-by";
 
 export const Statement = list({
   access: allowAll,
   hooks: {
+
     async afterOperation(args) {
       const prisma = args.context.prisma as PrismaClient
       if (args.operation === 'delete') {
@@ -31,7 +34,10 @@ export const Statement = list({
 
         // TODO DELETE PAYMENT
       } else {
-
+        // console.log(args.inputData)
+        // console.log(args.originalItem)
+        // console.log(args.item)
+        // console.log(args.resolvedData)
         if (args.inputData.peyments) {
 
           if (args.item!.id) {
@@ -45,7 +51,7 @@ export const Statement = list({
               },
               data: {
                 // TODO check this on create item (operation===create)
-                title: (args.originalItem!.title || args.resolvedData.title) + ' رسید '
+                title: (args.inputData.title || args.originalItem!.title || args.resolvedData.title) + ' رسید '
               }
             })
           }
@@ -62,15 +68,34 @@ export const Statement = list({
     listView: {
       initialColumns: ['title', 'status'],
       initialSort: {
-        field: 'dateOfPayment',
+        field: 'sateOfStatement',
         direction: 'DESC',
       },
+    },
+    itemView: {
+      // defaultFieldMode(args) {
+      //   return 'hidden'
+      // },
     },
     hideDelete(args) {
       return isMobayen(args)
     },
   },
   fields: {
+    confirmedByExample: checkbox({
+      ui: {
+        views: './src/custome-fields-view/confirmed-box.tsx',
+      }
+    }
+
+    ),
+    confirmedByAdmin: ConfirmedBy(),
+    tokhmi: customBigInt(
+      {
+        label: 'مبلغ',
+        validation: { isRequired: true }, defaultValue: 0n
+      }
+    ),
     title: text({ validation: { isRequired: true } }),
     description: relationship({
       label: ' شرح مصوبه متناظر',
@@ -95,7 +120,9 @@ export const Statement = list({
         }
       }
     }),
-    dateOfPayment: persianCalendar(),
+    sateOfStatement: persianCalendar({
+      label: 'تاریخ صورت وضعیت',
+    }),
     image: image({
       storage: "image",
       ui: {
@@ -113,6 +140,7 @@ export const Statement = list({
       }
     }),
     items: relationship({
+      label: 'آیتم ها',
       ref: 'StatementItem.statement',
       many: true,
       ui: {
@@ -130,25 +158,27 @@ export const Statement = list({
       }
     }),
     peyments: relationship({
+      label: 'رسید پرداختی',
       ref: 'Payment.statement',
       many: true,
       ui: {
-        createView: { fieldMode: 'hidden' },
+        // createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
             // TODO fix DRY here
             return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
           },
         },
-        cardFields: ['attachment', 'price', 'dateOfPayment'],
+        cardFields: ['attachment', 'price', 'dateOfPayment', 'description'],
         displayMode: 'cards',
         inlineConnect: false,
-        inlineCreate: { fields: ['attachment', 'price', 'dateOfPayment'] },
-        inlineEdit: { fields: ['attachment', 'price', 'dateOfPayment'] }
+        inlineCreate: { fields: ['attachment', 'price', 'dateOfPayment', 'description'] },
+        inlineEdit: { fields: ['attachment', 'price', 'dateOfPayment', 'description'] }
       }
     }),
 
-    deductionOnAccountOfAdvancePayment: integer({
+    deductionOnAccountOfAdvancePayment: bigInt({
+      label: 'کسر علی الحساب',
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
@@ -158,7 +188,14 @@ export const Statement = list({
             ], 'edit')
           },
         }
-      }
+      },
+      defaultValue: 0n,
+    }),
+
+    tax: bigInt({
+      label: 'مالیات',
+      validation: { isRequired: true },
+      defaultValue: 0n,
     }),
 
     totalPayable: virtual({
@@ -166,7 +203,7 @@ export const Statement = list({
         type: graphql.String,
         async resolve(item, args, context) {
 
-          const { id: itemid, deductionOnAccountOfAdvancePayment: deduction } = item as unknown as { id: string, deductionOnAccountOfAdvancePayment: number }
+          const { id: itemid, deductionOnAccountOfAdvancePayment: deduction, tax } = item as unknown as { id: string, deductionOnAccountOfAdvancePayment: bigint, tax: bigint }
 
           if (itemid) {
 
@@ -180,13 +217,14 @@ export const Statement = list({
               },
               query: 'total'
             })
-
-            let total = 0
+            console.log(x)
+            let total = 0n
 
             for (const i of x) {
-              total += parseFloat(i.total.replace(/,/g, ''))
+              total += BigInt(i.total.replace(/,/g, ''))
+              console.log({ total })
             }
-            return NumUtils.format(total - deduction)
+            return NumUtils.format(total - (deduction || 0n) + (tax || 0n))
 
           } else
             return "0"
