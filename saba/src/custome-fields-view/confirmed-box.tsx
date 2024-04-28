@@ -78,15 +78,6 @@ export const Field = ({
   itemValue,
   forceValidation
 }: FieldProps<typeof controller>) => {
-  console.log(itemValue.tax.value.value)
-  // for (let i in itemValue) {
-  //   console.log(i)
-  //   console.log(itemValue[i].value)
-  // }
-
-  const list = useList('Statement')
-
-  // console.log(list.fields.tax.controller)
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -95,12 +86,19 @@ export const Field = ({
 
 
   function tryConfirm() {
-
-    useChangedFieldsAndDataForUpdate(list.fields, itemValue)
+    let flag = false
+    document.querySelectorAll('button').forEach(i => {
+      if (i.innerText === 'Save changes') {
+        if (getComputedStyle(i).cursor === 'pointer')
+          flag = true
+      }
+    })
+    if (flag)
+      alert('save kon kon kash!')
     // alert("go home");
-    // router.push("/");
+    router.push("/statements");
     setIsOpen(false);
-    onChange?.(true)
+    // onChange?.(true)
     // if (forceValidation)
   }
 
