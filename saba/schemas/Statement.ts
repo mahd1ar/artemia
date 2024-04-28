@@ -89,13 +89,7 @@ export const Statement = list({
     }
 
     ),
-    confirmedByAdmin: ConfirmedBy(),
-    tokhmi: customBigInt(
-      {
-        label: 'مبلغ',
-        validation: { isRequired: true }, defaultValue: 0n
-      }
-    ),
+
     title: text({ validation: { isRequired: true } }),
     description: relationship({
       label: ' شرح مصوبه متناظر',

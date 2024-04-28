@@ -1,7 +1,6 @@
 import { group, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { bigInt, image, relationship, select, text } from "@keystone-6/core/fields";
-import { PrismaClient } from '@prisma/client'
 import { persianCalendar } from "../src/custom-fields/persian-calander";
 export const Payment = list({
   access: allowAll,

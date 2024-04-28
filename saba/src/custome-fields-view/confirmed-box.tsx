@@ -1,43 +1,46 @@
-import React from 'react'
-import Link from 'next/link'
-import { type FieldProps } from '@keystone-6/core/types'
-import { css } from '@emotion/css'
-import { Button } from '@keystone-ui/button'
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
-import { MinusCircleIcon, EditIcon } from '@keystone-ui/icons'
-import { type controller } from '@keystone-6/core/fields/types/checkbox/views'
-import { Fragment, useState } from 'react'
-import { Checkbox } from '@keystone-ui/fields'
-import { useRouter } from 'next/navigation';
+import React from "react";
+import Link from "next/link";
+import { type FieldProps } from "@keystone-6/core/types";
+import { css } from "@emotion/css";
+import { Button } from "@keystone-ui/button";
+import { AlertDialog } from "@keystone-ui/modals";
+import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
+import { MinusCircleIcon, EditIcon, CheckIcon } from "@keystone-ui/icons";
+import { type controller } from "@keystone-6/core/fields/types/checkbox/views";
+import { Fragment, useState } from "react";
+import { Checkbox } from "@keystone-ui/fields";
+import { useRouter } from "next/navigation";
+import { useChangedFieldsAndDataForUpdate, useInvalidFields } from "@keystone-6/core/admin-ui/utils"
+import { useList } from "@keystone-6/core/admin-ui/context"
+// import { useChangedFieldsAndDataForUpdate } from "@keystone-6/core/admin-ui/utils"
 
-type RelatedLink = boolean | null
 
 const styles = {
-    form: {
-        field: css`
+  form: {
+    field: css`
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
       width: 100%;
       margin: 1rem 0 0 0;
     `,
-        label: css`
+    label: css`
       width: 10%;
     `,
-        input: css`
+    input: css`
       width: 90%;
     `,
-        button: css`
+    button: css`
       margin: 1rem 0.5rem 0 0;
     `,
-    },
-    list: {
-        ul: css`
+  },
+  list: {
+    ul: css`
       list-style: none;
       margin: 1rem 0 0 0;
       padding: 0;
     `,
-        li: css`
+    li: css`
       display: flex;
       align-items: center;
       flex-wrap: nowrap;
@@ -47,7 +50,7 @@ const styles = {
         background-color: white;
       }
     `,
-        data: css`
+    data: css`
       background-color: #eff3f6;
       padding: 0.5rem;
       flex: auto;
@@ -55,77 +58,136 @@ const styles = {
       align-items: flex-start;
       flex-wrap: nowrap;
     `,
-        dataLabel: css`
+    dataLabel: css`
       width: 40%;
     `,
-        dataHref: css`
+    dataHref: css`
       width: 60%;
     `,
-        optionButton: css`
+    optionButton: css`
       margin: 0 0 0 0.5rem;
     `,
-    },
-}
+  },
+};
 
-export const Field = ({ field, value, onChange, autoFocus }: FieldProps<typeof controller>) => {
-    const [labelValue, setLabelValue] = useState('')
-    const [hrefValue, setHrefValue] = useState('')
-    const [index, setIndex] = useState<number | null>(null)
+export const Field = ({
+  field,
+  value,
+  onChange,
+  autoFocus,
+  itemValue,
+  forceValidation
+}: FieldProps<typeof controller>) => {
+  console.log(itemValue.tax.value.value)
+  // for (let i in itemValue) {
+  //   console.log(i)
+  //   console.log(itemValue[i].value)
+  // }
 
-    const relatedLinks: RelatedLink = !!value
+  const list = useList('Statement')
 
-    const onSubmitNewRelatedLink = () => {
-        if (onChange) {
-            const relatedLinksCopy = [...relatedLinks, { label: labelValue, href: hrefValue }]
-            onChange(JSON.stringify(relatedLinksCopy))
-            onCancelRelatedLink()
-        }
-    }
+  // console.log(list.fields.tax.controller)
 
-    const onDeleteRelatedLink = (index: number) => {
-        if (onChange) {
-            const relatedLinksCopy = [...relatedLinks]
-            relatedLinksCopy.splice(index, 1)
-            onChange(JSON.stringify(relatedLinksCopy))
-            onCancelRelatedLink()
-        }
-    }
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const router = useRouter();
 
-    const onEditRelatedLink = (index: number) => {
-        if (onChange) {
-            setIndex(index)
-            setLabelValue(relatedLinks[index].label)
-            setHrefValue(relatedLinks[index].href)
-        }
-    }
-
-    const onUpdateRelatedLink = () => {
-        if (onChange && index !== null) {
-            const relatedLinksCopy = [...relatedLinks]
-            relatedLinksCopy[index] = { label: labelValue, href: hrefValue }
-            onChange(JSON.stringify(relatedLinksCopy))
-            onCancelRelatedLink()
-        }
-    }
-
-    const onCancelRelatedLink = () => {
-        setIndex(null)
-        setLabelValue('')
-        setHrefValue('')
-    }
-
-    return (
-        <FieldContainer>
-            <FieldLabel>{field.label}</FieldLabel>
-
-            <Checkbox
-                checked={!!value}
-                onChange={event => onChange?.(event.target.checked ? true : false)}
-            >
-                Check Me
-            </Checkbox>
+  console.log({ forceValidation })
 
 
-        </FieldContainer>
-    )
-}
+  function tryConfirm() {
+
+    useChangedFieldsAndDataForUpdate(list.fields, itemValue)
+    // alert("go home");
+    // router.push("/");
+    setIsOpen(false);
+    onChange?.(true)
+    // if (forceValidation)
+  }
+
+
+  return (
+    <>
+      <FieldContainer>
+        <FieldLabel>{field.label}</FieldLabel>
+
+        <Button
+          tone={value ? 'positive' : 'passive'}
+          onClick={() => setIsOpen(true)}
+          disabled={value}
+        >
+          {
+            value ? 'Confirm values' : 'Done'
+          }
+          {value && (
+            <CheckIcon />
+          )}
+        </Button>
+        <Checkbox
+          checked={!!value}
+          onChange={(event) => onChange?.(event.target.checked ? true : false)}
+        >
+          Check Me
+        </Checkbox>
+      </FieldContainer>
+      <AlertDialog
+        title="confirm"
+        isOpen={isOpen}
+        actions={{
+          cancel: {
+            action: () => {
+              setIsOpen(false);
+            },
+            label: "Cancel",
+          },
+          confirm: {
+            action: () => {
+              tryConfirm()
+            },
+            label: "Done",
+          },
+        }}
+      >
+        <h2>Are you sure?</h2>
+      </AlertDialog>
+    </>
+  );
+};
+// const onSubmitNewRelatedLink = () => {
+//     if (onChange) {
+//         const relatedLinksCopy = [...relatedLinks, { label: labelValue, href: hrefValue }]
+//         onChange(JSON.stringify(relatedLinksCopy))
+//         onCancelRelatedLink()
+//     }
+// }
+
+// const onDeleteRelatedLink = (index: number) => {
+//     if (onChange) {
+//         const relatedLinksCopy = [...relatedLinks]
+//         relatedLinksCopy.splice(index, 1)
+//         onChange(JSON.stringify(relatedLinksCopy))
+//         onCancelRelatedLink()
+//     }
+// }
+
+// const onEditRelatedLink = (index: number) => {
+//     if (onChange) {
+//         setIndex(index)
+//         setLabelValue(relatedLinks[index].label)
+//         setHrefValue(relatedLinks[index].href)
+//     }
+// }
+
+// const onUpdateRelatedLink = () => {
+//     if (onChange && index !== null) {
+//         const relatedLinksCopy = [...relatedLinks]
+//         relatedLinksCopy[index] = { label: labelValue, href: hrefValue }
+//         onChange(JSON.stringify(relatedLinksCopy))
+//         onCancelRelatedLink()
+//     }
+// }
+
+// const onCancelRelatedLink = () => {
+//     setIndex(null)
+//     setLabelValue('')
+//     setHrefValue('')
+// }
