@@ -7,12 +7,15 @@ export const Payment = list({
   access: allowAll,
   ui: {
     label: 'پرداخت ها',
+    labelField: 'title',
   },
   fields: {
     title: text({
       ui: { createView: { fieldMode: 'hidden' } },
     }),
-    dateOfPayment: persianCalendar(),
+    dateOfPayment: persianCalendar({
+      label: 'تاریخ پرداخت',
+    }),
     statement: relationship({
       ref: 'Statement.peyments',
       many: false,
@@ -20,12 +23,22 @@ export const Payment = list({
         createView: { fieldMode: 'hidden' }
       }
     }),
+    description: text({
+      label: 'توضیحات',
+      ui: {
+        displayMode: 'textarea',
+      }
+    }),
     price: bigInt({
+      label: 'مبلغ',
       validation: {
         min: BigInt(0)
       }
     }),
-    attachment: image({ storage: "image" }),
+    attachment: image({
+      storage: "image",
+      label: 'فایل پیوست',
+    }),
 
   },
 });

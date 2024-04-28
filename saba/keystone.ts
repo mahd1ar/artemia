@@ -10,11 +10,8 @@ require("dotenv").config({
 import { storage } from "./storage";
 import { config } from "@keystone-6/core";
 import { lists } from "./schema";
-
 import { withAuth, session } from "./auth";
-import { PrismaClient } from "@prisma/client";
 import bodyParser from "body-parser";
-import { SendMessageToTelegram } from "./data/utils";
 
 
 type Response = {
@@ -43,11 +40,6 @@ export default withAuth(
         // add body parser
         app.use(bodyParser.json());
 
-        app.use(async (req, res, next) => {
-          if (req.path === '/')
-            res.redirect('/admin')
-          next()
-        })
 
       },
       maxFileSize: 1024_000_000,
