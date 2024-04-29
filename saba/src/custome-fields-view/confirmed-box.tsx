@@ -5,14 +5,15 @@ import { css } from "@emotion/css";
 import { Button } from "@keystone-ui/button";
 import { AlertDialog } from "@keystone-ui/modals";
 import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
-import { MinusCircleIcon, EditIcon, CheckIcon } from "@keystone-ui/icons";
+import { CheckIcon } from "@keystone-ui/icons";
 import { type controller } from "@keystone-6/core/fields/types/checkbox/views";
 import { Fragment, useState } from "react";
 import { Checkbox } from "@keystone-ui/fields";
-import { useRouter } from "next/navigation";
-import { useChangedFieldsAndDataForUpdate, useInvalidFields } from "@keystone-6/core/admin-ui/utils"
-import { useList } from "@keystone-6/core/admin-ui/context"
+import { useRouter, usePathname } from "next/navigation";
+import { useToasts } from "@keystone-ui/toast"
 // import { useChangedFieldsAndDataForUpdate } from "@keystone-6/core/admin-ui/utils"
+import { gql, useMutation } from '@apollo/client'
+import axios from "axios";
 
 
 const styles = {
@@ -79,13 +80,30 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
+  const { addToast } = useToasts()
+  const pn = usePathname();
 
-  console.log({ forceValidation })
+  const [update] = useMutation(gql`
+        mutation Mutation($id: ID!) {
+          updateStatement(where: {id: $id}, data: { confirmedByTheUploader : true}) {
+            id
+          } 
+      }
+      `,
+  )
 
+  async function tryConfirm() {
+    if (value) {
 
-  function tryConfirm() {
+      onChange?.(false)
+      isOpen && setIsOpen(false);
+
+      return
+    }
+
     let flag = false
     document.querySelectorAll('button').forEach(i => {
       if (i.innerText === 'Save changes') {
@@ -93,11 +111,28 @@ export const Field = ({
           flag = true
       }
     })
-    if (flag)
-      alert('save kon kon kash!')
+    if (flag) {
+      setIsOpen(false);
+      addToast({ title: "لطفا قبل از تایید نهایی تغییرات را ذخیره کنید", tone: "negative" })
+      return
+    }
     // alert("go home");
-    router.push("/statements");
-    setIsOpen(false);
+    const id = pn.split('/').at(-1)
+
+    if (id) {
+
+      const res = await update({
+        variables: { "id": pn.split('/').at(-1) }
+      })
+      console.log(res)
+      router.push("/statements");
+      setIsOpen(false);
+      addToast({ title: "Confirmed", tone: "positive" })
+      await axios.post('/api/v1/log', {
+        action: 'STATEMENT_CONFIRMED',
+        sid: id
+      })
+    }
     // onChange?.(true)
     // if (forceValidation)
   }
@@ -109,23 +144,27 @@ export const Field = ({
         <FieldLabel>{field.label}</FieldLabel>
 
         <Button
-          tone={value ? 'positive' : 'passive'}
+          tone={value ? 'passive' : 'active'}
           onClick={() => setIsOpen(true)}
-          disabled={value}
+        // disabled={value}
         >
           {
-            value ? 'Confirm values' : 'Done'
+            value ? 'این صورت وضعیت تایید شده' : ' تایید نهایی این صورت وضعیت'
           }
+
           {value && (
             <CheckIcon />
           )}
+
+          {/* <Checkbox
+            checked={!!value}
+            onChange={(event) => onChange?.(event.target.checked ? true : false)}
+          >
+            Check Me
+          </Checkbox> */}
+
         </Button>
-        <Checkbox
-          checked={!!value}
-          onChange={(event) => onChange?.(event.target.checked ? true : false)}
-        >
-          Check Me
-        </Checkbox>
+
       </FieldContainer>
       <AlertDialog
         title="confirm"
@@ -145,7 +184,16 @@ export const Field = ({
           },
         }}
       >
-        <h2>Are you sure?</h2>
+        {!value ?
+
+          <h4 dir="rtl" >
+            آیا از تایید نهایی این صورت وضعیت مطمین هستید؟
+          </h4>
+          :
+          <h4 dir="rtl" >
+            آیا مطمئن هستید که تأیید صورت وضعیت را لغو می کنید؟
+          </h4>
+        }
       </AlertDialog>
     </>
   );

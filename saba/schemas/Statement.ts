@@ -11,10 +11,30 @@ import { PrismaClient } from '@prisma/client'
 import { ConfirmedBy } from "../src/custom-fields/confirm-by";
 
 export const Statement = list({
-  access: allowAll,
+  access: {
+    operation: allowAll,
+    item: {
+      // update: (args) => !isMobayen(args),
+      delete: (args) => !isMobayen(args)
+    }
+  },
   hooks: {
 
+    async validate(args) {
+
+      if (args.operation !== 'create') {
+
+        if ((args.item as any).confirmedByTheUploader) {
+          const session = args.context.session as Session
+          if (session?.data.role === Roles.mobayen) {
+            args.addValidationError('این پیشنهاد قبلا تایید شده است')
+          }
+        }
+      }
+    },
+
     async afterOperation(args) {
+
       const prisma = args.context.prisma as PrismaClient
       if (args.operation === 'delete') {
 
@@ -60,7 +80,6 @@ export const Statement = list({
       }
 
 
-
     },
   },
   ui: {
@@ -82,8 +101,10 @@ export const Statement = list({
     },
   },
   fields: {
-    confirmedByExample: checkbox({
+    confirmedByTheUploader: checkbox({
+      label: '',
       ui: {
+        createView: { fieldMode: 'hidden' },
         views: './src/custome-fields-view/confirmed-box.tsx',
       }
     }
@@ -142,6 +163,7 @@ export const Statement = list({
           fieldMode(args) {
             return setPermitions(args, [
               { role: Roles.supervisor, fieldMode: 'read' },
+              { role: Roles.mobayen, fieldMode: 'read' },
             ], 'edit')
           },
         },
@@ -159,8 +181,10 @@ export const Statement = list({
         // createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
-            // TODO fix DRY here
-            return (args.session as Session)?.data.role === Roles.supervisor ? 'read' : 'edit'
+            return setPermitions(args, [
+              { role: Roles.supervisor, fieldMode: 'read' },
+              { role: Roles.mobayen, fieldMode: 'read' },
+            ], 'edit')
           },
         },
         cardFields: ['attachment', 'price', 'dateOfPayment', 'description'],
@@ -174,7 +198,7 @@ export const Statement = list({
     deductionOnAccountOfAdvancePayment: bigInt({
       label: 'کسر علی الحساب',
       ui: {
-        createView: { fieldMode: 'hidden' },
+        // createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
             return setPermitions(args, [

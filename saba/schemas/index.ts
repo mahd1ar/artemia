@@ -11,3 +11,4 @@ export { StatementItem } from './StatementItem';
 export { Contract } from './Contract';
 export { Design } from "./Design"
 export { Category } from "./Category"
+export { Log } from "./Log"

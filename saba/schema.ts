@@ -26,7 +26,7 @@ import {
   Payment,
   DescriptionOfApproval,
   Constractor,
-  FileStore, User, Category,
+  FileStore, User, Category, Log,
   Statement, StatementItem, Contract, Design
 } from "./schemas";
 import { Roles, Session, enumToArrayOfKeyValue } from "./data/types";
@@ -55,7 +55,7 @@ export const lists: Lists = {
   Design,
 
   // @ts-ignore
-  User, Category,
+  User, Category, Log,
   Tag: list({
     access: allowAll,
     ui: {
