@@ -12,7 +12,8 @@ import { config } from "@keystone-6/core";
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import bodyParser from "body-parser";
-
+import { Session } from "./data/types";
+import { PrismaClient } from "@prisma/client";
 
 type Response = {
   message: string;
@@ -40,7 +41,36 @@ export default withAuth(
         // add body parser
         app.use(bodyParser.json());
 
+        app.post("/api/v1/log", async (req, res) => {
+          try {
 
+
+            const sid = req.body.sid
+            const action = req.body.action
+            const session = (await context.withRequest(req)).session as Session
+            const prisma = context.prisma as PrismaClient
+            if (!session) {
+              res.json({ ok: false })
+              return
+            }
+
+            if (action === 'STATEMENT_CONFIRMED') {
+              await prisma.log.create({
+                data: {
+                  action: action,
+                  type: 'info',
+                  message: `تایید صورت وضعیت ${sid} از طرف ${session.data?.name} با موفقیت انجام شد`,
+                }
+              })
+            }
+
+            res.json({ ok: true })
+
+          } catch (error) {
+            console.log(error)
+            res.json({ ok: false, message: String(error) })
+          }
+        })
       },
       maxFileSize: 1024_000_000,
       port: +process.env.PORT!,
