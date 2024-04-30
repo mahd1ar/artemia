@@ -1,4 +1,5 @@
-import { graphql, list } from "@keystone-6/core";
+// import { graphql } from "@graphql-ts/schema";
+import { list, graphql } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { bigInt, image, relationship, text, timestamp, virtual } from "@keystone-6/core/fields";
 import { Session } from "../data/types";
@@ -12,7 +13,7 @@ export const Description = list({
         label: 'شرح مصوبه',
         plural: 'شرح مصوبات',
         listView: {
-            initialColumns: ['title', 'totalStatementsPayed', 'totalStatementsPayable'],
+            initialColumns: ['subject', 'totalStatementsPayed', 'totalStatementsPayable'],
             initialSort: {
                 field: 'title',
                 direction: 'ASC',
@@ -20,6 +21,34 @@ export const Description = list({
         }
     },
     fields: {
+        subject: virtual({
+            ui: {
+                createView: {
+                    fieldMode: "hidden",
+                },
+            },
+            field: graphql.field({
+                type: graphql.String,
+                async resolve(item, _, context) {
+                    const { approvalsId, title } = item as unknown as {
+                        approvalsId: string;
+                        title: string
+                    };
+                    const prisma = context.prisma as PrismaClient
+                    const approval = await prisma.approval.findUnique({
+                        where: {
+                            id: approvalsId
+                        },
+                        select: {
+                            code: true
+                        }
+                    })
+
+                    return `${title} (${approval!.code})`;
+                },
+            }),
+            // graphQLReturnType: "String",
+        }),
         title: text(),
         statements: relationship({
             ref: 'Statement.description',

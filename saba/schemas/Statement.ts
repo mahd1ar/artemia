@@ -117,6 +117,7 @@ export const Statement = list({
       ref: 'Description.statements',
       many: false,
       ui: {
+        views: './src/custome-fields-view/statement-description-realtion.tsx',
         itemView: {
           // TOD if user role is operator
           fieldMode: 'edit',
@@ -124,15 +125,15 @@ export const Statement = list({
             return 'sidebar'
           },
         },
-        createView: {
-          fieldMode(args) {
-
-            // TODO abstract this to function
-            const reff = new URL((args.context.res?.req.headers.referer as string))
-            const referer = (reff.pathname.split('/').filter(Boolean).at(0))
-            return referer === 'descriptions' ? 'hidden' : 'edit'
-          },
-        }
+        // createView: {
+        //   fieldMode(args) {
+        //     // TODO abstract this to function
+        //     const reff = new URL((args.context.res?.req.headers.referer as string))
+        //     const referer = (reff.pathname.split('/').filter(Boolean).at(0))
+        //     return referer === 'descriptions' ? 'hidden' : 'edit'
+        //   },
+        // },
+        // displayMode: 'select'
       }
     }),
     sateOfStatement: persianCalendar({

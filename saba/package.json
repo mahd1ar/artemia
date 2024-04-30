@@ -6,17 +6,25 @@
     "dev": "keystone dev",
     "start": "NODE_ENV=production keystone start",
     "build": "NODE_ENV=production keystone build",
-    "postinstall": "keystone build --no-ui --frozen"
+    "postinstall": "keystone build --no-ui --frozen && ts-gql build",
+    "ts-gql:build": "ts-gql build",
+    "ts-gql:watch": "ts-gql watch"
   },
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
+    "@ts-gql/compiler": "^0.16.7",
+    "@ts-gql/eslint-plugin": "^0.9.1",
+    "@ts-gql/tag": "^0.7.3",
     "axios": "^1.5.1",
     "dotenv": "^16.3.1",
+    "graphql": "^16.8.1",
     "react-multi-date-picker": "^4.4.1",
     "typescript": "^4.9.5",
     "uuid": "^9.0.1"
+  },  "ts-gql": {
+    "schema": "schema.graphql"
   }
 }
