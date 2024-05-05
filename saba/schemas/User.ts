@@ -30,6 +30,8 @@ export const User = list({
     approvals: relationship({ ref: "Approval.createdBy", many: true }),
     descriptions: relationship({ ref: "Description.createdBy", many: true }),
     Designs: relationship({ ref: "Design.createdBy", many: true }),
+    dailyReports: relationship({ ref: "DailyReport.createdBy", many: true }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
     }),
