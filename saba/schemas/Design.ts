@@ -14,6 +14,8 @@ import { Roles, Session } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
 import { sendResetPasswordEmail } from "../src/custom-fields/link-viewer";
 import { isAdmin, isMobayen } from "../data/access";
+import { PrismaClient } from "@prisma/client"
+import { gql } from "@ts-gql/tag/no-transform";
 
 export const Design = list({
   access: {
@@ -55,7 +57,7 @@ export const Design = list({
             const role = (args.context.session as Session)?.data.role
             console.log(role)
             if (role)
-              return [Roles.admin, Roles.operator].includes(role) ? 'read' : 'hidden'
+              return [Roles.admin, Roles.operator].includes(role) ? 'edit' : 'hidden'
             else
               return 'hidden'
           },
@@ -66,7 +68,40 @@ export const Design = list({
         cardFields: ['title'],
       }
     }),
-    maps: sendResetPasswordEmail(),
+
+    download: virtual({
+      ui: {
+        views: './src/custome-fields-view/link-viewer.tsx'
+      },
+      field: graphql.field({
+        type: graphql.JSON,
+        async resolve(item, args, context) {
+          console.log(item)
+          const { id } = item as unknown as { id?: string };
+
+          if (!id)
+            return []
+
+          const DESIGN_FILES = gql`
+            query DesignFiles($where: DesignWhereUniqueInput!) {
+                design(where: $where) {
+                  id
+                  design {
+                    file { filename url }
+                  }
+                }
+            }
+          ` as import('../__generated__/ts-gql/DesignFiles').type
+
+          const data = await context.graphql.run({
+            query: DESIGN_FILES,
+            variables: { where: { id } }
+          })
+          console.log(data.design?.design)
+          return data.design?.design?.map(i => ({ url: i.file?.url, name: i.file?.filename })).filter(i => i.url) || []
+        },
+      }),
+    }),
     category: relationship({
       label: 'tags',
       ref: 'Category',

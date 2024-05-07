@@ -25,7 +25,7 @@ export function UtilsBar(props: UtilsBarProps) {
   const [emailIsSent, setEmailIsSent] = useState(false);
   const { addToast } = useToasts()
 
-
+  console.log({ vaL: props.value })
   const { data } = useQuery(gql`
         query DesignFiles($where: DesignWhereUniqueInput!) {
           design(where: $where) {

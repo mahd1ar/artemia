@@ -9,7 +9,10 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
             <NavItem href="/">Dashboard</NavItem>
             <ListNavItems
                 lists={lists}
-                include={['Approval', 'Design', 'Statement', 'DailyReport', 'Log']} />
+                include={['Approval', 'Design', 'Statement',
+                    'DailyReport',
+                    'User',
+                    'Log']} />
         </NavigationContainer>
     )
 }
