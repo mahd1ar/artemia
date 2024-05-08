@@ -27,7 +27,7 @@ import {
   DescriptionOfApproval,
   Constractor,
   FileStore, User, Category, Log,
-  Statement, StatementItem, Contract, Design
+  Statement, StatementItem, Contract, Design, DailyReport
 } from "./schemas";
 import { Roles, Session, enumToArrayOfKeyValue } from "./data/types";
 import { isAdmin } from "./data/access";
@@ -52,7 +52,7 @@ export const lists: Lists = {
   Contract,
 
   // @ts-ignore
-  Design,
+  Design, DailyReport,
 
   // @ts-ignore
   User, Category, Log,
