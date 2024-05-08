@@ -1,8 +1,8 @@
-// ts-gql-integrity:4f7a07dd70638f329027a887fafd5cb6
+// ts-gql-integrity:359823caa42b2617c4f02e8ff66eed2b
 /*
 ts-gql-meta-begin
 {
-  "hash": "e52ca886ddadee7375bca99989895922"
+  "hash": "92874705050eeaadddc9c7213a8816b0"
 }
 ts-gql-meta-end
 */
@@ -996,6 +996,7 @@ export type Design = {
   readonly design: ReadonlyArray<FileStore> | null;
   readonly designCount: number | null;
   readonly maps: boolean | null;
+  readonly xvpn: string | null;
   readonly category: ReadonlyArray<Category> | null;
   readonly categoryCount: number | null;
   readonly createdAt: DateTime | null;
@@ -1105,6 +1106,49 @@ export type CategoryRelateToManyForCreateInput = {
   readonly connect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
 };
 
+export type DailyReport = {
+  readonly __typename: "DailyReport";
+  readonly id: string;
+  readonly document: FileFieldOutput | null;
+  readonly createdBy: User | null;
+  readonly date: DateTime | null;
+};
+
+export type DailyReportWhereUniqueInput = {
+  readonly id?: string | null;
+};
+
+export type DailyReportWhereInput = {
+  readonly AND?: TSGQLMaybeArray<DailyReportWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<DailyReportWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<DailyReportWhereInput> | null;
+  readonly id?: IDFilter | null;
+  readonly createdBy?: UserWhereInput | null;
+  readonly date?: DateTimeNullableFilter | null;
+};
+
+export type DailyReportOrderByInput = {
+  readonly id?: OrderDirection | null;
+  readonly date?: OrderDirection | null;
+};
+
+export type DailyReportUpdateInput = {
+  readonly document?: FileFieldInput | null;
+  readonly createdBy?: UserRelateToOneForUpdateInput | null;
+  readonly date?: DateTime | null;
+};
+
+export type DailyReportUpdateArgs = {
+  readonly where: DailyReportWhereUniqueInput;
+  readonly data: DailyReportUpdateInput;
+};
+
+export type DailyReportCreateInput = {
+  readonly document?: FileFieldInput | null;
+  readonly createdBy?: UserRelateToOneForCreateInput | null;
+  readonly date?: DateTime | null;
+};
+
 export type User = {
   readonly __typename: "User";
   readonly id: string;
@@ -1120,6 +1164,8 @@ export type User = {
   readonly descriptionsCount: number | null;
   readonly Designs: ReadonlyArray<Design> | null;
   readonly DesignsCount: number | null;
+  readonly dailyReports: ReadonlyArray<DailyReport> | null;
+  readonly dailyReportsCount: number | null;
   readonly createdAt: DateTime | null;
 };
 
@@ -1171,6 +1217,18 @@ export type UserDesignsCountArgs = {
   readonly where?: DesignWhereInput;
 };
 
+export type UserdailyReportsArgs = {
+  readonly where?: DailyReportWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<DailyReportOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: DailyReportWhereUniqueInput | null;
+};
+
+export type UserdailyReportsCountArgs = {
+  readonly where?: DailyReportWhereInput;
+};
+
 export type PasswordState = {
   readonly __typename: "PasswordState";
   readonly isSet: boolean;
@@ -1193,6 +1251,7 @@ export type UserWhereInput = {
   readonly approvals?: ApprovalManyRelationFilter | null;
   readonly descriptions?: DescriptionManyRelationFilter | null;
   readonly Designs?: DesignManyRelationFilter | null;
+  readonly dailyReports?: DailyReportManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
 };
 
@@ -1206,6 +1265,12 @@ export type DesignManyRelationFilter = {
   readonly every?: DesignWhereInput | null;
   readonly some?: DesignWhereInput | null;
   readonly none?: DesignWhereInput | null;
+};
+
+export type DailyReportManyRelationFilter = {
+  readonly every?: DailyReportWhereInput | null;
+  readonly some?: DailyReportWhereInput | null;
+  readonly none?: DailyReportWhereInput | null;
 };
 
 export type UserOrderByInput = {
@@ -1225,6 +1290,7 @@ export type UserUpdateInput = {
   readonly approvals?: ApprovalRelateToManyForUpdateInput | null;
   readonly descriptions?: DescriptionRelateToManyForUpdateInput | null;
   readonly Designs?: DesignRelateToManyForUpdateInput | null;
+  readonly dailyReports?: DailyReportRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
 };
 
@@ -1242,6 +1308,13 @@ export type DesignRelateToManyForUpdateInput = {
   readonly connect?: TSGQLMaybeArray<DesignWhereUniqueInput> | null;
 };
 
+export type DailyReportRelateToManyForUpdateInput = {
+  readonly disconnect?: TSGQLMaybeArray<DailyReportWhereUniqueInput> | null;
+  readonly set?: TSGQLMaybeArray<DailyReportWhereUniqueInput> | null;
+  readonly create?: TSGQLMaybeArray<DailyReportCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<DailyReportWhereUniqueInput> | null;
+};
+
 export type UserUpdateArgs = {
   readonly where: UserWhereUniqueInput;
   readonly data: UserUpdateInput;
@@ -1256,6 +1329,7 @@ export type UserCreateInput = {
   readonly approvals?: ApprovalRelateToManyForCreateInput | null;
   readonly descriptions?: DescriptionRelateToManyForCreateInput | null;
   readonly Designs?: DesignRelateToManyForCreateInput | null;
+  readonly dailyReports?: DailyReportRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
 };
 
@@ -1267,6 +1341,11 @@ export type ApprovalRelateToManyForCreateInput = {
 export type DesignRelateToManyForCreateInput = {
   readonly create?: TSGQLMaybeArray<DesignCreateInput> | null;
   readonly connect?: TSGQLMaybeArray<DesignWhereUniqueInput> | null;
+};
+
+export type DailyReportRelateToManyForCreateInput = {
+  readonly create?: TSGQLMaybeArray<DailyReportCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<DailyReportWhereUniqueInput> | null;
 };
 
 export type Category = {
@@ -1499,6 +1578,12 @@ export type Mutation = {
   readonly updateDesigns: ReadonlyArray<Design | null> | null;
   readonly deleteDesign: Design | null;
   readonly deleteDesigns: ReadonlyArray<Design | null> | null;
+  readonly createDailyReport: DailyReport | null;
+  readonly createDailyReports: ReadonlyArray<DailyReport | null> | null;
+  readonly updateDailyReport: DailyReport | null;
+  readonly updateDailyReports: ReadonlyArray<DailyReport | null> | null;
+  readonly deleteDailyReport: DailyReport | null;
+  readonly deleteDailyReports: ReadonlyArray<DailyReport | null> | null;
   readonly createUser: User | null;
   readonly createUsers: ReadonlyArray<User | null> | null;
   readonly updateUser: User | null;
@@ -1803,6 +1888,31 @@ export type MutationdeleteDesignsArgs = {
   readonly where: TSGQLMaybeArray<DesignWhereUniqueInput>;
 };
 
+export type MutationcreateDailyReportArgs = {
+  readonly data: DailyReportCreateInput;
+};
+
+export type MutationcreateDailyReportsArgs = {
+  readonly data: TSGQLMaybeArray<DailyReportCreateInput>;
+};
+
+export type MutationupdateDailyReportArgs = {
+  readonly where: DailyReportWhereUniqueInput;
+  readonly data: DailyReportUpdateInput;
+};
+
+export type MutationupdateDailyReportsArgs = {
+  readonly data: TSGQLMaybeArray<DailyReportUpdateArgs>;
+};
+
+export type MutationdeleteDailyReportArgs = {
+  readonly where: DailyReportWhereUniqueInput;
+};
+
+export type MutationdeleteDailyReportsArgs = {
+  readonly where: TSGQLMaybeArray<DailyReportWhereUniqueInput>;
+};
+
 export type MutationcreateUserArgs = {
   readonly data: UserCreateInput;
 };
@@ -1967,6 +2077,9 @@ export type Query = {
   readonly designs: ReadonlyArray<Design> | null;
   readonly design: Design | null;
   readonly designsCount: number | null;
+  readonly dailyReports: ReadonlyArray<DailyReport> | null;
+  readonly dailyReport: DailyReport | null;
+  readonly dailyReportsCount: number | null;
   readonly users: ReadonlyArray<User> | null;
   readonly user: User | null;
   readonly usersCount: number | null;
@@ -2157,6 +2270,22 @@ export type QuerydesignArgs = {
 
 export type QuerydesignsCountArgs = {
   readonly where?: DesignWhereInput;
+};
+
+export type QuerydailyReportsArgs = {
+  readonly where?: DailyReportWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<DailyReportOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: DailyReportWhereUniqueInput | null;
+};
+
+export type QuerydailyReportArgs = {
+  readonly where: DailyReportWhereUniqueInput;
+};
+
+export type QuerydailyReportsCountArgs = {
+  readonly where?: DailyReportWhereInput;
 };
 
 export type QueryusersArgs = {

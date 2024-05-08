@@ -6,6 +6,8 @@ import { type controller } from "@keystone-6/core/fields/types/relationship/view
 import { Fragment, useState } from "react";
 import { useQuery, useLazyQuery } from '@apollo/client'
 import { gql } from '@ts-gql/tag/no-transform'
+// import { useRouter } from "@keystone-6/core/dist/declarations/src/admin-ui/router";
+import { useRouter } from "next/router";
 
 
 type Option = {
@@ -26,7 +28,12 @@ export const Field = ({
     value: '',
     label: 'انتخاب کنید'
   }
-  console.log(value)
+
+  const router = useRouter()
+  const [isHidden] = useState(router.pathname.split("/").filter(Boolean).at(0) === 'descriptions')
+
+  console.log(isHidden)
+
   const [selectedApproval, setSelectedApproval] = useState<Option>(firstOption)
 
   const [selectedDescriptoins, setSelectedDescriptoins] = useState<Option>(firstOption)
@@ -120,24 +127,27 @@ export const Field = ({
 
   return (
     <>
-      <FieldContainer>
-        <FieldLabel>{field.label}</FieldLabel>
+      {!isHidden &&
 
-        <Select onChange={onChangeApproval} value={selectedApproval}
-          options={data?.approvals?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
-        />
+        <FieldContainer>
+          <FieldLabel>{field.label}</FieldLabel>
 
-        {dataDescriptions &&
-          (
-            <Select
-              css={{ marginTop: '0.5rem' }}
-              onChange={onChangeDescription}
-              value={selectedDescriptoins}
-              options={dataDescriptions?.descriptions?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
-            />
-          )}
+          <Select onChange={onChangeApproval} value={selectedApproval}
+            options={data?.approvals?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
+          />
 
-      </FieldContainer>
+          {dataDescriptions &&
+            (
+              <Select
+                css={{ marginTop: '0.5rem' }}
+                onChange={onChangeDescription}
+                value={selectedDescriptoins}
+                options={dataDescriptions?.descriptions?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
+              />
+            )}
+
+        </FieldContainer>
+      }
 
     </>
   );
