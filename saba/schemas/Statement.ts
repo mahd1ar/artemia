@@ -199,6 +199,7 @@ export const Statement = list({
     deductionOnAccountOfAdvancePayment: bigInt({
       label: 'کسر علی الحساب',
       ui: {
+        views: './src/custome-fields-view/bigint-with-farsi-letters',
         // createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
