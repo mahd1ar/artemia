@@ -12,9 +12,7 @@ import {
 } from "@keystone-6/core/fields";
 import { Roles, Session } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
-import { sendResetPasswordEmail } from "../src/custom-fields/link-viewer";
 import { isAdmin, isMobayen } from "../data/access";
-import { PrismaClient } from "@prisma/client"
 import { gql } from "@ts-gql/tag/no-transform";
 
 export const Design = list({
@@ -55,7 +53,7 @@ export const Design = list({
         itemView: {
           fieldMode(args) {
             const role = (args.context.session as Session)?.data.role
-            console.log(role)
+
             if (role)
               return [Roles.admin, Roles.operator].includes(role) ? 'edit' : 'hidden'
             else
@@ -76,7 +74,7 @@ export const Design = list({
       field: graphql.field({
         type: graphql.JSON,
         async resolve(item, args, context) {
-          console.log(item)
+
           const { id } = item as unknown as { id?: string };
 
           if (!id)
