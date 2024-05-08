@@ -12,13 +12,6 @@ export const StatementItem = list({
       return !((args.session as Session)?.data.role === Roles.admin)
     },
   },
-  hooks: {
-    validate(args) {
-      console.log(args.item)
-      console.log(args.inputData)
-      console.log(args.resolvedData)
-    },
-  },
   fields: {
     description: text(),
     unit: select({
