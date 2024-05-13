@@ -1,5 +1,4 @@
 import { resolve } from "path";
-import axios from "axios";
 require("dotenv").config({
   override: true,
   path: resolve(
@@ -18,14 +17,15 @@ import { CronJob } from "cron";
 import { getContext } from '@keystone-6/core/context';
 import { Context } from '.keystone/types';
 import * as PrismaModule from '.prisma/client';
+import markdownit from 'markdown-it'
+import fs from "fs/promises"
+import path from 'path'
 
 type Response = {
   message: string;
   ok?: boolean;
   payload?: any;
 };
-
-
 
 const configWithAuth = withAuth(
   config({
@@ -74,6 +74,29 @@ const configWithAuth = withAuth(
           } catch (error) {
             console.log(error)
             res.json({ ok: false, message: String(error) })
+          }
+        })
+
+        app.get("/api/v1/changelog", async (req, res) => {
+          try {
+
+            const ls = await fs.readdir(path.resolve(process.cwd(), 'changelog'))
+
+            const x = await Promise.all(ls.map(async li => {
+              return `# [ changelog ${li.replace(".md", '')} ] \n ` + (await fs.readFile(path.resolve(process.cwd(), 'changelog', li))).toString()
+            }))
+
+
+
+            const md = markdownit()
+
+
+            res.send(md.render(x.join("\n")))
+
+
+          } catch (error) {
+            console.log(error)
+            res.send('<pre>' + String(error) + '<pre>')
           }
         })
 

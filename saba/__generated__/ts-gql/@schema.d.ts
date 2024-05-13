@@ -1,8 +1,8 @@
-// ts-gql-integrity:359823caa42b2617c4f02e8ff66eed2b
+// ts-gql-integrity:9088535b6300377a032b72cc9520b912
 /*
 ts-gql-meta-begin
 {
-  "hash": "92874705050eeaadddc9c7213a8816b0"
+  "hash": "0a4fb9889dc52d317a36e1f07b29a21d"
 }
 ts-gql-meta-end
 */
@@ -995,8 +995,7 @@ export type Design = {
   readonly title: string | null;
   readonly design: ReadonlyArray<FileStore> | null;
   readonly designCount: number | null;
-  readonly maps: boolean | null;
-  readonly xvpn: string | null;
+  readonly download: JSON | null;
   readonly category: ReadonlyArray<Category> | null;
   readonly categoryCount: number | null;
   readonly createdAt: DateTime | null;
