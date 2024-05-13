@@ -1,14 +1,11 @@
-import { graphql, group, list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { bigInt, checkbox, file, image, integer, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
-import { document } from "@keystone-6/fields-document";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
-import { bigInt as customBigInt } from "../src/custom-fields/custom-big-int";
 import { NumUtils, setPermitions } from "../data/utils";
 import { Roles, Session } from "../data/types";
 import { isMobayen } from "../data/access";
 import { PrismaClient } from '@prisma/client'
-import { ConfirmedBy } from "../src/custom-fields/confirm-by";
 
 export const Statement = list({
   access: {
@@ -50,7 +47,6 @@ export const Statement = list({
           }
         })
 
-        console.log(x)
 
         // TODO DELETE PAYMENT
       } else {
@@ -199,6 +195,7 @@ export const Statement = list({
     deductionOnAccountOfAdvancePayment: bigInt({
       label: 'کسر علی الحساب',
       ui: {
+        views: './src/custome-fields-view/bigint-with-farsi-letters',
         // createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
@@ -236,12 +233,11 @@ export const Statement = list({
               },
               query: 'total'
             })
-            console.log(x)
+
             let total = 0n
 
             for (const i of x) {
               total += BigInt(i.total.replace(/,/g, ''))
-              console.log({ total })
             }
             return NumUtils.format(total - (deduction || 0n) + (tax || 0n))
 
