@@ -1,8 +1,8 @@
-// ts-gql-integrity:359823caa42b2617c4f02e8ff66eed2b
+// ts-gql-integrity:bd951b5d2f66288f193b55ed4892bab5
 /*
 ts-gql-meta-begin
 {
-  "hash": "92874705050eeaadddc9c7213a8816b0"
+  "hash": "21f1b62878b255523d0b0bfefae881d9"
 }
 ts-gql-meta-end
 */
@@ -718,68 +718,6 @@ export type ImageStoreCreateInput = {
   readonly createdAt?: DateTime | null;
 };
 
-export type DescriptionOfApproval = {
-  readonly __typename: "DescriptionOfApproval";
-  readonly id: string;
-  readonly slug: string | null;
-  readonly url: string | null;
-  readonly image: ImageStore | null;
-  readonly noUI: boolean | null;
-  readonly createdAt: DateTime | null;
-};
-
-export type DescriptionOfApprovalWhereUniqueInput = {
-  readonly id?: string | null;
-};
-
-export type DescriptionOfApprovalWhereInput = {
-  readonly AND?: TSGQLMaybeArray<DescriptionOfApprovalWhereInput> | null;
-  readonly OR?: TSGQLMaybeArray<DescriptionOfApprovalWhereInput> | null;
-  readonly NOT?: TSGQLMaybeArray<DescriptionOfApprovalWhereInput> | null;
-  readonly id?: IDFilter | null;
-  readonly slug?: StringFilter | null;
-  readonly image?: ImageStoreWhereInput | null;
-  readonly noUI?: BooleanFilter | null;
-  readonly createdAt?: DateTimeNullableFilter | null;
-};
-
-export type DescriptionOfApprovalOrderByInput = {
-  readonly id?: OrderDirection | null;
-  readonly slug?: OrderDirection | null;
-  readonly noUI?: OrderDirection | null;
-  readonly createdAt?: OrderDirection | null;
-};
-
-export type DescriptionOfApprovalUpdateInput = {
-  readonly slug?: string | null;
-  readonly image?: ImageStoreRelateToOneForUpdateInput | null;
-  readonly noUI?: boolean | null;
-  readonly createdAt?: DateTime | null;
-};
-
-export type ImageStoreRelateToOneForUpdateInput = {
-  readonly create?: ImageStoreCreateInput | null;
-  readonly connect?: ImageStoreWhereUniqueInput | null;
-  readonly disconnect?: boolean | null;
-};
-
-export type DescriptionOfApprovalUpdateArgs = {
-  readonly where: DescriptionOfApprovalWhereUniqueInput;
-  readonly data: DescriptionOfApprovalUpdateInput;
-};
-
-export type DescriptionOfApprovalCreateInput = {
-  readonly slug?: string | null;
-  readonly image?: ImageStoreRelateToOneForCreateInput | null;
-  readonly noUI?: boolean | null;
-  readonly createdAt?: DateTime | null;
-};
-
-export type ImageStoreRelateToOneForCreateInput = {
-  readonly create?: ImageStoreCreateInput | null;
-  readonly connect?: ImageStoreWhereUniqueInput | null;
-};
-
 export type Constractor = {
   readonly __typename: "Constractor";
   readonly id: string;
@@ -995,8 +933,7 @@ export type Design = {
   readonly title: string | null;
   readonly design: ReadonlyArray<FileStore> | null;
   readonly designCount: number | null;
-  readonly maps: boolean | null;
-  readonly xvpn: string | null;
+  readonly download: JSON | null;
   readonly category: ReadonlyArray<Category> | null;
   readonly categoryCount: number | null;
   readonly createdAt: DateTime | null;
@@ -1548,12 +1485,6 @@ export type Mutation = {
   readonly updateImageStores: ReadonlyArray<ImageStore | null> | null;
   readonly deleteImageStore: ImageStore | null;
   readonly deleteImageStores: ReadonlyArray<ImageStore | null> | null;
-  readonly createDescriptionOfApproval: DescriptionOfApproval | null;
-  readonly createDescriptionOfApprovals: ReadonlyArray<DescriptionOfApproval | null> | null;
-  readonly updateDescriptionOfApproval: DescriptionOfApproval | null;
-  readonly updateDescriptionOfApprovals: ReadonlyArray<DescriptionOfApproval | null> | null;
-  readonly deleteDescriptionOfApproval: DescriptionOfApproval | null;
-  readonly deleteDescriptionOfApprovals: ReadonlyArray<DescriptionOfApproval | null> | null;
   readonly createConstractor: Constractor | null;
   readonly createConstractors: ReadonlyArray<Constractor | null> | null;
   readonly updateConstractor: Constractor | null;
@@ -1761,31 +1692,6 @@ export type MutationdeleteImageStoreArgs = {
 
 export type MutationdeleteImageStoresArgs = {
   readonly where: TSGQLMaybeArray<ImageStoreWhereUniqueInput>;
-};
-
-export type MutationcreateDescriptionOfApprovalArgs = {
-  readonly data: DescriptionOfApprovalCreateInput;
-};
-
-export type MutationcreateDescriptionOfApprovalsArgs = {
-  readonly data: TSGQLMaybeArray<DescriptionOfApprovalCreateInput>;
-};
-
-export type MutationupdateDescriptionOfApprovalArgs = {
-  readonly where: DescriptionOfApprovalWhereUniqueInput;
-  readonly data: DescriptionOfApprovalUpdateInput;
-};
-
-export type MutationupdateDescriptionOfApprovalsArgs = {
-  readonly data: TSGQLMaybeArray<DescriptionOfApprovalUpdateArgs>;
-};
-
-export type MutationdeleteDescriptionOfApprovalArgs = {
-  readonly where: DescriptionOfApprovalWhereUniqueInput;
-};
-
-export type MutationdeleteDescriptionOfApprovalsArgs = {
-  readonly where: TSGQLMaybeArray<DescriptionOfApprovalWhereUniqueInput>;
 };
 
 export type MutationcreateConstractorArgs = {
@@ -2062,9 +1968,6 @@ export type Query = {
   readonly imageStores: ReadonlyArray<ImageStore> | null;
   readonly imageStore: ImageStore | null;
   readonly imageStoresCount: number | null;
-  readonly descriptionOfApprovals: ReadonlyArray<DescriptionOfApproval> | null;
-  readonly descriptionOfApproval: DescriptionOfApproval | null;
-  readonly descriptionOfApprovalsCount: number | null;
   readonly constractors: ReadonlyArray<Constractor> | null;
   readonly constractor: Constractor | null;
   readonly constractorsCount: number | null;
@@ -2190,22 +2093,6 @@ export type QueryimageStoreArgs = {
 
 export type QueryimageStoresCountArgs = {
   readonly where?: ImageStoreWhereInput;
-};
-
-export type QuerydescriptionOfApprovalsArgs = {
-  readonly where?: DescriptionOfApprovalWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<DescriptionOfApprovalOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: DescriptionOfApprovalWhereUniqueInput | null;
-};
-
-export type QuerydescriptionOfApprovalArgs = {
-  readonly where: DescriptionOfApprovalWhereUniqueInput;
-};
-
-export type QuerydescriptionOfApprovalsCountArgs = {
-  readonly where?: DescriptionOfApprovalWhereInput;
 };
 
 export type QueryconstractorsArgs = {

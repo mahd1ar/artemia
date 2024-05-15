@@ -2,7 +2,6 @@ export { ImageStore } from "./ImageStore";
 export { Description } from "./Description";
 export { Approval } from "./Approval";
 export { Payment } from "./Payment";
-export { DescriptionOfApproval } from "./DescriptionOfApproval";
 export { Constractor } from "./Customer";
 export { FileStore } from './FileStore';
 export { User } from './User';

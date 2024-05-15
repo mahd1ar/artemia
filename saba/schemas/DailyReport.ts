@@ -27,7 +27,7 @@ export const DailyReport = list({
         validate(args) {
             const session = args.context.session as Session
             if (args.operation === 'update') {
-                if (session?.data.role === Roles.mobayen) {
+                if (session?.data.role === Roles.workshop) {
                     const createdAt = args.item.date as Date
                     // check if user is not exceeded 48 hours
                     const diff = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60)
@@ -69,7 +69,7 @@ export const DailyReport = list({
                 resolveInput(args) {
                     const session = args.context.session as Session
 
-                    if (args.inputData.createdBy && session?.data.role !== Roles.mobayen) {
+                    if (args.inputData.createdBy && session?.data.role !== Roles.workshop) {
                         return args.resolvedData.createdBy
                     }
 

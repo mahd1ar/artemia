@@ -13,8 +13,11 @@ export const StatementItem = list({
     },
   },
   fields: {
-    description: text(),
+    description: text({
+      label: 'توضیحات'
+    }),
     unit: select({
+      label: 'واحد',
       options: [
         {
           value: 'meters',
@@ -34,14 +37,17 @@ export const StatementItem = list({
         }
       ]
     }),
-    unitPrice: integer({ validation: { isRequired: true } }),
+    unitPrice: integer({ label: 'قیمت واحد', validation: { isRequired: true } }),
     quantity: integer({
+      label: 'مقدار',
       validation: { isRequired: true }
     }),
     percentageOfWorkDone: integer({
+      label: 'درصد انجام کار',
       defaultValue: 100
     }),
     total: virtual({
+      label: 'جمع کل',
       field: graphql.field({
         type: graphql.String,
         resolve(item) {
