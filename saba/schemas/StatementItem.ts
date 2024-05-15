@@ -32,9 +32,61 @@ export const StatementItem = list({
           label: 'کیلوگرم',
         },
         {
+          label: 'لیتر',
+          value: "litre",
+        },
+        {
           value: 'days',
           label: 'روز',
-        }
+        }, {
+          label: 'پرس',
+          value: 'press'
+        },
+        {
+          label: 'سرویس',
+          value: 'service'
+        }, {
+          label: 'مقطوع',
+          value: 'piece'
+        }, {
+          label: 'فاکتوری',
+          value: 'facture'
+        }, {
+          label: 'کیسه',
+          value: 'bag',
+        },
+        {
+          label: 'متر طول',
+          value: 'meter long'
+        }, {
+          label: 'متر مکعب',
+          value: 'meter cubed'
+        }, {
+          label: 'متر مربع',
+          value: 'meter square'
+        }, {
+          label: 'نفر / روز',
+          value: 'person/day',
+        }, {
+          label: 'حلقه',
+          value: 'ring'
+        }, {
+          label: 'دستگاه',
+          value: 'device'
+        },
+        {
+          label: "شاخه",
+          value: "section",
+        },
+        {
+          label: 'شیت / رول',
+          value: 'sheet/roll',
+        },
+        {
+          label: 'عدد',
+          value: 'number'
+        },
+
       ]
     }),
     unitPrice: integer({ label: 'قیمت واحد', validation: { isRequired: true } }),
