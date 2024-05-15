@@ -13,7 +13,7 @@
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@keystone-6/auth": "^8.0.0",
-    "@keystone-6/core": "^6.0.0",
+    "@keystone-6/core": "^6.1.0",
     "@keystone-6/fields-document": "^9.0.0",
     "@ts-gql/compiler": "^0.16.7",
     "@ts-gql/eslint-plugin": "^0.9.1",

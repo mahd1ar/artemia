@@ -16,5 +16,5 @@ export function isAdmin(args: BaseAccessArgs<BaseListTypeInfo>) {
 
 export function isMobayen(args: { session?: Session } & Record<string, any>) {
   const role = (args.session as Session)!.data.role
-  return role === Roles.mobayen
+  return role === Roles.workshop
 }

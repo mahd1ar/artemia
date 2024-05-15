@@ -19,7 +19,7 @@ export const Approval = list({
       initialColumns: ["code", 'title', 'estimatedBudget'],
     },
     isHidden(args) {
-      return (args.session as Session)?.data.role === Roles.mobayen
+      return (args.session as Session)?.data.role === Roles.workshop
     },
     itemView: {
       defaultFieldMode(args) {
@@ -34,7 +34,7 @@ export const Approval = list({
     title: text({
       label: 'عنوان',
     }),
-    estimatedBudget: bigInt({}),
+    estimatedBudget: bigInt({ label: 'برودجه تخمینی' }),
     description: relationship({
       ref: 'Description.approvals',
       many: true,

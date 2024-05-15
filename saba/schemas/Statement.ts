@@ -23,7 +23,7 @@ export const Statement = list({
 
         if ((args.item as any).confirmedByTheUploader) {
           const session = args.context.session as Session
-          if (session?.data.role === Roles.mobayen) {
+          if (session?.data.role === Roles.workshop) {
             args.addValidationError('این پیشنهاد قبلا تایید شده است')
           }
         }
@@ -160,7 +160,7 @@ export const Statement = list({
           fieldMode(args) {
             return setPermitions(args, [
               { role: Roles.supervisor, fieldMode: 'read' },
-              { role: Roles.mobayen, fieldMode: 'read' },
+              { role: Roles.workshop, fieldMode: 'read' },
             ], 'edit')
           },
         },
@@ -180,7 +180,7 @@ export const Statement = list({
           fieldMode(args) {
             return setPermitions(args, [
               { role: Roles.supervisor, fieldMode: 'read' },
-              { role: Roles.mobayen, fieldMode: 'read' },
+              { role: Roles.workshop, fieldMode: 'read' },
             ], 'edit')
           },
         },
@@ -215,6 +215,7 @@ export const Statement = list({
     }),
 
     totalPayable: virtual({
+      label: 'جمع  کل قابل پرداخت ',
       field: graphql.field({
         type: graphql.String,
         async resolve(item, args, context) {

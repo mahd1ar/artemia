@@ -14,7 +14,8 @@ export enum Roles {
     admin = "admin",
     operator = "operator",
     supervisor = "supervisor",
-    "mobayen" = "map_and_reporting"
+    financial = "financial",
+    workshop = "map_and_reporting"
 }
 
 export function enumToArrayOfKeyValue(enumObject: Record<string, string>) {

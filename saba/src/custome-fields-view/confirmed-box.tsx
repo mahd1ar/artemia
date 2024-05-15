@@ -113,7 +113,7 @@ export const Field = ({
     })
     if (flag) {
       setIsOpen(false);
-      addToast({ title: "لطفا قبل از تایید نهایی تغییرات را ذخیره کنید", tone: "negative" })
+      addToast({ title: "لطفا قبل از ثبت نهایی تغییرات را ذخیره کنید", tone: "negative" })
       return
     }
     // alert("go home");
@@ -149,7 +149,7 @@ export const Field = ({
         // disabled={value}
         >
           {
-            value ? 'این صورت وضعیت تایید شده' : ' تایید نهایی این صورت وضعیت'
+            value ? 'این صورت وضعیت تایید شده' : ' ثبت نهایی این صورت وضعیت'
           }
 
           {value && (
@@ -187,7 +187,7 @@ export const Field = ({
         {!value ?
 
           <h4 dir="rtl" >
-            آیا از تایید نهایی این صورت وضعیت مطمین هستید؟
+            آیا از ثبت نهایی این صورت وضعیت مطمین هستید؟
           </h4>
           :
           <h4 dir="rtl" >
