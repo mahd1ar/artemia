@@ -7,6 +7,7 @@ import {
     useQuery
 } from '@apollo/client'
 import { Roles } from '../../data/types';
+import ChangeLog from "../components/changelog";
 
 
 export default function CustomPage() {
@@ -62,7 +63,12 @@ export default function CustomPage() {
                 </p>
 
 
+                <h1>
+                    💖
+                    آخرین بروزرسانی ها</h1>
+                <ChangeLog />
             </div>
+
 
 
         </PageContainer>
