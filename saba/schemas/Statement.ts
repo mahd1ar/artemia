@@ -31,6 +31,9 @@ export const Statement = list({
     },
 
     async afterOperation(args) {
+      const session = args.context.session as Session
+
+
 
       const prisma = args.context.prisma as PrismaClient
       if (args.operation === 'delete') {
@@ -73,6 +76,21 @@ export const Statement = list({
           }
         }
 
+      }
+
+      if (args.operation === 'update') {
+        if (typeof args.inputData.confirmedByTheUploader === 'boolean') {
+          const confirmed = !!args.inputData.confirmedByTheUploader
+          console.log("im here")
+          await prisma.log.create({
+            data: {
+              action: 'STATEMENT_CONFIRMED',
+              type: 'info',
+              message: `statement with id ${args.item?.id} is ${confirmed ? 'confirmed ✔️' : 'UNconfirmed ❌'} by "${session?.data.name}"`
+            },
+            select: { id: true }
+          })
+        }
       }
 
 

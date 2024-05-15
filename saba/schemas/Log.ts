@@ -11,6 +11,10 @@ export const Log = list({
     ui: {
         listView: {
             initialColumns: ['type', 'action', 'message', 'date'],
+            initialSort: {
+                direction: 'DESC',
+                field: 'date'
+            }
         },
         isHidden(args) {
             return (args.session as Session)?.data.role !== Roles.admin
@@ -32,6 +36,7 @@ export const Log = list({
                     value: 'STATEMENT_CONFIRMED'
                 }
             ],
+            type: 'enum'
         }),
         message: text({
             ui: {
