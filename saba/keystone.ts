@@ -46,41 +46,17 @@ const configWithAuth = withAuth(
         // add body parser
         app.use(bodyParser.json());
 
-        app.post("/api/v1/log", async (req, res) => {
-          try {
-
-
-            const sid = req.body.sid
-            const action = req.body.action
-            const session = (await context.withRequest(req)).session as Session
-            const prisma = context.prisma as PrismaClient
-            if (!session) {
-              res.json({ ok: false })
-              return
-            }
-
-            if (action === 'STATEMENT_CONFIRMED') {
-              await prisma.log.create({
-                data: {
-                  action: action,
-                  type: 'info',
-                  message: `تایید صورت وضعیت ${sid} از طرف ${session.data?.name} با موفقیت انجام شد`,
-                }
-              })
-            }
-
-            res.json({ ok: true })
-
-          } catch (error) {
-            console.log(error)
-            res.json({ ok: false, message: String(error) })
-          }
-        })
 
         app.get("/api/v1/changelog", async (req, res) => {
           try {
 
-            const ls = await fs.readdir(path.resolve(process.cwd(), 'changelog'))
+            const ls = (await fs.readdir(path.resolve(process.cwd(), 'changelog')))
+
+            try {
+              ls.sort((a, b) => (new Date(b.slice(0, -3)).getTime()) - (new Date(a.slice(0, -3)).getTime()))
+            } catch (_) {
+
+            }
 
             const x = await Promise.all(ls.map(async li => {
               return `# [ changelog ${li.replace(".md", '')} ] \n ` + (await fs.readFile(path.resolve(process.cwd(), 'changelog', li))).toString()

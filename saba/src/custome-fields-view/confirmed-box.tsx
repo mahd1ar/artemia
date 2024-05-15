@@ -128,10 +128,7 @@ export const Field = ({
       router.push("/statements");
       setIsOpen(false);
       addToast({ title: "Confirmed", tone: "positive" })
-      await axios.post('/api/v1/log', {
-        action: 'STATEMENT_CONFIRMED',
-        sid: id
-      })
+
     }
     // onChange?.(true)
     // if (forceValidation)
