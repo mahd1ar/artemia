@@ -23,7 +23,7 @@ export const Field = ({
   itemValue,
   forceValidation
 }: FieldProps<typeof controller>) => {
-  console.log({ value })
+
   const firstOption: Option = {
     value: '',
     label: 'انتخاب کنید'
@@ -32,7 +32,6 @@ export const Field = ({
   const router = useRouter()
   const [isHidden] = useState(router.pathname.split("/").filter(Boolean).at(0) === 'descriptions')
 
-  console.log(isHidden)
 
   const [selectedApproval, setSelectedApproval] = useState<Option>(firstOption)
 
@@ -80,9 +79,8 @@ export const Field = ({
 
             const id = res.data?.description?.approvals?.id
             const title = res.data?.description?.approvals?.title
-            console.log(res)
-            if (id && title) {
 
+            if (id && title) {
               setSelectedApproval({ label: title || '', value: id })
               loadCoresponsiveDescriptions({ variables: { id } })
               setSelectedDescriptoins({ label: res.data?.description?.title || '', value: res.data?.description?.id || '' })
