@@ -1,8 +1,7 @@
-import { list } from "@keystone-6/core";
+import { list, graphql } from "@keystone-6/core";
 import { allowAll, allOperations } from "@keystone-6/core/access";
-import { password, relationship, select, text, timestamp } from "@keystone-6/core/fields";
-import { isAdmin } from "../data/access";
-import { Roles, Session, enumToArrayOfKeyValue } from "../data/types";
+import { password, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
+import { Roles, Session, getRoleFromArgs } from "../data/types";
 
 export const User = list({
   access: {
@@ -13,17 +12,56 @@ export const User = list({
   },
   ui: {
     isHidden(args) {
-      return !((args.session as Session)?.data.role === Roles.admin)
+      console.log(getRoleFromArgs(args))
+      return getRoleFromArgs(args) > Roles.operator
     },
+    listView: {
+      initialColumns: ['name', 'role']
+    }
   },
   fields: {
+    fullname: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item) {
+          return `${item.name} ${item.role}`
+        },
+      }),
+    }),
     name: text({ validation: { isRequired: true } }),
     email: text({
       validation: { isRequired: true },
       isIndexed: "unique",
     }),
     role: select({
-      options: enumToArrayOfKeyValue(Roles).map(i => ({ label: i.key, value: i.value })),
+      options: [
+        {
+          label: " مدیر کل",
+          value: Roles.admin,
+        },
+        {
+          label: "مدیر",
+          value: Roles.supervisor,
+        },
+        {
+          value: Roles.operator,
+          label: 'اپراتور'
+        },
+        {
+          value: Roles.projectControl,
+          label: 'کنترل پروژه'
+        },
+        {
+          value: Roles.financial,
+          label: 'مالی'
+        },
+        {
+          value: Roles.workshop,
+          label: 'کارگاه'
+        }
+      ],
+      type: "integer",
+      defaultValue: Roles.guest,
     }),
     password: password({ validation: { isRequired: true } }),
     statements: relationship({ ref: "Statement.createdBy", many: true }),

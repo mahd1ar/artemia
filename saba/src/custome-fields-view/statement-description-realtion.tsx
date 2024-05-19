@@ -132,11 +132,13 @@ export const Field = ({
 
           <Select onChange={onChangeApproval} value={selectedApproval}
             options={data?.approvals?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
+            isDisabled={!onChange}
           />
 
           {dataDescriptions &&
             (
               <Select
+                isDisabled={!onChange}
                 css={{ marginTop: '0.5rem' }}
                 onChange={onChangeDescription}
                 value={selectedDescriptoins}

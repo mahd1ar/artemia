@@ -14,9 +14,24 @@ import {
 } from "@keystone-6/core/fields";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
 import { NumUtils, setPermitions } from "../data/utils";
-import { Roles, Session } from "../data/types";
+import { Roles, Session, getRoleFromArgs } from "../data/types";
 import { isMobayen } from "../data/access";
 import { PrismaClient } from "@prisma/client";
+
+
+const alc = [{
+  key: 'confirmedByFinancialSupervisor',
+  for: Roles.financial
+},
+{
+  key: 'confirmedByTheUploader',
+  for: Roles.workshop
+},
+{
+  key: 'confirmedByProjectControlSupervisor',
+  for: Roles.projectControl
+}]
+
 
 export const Statement = list({
   access: {
@@ -25,17 +40,53 @@ export const Statement = list({
       // update: (args) => !isMobayen(args),
       delete: (args) => !isMobayen(args),
     },
-  },
-  hooks: {
-    async validate(args) {
-      if (args.operation !== "create") {
-        if ((args.item as any).confirmedByTheUploader) {
-          const session = args.context.session as Session;
-          if (session?.data.role === Roles.workshop) {
-            args.addValidationError("این پیشنهاد قبلا تایید شده است");
+    filter: {
+      query: args => {
+        const role = getRoleFromArgs(args, Roles.guest)
+
+        if (role === Roles.admin || role === Roles.workshop)
+          return true
+
+        return {
+          confirmedByTheUploader: {
+            equals: true
           }
         }
       }
+    }
+  },
+  hooks: {
+    async validate(args) {
+      const session = args.context.session as Session;
+
+      // if (args.operation !== "create") {
+      //   if ((args.item as any).confirmedByTheUploader) {
+      //     if (session?.data.role === Roles.workshop) {
+      //       args.addValidationError("این پیشنهاد قبلا تایید شده است");
+      //     }
+      //   }
+      // }
+
+
+      if (args.operation === 'update') {
+
+        alc.forEach(({ key, for: forr }) => {
+
+
+          if (typeof args.inputData![key] === "boolean") {
+            const confirmed = !!args.inputData![key];
+
+            if (confirmed === false && session?.data.role === forr) {
+              args.addValidationError("این پیشنهاد قبلا تایید شده است");
+            }
+
+          }
+
+        })
+
+      }
+
+
     },
 
     async afterOperation(args) {
@@ -84,19 +135,32 @@ export const Statement = list({
       }
 
       if (args.operation === "update") {
-        if (typeof args.inputData.confirmedByTheUploader === "boolean") {
-          const confirmed = !!args.inputData.confirmedByTheUploader;
-          console.log("im here");
-          await prisma.log.create({
-            data: {
-              action: "STATEMENT_CONFIRMED",
-              type: "info",
-              message: `statement with id ${args.item?.id} is ${confirmed ? "confirmed ✔️" : "UNconfirmed ❌"
-                } by "${session?.data.name}"`,
-            },
-            select: { id: true },
-          });
-        }
+
+        alc.forEach(async ({ key, for: forr }) => {
+
+          if (typeof args.inputData![key] === "boolean") {
+            const confirmed = !!args.inputData![key];
+
+            await prisma.log.create({
+              data: {
+                action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : "STATEMENT_CONFIRMED",
+                type: "info",
+                message: `statement with id ${args.item?.id} is ${confirmed ? "confirmed ✔️" : "UNconfirmed ❌"
+                  } by "${session?.data.name}(${session?.itemId})"`,
+              },
+              select: { id: true },
+            });
+
+
+
+          }
+
+
+
+        })
+
+
+
       }
     },
   },
@@ -110,9 +174,8 @@ export const Statement = list({
       },
     },
     itemView: {
-      // defaultFieldMode(args) {
-      //   return 'hidden'
-      // },
+      defaultFieldMode: args =>
+        [Roles.admin, Roles.workshop, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : 'read'
     },
     hideDelete(args) {
       return isMobayen(args);
@@ -121,46 +184,103 @@ export const Statement = list({
   fields: {
     statementConfirmationStatus: virtual({
       ui: {
+        itemView: { fieldMode: 'hidden' },
         views: './src/custome-fields-view/statement-confirmation-status.tsx'
       },
       field: graphql.field({
         type: graphql.JSON,
         async resolve(item, args, context) {
 
-          const { id, confirmedByFinancialSupervisor, confirmedByTheUploader } = item as unknown as {
-            id?: string,
-            confirmedByFinancialSupervisor: boolean,
-            confirmedByTheUploader: boolean
-          };
 
-          if (!id)
+
+          if (!item.id)
             return {
               ok: true,
               uploader: null,
-              financialSupervisor: null
+              financialSupervisor: null,
+              projectControlSupervisor: null,
+              Supervisor: null,
             }
 
 
           return {
             ok: true,
-            uploader: confirmedByTheUploader,
-            financialSupervisor: confirmedByFinancialSupervisor
+            uploader: item.confirmedByTheUploader as boolean,
+            financialSupervisor: item.confirmedByFinancialSupervisor as boolean,
+            projectControlSupervisor: item.confirmedByProjectControlSupervisor as boolean,
+            Supervisor: item.confirmedBySupervisor as boolean
           }
         },
       }),
     }),
+
+
     confirmedByTheUploader: checkbox({
-      label: "",
+      label: "تایید توسط ناظر کارگاه",
       ui: {
+        itemView: {
+          fieldMode(args) {
+            return setPermitions(args, [
+              { role: Roles.workshop, fieldMode: 'edit' },
+              { role: Roles.admin, fieldMode: 'edit' },
+              { role: Roles.operator, fieldMode: 'edit' },
+              // { role: Roles.supervisor, fieldMode: 'edit' },
+            ], 'hidden')
+          },
+        },
         createView: { fieldMode: "hidden" },
-        views: "./src/custome-fields-view/confirmed-box.tsx",
+        views: "./src/custome-fields-view/confirm-statement-by.tsx",
       },
     }),
     confirmedByFinancialSupervisor: checkbox({
-      label: "",
+      label: "تایید توسط ناظر مالی",
 
       ui: {
-        // description: 'ناظر مالی',
+        itemView: {
+          fieldMode(args) {
+            return setPermitions(args, [
+              { role: Roles.financial, fieldMode: 'edit' },
+              { role: Roles.admin, fieldMode: 'edit' },
+              { role: Roles.operator, fieldMode: 'edit' },
+              // { role: Roles.supervisor, fieldMode: 'edit' },
+            ], 'hidden')
+          },
+        },
+        createView: { fieldMode: "hidden" },
+        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+      },
+    }),
+    confirmedByProjectControlSupervisor: checkbox({
+      label: "تایید توسط ناظر کنترل پروژه",
+
+      ui: {
+        itemView: {
+          fieldMode(args) {
+            return setPermitions(args, [
+              { role: Roles.projectControl, fieldMode: 'edit' },
+              { role: Roles.admin, fieldMode: 'edit' },
+              { role: Roles.operator, fieldMode: 'edit' },
+              // { role: Roles.supervisor, fieldMode: 'edit' },
+            ], 'hidden')
+          },
+        },
+        createView: { fieldMode: "hidden" },
+        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+      },
+    }),
+    confirmedBySupervisor: checkbox({
+      label: "تایید توسط سرپرست کل ",
+
+      ui: {
+        itemView: {
+          fieldMode(args) {
+            return setPermitions(args, [
+              { role: Roles.supervisor, fieldMode: 'edit' },
+              { role: Roles.admin, fieldMode: 'edit' },
+              { role: Roles.operator, fieldMode: 'edit' },
+            ], 'hidden')
+          },
+        },
         createView: { fieldMode: "hidden" },
         views: "./src/custome-fields-view/confirm-statement-by.tsx",
       },
@@ -174,8 +294,6 @@ export const Statement = list({
       ui: {
         views: "./src/custome-fields-view/statement-description-realtion.tsx",
         itemView: {
-          // TOD if user role is operator
-          fieldMode: "edit",
           fieldPosition(args) {
             return "sidebar";
           },
@@ -199,13 +317,6 @@ export const Statement = list({
       ui: {
         itemView: {
           fieldPosition: "sidebar",
-          fieldMode(args) {
-            return setPermitions(
-              args,
-              [{ role: Roles.supervisor, fieldMode: "read" }],
-              "edit"
-            );
-          },
         },
       },
     }),
@@ -214,18 +325,6 @@ export const Statement = list({
       ref: "StatementItem.statement",
       many: true,
       ui: {
-        itemView: {
-          fieldMode(args) {
-            return setPermitions(
-              args,
-              [
-                { role: Roles.supervisor, fieldMode: "read" },
-                { role: Roles.workshop, fieldMode: "read" },
-              ],
-              "edit"
-            );
-          },
-        },
         displayMode: "cards",
         cardFields: [
           "description",
@@ -260,19 +359,7 @@ export const Statement = list({
       ref: "Payment.statement",
       many: true,
       ui: {
-        // createView: { fieldMode: 'hidden' },
-        itemView: {
-          fieldMode(args) {
-            return setPermitions(
-              args,
-              [
-                { role: Roles.supervisor, fieldMode: "read" },
-                { role: Roles.workshop, fieldMode: "read" },
-              ],
-              "edit"
-            );
-          },
-        },
+
         cardFields: ["attachment", "price", "dateOfPayment", "description"],
         displayMode: "cards",
         inlineConnect: false,
@@ -288,17 +375,8 @@ export const Statement = list({
     deductionOnAccountOfAdvancePayment: bigInt({
       label: "کسر علی الحساب",
       ui: {
+        // itemView: { fieldMode: 'edit' },
         views: "./src/custome-fields-view/bigint-with-farsi-letters",
-        // createView: { fieldMode: 'hidden' },
-        itemView: {
-          fieldMode(args) {
-            return setPermitions(
-              args,
-              [{ role: Roles.supervisor, fieldMode: "read" }],
-              "edit"
-            );
-          },
-        },
       },
       defaultValue: 0n,
     }),
@@ -356,15 +434,6 @@ export const Statement = list({
       ui: {
         displayMode: "segmented-control",
         createView: { fieldMode: "hidden" },
-        itemView: {
-          fieldMode(args) {
-            return setPermitions(
-              args,
-              [{ role: Roles.supervisor, fieldMode: "read" }],
-              "edit"
-            );
-          },
-        },
       },
     }),
 

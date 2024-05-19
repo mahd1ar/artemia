@@ -56,6 +56,7 @@ function BigIntInput({
       },
     }
   )
+
   return (
     <span>
       <TextInput
@@ -132,7 +133,7 @@ export const Field = ({
   itemValue,
   forceValidation
 }: FieldProps<typeof controller>) => {
-
+  console.log(field)
   const message = validate(value, field.validation, field.label, field.hasAutoIncrementDefault)
 
 
@@ -164,7 +165,14 @@ export const Field = ({
       ) : value.value === null ? (
         'null'
       ) : (
-        value.value.toString()
+        <span dir='rtl' >
+          {Intl.NumberFormat('ir-fa').format(+value.value.toString())}
+          <span style={{ fontSize: 12 }} >
+
+            ریال
+          </span>
+
+        </span>
       )}
 
 
