@@ -35,10 +35,8 @@ export namespace NumUtils {
 
 
 export function setPermitions(
-  args: {
-    context: KeystoneContext<BaseKeystoneTypeInfo<any>>;
+  args: object & {
     session?: Session;
-    item: BaseItem;
   },
 
   permittions: {

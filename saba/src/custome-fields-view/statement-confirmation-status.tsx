@@ -16,7 +16,13 @@ import { gql, useMutation } from '@apollo/client'
 import axios from "axios";
 import { CellContainer, CellLink } from "@keystone-6/core/admin-ui/components";
 
+import StepperProgress from "./stepper-progress";
+import { Match } from "../../data/match";
 
+type Value = {
+  ok: boolean,
+  data: { key: string, value: boolean, isCurrent: boolean }[]
+}
 
 export const Field = ({
   field,
@@ -27,21 +33,21 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
-  console.log(Object.entries(value))
+
+  const dataItems = (value as Value).data
+    .map((i) => ({
+      dataDesc: Match.AclRole(i.key),
+      isDone: i.value,
+      isCurrent: i.isCurrent
+    }))
+    .sort((a, b) => +b.isDone - +a.isDone)
+
   return (
     <>
       <FieldContainer>
         <FieldLabel>{field.label}</FieldLabel>
-
         <div>
-
-
-          {
-            Object.entries(value).slice(1).map(i => {
-              return <div>{i[0]} : {!!i[1] ? '✅' : '❌'}</div>
-            })
-          }
-
+          < StepperProgress dataItems={dataItems} />
 
         </div>
 
@@ -53,12 +59,12 @@ export const Field = ({
   );
 };
 
-function statementStatusToEmije(item?: Record<string, any>) {
-  return item ? Object.entries(item).slice(1).map(i => (i[1] ? '✅' : '❌')).join('') : ''
+function statementStatusToEmije(items?: Value['data']) {
+  return items?.map(i => i.value ? '✅' : '⬜') || ''
 }
 
 export const Cell: CellComponent = ({ item, field, linkTo }) => {
-  let value = item[field.path] as Record<string, any>
+  let value = (item[field.path] as Value)?.data
 
   return linkTo ? <CellLink {...linkTo}>{statementStatusToEmije(value)}</CellLink> : <CellContainer>{
     statementStatusToEmije(value)
