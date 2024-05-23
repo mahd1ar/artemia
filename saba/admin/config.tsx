@@ -1,7 +1,7 @@
 import React from 'react'
 import type { AdminConfig } from '@keystone-6/core/types';
 import { CustomNavigation } from './components/CustomNavigation';
-const logo = require('./public/static/saba.png').default.src
+const logo = require('./saba.png').default.src
 
 function CustomLogo() {
     return (
