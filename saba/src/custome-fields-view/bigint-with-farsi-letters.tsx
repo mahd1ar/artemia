@@ -133,7 +133,7 @@ export const Field = ({
   itemValue,
   forceValidation
 }: FieldProps<typeof controller>) => {
-  console.log(field)
+
   const message = validate(value, field.validation, field.label, field.hasAutoIncrementDefault)
 
 

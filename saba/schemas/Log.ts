@@ -34,7 +34,11 @@ export const Log = list({
                 {
                     label: 'تایید صورت وضعیت',
                     value: 'STATEMENT_CONFIRMED'
-                }
+                },
+                {
+                    label: 'تایید نهایی',
+                    value: 'STATEMENT_FINALIZED_REGISTRATION'
+                },
             ],
             type: 'enum'
         }),
