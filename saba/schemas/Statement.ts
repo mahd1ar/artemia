@@ -14,7 +14,7 @@ import {
 } from "@keystone-6/core/fields";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
 import { NumUtils, setPermitions } from "../data/utils";
-import { Roles, Session, alc, getRoleFromArgs } from "../data/types";
+import { LogMessage, Roles, Session, alc, getRoleFromArgs } from "../data/types";
 import { isMobayen } from "../data/access";
 import { PrismaClient } from "@prisma/client";
 import type { Lists } from ".keystone/types";
@@ -133,12 +133,17 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           if (typeof args.inputData![key] === "boolean") {
             const confirmed = !!args.inputData![key];
 
+            const logMessage: LogMessage.Statement = {
+              confirmed,
+              id: args.item.id,
+              user: session!.itemId
+            }
+
             await prisma.log.create({
               data: {
                 action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : "STATEMENT_CONFIRMED",
                 type: "info",
-                message: `statement with id ${args.item?.id} is ${confirmed ? "confirmed ✔️" : "UNconfirmed ❌"
-                  } by "${session?.data.name}(${session?.itemId})"`,
+                message: JSON.stringify(logMessage),
               },
               select: { id: true },
             });
@@ -177,6 +182,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     statementConfirmationStatus: virtual({
       ui: {
         // itemView: { fieldMode: 'hidden' },
+        createView: { fieldMode: 'hidden' },
         views: './src/custome-fields-view/statement-confirmation-status.tsx'
       },
       field: graphql.field({

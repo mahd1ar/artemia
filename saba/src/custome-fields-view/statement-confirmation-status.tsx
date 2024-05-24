@@ -22,7 +22,7 @@ import { Match } from "../../data/match";
 type Value = {
   ok: boolean,
   data: { key: string, value: boolean, isCurrent: boolean }[]
-}
+} | undefined
 
 export const Field = ({
   field,
@@ -33,14 +33,15 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
-
-  const dataItems = (value as Value).data
+  const dataItems = value.data ? (value as Value)!.data
     .map((i) => ({
       dataDesc: Match.AclRole(i.key),
       isDone: i.value,
       isCurrent: i.isCurrent
     }))
     .sort((a, b) => +b.isDone - +a.isDone)
+    : []
+
 
   return (
     <>
@@ -59,7 +60,7 @@ export const Field = ({
   );
 };
 
-function statementStatusToEmije(items?: Value['data']) {
+function statementStatusToEmije(items?: NonNullable<Value>['data']) {
   return items?.map(i => i.value ? '✅' : '⬜') || ''
 }
 

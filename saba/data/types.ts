@@ -40,6 +40,13 @@ export const alc = [
 ]
 
 
+export namespace LogMessage {
+    export type Statement = {
+        id: string,
+        confirmed: boolean,
+        user: string
+    }
+}
 
 export const getRoleFromArgs = (args: Record<string, any> & { session?: Session }, defaultValue = Roles.guest) => {
     if (!args.session) {
