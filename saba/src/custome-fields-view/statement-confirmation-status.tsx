@@ -27,7 +27,7 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
-  console.log(Object.entries(value))
+
   return (
     <>
       <FieldContainer>

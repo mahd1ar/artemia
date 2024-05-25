@@ -95,7 +95,7 @@ export const Design = list({
             query: DESIGN_FILES,
             variables: { where: { id } }
           })
-          console.log(data.design?.design)
+
           return data.design?.design?.map(i => ({ url: i.file?.url, name: i.file?.filename })).filter(i => i.url) || []
         },
       }),

@@ -12,7 +12,6 @@ export const User = list({
   },
   ui: {
     isHidden(args) {
-      console.log(getRoleFromArgs(args))
       return getRoleFromArgs(args) > Roles.operator
     },
     listView: {

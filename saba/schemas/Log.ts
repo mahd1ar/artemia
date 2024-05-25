@@ -32,8 +32,16 @@ export const Log = list({
         action: select({
             options: [
                 {
+                    label: 'ثبت صورت وضعیت',
+                    value: 'STATEMENT_FINALIZED_REGISTRATION'
+                },
+                {
                     label: 'تایید صورت وضعیت',
                     value: 'STATEMENT_CONFIRMED'
+                },
+                {
+                    label: 'تایید نهایی صورت وضعیت',
+                    value: 'STATEMENT_FINALIZED'
                 }
             ],
             type: 'enum'
