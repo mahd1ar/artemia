@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import {
   bigInt,
@@ -7,8 +7,9 @@ import {
   select,
   text,
   timestamp,
+  virtual,
 } from "@keystone-6/core/fields";
-import { Roles, Session } from "../data/types";
+import { Roles, Session, getRoleFromArgs } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
 
 export const Approval = list({
@@ -23,9 +24,7 @@ export const Approval = list({
     },
     itemView: {
       defaultFieldMode(args) {
-        return setPermitions(args, [
-          { role: Roles.operator, fieldMode: 'edit' },
-        ], 'read')
+        return getRoleFromArgs(args) > Roles.operator ? 'hidden' : 'edit'
       },
     }
   },
@@ -34,7 +33,39 @@ export const Approval = list({
     title: text({
       label: 'عنوان',
     }),
-    estimatedBudget: bigInt({ label: 'برودجه تخمینی' }),
+    estimatedBudget: bigInt({
+      label: 'برودجه تخمینی',
+      ui: {
+        views: './src/custome-fields-view/bigint-with-farsi-letters.tsx'
+      }
+    }),
+
+    totalStatementsPayable: virtual({
+      ui: {
+        views: './src/custome-fields-view/bigint-viewer.tsx'
+      },
+      label: "مجموع قابل پرداخت",
+      field: graphql.field({
+        type: graphql.BigInt,
+        async resolve(item, args, context) {
+
+          if (!item.id)
+            return 0n
+
+          let cost = 0n
+          const data = await context.query.Approval.findOne({
+            where: { id: item.id.toString() },
+            query: 'description { id totalStatementsPayable } '
+          })
+          data.description.forEach((i: any) => {
+            cost = cost + BigInt(i.totalStatementsPayable)
+          })
+          console.log(cost)
+          return cost
+        }
+      })
+    }),
+
     description: relationship({
       ref: 'Description.approvals',
       many: true,

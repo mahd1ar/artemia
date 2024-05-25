@@ -1,5 +1,5 @@
 import { graphql, list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
+import { allOperations, allowAll } from "@keystone-6/core/access";
 import {
   bigInt,
   checkbox,
@@ -14,28 +14,21 @@ import {
 } from "@keystone-6/core/fields";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
 import { NumUtils, setPermitions } from "../data/utils";
-import { Roles, Session, getRoleFromArgs } from "../data/types";
+import { LogMessage, Roles, Session, alc, getRoleFromArgs } from "../data/types";
 import { isMobayen } from "../data/access";
 import { PrismaClient } from "@prisma/client";
+import type { Lists } from ".keystone/types";
+import { Notif } from '../data/message'
 
 
-const alc = [{
-  key: 'confirmedByFinancialSupervisor',
-  for: Roles.financial
-},
-{
-  key: 'confirmedByTheUploader',
-  for: Roles.workshop
-},
-{
-  key: 'confirmedByProjectControlSupervisor',
-  for: Roles.projectControl
-}]
-
-
-export const Statement = list({
+export const Statement = list<Lists.Statement.TypeInfo<any>>({
   access: {
-    operation: allowAll,
+    operation: {
+      create: args => !!args.session,
+      delete: args => !!args.session,
+      query: args => !!args.session,
+      update: args => !!args.session,
+    },
     item: {
       // update: (args) => !isMobayen(args),
       delete: (args) => !isMobayen(args),
@@ -70,8 +63,7 @@ export const Statement = list({
 
       if (args.operation === 'update') {
 
-        alc.forEach(({ key, for: forr }) => {
-
+        alc.forEach(({ gqlkey: key, for: forr }) => {
 
           if (typeof args.inputData![key] === "boolean") {
             const confirmed = !!args.inputData![key];
@@ -90,6 +82,7 @@ export const Statement = list({
     },
 
     async afterOperation(args) {
+
       const session = args.context.session as Session;
 
       const prisma = args.context.prisma as PrismaClient;
@@ -136,17 +129,22 @@ export const Statement = list({
 
       if (args.operation === "update") {
 
-        alc.forEach(async ({ key, for: forr }) => {
+        alc.forEach(async ({ gqlkey: key, for: forr }) => {
 
           if (typeof args.inputData![key] === "boolean") {
             const confirmed = !!args.inputData![key];
+
+            const logMessage: LogMessage.Statement = {
+              confirmed,
+              id: args.item.id,
+              user: session!.itemId
+            }
 
             await prisma.log.create({
               data: {
                 action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : "STATEMENT_CONFIRMED",
                 type: "info",
-                message: `statement with id ${args.item?.id} is ${confirmed ? "confirmed ✔️" : "UNconfirmed ❌"
-                  } by "${session?.data.name}(${session?.itemId})"`,
+                message: JSON.stringify(logMessage),
               },
               select: { id: true },
             });
@@ -159,6 +157,17 @@ export const Statement = list({
 
         })
 
+        const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
+        const notif_username = (args.context.session as Session)?.data.name || 'undefined'
+        const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
+
+        if (args.inputData.confirmedByTheUploader) {
+
+          await Notif.workShopIsDoneUploadingStatement(notif_statementTile, notif_username, notif_url)
+
+        } else if (args.inputData.confirmedByProjectControlSupervisor) {
+          await Notif.statementIsConfirmedByProjectManager(notif_statementTile, notif_username, notif_url)
+        }
 
 
       }
@@ -192,32 +201,24 @@ export const Statement = list({
     statementConfirmationStatus: virtual({
       label: ' تایید صورت وضعیت',
       ui: {
-        itemView: { fieldMode: 'hidden' },
+        // itemView: { fieldMode: 'hidden' },
+        createView: { fieldMode: 'hidden' },
         views: './src/custome-fields-view/statement-confirmation-status.tsx'
       },
       field: graphql.field({
         type: graphql.JSON,
         async resolve(item, args, context) {
 
-
-
-          if (!item.id)
-            return {
-              ok: true,
-              uploader: null,
-              financialSupervisor: null,
-              projectControlSupervisor: null,
-              Supervisor: null,
-            }
-
-
           return {
-            ok: true,
-            uploader: item.confirmedByTheUploader as boolean,
-            financialSupervisor: item.confirmedByFinancialSupervisor as boolean,
-            projectControlSupervisor: item.confirmedByProjectControlSupervisor as boolean,
-            Supervisor: item.confirmedBySupervisor as boolean
+            ok: !!item.id,
+            userRole: (context.session as Session)?.data.role,
+            data: alc.map(i => ({
+              key: i.gqlkey,
+              value: !!item.id ? item[i.gqlkey] as boolean : null,
+              isCurrent: (context.session as Session)?.data.role === i.for
+            }))
           }
+
         },
       }),
     }),
@@ -399,9 +400,12 @@ export const Statement = list({
     }),
 
     totalPayable: virtual({
+      ui: {
+        views: './src/custome-fields-view/bigint-viewer.tsx'
+      },
       label: "جمع  کل قابل پرداخت ",
       field: graphql.field({
-        type: graphql.String,
+        type: graphql.BigInt,
         async resolve(item, args, context) {
           const {
             id: itemid,
@@ -430,8 +434,9 @@ export const Statement = list({
             for (const i of x) {
               total += BigInt(i.total.replace(/,/g, ""));
             }
-            return NumUtils.format(total - (deduction || 0n) + (tax || 0n));
-          } else return "0";
+
+            return BigInt(total - (deduction || 0n) + (tax || 0n));
+          } else return 0n;
         },
       }),
     }),

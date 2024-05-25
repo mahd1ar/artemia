@@ -20,6 +20,33 @@ export enum Roles {
     guest = 100
 }
 
+export const alc = [
+    {
+        gqlkey: 'confirmedByTheUploader',
+        for: Roles.workshop
+    },
+    {
+        gqlkey: 'confirmedByProjectControlSupervisor',
+        for: Roles.projectControl
+    },
+    {
+        gqlkey: 'confirmedByFinancialSupervisor',
+        for: Roles.financial
+    },
+    {
+        gqlkey: 'confirmedBySupervisor',
+        for: Roles.supervisor
+    },
+]
+
+
+export namespace LogMessage {
+    export type Statement = {
+        id: string,
+        confirmed: boolean,
+        user: string
+    }
+}
 
 export const getRoleFromArgs = (args: Record<string, any> & { session?: Session }, defaultValue = Roles.guest) => {
     if (!args.session) {
