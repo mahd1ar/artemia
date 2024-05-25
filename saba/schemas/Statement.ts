@@ -167,11 +167,18 @@ export const Statement = list({
   ui: {
     label: "صورت وضعیت",
     listView: {
-      initialColumns: ["title", "status"],
+      initialColumns: ["title", "status", 'statementConfirmationStatus'],
       initialSort: {
         field: "sateOfStatement",
         direction: "DESC",
       },
+    },
+    hideCreate(args) {
+
+      const role = getRoleFromArgs(args)
+
+      return Roles.workshop !== role && role > Roles.operator
+
     },
     itemView: {
       defaultFieldMode: args =>
@@ -183,6 +190,7 @@ export const Statement = list({
   },
   fields: {
     statementConfirmationStatus: virtual({
+      label: ' تایید صورت وضعیت',
       ui: {
         itemView: { fieldMode: 'hidden' },
         views: './src/custome-fields-view/statement-confirmation-status.tsx'
@@ -286,7 +294,10 @@ export const Statement = list({
       },
     }),
 
-    title: text({ validation: { isRequired: true } }),
+    title: text({
+      label: 'عنوان',
+      validation: { isRequired: true }
+    }),
     description: relationship({
       label: " شرح مصوبه متناظر",
       ref: "Description.statements",
@@ -426,6 +437,7 @@ export const Statement = list({
     }),
 
     status: select({
+      label: 'وضعیت پرداخت',
       options: [
         { label: "در انتظار پرداخت", value: "pending" },
         { label: "پرداخت شد", value: "paid" },
