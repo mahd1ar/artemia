@@ -7,7 +7,7 @@ import { NumUtils } from "../data/utils";
 import { PrismaClient } from '@prisma/client'
 
 export const Description = list({
-    access: allowAll,
+    access: allowAll, // FIXME
 
     ui: {
         label: 'شرح مصوبه',
@@ -66,8 +66,11 @@ export const Description = list({
         }),
         totalStatementsPayable: virtual({
             label: "مجموع قابل پرداخت",
+            ui: {
+                views: './src/custome-fields-view/bigint-viewer.tsx'
+            },
             field: graphql.field({
-                type: graphql.String,
+                type: graphql.BigInt,
                 async resolve(item, args, context) {
                     const { id } = item as unknown as { id: string }
                     const { statements } = await context.query.Description.findOne({
@@ -78,22 +81,24 @@ export const Description = list({
                     })
 
                     let total = BigInt(0)
+
                     statements.forEach((i: any) => {
+                        console.log(i.totalPayable)
+                        total += BigInt(i.totalPayable)
+                    })
 
-                        total += NumUtils.deformat(i.totalPayable)
-                    }
-                    )
 
-                    return NumUtils.format(total)
+                    return total
                 }
             })
         }),
         totalStatementsPayed: virtual({
             label: "مجموع پرداختی ها",
-
-
+            ui: {
+                views: './src/custome-fields-view/bigint-viewer.tsx'
+            },
             field: graphql.field({
-                type: graphql.String,
+                type: graphql.BigInt,
                 async resolve(item, args, context) {
                     const { id } = item as unknown as { id: string }
                     const prisma = context.prisma as PrismaClient
@@ -124,7 +129,7 @@ export const Description = list({
                         })
                     })
 
-                    return NumUtils.format(total)
+                    return total
                 }
             })
         }),

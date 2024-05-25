@@ -1,8 +1,8 @@
-// ts-gql-integrity:bd951b5d2f66288f193b55ed4892bab5
+// ts-gql-integrity:6ad467fb5262e4be276d7702259a9ae1
 /*
 ts-gql-meta-begin
 {
-  "hash": "21f1b62878b255523d0b0bfefae881d9"
+  "hash": "ae9674b3a4e174ab5538000cf1063784"
 }
 ts-gql-meta-end
 */
@@ -301,7 +301,11 @@ export type ApprovalRelateToOneForCreateInput = {
 export type Statement = {
   readonly __typename: "Statement";
   readonly id: string;
+  readonly statementConfirmationStatus: JSON | null;
   readonly confirmedByTheUploader: boolean | null;
+  readonly confirmedByFinancialSupervisor: boolean | null;
+  readonly confirmedByProjectControlSupervisor: boolean | null;
+  readonly confirmedBySupervisor: boolean | null;
   readonly title: string | null;
   readonly description: Description | null;
   readonly sateOfStatement: number | null;
@@ -369,6 +373,9 @@ export type StatementWhereInput = {
   readonly NOT?: TSGQLMaybeArray<StatementWhereInput> | null;
   readonly id?: IDFilter | null;
   readonly confirmedByTheUploader?: BooleanFilter | null;
+  readonly confirmedByFinancialSupervisor?: BooleanFilter | null;
+  readonly confirmedByProjectControlSupervisor?: BooleanFilter | null;
+  readonly confirmedBySupervisor?: BooleanFilter | null;
   readonly title?: StringFilter | null;
   readonly description?: DescriptionWhereInput | null;
   readonly sateOfStatement?: PairFilter | null;
@@ -435,6 +442,9 @@ export type StringNullableFilter = {
 export type StatementOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly confirmedByTheUploader?: OrderDirection | null;
+  readonly confirmedByFinancialSupervisor?: OrderDirection | null;
+  readonly confirmedByProjectControlSupervisor?: OrderDirection | null;
+  readonly confirmedBySupervisor?: OrderDirection | null;
   readonly title?: OrderDirection | null;
   readonly sateOfStatement?: OrderDirection | null;
   readonly deductionOnAccountOfAdvancePayment?: OrderDirection | null;
@@ -445,6 +455,9 @@ export type StatementOrderByInput = {
 
 export type StatementUpdateInput = {
   readonly confirmedByTheUploader?: boolean | null;
+  readonly confirmedByFinancialSupervisor?: boolean | null;
+  readonly confirmedByProjectControlSupervisor?: boolean | null;
+  readonly confirmedBySupervisor?: boolean | null;
   readonly title?: string | null;
   readonly description?: DescriptionRelateToOneForUpdateInput | null;
   readonly sateOfStatement?: number | null;
@@ -492,6 +505,9 @@ export type StatementUpdateArgs = {
 
 export type StatementCreateInput = {
   readonly confirmedByTheUploader?: boolean | null;
+  readonly confirmedByFinancialSupervisor?: boolean | null;
+  readonly confirmedByProjectControlSupervisor?: boolean | null;
+  readonly confirmedBySupervisor?: boolean | null;
   readonly title?: string | null;
   readonly description?: DescriptionRelateToOneForCreateInput | null;
   readonly sateOfStatement?: number | null;
@@ -1089,9 +1105,10 @@ export type DailyReportCreateInput = {
 export type User = {
   readonly __typename: "User";
   readonly id: string;
+  readonly fullname: string | null;
   readonly name: string | null;
   readonly email: string | null;
-  readonly role: string | null;
+  readonly role: number | null;
   readonly password: PasswordState | null;
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statementsCount: number | null;
@@ -1183,7 +1200,7 @@ export type UserWhereInput = {
   readonly id?: IDFilter | null;
   readonly name?: StringFilter | null;
   readonly email?: StringFilter | null;
-  readonly role?: StringNullableFilter | null;
+  readonly role?: IntNullableFilter | null;
   readonly statements?: StatementManyRelationFilter | null;
   readonly approvals?: ApprovalManyRelationFilter | null;
   readonly descriptions?: DescriptionManyRelationFilter | null;
@@ -1221,7 +1238,7 @@ export type UserOrderByInput = {
 export type UserUpdateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
-  readonly role?: string | null;
+  readonly role?: number | null;
   readonly password?: string | null;
   readonly statements?: StatementRelateToManyForUpdateInput | null;
   readonly approvals?: ApprovalRelateToManyForUpdateInput | null;
@@ -1260,7 +1277,7 @@ export type UserUpdateArgs = {
 export type UserCreateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
-  readonly role?: string | null;
+  readonly role?: number | null;
   readonly password?: string | null;
   readonly statements?: StatementRelateToManyForCreateInput | null;
   readonly approvals?: ApprovalRelateToManyForCreateInput | null;
@@ -1362,10 +1379,15 @@ export type Log = {
   readonly __typename: "Log";
   readonly id: string;
   readonly type: string | null;
-  readonly action: string | null;
+  readonly action: LogActionType | null;
   readonly message: string | null;
   readonly date: DateTime | null;
 };
+
+export type LogActionType =
+  | "STATEMENT_FINALIZED_REGISTRATION"
+  | "STATEMENT_CONFIRMED"
+  | "STATEMENT_FINALIZED";
 
 export type LogWhereUniqueInput = {
   readonly id?: string | null;
@@ -1377,9 +1399,16 @@ export type LogWhereInput = {
   readonly NOT?: TSGQLMaybeArray<LogWhereInput> | null;
   readonly id?: IDFilter | null;
   readonly type?: StringNullableFilter | null;
-  readonly action?: StringNullableFilter | null;
+  readonly action?: LogActionTypeNullableFilter | null;
   readonly message?: StringFilter | null;
   readonly date?: DateTimeNullableFilter | null;
+};
+
+export type LogActionTypeNullableFilter = {
+  readonly equals?: LogActionType | null;
+  readonly in?: TSGQLMaybeArray<LogActionType> | null;
+  readonly notIn?: TSGQLMaybeArray<LogActionType> | null;
+  readonly not?: LogActionTypeNullableFilter | null;
 };
 
 export type LogOrderByInput = {
@@ -1392,7 +1421,7 @@ export type LogOrderByInput = {
 
 export type LogUpdateInput = {
   readonly type?: string | null;
-  readonly action?: string | null;
+  readonly action?: LogActionType | null;
   readonly message?: string | null;
   readonly date?: DateTime | null;
 };
@@ -1404,7 +1433,7 @@ export type LogUpdateArgs = {
 
 export type LogCreateInput = {
   readonly type?: string | null;
-  readonly action?: string | null;
+  readonly action?: LogActionType | null;
   readonly message?: string | null;
   readonly date?: DateTime | null;
 };
@@ -1944,7 +1973,7 @@ export type UserAuthenticationWithPasswordFailure = {
 export type CreateInitialUserInput = {
   readonly name?: string | null;
   readonly email?: string | null;
-  readonly role?: string | null;
+  readonly role?: number | null;
   readonly password?: string | null;
 };
 

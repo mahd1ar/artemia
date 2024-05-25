@@ -1,9 +1,23 @@
 import React from 'react'
 import type { AdminConfig } from '@keystone-6/core/types';
 import { CustomNavigation } from './components/CustomNavigation';
+const logo = require('./saba.png').default.src
 
 function CustomLogo() {
-    return <h3>پنل کنترل پروژه صباپیشرو </h3>
+    return (
+        <div style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            display: 'flex',
+            width: '100%',
+            gap: 4
+        }} >
+
+            <img width={'82px'} src={logo} />
+            <h3>پنل کنتل پروژه</h3>
+        </div>
+    )
+
 }
 
 export const components: AdminConfig['components'] = {
