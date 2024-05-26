@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { CellComponent, type FieldProps } from "@keystone-6/core/types";
+import { CellComponent, CardValueComponent, type FieldProps } from "@keystone-6/core/types";
 import { css } from "@emotion/css";
 import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
 import { type controller } from "@keystone-6/core/fields/types/virtual/views";
@@ -28,7 +28,7 @@ export const Field = ({
     justify-content: flex-start;
     `
   }
-
+  console.log(typeof value)
   return (
     <>
       <FieldContainer>
@@ -41,7 +41,7 @@ export const Field = ({
               </span>
               <span style={{ fontSize: '17px' }} >
 
-                {typeof value === 'number' ? Intl.NumberFormat('us-en').format(value) : ''}
+                {typeof value !== 'symbol' ? Intl.NumberFormat('us-en').format(value) : '0'}
               </span>
             </div>
           ) :
@@ -63,3 +63,22 @@ export const Cell: CellComponent = ({ item, field, linkTo }) => {
 
 }
 Cell.supportsLinkTo = true
+
+export const CardValue: CardValueComponent = ({ item, field }) => {
+  let str = '-'
+
+  try {
+    str = Intl.NumberFormat('us-en').format(item[field.path])
+
+    str = str + ' ریال '
+  } catch (error) { }
+
+  return (
+    <FieldContainer>
+      <FieldLabel>{field.label}</FieldLabel>
+      <div>
+        {str}
+      </div>
+    </FieldContainer>
+  )
+}

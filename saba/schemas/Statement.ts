@@ -443,7 +443,8 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             let total = 0n;
 
             for (const i of x) {
-              total += BigInt(i.total.replace(/,/g, ""));
+
+              total += BigInt(i.total) /*.replace(/,/g, "") */;
             }
 
             return BigInt(total - (deduction || 0n) + (tax || 0n));
