@@ -41,7 +41,7 @@ export const Field = ({
               </span>
               <span style={{ fontSize: '17px' }} >
 
-                {Intl.NumberFormat('us-en').format(value)}
+                {typeof value === 'number' ? Intl.NumberFormat('us-en').format(value) : ''}
               </span>
             </div>
           ) :
