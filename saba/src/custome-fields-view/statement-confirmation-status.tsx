@@ -49,11 +49,7 @@ export const Field = ({
         <FieldLabel>{field.label}</FieldLabel>
         <div>
           < StepperProgress dataItems={dataItems} />
-
         </div>
-
-
-
       </FieldContainer>
 
     </>

@@ -1,8 +1,6 @@
 import { graphql, group, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { integer, relationship, select, text, virtual } from "@keystone-6/core/fields";
-import { document } from "@keystone-6/fields-document";
-import { persianCalendar } from "../src/custom-fields/persian-calander";
+import { float, integer, relationship, select, text, virtual } from "@keystone-6/core/fields";
 import { NumUtils } from "../data/utils";
 import { Roles, Session } from "../data/types";
 export const StatementItem = list({
@@ -90,10 +88,15 @@ export const StatementItem = list({
       ]
     }),
     unitPrice: integer({ label: 'قیمت واحد', validation: { isRequired: true } }),
-    quantity: integer({
+    quantity: float({
       label: 'مقدار',
       validation: { isRequired: true }
     }),
+    // pi: float({
+    //   label: 'maghdar',
+    //   defaultValue: 3.14,
+    //   validation: { isRequired: true }
+    // }),
     percentageOfWorkDone: integer({
       label: 'درصد انجام کار',
       defaultValue: 100
@@ -101,7 +104,7 @@ export const StatementItem = list({
     total: virtual({
       label: 'جمع کل',
       field: graphql.field({
-        type: graphql.String,
+        type: graphql.BigInt,
         resolve(item) {
           const { unitPrice = 0, quantity = 0, percentageOfWorkDone = 100 } = item as unknown as {
             unitPrice: number
@@ -109,13 +112,14 @@ export const StatementItem = list({
             percentageOfWorkDone: number
           }
 
-          return NumUtils.format(unitPrice * quantity * percentageOfWorkDone / 100)
+          return BigInt(Math.round(unitPrice * quantity * percentageOfWorkDone / 100))
         }
       }),
       ui: {
         itemView: {
-          fieldMode: 'hidden'
-        }
+          // fieldMode: 'hidden'
+        },
+        views: './src/custome-fields-view/bigint-viewer.tsx'
       }
     }),
     statement: relationship({ ref: 'Statement.items', many: false })
