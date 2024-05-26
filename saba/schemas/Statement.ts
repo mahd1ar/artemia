@@ -158,15 +158,26 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         })
 
         const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
-        const notif_username = (args.context.session as Session)?.data.name || 'undefined'
         const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
 
-        if (args.inputData.confirmedByTheUploader) {
+        if (session && session.data.role > Roles.operator) {
 
-          await Notif.workShopIsDoneUploadingStatement(notif_statementTile, notif_username, notif_url)
+          const notif_username = session.data.name
 
-        } else if (args.inputData.confirmedByProjectControlSupervisor) {
-          await Notif.statementIsConfirmedByProjectManager(notif_statementTile, notif_username, notif_url)
+          if (args.inputData.confirmedByTheUploader) {
+
+            await Notif.workShopIsDoneUploadingStatement(notif_statementTile, notif_username, notif_url)
+
+          } else if (args.inputData.confirmedByProjectControlSupervisor) {
+
+            await Notif.statementIsConfirmedByProjectManager(notif_statementTile, notif_username, notif_url)
+
+          } else if (args.inputData.confirmedByFinancialSupervisor) {
+
+            await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
+
+          }
+
         }
 
 
