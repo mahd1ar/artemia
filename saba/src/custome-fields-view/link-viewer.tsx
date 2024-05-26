@@ -46,7 +46,7 @@ export const Field = ({
           </span>
         </div>
 
-        {value && value.map((i: any, index: number) => {
+        {value && Array.isArray(value) && value.map((i: any, index: number) => {
 
           return <div>
             {index + 1}. <Link
