@@ -86,6 +86,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       const session = args.context.session as Session;
 
       const prisma = args.context.prisma as PrismaClient;
+
       if (args.operation === "delete") {
         const itemId = args.originalItem.id;
 
@@ -129,9 +130,13 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
       if (args.operation === "update") {
 
+        let conformationHappend = false
+
         alc.forEach(async ({ gqlkey: key, for: forr }) => {
 
           if (typeof args.inputData![key] === "boolean") {
+
+            conformationHappend = true
             const confirmed = !!args.inputData![key];
 
             const logMessage: LogMessage.Statement = {
@@ -157,28 +162,38 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
         })
 
-        const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
-        const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
+        if (conformationHappend) { // confirmation or un confirmation has happend
 
-        if (session && session.data.role > Roles.operator) {
+          const settings = await prisma.setting.findFirst()
 
-          const notif_username = session.data.name
+          if (settings?.sendMessageToTelegram) {
 
-          if (args.inputData.confirmedByTheUploader) {
+            const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
+            const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
 
-            await Notif.workShopIsDoneUploadingStatement(notif_statementTile, notif_username, notif_url)
+            if (session && session.data.role > Roles.operator) {
 
-          } else if (args.inputData.confirmedByProjectControlSupervisor) {
+              const notif_username = session.data.name
 
-            await Notif.statementIsConfirmedByProjectManager(notif_statementTile, notif_username, notif_url)
+              if (args.inputData.confirmedByTheUploader) {
 
-          } else if (args.inputData.confirmedByFinancialSupervisor) {
+                await Notif.workShopIsDoneUploadingStatement(notif_statementTile, notif_username, notif_url)
 
-            await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
+              } else if (args.inputData.confirmedByProjectControlSupervisor) {
 
+                await Notif.statementIsConfirmedByProjectManager(notif_statementTile, notif_username, notif_url)
+
+              } else if (args.inputData.confirmedByFinancialSupervisor) {
+
+                await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
+
+              }
+
+            }
           }
 
         }
+
 
 
       }
@@ -343,6 +358,24 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
       },
     }),
+
+    attachments: relationship({
+      label: 'فایل های ضمیمه شده',
+      ref: 'FileStore.statement',
+      many: true,
+      ui: {
+        itemView: {
+          fieldPosition: 'sidebar'
+        },
+        displayMode: 'cards',
+        cardFields: ['file', 'title'],
+        inlineCreate: { fields: ['file', 'title'] },
+        inlineConnect: false,
+        inlineEdit: { fields: ['file', 'title'] },
+        linkToItem: false
+      }
+    }),
+
     items: relationship({
       label: "آیتم ها",
       ref: "StatementItem.statement",

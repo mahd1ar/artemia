@@ -12,7 +12,7 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
                 include={['Approval', 'Design', 'Statement',
                     'DailyReport',
                     'User',
-                    'Log']} />
+                    'Log', 'Setting']} />
         </NavigationContainer>
     )
 }

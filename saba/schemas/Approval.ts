@@ -24,7 +24,8 @@ export const Approval = list({
     },
     itemView: {
       defaultFieldMode(args) {
-        return getRoleFromArgs(args) > Roles.operator ? 'hidden' : 'edit'
+        const currentRole = getRoleFromArgs(args)
+        return currentRole > Roles.operator ? 'read' : 'edit'
       },
     }
   },
