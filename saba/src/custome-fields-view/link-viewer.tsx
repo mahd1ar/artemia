@@ -26,6 +26,14 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
+  let len = '-'
+
+  try {
+
+    len = String(value.length || 0)
+  } catch (error) {
+
+  }
 
   return (
     <>
@@ -39,7 +47,7 @@ export const Field = ({
           </span>
 
           <b>
-            {value.length || 0}
+            {len}
           </b>
           <span>
             عدد
