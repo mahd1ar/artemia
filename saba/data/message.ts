@@ -46,6 +46,20 @@ ${statementUrl}
 
 👷‍♂️ صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
 
+امکان تایید این مصوبه توسط گروه "فنی" امکان پذیر هست
+
+${statementUrl}           
+`
+
+        return await sendMessage(message)
+    }
+    export async function statementIsConfirmedByTechnicalGroup(statementTitle: string, user: string, statementUrl: string) {
+
+        const message = `
+(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+
+⚙️ صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
+
 امکان تایید این مصوبه توسط گروه "مالی" امکان پذیر هست
 
 ${statementUrl}           

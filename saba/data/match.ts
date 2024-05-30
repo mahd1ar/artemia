@@ -9,6 +9,9 @@ export namespace Match {
             case 'confirmedByFinancialSupervisor':
                 return 'ناظر مالی'
 
+            case 'confirmedByTechnicalSupervisor':
+                return 'ناظر فنی'
+
             case 'confirmedByProjectControlSupervisor':
                 return 'ناظر کنترل پروژه'
 

@@ -172,6 +172,10 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
             await Notif.statementIsConfirmedByProjectManager(notif_statementTile, notif_username, notif_url)
 
+          } else if (args.inputData.confirmedByTechnicalSupervisor) {
+
+            await Notif.statementIsConfirmedByTechnicalGroup(notif_statementTile, notif_username, notif_url)
+
           } else if (args.inputData.confirmedByFinancialSupervisor) {
 
             await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
@@ -278,6 +282,24 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           fieldMode(args) {
             return setPermitions(args, [
               { role: Roles.projectControl, fieldMode: 'edit' },
+              { role: Roles.admin, fieldMode: 'edit' },
+              { role: Roles.operator, fieldMode: 'edit' },
+              // { role: Roles.supervisor, fieldMode: 'edit' },
+            ], 'hidden')
+          },
+        },
+        createView: { fieldMode: "hidden" },
+        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+      },
+    }),
+    confirmedByTechnicalSupervisor: checkbox({
+      label: "تایید توسط ناظر فنی پروژه",
+
+      ui: {
+        itemView: {
+          fieldMode(args) {
+            return setPermitions(args, [
+              { role: Roles.technical, fieldMode: 'edit' },
               { role: Roles.admin, fieldMode: 'edit' },
               { role: Roles.operator, fieldMode: 'edit' },
               // { role: Roles.supervisor, fieldMode: 'edit' },

@@ -14,7 +14,8 @@ export enum Roles {
     admin = 1,
     supervisor = 20,
     operator = 40,
-    financial = 85,
+    financial = 84,
+    technical = 85,
     projectControl = 86,
     workshop = 87,
     guest = 100
@@ -28,6 +29,10 @@ export const alc = [
     {
         gqlkey: 'confirmedByProjectControlSupervisor',
         for: Roles.projectControl
+    },
+    {
+        gqlkey: 'confirmedByTechnicalSupervisor',
+        for: Roles.technical
     },
     {
         gqlkey: 'confirmedByFinancialSupervisor',
