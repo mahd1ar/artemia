@@ -1,5 +1,5 @@
 import { list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
+import { allOperations, allowAll } from "@keystone-6/core/access";
 import { text, timestamp, file, relationship } from "@keystone-6/core/fields";
 import { editIfAdmin } from "../data/utils";
 import { Session } from "../data/types";
@@ -7,6 +7,7 @@ import { Session } from "../data/types";
 export const FileStore = list({
   access: allowAll,
   ui: {
+    label: 'file',
     isHidden: true,
   },
   hooks: {
@@ -26,6 +27,9 @@ export const FileStore = list({
     }),
     file: file({
       storage: "file",
+    }),
+    statement: relationship({
+      ref: 'Statement.attachments'
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },

@@ -1,6 +1,7 @@
 import { list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
+import { allOperations, allowAll } from "@keystone-6/core/access";
 import {
+  checkbox,
   text,
 } from "@keystone-6/core/fields";
 
@@ -14,6 +15,7 @@ import {
   FileStore, User, Category, Log,
   Statement, StatementItem, Contract, Design, DailyReport
 } from "./schemas";
+import { Roles, getRoleFromArgs } from "./data/types";
 
 export const lists: Lists = {
 
@@ -47,5 +49,17 @@ export const lists: Lists = {
       name: text(),
     },
   }),
+  Setting: list({
+    access: allowAll,
+    isSingleton: true,
+    ui: {
+      isHidden(args) {
+        return getRoleFromArgs(args) > Roles.operator
+      },
+    },
+    fields: {
+      sendMessageToTelegram: checkbox()
+    }
+  })
 
 };
