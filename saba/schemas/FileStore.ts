@@ -27,6 +27,9 @@ export const FileStore = list({
     }),
     file: file({
       storage: "file",
+      ui: {
+        views: './src/custome-fields-view/relationship-file-viewer.tsx'
+      }
     }),
     statement: relationship({
       ref: 'Statement.attachments'
