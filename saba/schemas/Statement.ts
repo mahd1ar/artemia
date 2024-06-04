@@ -396,10 +396,10 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           fieldPosition: 'sidebar'
         },
         displayMode: 'cards',
-        cardFields: ['file', 'title'],
-        inlineCreate: { fields: ['file', 'title'] },
+        cardFields: ['title', 'file'],
+        inlineCreate: { fields: ['title', 'file'] },
         inlineConnect: false,
-        inlineEdit: { fields: ['file', 'title'] },
+        inlineEdit: { fields: ['title', 'file'] },
         linkToItem: false
       }
     }),

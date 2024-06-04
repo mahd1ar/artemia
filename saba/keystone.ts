@@ -59,7 +59,7 @@ const configWithAuth = withAuth(
             }
 
             const x = await Promise.all(ls.map(async li => {
-              return `# [ changelog ${li.replace(".md", '')} ] \n ` + (await fs.readFile(path.resolve(process.cwd(), 'changelog', li))).toString()
+              return `## [ changelog ${li.replace(".md", '')} ] \n ` + (await fs.readFile(path.resolve(process.cwd(), 'changelog', li))).toString()
             }))
 
 
