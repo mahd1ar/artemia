@@ -187,15 +187,15 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
               }
 
-              else if (args.inputData.confirmedByTechnicalSupervisor) {
-
-                await Notif.statementIsConfirmedByTechnicalGroup(notif_statementTile, notif_username, notif_url)
-
-              }
-
               else if (args.inputData.confirmedByFinancialSupervisor) {
 
                 await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
+
+              }
+
+              else if (args.inputData.confirmedByTechnicalSupervisor) {
+
+                await Notif.statementIsConfirmedByTechnicalGroup(notif_statementTile, notif_username, notif_url)
 
               }
 

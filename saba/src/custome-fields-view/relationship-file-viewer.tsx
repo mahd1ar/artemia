@@ -20,11 +20,15 @@ const styls = {
 
 export const CardValue: CardValueComponent = ({ item, field }) => {
 
-  let url: string
+  let url: string = ""
+  let ext: string = ""
+
   try {
+
     url = item.file.url
+    ext = item?.file?.filename?.split(".")?.at(-1) || ''
   } catch (error) {
-    url = ""
+    console.log(error)
   }
   return (
     <FieldContainer>
@@ -36,7 +40,7 @@ export const CardValue: CardValueComponent = ({ item, field }) => {
             onClick={() => window.open(url)}
             className={styls.flexcenter}
           >
-            <span>Download</span>
+            Download {ext} File
             <ArrowDownIcon />
           </Button>
         )
