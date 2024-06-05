@@ -39,7 +39,7 @@ export const Field = ({
       isDone: i.value,
       isCurrent: i.isCurrent
     }))
-    .sort((a, b) => +b.isDone - +a.isDone)
+    // .sort((a, b) => +b.isDone - +a.isDone)
     : []
 
 

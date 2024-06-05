@@ -11,6 +11,7 @@ import {
 } from "@keystone-6/core/fields";
 import { Roles, Session, getRoleFromArgs } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
+import { persianCalendar } from "../src/custom-fields/persian-calander";
 
 export const Approval = list({
   access: allowAll,
@@ -65,6 +66,16 @@ export const Approval = list({
           return cost
         }
       })
+    }),
+
+    startDate: persianCalendar({
+      label: 'تاریخ شروع',
+      ui: {
+
+      }
+    }),
+    estimatedEndDate: persianCalendar({
+      label: 'تاریخ تخمینی پایان پروژه'
     }),
 
     description: relationship({
