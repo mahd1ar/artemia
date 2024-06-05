@@ -86,12 +86,16 @@ export const User = list<Lists.User.TypeInfo<any>>({
           label: 'اپراتور'
         },
         {
-          value: Roles.projectControl,
-          label: 'کنترل پروژه'
+          value: Roles.technical,
+          label: 'فنی'
         },
         {
           value: Roles.financial,
           label: 'مالی'
+        },
+        {
+          value: Roles.projectControl,
+          label: 'کنترل پروژه'
         },
         {
           value: Roles.workshop,

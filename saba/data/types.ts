@@ -31,12 +31,12 @@ export const alc = [
         for: Roles.projectControl
     },
     {
-        gqlkey: 'confirmedByTechnicalSupervisor',
-        for: Roles.technical
-    },
-    {
         gqlkey: 'confirmedByFinancialSupervisor',
         for: Roles.financial
+    },
+    {
+        gqlkey: 'confirmedByTechnicalSupervisor',
+        for: Roles.technical
     },
     {
         gqlkey: 'confirmedBySupervisor',
