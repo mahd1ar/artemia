@@ -99,10 +99,21 @@ new CronJob(
       }
     })
 
+    // find statement items without statement
+    const statementItemsBatchPayload = await keystoneContext.prisma.statementItem.deleteMany({
+      where: {
+        statement: null
+      },
+    })
+
+    console.info(statementItemsBatchPayload.count + ' items are deleted')
+
+
   }, // onTick
   null, // onComplete
   true, // start
   'Asia/Tehran' // timeZone
 );
+
 
 export default configWithAuth

@@ -51,30 +51,18 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
   hooks: {
     async validate(args) {
       const session = args.context.session as Session;
-
-      // if (args.operation !== "create") {
-      //   if ((args.item as any).confirmedByTheUploader) {
-      //     if (session?.data.role === Roles.workshop) {
-      //       args.addValidationError("این پیشنهاد قبلا تایید شده است");
-      //     }
-      //   }
-      // }
+      const role = getRoleFromArgs(args.context)
 
 
       if (args.operation === 'update') {
 
-        alc.forEach(({ gqlkey: key, for: forr }) => {
 
-          if (typeof args.inputData![key] === "boolean") {
-            const confirmed = !!args.inputData![key];
 
-            if (confirmed === false && session?.data.role === forr) {
-              args.addValidationError("این پیشنهاد قبلا تایید شده است");
-            }
-
+        if (role > Roles.operator && args.item.confirmedByTheUploader) {
+          if (!alc.find(i => args.inputData![i.gqlkey] === true && role === i.for)) {
+            args.addValidationError("این صورت وضعیت قبلا تایید شده است و فقط اپراتور میتواند این صورت وضعیت را ویرایش کند");
           }
-
-        })
+        }
 
       }
 
