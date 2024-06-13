@@ -163,11 +163,11 @@ export const Field = ({
           />
         </span>
       ) : value.value === null ? (
-        'null'
+        ' 0'
       ) : (
         <span dir='rtl' >
           {Intl.NumberFormat('ir-fa').format(+value.value.toString())}
-          <span style={{ fontSize: 12 }} >
+          <span style={{ fontSize: 12, display: +value.value.toString() ? 'inline' : 'none' }} >
 
             ریال
           </span>

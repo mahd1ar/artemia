@@ -1,3 +1,5 @@
+import type { Lists } from ".keystone/types";
+
 export type Session = {
     listKey: string;
     itemId: string;
@@ -21,7 +23,7 @@ export enum Roles {
     guest = 100
 }
 
-export const alc = [
+export const alc: { gqlkey: keyof Omit<Lists.Statement.Item, 'id'>, for: Roles }[] = [
     {
         gqlkey: 'confirmedByTheUploader',
         for: Roles.workshop

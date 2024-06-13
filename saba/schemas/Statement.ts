@@ -20,7 +20,6 @@ import { PrismaClient } from "@prisma/client";
 import type { Lists } from ".keystone/types";
 import { Notif } from '../data/message'
 
-
 export const Statement = list<Lists.Statement.TypeInfo<any>>({
   access: {
     operation: {
@@ -40,11 +39,24 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         if (role === Roles.admin || role === Roles.workshop)
           return true
 
-        return {
-          confirmedByTheUploader: {
-            equals: true
+        if (role === Roles.supervisor)
+          return {
+            confirmedByTheUploader: {
+              equals: true
+            },
           }
-        }
+
+        const zz = {}
+        alc.some(i => {
+          if (i.for !== role) {
+            zz[i.gqlkey] = { equals: true }
+            return false
+          }
+
+          return true
+        })
+
+        return zz
       }
     }
   },
@@ -76,13 +88,12 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       const prisma = args.context.prisma as PrismaClient;
 
       if (args.operation === "delete") {
-        const itemId = args.originalItem.id;
 
-        const x = await prisma.statementItem.deleteMany({
+        await prisma.statementItem.deleteMany({
           where: {
             statement: {
               id: {
-                equals: String(itemId),
+                equals: args.originalItem.id.toString(),
               },
             },
           },
@@ -443,7 +454,38 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
       },
     }),
+    grossTotal: virtual({
+      ui: {
+        views: './src/custome-fields-view/bigint-viewer.tsx'
+      },
+      label: "جمع کل صورت وضعیت ناخالص",
+      field: graphql.field({
+        type: graphql.BigInt,
+        async resolve(item, args, context) {
 
+          if (item.id) {
+            const x = await context.query.StatementItem.findMany({
+              where: {
+                statement: {
+                  id: {
+                    equals: item.id,
+                  },
+                },
+              },
+              query: "total",
+            })
+
+            let total = 0n;
+
+            for (const i of x)
+              total += BigInt(i.total);
+
+            return total
+
+          } else return 0n;
+        },
+      }),
+    }),
     deductionOnAccountOfAdvancePayment: bigInt({
       label: "کسر علی الحساب",
       ui: {
@@ -457,13 +499,16 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       label: "مالیات",
       validation: { isRequired: true },
       defaultValue: 0n,
+      ui: {
+        views: "./src/custome-fields-view/bigint-with-farsi-letters",
+      }
     }),
 
     totalPayable: virtual({
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx'
       },
-      label: "جمع  کل قابل پرداخت ",
+      label: "جمع  کل قابل پرداخت",
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
@@ -471,11 +516,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             id: itemid,
             deductionOnAccountOfAdvancePayment: deduction,
             tax,
-          } = item as unknown as {
-            id: string;
-            deductionOnAccountOfAdvancePayment: bigint;
-            tax: bigint;
-          };
+          } = item
 
           if (itemid) {
             const x = await context.query.StatementItem.findMany({

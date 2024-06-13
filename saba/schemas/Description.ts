@@ -77,16 +77,14 @@ export const Description = list({
                         where: {
                             id
                         },
-                        query: ' statements { totalPayable }'
+                        query: ' statements { grossTotal }'
                     })
 
                     let total = BigInt(0)
 
                     statements.forEach((i: any) => {
-                        console.log(i.totalPayable)
-                        total += BigInt(i.totalPayable)
+                        total += BigInt(i.grossTotal)
                     })
-
 
                     return total
                 }

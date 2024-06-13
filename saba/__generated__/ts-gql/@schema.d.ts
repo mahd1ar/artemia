@@ -1,8 +1,8 @@
-// ts-gql-integrity:6ad467fb5262e4be276d7702259a9ae1
+// ts-gql-integrity:dddc8223ad8cf2e4a6811154c49e136a
 /*
 ts-gql-meta-begin
 {
-  "hash": "ae9674b3a4e174ab5538000cf1063784"
+  "hash": "3f78582928b795d3804446e225cfe34b"
 }
 ts-gql-meta-end
 */
@@ -36,6 +36,9 @@ export type Approval = {
   readonly code: string | null;
   readonly title: string | null;
   readonly estimatedBudget: BigInt | null;
+  readonly totalStatementsPayable: BigInt | null;
+  readonly startDate: number | null;
+  readonly estimatedEndDate: number | null;
   readonly description: ReadonlyArray<Description> | null;
   readonly descriptionCount: number | null;
   readonly createdAt: DateTime | null;
@@ -70,6 +73,8 @@ export type ApprovalWhereInput = {
   readonly code?: StringFilter | null;
   readonly title?: StringFilter | null;
   readonly estimatedBudget?: BigIntNullableFilter | null;
+  readonly startDate?: PairFilter | null;
+  readonly estimatedEndDate?: PairFilter | null;
   readonly description?: DescriptionManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
@@ -125,6 +130,14 @@ export type BigIntNullableFilter = {
   readonly not?: BigIntNullableFilter | null;
 };
 
+export type PairFilter = {
+  readonly equals?: number | null;
+  readonly lt?: number | null;
+  readonly lte?: number | null;
+  readonly gt?: number | null;
+  readonly gte?: number | null;
+};
+
 export type DescriptionManyRelationFilter = {
   readonly every?: DescriptionWhereInput | null;
   readonly some?: DescriptionWhereInput | null;
@@ -147,6 +160,8 @@ export type ApprovalOrderByInput = {
   readonly code?: OrderDirection | null;
   readonly title?: OrderDirection | null;
   readonly estimatedBudget?: OrderDirection | null;
+  readonly startDate?: OrderDirection | null;
+  readonly estimatedEndDate?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
 };
 
@@ -158,6 +173,8 @@ export type ApprovalUpdateInput = {
   readonly code?: string | null;
   readonly title?: string | null;
   readonly estimatedBudget?: BigInt | null;
+  readonly startDate?: number | null;
+  readonly estimatedEndDate?: number | null;
   readonly description?: DescriptionRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
@@ -185,6 +202,8 @@ export type ApprovalCreateInput = {
   readonly code?: string | null;
   readonly title?: string | null;
   readonly estimatedBudget?: BigInt | null;
+  readonly startDate?: number | null;
+  readonly estimatedEndDate?: number | null;
   readonly description?: DescriptionRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
@@ -208,8 +227,8 @@ export type Description = {
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statementsCount: number | null;
   readonly approvals: Approval | null;
-  readonly totalStatementsPayable: string | null;
-  readonly totalStatementsPayed: string | null;
+  readonly totalStatementsPayable: BigInt | null;
+  readonly totalStatementsPayed: BigInt | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
@@ -305,22 +324,38 @@ export type Statement = {
   readonly confirmedByTheUploader: boolean | null;
   readonly confirmedByFinancialSupervisor: boolean | null;
   readonly confirmedByProjectControlSupervisor: boolean | null;
+  readonly confirmedByTechnicalSupervisor: boolean | null;
   readonly confirmedBySupervisor: boolean | null;
   readonly title: string | null;
   readonly description: Description | null;
   readonly sateOfStatement: number | null;
   readonly image: ImageFieldOutput | null;
+  readonly attachments: ReadonlyArray<FileStore> | null;
+  readonly attachmentsCount: number | null;
   readonly items: ReadonlyArray<StatementItem> | null;
   readonly itemsCount: number | null;
+  readonly grossTotal: BigInt | null;
   readonly peyments: ReadonlyArray<Payment> | null;
   readonly peymentsCount: number | null;
   readonly deductionOnAccountOfAdvancePayment: BigInt | null;
   readonly tax: BigInt | null;
-  readonly totalPayable: string | null;
+  readonly totalPayable: BigInt | null;
   readonly status: string | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
   readonly updatedBy: User | null;
+};
+
+export type StatementattachmentsArgs = {
+  readonly where?: FileStoreWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<FileStoreOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: FileStoreWhereUniqueInput | null;
+};
+
+export type StatementattachmentsCountArgs = {
+  readonly where?: FileStoreWhereInput;
 };
 
 export type StatementitemsArgs = {
@@ -375,10 +410,12 @@ export type StatementWhereInput = {
   readonly confirmedByTheUploader?: BooleanFilter | null;
   readonly confirmedByFinancialSupervisor?: BooleanFilter | null;
   readonly confirmedByProjectControlSupervisor?: BooleanFilter | null;
+  readonly confirmedByTechnicalSupervisor?: BooleanFilter | null;
   readonly confirmedBySupervisor?: BooleanFilter | null;
   readonly title?: StringFilter | null;
   readonly description?: DescriptionWhereInput | null;
   readonly sateOfStatement?: PairFilter | null;
+  readonly attachments?: FileStoreManyRelationFilter | null;
   readonly items?: StatementItemManyRelationFilter | null;
   readonly peyments?: PaymentManyRelationFilter | null;
   readonly deductionOnAccountOfAdvancePayment?: BigIntNullableFilter | null;
@@ -394,12 +431,10 @@ export type BooleanFilter = {
   readonly not?: BooleanFilter | null;
 };
 
-export type PairFilter = {
-  readonly equals?: number | null;
-  readonly lt?: number | null;
-  readonly lte?: number | null;
-  readonly gt?: number | null;
-  readonly gte?: number | null;
+export type FileStoreManyRelationFilter = {
+  readonly every?: FileStoreWhereInput | null;
+  readonly some?: FileStoreWhereInput | null;
+  readonly none?: FileStoreWhereInput | null;
 };
 
 export type StatementItemManyRelationFilter = {
@@ -444,6 +479,7 @@ export type StatementOrderByInput = {
   readonly confirmedByTheUploader?: OrderDirection | null;
   readonly confirmedByFinancialSupervisor?: OrderDirection | null;
   readonly confirmedByProjectControlSupervisor?: OrderDirection | null;
+  readonly confirmedByTechnicalSupervisor?: OrderDirection | null;
   readonly confirmedBySupervisor?: OrderDirection | null;
   readonly title?: OrderDirection | null;
   readonly sateOfStatement?: OrderDirection | null;
@@ -457,11 +493,13 @@ export type StatementUpdateInput = {
   readonly confirmedByTheUploader?: boolean | null;
   readonly confirmedByFinancialSupervisor?: boolean | null;
   readonly confirmedByProjectControlSupervisor?: boolean | null;
+  readonly confirmedByTechnicalSupervisor?: boolean | null;
   readonly confirmedBySupervisor?: boolean | null;
   readonly title?: string | null;
   readonly description?: DescriptionRelateToOneForUpdateInput | null;
   readonly sateOfStatement?: number | null;
   readonly image?: ImageFieldInput | null;
+  readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
   readonly items?: StatementItemRelateToManyForUpdateInput | null;
   readonly peyments?: PaymentRelateToManyForUpdateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
@@ -483,6 +521,13 @@ export type ImageFieldInput = {
 };
 
 export type Upload = any;
+
+export type FileStoreRelateToManyForUpdateInput = {
+  readonly disconnect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
+  readonly set?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
+  readonly create?: TSGQLMaybeArray<FileStoreCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
+};
 
 export type StatementItemRelateToManyForUpdateInput = {
   readonly disconnect?: TSGQLMaybeArray<StatementItemWhereUniqueInput> | null;
@@ -507,11 +552,13 @@ export type StatementCreateInput = {
   readonly confirmedByTheUploader?: boolean | null;
   readonly confirmedByFinancialSupervisor?: boolean | null;
   readonly confirmedByProjectControlSupervisor?: boolean | null;
+  readonly confirmedByTechnicalSupervisor?: boolean | null;
   readonly confirmedBySupervisor?: boolean | null;
   readonly title?: string | null;
   readonly description?: DescriptionRelateToOneForCreateInput | null;
   readonly sateOfStatement?: number | null;
   readonly image?: ImageFieldInput | null;
+  readonly attachments?: FileStoreRelateToManyForCreateInput | null;
   readonly items?: StatementItemRelateToManyForCreateInput | null;
   readonly peyments?: PaymentRelateToManyForCreateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
@@ -525,6 +572,11 @@ export type StatementCreateInput = {
 export type DescriptionRelateToOneForCreateInput = {
   readonly create?: DescriptionCreateInput | null;
   readonly connect?: DescriptionWhereUniqueInput | null;
+};
+
+export type FileStoreRelateToManyForCreateInput = {
+  readonly create?: TSGQLMaybeArray<FileStoreCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
 };
 
 export type StatementItemRelateToManyForCreateInput = {
@@ -545,7 +597,7 @@ export type StatementItem = {
   readonly unitPrice: number | null;
   readonly quantity: number | null;
   readonly percentageOfWorkDone: number | null;
-  readonly total: string | null;
+  readonly total: BigInt | null;
   readonly statement: Statement | null;
 };
 
@@ -561,7 +613,7 @@ export type StatementItemWhereInput = {
   readonly description?: StringFilter | null;
   readonly unit?: StringNullableFilter | null;
   readonly unitPrice?: IntFilter | null;
-  readonly quantity?: IntFilter | null;
+  readonly quantity?: FloatFilter | null;
   readonly percentageOfWorkDone?: IntNullableFilter | null;
   readonly statement?: StatementWhereInput | null;
 };
@@ -575,6 +627,17 @@ export type IntFilter = {
   readonly gt?: number | null;
   readonly gte?: number | null;
   readonly not?: IntFilter | null;
+};
+
+export type FloatFilter = {
+  readonly equals?: number | null;
+  readonly in?: TSGQLMaybeArray<number> | null;
+  readonly notIn?: TSGQLMaybeArray<number> | null;
+  readonly lt?: number | null;
+  readonly lte?: number | null;
+  readonly gt?: number | null;
+  readonly gte?: number | null;
+  readonly not?: FloatFilter | null;
 };
 
 export type IntNullableFilter = {
@@ -815,6 +878,7 @@ export type FileStore = {
   readonly id: string;
   readonly title: string | null;
   readonly file: FileFieldOutput | null;
+  readonly statement: Statement | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
@@ -836,6 +900,7 @@ export type FileStoreWhereInput = {
   readonly NOT?: TSGQLMaybeArray<FileStoreWhereInput> | null;
   readonly id?: IDFilter | null;
   readonly title?: StringFilter | null;
+  readonly statement?: StatementWhereInput | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
 };
@@ -849,6 +914,7 @@ export type FileStoreOrderByInput = {
 export type FileStoreUpdateInput = {
   readonly title?: string | null;
   readonly file?: FileFieldInput | null;
+  readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
@@ -865,6 +931,7 @@ export type FileStoreUpdateArgs = {
 export type FileStoreCreateInput = {
   readonly title?: string | null;
   readonly file?: FileFieldInput | null;
+  readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
 };
@@ -996,12 +1063,6 @@ export type DesignWhereInput = {
   readonly createdBy?: UserWhereInput | null;
 };
 
-export type FileStoreManyRelationFilter = {
-  readonly every?: FileStoreWhereInput | null;
-  readonly some?: FileStoreWhereInput | null;
-  readonly none?: FileStoreWhereInput | null;
-};
-
 export type CategoryManyRelationFilter = {
   readonly every?: CategoryWhereInput | null;
   readonly some?: CategoryWhereInput | null;
@@ -1022,13 +1083,6 @@ export type DesignUpdateInput = {
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
 
-export type FileStoreRelateToManyForUpdateInput = {
-  readonly disconnect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
-  readonly set?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
-  readonly create?: TSGQLMaybeArray<FileStoreCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
-};
-
 export type CategoryRelateToManyForUpdateInput = {
   readonly disconnect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
   readonly set?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
@@ -1047,11 +1101,6 @@ export type DesignCreateInput = {
   readonly category?: CategoryRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
-};
-
-export type FileStoreRelateToManyForCreateInput = {
-  readonly create?: TSGQLMaybeArray<FileStoreCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
 };
 
 export type CategoryRelateToManyForCreateInput = {
@@ -1474,6 +1523,42 @@ export type TagCreateInput = {
   readonly name?: string | null;
 };
 
+export type Setting = {
+  readonly __typename: "Setting";
+  readonly id: string;
+  readonly sendMessageToTelegram: boolean | null;
+};
+
+export type SettingWhereUniqueInput = {
+  readonly id?: string | null;
+};
+
+export type SettingWhereInput = {
+  readonly AND?: TSGQLMaybeArray<SettingWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<SettingWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<SettingWhereInput> | null;
+  readonly id?: IDFilter | null;
+  readonly sendMessageToTelegram?: BooleanFilter | null;
+};
+
+export type SettingOrderByInput = {
+  readonly id?: OrderDirection | null;
+  readonly sendMessageToTelegram?: OrderDirection | null;
+};
+
+export type SettingUpdateInput = {
+  readonly sendMessageToTelegram?: boolean | null;
+};
+
+export type SettingUpdateArgs = {
+  readonly where?: SettingWhereUniqueInput;
+  readonly data: SettingUpdateInput;
+};
+
+export type SettingCreateInput = {
+  readonly sendMessageToTelegram?: boolean | null;
+};
+
 export type JSON = any;
 
 export type Mutation = {
@@ -1568,6 +1653,12 @@ export type Mutation = {
   readonly updateTags: ReadonlyArray<Tag | null> | null;
   readonly deleteTag: Tag | null;
   readonly deleteTags: ReadonlyArray<Tag | null> | null;
+  readonly createSetting: Setting | null;
+  readonly createSettings: ReadonlyArray<Setting | null> | null;
+  readonly updateSetting: Setting | null;
+  readonly updateSettings: ReadonlyArray<Setting | null> | null;
+  readonly deleteSetting: Setting | null;
+  readonly deleteSettings: ReadonlyArray<Setting | null> | null;
   readonly endSession: boolean;
   readonly authenticateUserWithPassword: UserAuthenticationWithPasswordResult | null;
   readonly createInitialUser: UserAuthenticationWithPasswordSuccess;
@@ -1948,6 +2039,31 @@ export type MutationdeleteTagsArgs = {
   readonly where: TSGQLMaybeArray<TagWhereUniqueInput>;
 };
 
+export type MutationcreateSettingArgs = {
+  readonly data: SettingCreateInput;
+};
+
+export type MutationcreateSettingsArgs = {
+  readonly data: TSGQLMaybeArray<SettingCreateInput>;
+};
+
+export type MutationupdateSettingArgs = {
+  readonly where?: SettingWhereUniqueInput;
+  readonly data: SettingUpdateInput;
+};
+
+export type MutationupdateSettingsArgs = {
+  readonly data: TSGQLMaybeArray<SettingUpdateArgs>;
+};
+
+export type MutationdeleteSettingArgs = {
+  readonly where?: SettingWhereUniqueInput;
+};
+
+export type MutationdeleteSettingsArgs = {
+  readonly where: TSGQLMaybeArray<SettingWhereUniqueInput>;
+};
+
 export type MutationauthenticateUserWithPasswordArgs = {
   readonly email: string;
   readonly password: string;
@@ -2024,6 +2140,9 @@ export type Query = {
   readonly tags: ReadonlyArray<Tag> | null;
   readonly tag: Tag | null;
   readonly tagsCount: number | null;
+  readonly settings: ReadonlyArray<Setting> | null;
+  readonly setting: Setting | null;
+  readonly settingsCount: number | null;
   readonly keystone: KeystoneMeta;
   readonly authenticatedItem: AuthenticatedItem | null;
 };
@@ -2266,6 +2385,22 @@ export type QuerytagArgs = {
 
 export type QuerytagsCountArgs = {
   readonly where?: TagWhereInput;
+};
+
+export type QuerysettingsArgs = {
+  readonly where?: SettingWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<SettingOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: SettingWhereUniqueInput | null;
+};
+
+export type QuerysettingArgs = {
+  readonly where?: SettingWhereUniqueInput;
+};
+
+export type QuerysettingsCountArgs = {
+  readonly where?: SettingWhereInput;
 };
 
 export type AuthenticatedItem = User;
