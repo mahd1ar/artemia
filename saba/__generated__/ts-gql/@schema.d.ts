@@ -1,8 +1,8 @@
-// ts-gql-integrity:dddc8223ad8cf2e4a6811154c49e136a
+// ts-gql-integrity:926bbdf20950ca75f438c3f3db4f4520
 /*
 ts-gql-meta-begin
 {
-  "hash": "3f78582928b795d3804446e225cfe34b"
+  "hash": "b3ff955f9be3331028604b4ca7b2d313"
 }
 ts-gql-meta-end
 */
@@ -334,9 +334,9 @@ export type Statement = {
   readonly attachmentsCount: number | null;
   readonly items: ReadonlyArray<StatementItem> | null;
   readonly itemsCount: number | null;
-  readonly grossTotal: BigInt | null;
   readonly peyments: ReadonlyArray<Payment> | null;
   readonly peymentsCount: number | null;
+  readonly grossTotal: BigInt | null;
   readonly deductionOnAccountOfAdvancePayment: BigInt | null;
   readonly tax: BigInt | null;
   readonly totalPayable: BigInt | null;

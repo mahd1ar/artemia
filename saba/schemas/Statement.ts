@@ -19,6 +19,17 @@ import { isMobayen } from "../data/access";
 import { PrismaClient } from "@prisma/client";
 import type { Lists } from ".keystone/types";
 import { Notif } from '../data/message'
+import DeviceDetector from "node-device-detector";
+
+const detector = new DeviceDetector({
+  clientIndexes: false,
+  deviceIndexes: true,
+  deviceAliasCode: false,
+  deviceTrusted: false,
+  deviceInfo: false,
+  maxUserAgentSize: 500,
+});
+
 
 export const Statement = list<Lists.Statement.TypeInfo<any>>({
   access: {
@@ -28,10 +39,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       query: args => !!args.session,
       update: args => !!args.session,
     },
-    item: {
-      // update: (args) => !isMobayen(args),
-      delete: (args) => !isMobayen(args),
-    },
+
     filter: {
       query: args => {
         const role = getRoleFromArgs(args, Roles.guest)
@@ -46,7 +54,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             },
           }
 
-        const zz = {}
+        const zz = {} as Record<(typeof alc)[number]['gqlkey'], any>
         alc.some(i => {
           if (i.for !== role) {
             zz[i.gqlkey] = { equals: true }
@@ -71,11 +79,22 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
 
         if (role > Roles.operator && args.item.confirmedByTheUploader) {
+          // @ts-ignore
           if (!alc.find(i => args.inputData![i.gqlkey] === true && role === i.for)) {
             args.addValidationError("این صورت وضعیت قبلا تایید شده است و فقط اپراتور میتواند این صورت وضعیت را ویرایش کند");
           }
         }
 
+      }
+
+      if (args.operation === 'delete') {
+        if (role === Roles.admin || role === Roles.operator || role === Roles.supervisor) {
+          return
+        } else {
+          if (args.item.confirmedByTheUploader) {
+            args.addValidationError('این صورت وضعیت تایید شده و قابل حذف نیست، لطفا با اپراتور تماس بگیرید')
+          }
+        }
       }
 
 
@@ -229,7 +248,8 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         [Roles.admin, Roles.workshop, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : 'read'
     },
     hideDelete(args) {
-      return isMobayen(args);
+      const role = getRoleFromArgs(args)
+      return role > Roles.operator && role !== Roles.workshop;
     },
   },
   fields: {
@@ -242,6 +262,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       },
       field: graphql.field({
         type: graphql.JSON,
+        // @ts-ignore
         async resolve(item, args, context) {
 
           return {
@@ -257,8 +278,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
       }),
     }),
-
-
     confirmedByTheUploader: checkbox({
       label: "تایید توسط ناظر کارگاه",
       ui: {
@@ -360,6 +379,11 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         views: "./src/custome-fields-view/statement-description-realtion.tsx",
         itemView: {
           fieldPosition(args) {
+            const userAgent = (args.context.req?.headers["user-agent"])
+
+            if (userAgent)
+              return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
+
             return "sidebar";
           },
         },
@@ -381,7 +405,14 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       storage: "image",
       ui: {
         itemView: {
-          fieldPosition: "sidebar",
+          fieldPosition(args) {
+            const userAgent = (args.context.req?.headers["user-agent"])
+
+            if (userAgent)
+              return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
+
+            return "sidebar"
+          },
         },
       },
     }),
@@ -392,7 +423,14 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       many: true,
       ui: {
         itemView: {
-          fieldPosition: 'sidebar'
+          fieldPosition(args) {
+            const userAgent = (args.context.req?.headers["user-agent"])
+
+            if (userAgent)
+              return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
+
+            return 'sidebar'
+          }
         },
         displayMode: 'cards',
         cardFields: ['title', 'file'],
