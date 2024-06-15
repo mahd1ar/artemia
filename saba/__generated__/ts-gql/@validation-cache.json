@@ -1,10 +1,10 @@
 {
-  "version": "ts-gql-document-validator@v1,schema@47cbc7ea9ee1c00f256f6ebaaef7c36f",
-  "integrity": "__TS_GQL_INTEGRITY_9012e2016304ecbe32e175be28e939cc_TS_GQL_INTEGRITY__",
+  "version": "ts-gql-document-validator@v1,schema@83757a921d54aa9dec1a3f030ca1c940",
+  "integrity": "__TS_GQL_INTEGRITY_91cb3c9755376051b424939b6b5843e3_TS_GQL_INTEGRITY__",
   "cache": {
-    "94dc2da970313093f9cf2240f57cebff": [],
-    "f959308e3817089bc1bc89d04bca7136": [],
-    "dbbfb806ebe8d847e79b505f1e9b4638": [],
-    "2fd7ca15548c0ab4e0ddb7c90c954626": []
+    "fd2cf0ff94422f882e2da2383487641d": [],
+    "79acc333ff3c8186584be9f1477bd909": [],
+    "b49bd9c801d03571fbf5e1af8b359e40": [],
+    "fd0ae8a044b3baa5faa628d814ffcb6a": []
   }
 }
