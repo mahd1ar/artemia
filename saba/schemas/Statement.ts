@@ -36,7 +36,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       query: args => {
         const role = getRoleFromArgs(args, Roles.guest)
 
-        if (role === Roles.admin || role === Roles.workshop)
+        if (role === Roles.admin || role === Roles.workshop || role === Roles.operator)
           return true
 
         if (role === Roles.supervisor)
@@ -458,7 +458,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx'
       },
-      label: "جمع کل صورت وضعیت ناخالص",
+      label: "جمع کل صورت وضعیت",
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
