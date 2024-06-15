@@ -13,6 +13,7 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
                     'DailyReport',
                     'User',
                     'Log', 'Setting']} />
+            <NavItem href="/changelog">Change Log</NavItem>
         </NavigationContainer>
     )
 }
