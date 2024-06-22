@@ -8,9 +8,8 @@ async function sendMessage(message: string): Promise<boolean> {
 
     try {
 
-        const { data } = await axios.get(url)
+        await axios.get(url)
         console.log("success")
-        console.log(data.result)
         return true
 
     } catch (error) {
