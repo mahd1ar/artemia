@@ -18,7 +18,7 @@ export const Approval = list({
   ui: {
     label: 'مصوبات',
     listView: {
-      initialColumns: ["code", 'title', 'estimatedBudget'],
+      initialColumns: ["code", 'title', 'estimatedBudget', 'totalStatementsPayable'],
     },
     isHidden(args) {
       return (args.session as Session)?.data.role === Roles.workshop
@@ -36,7 +36,7 @@ export const Approval = list({
       label: 'عنوان',
     }),
     estimatedBudget: bigInt({
-      label: 'برودجه تخمینی',
+      label: 'بودجه تخمینی',
       ui: {
         views: './src/custome-fields-view/bigint-with-farsi-letters.tsx'
       }
@@ -46,7 +46,7 @@ export const Approval = list({
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx'
       },
-      label: "مجموع قابل پرداخت",
+      label: "مجموع پرداخت شده",
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
