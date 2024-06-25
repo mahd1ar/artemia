@@ -93,9 +93,10 @@ new CronJob(
       (globalThis as any).keystoneContext || getContext(configWithAuth, PrismaModule);
 
     // create an empty daily report
+    const today = new Date();
     await keystoneContext.prisma.dailyReport.create({
       data: {
-        date: new Date(),
+        date: today,
       }
     })
 
