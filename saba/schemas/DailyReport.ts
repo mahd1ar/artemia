@@ -10,8 +10,9 @@ import {
 import { isAdmin, isLoggedIn } from "../data/access";
 import { Session, Roles, getRoleFromArgs } from "../data/types";
 import { setPermitions } from "../data/utils";
+import type { Lists } from ".keystone/types";
 
-export const DailyReport = list({
+export const DailyReport = list<Lists.DailyReport.TypeInfo<any>>({
     access: {
         operation: {
             create: (args) =>
@@ -26,6 +27,7 @@ export const DailyReport = list({
         },
     },
     ui: {
+        searchFields: [],
         listView: {
             initialColumns: ["date"],
             initialSort: {
@@ -74,6 +76,7 @@ export const DailyReport = list({
             label: 'فایل گزارش روز',
             storage: "file",
         }),
+        // TODO delete this
         createdBy: relationship({
             ref: "User.dailyReports",
             many: false,
@@ -101,7 +104,7 @@ export const DailyReport = list({
                         return args.resolvedData.createdBy;
                     }
 
-                    if (args.operation === "update" && !args.item.createdBy) {
+                    if (args.operation === "update" && !args.item.createdById) {
                         args.resolvedData.createdBy = { connect: { id: session?.itemId } };
                     }
 
