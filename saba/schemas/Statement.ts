@@ -13,9 +13,8 @@ import {
   virtual,
 } from "@keystone-6/core/fields";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
-import { NumUtils, setPermitions } from "../data/utils";
+import { ExcludesFalse, NumUtils, setPermitions } from "../data/utils";
 import { LogMessage, Roles, Session, alc, getRoleFromArgs } from "../data/types";
-import { isMobayen } from "../data/access";
 import { PrismaClient } from "@prisma/client";
 import type { Lists } from ".keystone/types";
 import { Notif } from '../data/message'
@@ -197,6 +196,42 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
                 await Notif.workShopIsDoneUploadingStatement(notif_statementTile, notif_username, notif_url)
 
+                // send files to telegram
+
+                const currentStatement = await prisma
+                  .statement
+                  .findUnique({
+                    where: { id: args.item.id },
+                    select: {
+                      image_extension: true,
+                      image_id: true,
+                      attachments: {
+                        select: {
+                          file_filename: true,
+                        }
+                      },
+                      peyments: {
+                        select: {
+                          attachment_id: true,
+                          attachment_extension: true
+                        }
+                      }
+                    },
+                  })
+
+                if (currentStatement) {
+                  const imageUrl = currentStatement.image_id && "saba.netdom.ir/image/" + currentStatement.image_id + "." + currentStatement.image_extension
+                  const attachmentsUrl = currentStatement.attachments.map(item => item ? "saba.netdom.ir/image/" + item.file_filename : null).filter(Boolean as unknown as ExcludesFalse)
+                  if (imageUrl)
+                    attachmentsUrl.unshift(imageUrl)
+                  const peymentsUrl = currentStatement.peyments.map(item => item.attachment_id ? "saba.netdom.ir/image/" + item.attachment_id + "." + item.attachment_extension : null).filter(Boolean as unknown as ExcludesFalse)
+
+                  setTimeout(async () => {
+                    await Notif.sendStatementAttachmenets(notif_statementTile, attachmentsUrl, peymentsUrl)
+                  }, 1000);
+
+                }
+
               }
 
               else if (args.inputData.confirmedByProjectControlSupervisor) {
@@ -218,6 +253,8 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
               }
 
             }
+
+
           }
 
         }

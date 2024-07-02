@@ -51,3 +51,6 @@ export function editIfAdmin(args: {
 ) {
   return setPermitions(args, [{ role: Roles.admin, fieldMode: 'edit' }], defaultValue || 'read')
 }
+
+
+export type ExcludesFalse = <T>(x: T | false | undefined | null) => x is T;
