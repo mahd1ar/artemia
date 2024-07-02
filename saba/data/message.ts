@@ -27,7 +27,7 @@ export namespace Notif {
     export async function workShopIsDoneUploadingStatement(statementTitle: string, user: string, statementUrl: string) {
 
         const message = `
-(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+( ربات کنترل پروژه صبا )
 
 📝 صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user}) آپلود شد
 
@@ -42,7 +42,7 @@ ${statementUrl}
     export async function statementIsConfirmedByProjectManager(statementTitle: string, user: string, statementUrl: string) {
 
         const message = `
-(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+( ربات کنترل پروژه صبا )
 
 👷‍♂️ صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
 
@@ -56,7 +56,7 @@ ${statementUrl}
     export async function statementIsConfirmedByTechnicalGroup(statementTitle: string, user: string, statementUrl: string) {
 
         const message = `
-(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+( ربات کنترل پروژه صبا )
 
 ⚙️ صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
 
@@ -71,7 +71,7 @@ ${statementUrl}
     export async function statementIsConfirmedByFinancialSupervisor(statementTitle: string, user: string, statementUrl: string) {
 
         const message = `
-(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+( ربات کنترل پروژه صبا )
 
 💵 صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
 
@@ -81,6 +81,43 @@ ${statementUrl}
 `
 
         return await sendMessage(message)
+    }
+
+    export async function sendGeneralMessage(message: string) {
+        return await sendMessage(message)
+    }
+
+    export async function sendStatementAttachmenets(
+        title: string,
+        attachmentsUrl: string[] | null,
+        peymentsUrl: string[] | null,
+    ) {
+
+
+        const hasImageOrAttachments = !!(attachmentsUrl && attachmentsUrl?.length > 0)
+        const hasPayments = !!peymentsUrl && peymentsUrl?.length > 0
+
+        if (attachmentsUrl)
+            attachmentsUrl = attachmentsUrl?.map((i, index) => `${index + 1}- ${i}`)
+
+        if (peymentsUrl)
+            peymentsUrl = peymentsUrl?.map((i, index) => `${index + 1}- ${i}`)
+
+        const msg = `(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+
+🗂 "${title}"
+
+🔗 فایل های ضمیمه شده:
+${!hasImageOrAttachments ?
+                "هیچ فایلی ضمیمه نشده" :
+                attachmentsUrl!.join("\n")
+            }
+
+${hasPayments ? "🔗 رسید های پرداختی: \n" + peymentsUrl!.join("\n") : ''}
+`
+
+
+        return await sendMessage(msg)
     }
 
 
