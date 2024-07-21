@@ -28,7 +28,7 @@ export const CardValue: CardValueComponent = ({ item, field }) => {
     url = item.file.url
     ext = item?.file?.filename?.split(".")?.at(-1) || ''
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
   return (
     <FieldContainer>

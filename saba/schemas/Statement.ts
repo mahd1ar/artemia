@@ -119,10 +119,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
         // TODO DELETE PAYMENT
       } else {
-        // console.log(args.inputData)
-        // console.log(args.originalItem)
-        // console.log(args.item)
-        // console.log(args.resolvedData)
+
         if (args.inputData.peyments) {
           if (args.item!.id) {
             await prisma.payment.updateMany({
@@ -681,9 +678,9 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       hooks: {
         resolveInput(args) {
           const session = args.context.session as Session;
-          args.resolvedData.createdBy = { connect: { id: session?.itemId } };
+          args.resolvedData.updatedBy = { connect: { id: session?.itemId } };
 
-          return args.resolvedData.createdBy;
+          return args.resolvedData.updatedBy;
         },
       },
     }),
