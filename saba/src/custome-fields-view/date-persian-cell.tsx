@@ -14,8 +14,6 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
-  console.log(field)
-
   return (
     <FieldContainer>
 

@@ -62,7 +62,7 @@ export const Approval = list({
           data.description.forEach((i: any) => {
             cost = cost + BigInt(i.totalStatementsPayable)
           })
-          console.log(cost)
+
           return cost
         }
       })

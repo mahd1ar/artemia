@@ -71,7 +71,7 @@ const configWithAuth = withAuth(
 
 
           } catch (error) {
-            console.log(error)
+            console.error(error)
             res.send('<pre>' + String(error) + '<pre>')
           }
         })
