@@ -1,21 +1,44 @@
-
-/**
- * this is experimental
- */
-
-
 import React from "react";
 import { CellComponent } from "@keystone-6/core/types";
 import { CellContainer, CellLink } from "@keystone-6/core/admin-ui/components";
 import Link from "next/link";
 import { type FieldProps } from "@keystone-6/core/types";
 import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
-import { type controller } from "@keystone-6/core/fields/types/calendarDay/views";
+import { type controller } from "@keystone-6/core/fields/types/timestamp/views";
 import DatePicker, { DateObject } from 'react-multi-date-picker'
 import persian from 'react-date-object/calendars/persian'
 import persian_fa from 'react-date-object/locales/persian_fa'
 import TimePicker from 'react-multi-date-picker/plugins/time_picker'
 import { jsx, Inline, Stack, Text } from '@keystone-ui/core'
+
+import { parse, isValid, formatISO, format } from 'date-fns'
+
+const FULL_TIME_PATTERN = 'HH:mm:ss.SSS'
+
+function formatFullTime(date: Date) {
+  return format(date, FULL_TIME_PATTERN)
+}
+
+function formatTime(time: string) {
+  const date = parse(time, FULL_TIME_PATTERN, new Date())
+  if (date.getMilliseconds() !== 0) {
+    return format(date, FULL_TIME_PATTERN)
+  }
+  if (date.getSeconds() !== 0) {
+    return format(date, 'HH:mm:ss')
+  }
+  return format(date, 'HH:mm')
+}
+
+function parseTime(time: string) {
+  for (const pattern of ['H:m:s.SSS', 'H:m:s', 'H:m', 'H']) {
+    const parsed = parse(time, pattern, new Date())
+    if (isValid(parsed)) {
+      return format(parsed, FULL_TIME_PATTERN)
+    }
+  }
+  return undefined
+}
 
 
 export const Field = ({
@@ -27,15 +50,16 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
+  console.log(value)
 
   const [date, setDate] = React.useState(
-    value.value ? new Date(value.value) : null
+    value?.initial ? new Date(value.initial) : null
   )
 
   function changeTime(event: DateObject | DateObject[] | null) {
 
     // console.log(field.fieldMeta)
-    let unix: string | null = null
+    let unix: Date | null = null
     if (Array.isArray(event) === false && event && event?.unix) {
 
 
@@ -43,12 +67,20 @@ export const Field = ({
 
 
     }
-    console.log(value)
-    if (value.kind === 'update') {
+    if (unix && value.kind === 'update') {
+      console.log({ onChange })
+      console.log(value)
+      console.log("value")
       onChange?.({
         kind: 'update',
-        value: unix!,
-        initial: null
+        value: {
+          dateValue: formatISO(new Date(unix), { representation: 'date' }), // '2024-07-08' ,
+          timeValue: {
+            kind: 'parsed',
+            value: formatFullTime(unix)
+          }
+        },
+        initial: unix.toJSON()
       })
     }
 
