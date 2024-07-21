@@ -63,11 +63,11 @@ export const DailyReport = list<Lists.DailyReport.TypeInfo<any>>({
             label: 'تاریخ',
             defaultValue: { kind: "now" },
             ui: {
-                views: "./src/custome-fields-view/date-persian-cell.tsx",
-                createView: { fieldMode: "hidden" },
+                views: "./src/custome-fields-view/persian-calander.tsx",
+                // createView: { fieldMode: "hidden" },
                 itemView: {
                     fieldMode(args) {
-                        return "read";
+                        return getRoleFromArgs(args) in [Roles.admin, Roles.operator] ? 'edit' : "read";
                     },
                 },
             },
