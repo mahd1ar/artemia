@@ -53,6 +53,7 @@ export const Field = ({
   console.log(value)
 
   const [date, setDate] = React.useState(
+    //@ts-ignore
     value?.initial ? new Date(value.initial) : null
   )
 
