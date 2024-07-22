@@ -109,6 +109,15 @@ new CronJob(
 
     console.info(statementItemsBatchPayload.count + ' items are deleted')
 
+    // create safety report in first day of each mounth
+    const isFirstDayOfMounth = Intl.DateTimeFormat("us", { calendar: "persian", day: "numeric" }).format(today) === '2'
+    if (isFirstDayOfMounth) {
+      await keystoneContext.prisma.safetyReport.create({
+        data: {
+          date: today,
+        }
+      })
+    }
 
   }, // onTick
   null, // onComplete

@@ -13,7 +13,7 @@ import {
   Payment,
   Constractor,
   FileStore, User, Category, Log,
-  Statement, StatementItem, Contract, Design, DailyReport
+  Statement, StatementItem, Contract, Design, DailyReport, SafetyReport
 } from "./schemas";
 import { Roles, getRoleFromArgs } from "./data/types";
 
@@ -36,7 +36,9 @@ export const lists: Lists = {
   Contract,
 
   // @ts-ignore
-  Design, DailyReport,
+  Design, 
+  DailyReport,
+  SafetyReport,
 
   // @ts-ignore
   User, Category, Log,
