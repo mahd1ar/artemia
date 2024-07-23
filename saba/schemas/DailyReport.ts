@@ -67,7 +67,7 @@ export const DailyReport = list<Lists.DailyReport.TypeInfo<any>>({
                 // createView: { fieldMode: "hidden" },
                 itemView: {
                     fieldMode(args) {
-                        return getRoleFromArgs(args) in [Roles.admin, Roles.operator] ? 'edit' : "read";
+                        return [Roles.admin, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : "read";
                     },
                 },
             },

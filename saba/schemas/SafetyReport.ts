@@ -14,11 +14,11 @@ export const SafetyReport = list<Lists.SafetyReport.TypeInfo<any>>({
     access: {
         operation: {
             create: (args) =>
-                getRoleFromArgs(args) in [Roles.admin, Roles.operator],
+                [Roles.admin, Roles.operator].includes(getRoleFromArgs(args)),
             delete: (args) =>
-                getRoleFromArgs(args) in [Roles.admin, Roles.operator],
+                [Roles.admin, Roles.operator].includes(getRoleFromArgs(args)),
             update: (args) =>
-                getRoleFromArgs(args) in [Roles.admin, Roles.operator, Roles.projectControl],
+                [Roles.admin, Roles.operator, Roles.projectControl].includes(getRoleFromArgs(args)),
             query: () => true,
         },
     },
@@ -33,13 +33,14 @@ export const SafetyReport = list<Lists.SafetyReport.TypeInfo<any>>({
         },
         itemView: {
             defaultFieldMode(args) {
-                return getRoleFromArgs(args) in [Roles.admin, Roles.operator, Roles.projectControl] ? 'edit' : 'read';
+
+                return [Roles.admin, Roles.operator, Roles.projectControl].includes(getRoleFromArgs(args)) ? 'edit' : 'read';
             },
 
         },
         label: "گزارش ایمنی",
         hideCreate(args) {
-            return !(getRoleFromArgs(args) in [Roles.admin, Roles.operator]);
+            return ![Roles.admin, Roles.operator].includes(getRoleFromArgs(args));
         },
     },
     hooks: {
@@ -54,7 +55,7 @@ export const SafetyReport = list<Lists.SafetyReport.TypeInfo<any>>({
                 // createView: { fieldMode: "hidden" },
                 itemView: {
                     fieldMode(args) {
-                        return getRoleFromArgs(args) in [Roles.admin, Roles.operator] ? 'edit' : "read";
+                        return [Roles.admin, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : "read";
                     },
                 },
             },
@@ -62,6 +63,7 @@ export const SafetyReport = list<Lists.SafetyReport.TypeInfo<any>>({
         document: file({
             label: 'فایل گزارش ایمنی',
             storage: "file",
+
         }),
 
         updatedBy: relationship({
@@ -71,7 +73,7 @@ export const SafetyReport = list<Lists.SafetyReport.TypeInfo<any>>({
                 itemView: {
                     fieldPosition: "sidebar",
                     fieldMode(args) {
-                        return getRoleFromArgs(args) in [Roles.admin, Roles.operator] ? 'edit' : args.item.updatedById ? "read" : "hidden";
+                        return [Roles.admin, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : args.item.updatedById ? "read" : "hidden";
                     },
                 },
                 createView: { fieldMode: "hidden" },
