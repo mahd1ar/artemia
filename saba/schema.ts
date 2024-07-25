@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core";
+import { group, list } from "@keystone-6/core";
 import { allOperations, allowAll } from "@keystone-6/core/access";
 import {
   checkbox,
@@ -36,7 +36,7 @@ export const lists: Lists = {
   Contract,
 
   // @ts-ignore
-  Design, 
+  Design,
   DailyReport,
   SafetyReport,
 
@@ -60,7 +60,13 @@ export const lists: Lists = {
       },
     },
     fields: {
-      sendMessageToTelegram: checkbox()
+      sendMessageToTelegram: checkbox(),
+      ...group({
+        label: 'Categories',
+        fields: {
+          parentCategoryOfDesignTag: text(),
+        }
+      })
     }
   })
 
