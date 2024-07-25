@@ -692,27 +692,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
       },
     }),
-    updatedBy: relationship({
-      ref: "User",
-      many: false,
-      ui: {
-        createView: { fieldMode: "hidden" },
-        itemView: {
-          fieldPosition: "sidebar",
-          fieldMode(args) {
-            return "read";
-          },
-        },
-      },
-      hooks: {
-        resolveInput(args) {
-          const session = args.context.session as Session;
-          args.resolvedData.updatedBy = { connect: { id: session?.itemId } };
 
-          return args.resolvedData.updatedBy;
-        },
-      },
-    }),
   },
 });
 
