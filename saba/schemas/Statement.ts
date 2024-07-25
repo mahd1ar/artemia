@@ -255,9 +255,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           }
 
         }
-
-
-
       }
     },
   },
@@ -474,12 +471,44 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         linkToItem: false
       }
     }),
+    visualItems: virtual({
+      label: "آیتم ها",
+      ui: {
+        itemView: {
+          fieldMode: args => getRoleFromArgs(args) !== Roles.workshop ? 'edit' : 'hidden',
+        },
+        views: './src/custome-fields-view/statement-items-table'
+      },
+      field: graphql.field({
+        type: graphql.JSON,
+        async resolve(item, args, context) {
 
+          if (item.id) {
+            const x = await context.query.StatementItem.findMany({
+              where: {
+                statement: {
+                  id: {
+                    equals: item.id,
+                  },
+                },
+              },
+              query: "description unit  unitPrice quantity percentageOfWorkDone total",
+            })
+
+            return x
+
+          } else return [];
+        },
+      }),
+    }),
     items: relationship({
       label: "آیتم ها",
       ref: "StatementItem.statement",
       many: true,
       ui: {
+        itemView: {
+          fieldMode: args => getRoleFromArgs(args) === Roles.workshop ? 'edit' : 'hidden',
+        },
         displayMode: "cards",
         cardFields: [
           "description",
