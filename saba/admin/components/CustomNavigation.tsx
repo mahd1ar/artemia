@@ -10,7 +10,7 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
             <ListNavItems
                 lists={lists}
                 include={['Approval', 'Design', 'Statement',
-                    'DailyReport', 'SafetyReport',
+                    'DailyReport', 'SafetyReport', 'FileStore',
                     'User',
                     'Log', 'Setting']} />
             <NavItem href="/changelog">Change Log</NavItem>

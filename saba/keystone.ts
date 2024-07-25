@@ -113,11 +113,16 @@ new CronJob(
     const isFirstDayOfMounth = Intl.DateTimeFormat("us", { calendar: "persian", day: "numeric" }).format(today) === '3'
     if (isFirstDayOfMounth) {
       console.log('it a new date')
-      await keystoneContext.prisma.safetyReport.create({
+      const data = await keystoneContext.prisma.safetyReport.create({
         data: {
           date: today,
+        },
+        select: {
+          id: true
         }
       })
+
+      console.log(data)
     }
 
   }, // onTick
