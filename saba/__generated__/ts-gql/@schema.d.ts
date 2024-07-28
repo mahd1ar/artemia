@@ -1,8 +1,8 @@
-// ts-gql-integrity:4ede813a18d1104624ba4bd500d61d0c
+// ts-gql-integrity:9d23e210f5c9a85744fe7dec2654bb94
 /*
 ts-gql-meta-begin
 {
-  "hash": "f290f31592d000ad8ff26f8741902027"
+  "hash": "d4e6fa99e6a0c687d5b36464b9d72ec4"
 }
 ts-gql-meta-end
 */
@@ -1608,7 +1608,7 @@ export type Setting = {
   readonly __typename: "Setting";
   readonly id: string;
   readonly sendMessageToTelegram: boolean | null;
-  readonly parentCategoryOfDesignTag: string | null;
+  readonly parentCategoryOfDesign: string | null;
 };
 
 export type SettingWhereUniqueInput = {
@@ -1621,18 +1621,18 @@ export type SettingWhereInput = {
   readonly NOT?: TSGQLMaybeArray<SettingWhereInput> | null;
   readonly id?: IDFilter | null;
   readonly sendMessageToTelegram?: BooleanFilter | null;
-  readonly parentCategoryOfDesignTag?: StringFilter | null;
+  readonly parentCategoryOfDesign?: StringFilter | null;
 };
 
 export type SettingOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly sendMessageToTelegram?: OrderDirection | null;
-  readonly parentCategoryOfDesignTag?: OrderDirection | null;
+  readonly parentCategoryOfDesign?: OrderDirection | null;
 };
 
 export type SettingUpdateInput = {
   readonly sendMessageToTelegram?: boolean | null;
-  readonly parentCategoryOfDesignTag?: string | null;
+  readonly parentCategoryOfDesign?: string | null;
 };
 
 export type SettingUpdateArgs = {
@@ -1642,7 +1642,7 @@ export type SettingUpdateArgs = {
 
 export type SettingCreateInput = {
   readonly sendMessageToTelegram?: boolean | null;
-  readonly parentCategoryOfDesignTag?: string | null;
+  readonly parentCategoryOfDesign?: string | null;
 };
 
 export type JSON = any;

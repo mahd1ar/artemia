@@ -29,6 +29,13 @@ export const Field = ({
 
   const router = useRouter()
 
+  const PARENTCATEGORYOFRESOURSE = gql`
+        query PARENTCATEGORYOFRESOURSE {
+            setting {
+              parentCategoryOfDesign
+            }
+          }
+  ` as import('../../__generated__/ts-gql/PARENTCATEGORYOFRESOURSE').type
 
   const FOLDERS = gql`
         query FOLDERS($where: CategoryWhereInput!) {
@@ -61,6 +68,7 @@ export const Field = ({
 
   const [cats, setCats] = useState<category[]>([])
   const [load, { data }] = useLazyQuery(FOLDERS)
+  const [loadSettings] = useLazyQuery(PARENTCATEGORYOFRESOURSE)
 
   useEffect(() => {
 
@@ -68,8 +76,13 @@ export const Field = ({
       if (value.value?.id)
         fetchParent(value.value?.id, [])
 
-      else
-        fetchChildren()
+      else {
+        loadSettings().then(d => {
+
+          if (d.data?.setting?.parentCategoryOfDesign)
+            fetchChildren(d.data.setting.parentCategoryOfDesign)
+        })
+      }
 
   }, [])
 
@@ -103,13 +116,13 @@ export const Field = ({
 
       arr.reverse()
       setCats(arr)
-      console.log(arr)
     }
 
 
   }
 
-  async function fetchChildren(parentId = "clz5dc92k0000zjq8ifrkgrt0", level = 0, title = '') {
+  // TODO - get this from api
+  async function fetchChildren(parentId: string, level = 0, title = '') {
 
     const res = await load({
       variables: {
@@ -185,7 +198,7 @@ export const Field = ({
               css={{ marginTop: '0.5rem' }}
               onChange={e => {
 
-                fetchChildren(e?.value, index + 1, i.title)
+                fetchChildren(e!.value, index + 1, i.title)
               }}
               value={i.selectedChild}
               key={index}

@@ -64,7 +64,7 @@ export const lists: Lists = {
       ...group({
         label: 'Categories',
         fields: {
-          parentCategoryOfDesignTag: text(),
+          parentCategoryOfDesign: text(),
         }
       })
     }
