@@ -57,20 +57,20 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
         }),
         description: text({ ui: { displayMode: "textarea" } }),
         children: relationship({
-            ui: {
-                createView: {
-                    fieldMode: "hidden",
-                },
-            },
+            // ui: {
+            //     createView: {
+            //         fieldMode: "hidden",
+            //     },
+            // },
             ref: "Category.parent",
             many: true,
         }),
         parent: relationship({
-            ui: {
-                createView: {
-                    fieldMode: "hidden",
-                },
-            },
+            // ui: {
+            //     createView: {
+            //         fieldMode: "hidden",
+            //     },
+            // },
             ref: "Category.children",
             hooks: {
                 async resolveInput(args) {
@@ -105,5 +105,10 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
                 },
             },
         }),
+
+        Designs: relationship({
+            ref: 'Design.category',
+            many: true
+        })
     },
 });

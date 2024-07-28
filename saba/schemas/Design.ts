@@ -10,7 +10,7 @@ import {
   timestamp,
   virtual,
 } from "@keystone-6/core/fields";
-import { Roles, Session } from "../data/types";
+import { getRoleFromArgs, Roles, Session } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
 import { isAdmin, isMobayen } from "../data/access";
 import { gql } from "@ts-gql/tag/no-transform";
@@ -48,12 +48,10 @@ export const Design = list({
     title: text(),
     design: relationship({
       ref: 'FileStore',
-      many: true,
       ui: {
         itemView: {
           fieldMode(args) {
-            const role = (args.context.session as Session)?.data.role
-
+            const role = getRoleFromArgs(args)
             if (role)
               return [Roles.admin, Roles.operator].includes(role) ? 'edit' : 'hidden'
             else
@@ -67,43 +65,58 @@ export const Design = list({
       }
     }),
 
-    download: virtual({
-      ui: {
-        views: './src/custome-fields-view/link-viewer.tsx'
-      },
-      field: graphql.field({
-        type: graphql.JSON,
-        async resolve(item, args, context) {
+    // download: virtual({
+    //   ui: {
+    //     views: './src/custome-fields-view/link-viewer.tsx'
+    //   },
+    //   field: graphql.field({
+    //     type: graphql.JSON,
+    //     async resolve(item, args, context) {
 
-          const { id } = item as unknown as { id?: string };
+    //       const { id } = item as unknown as { id?: string };
 
-          if (!id)
-            return []
+    //       if (!id)
+    //         return []
 
-          const DESIGN_FILES = gql`
-            query DesignFiles($where: DesignWhereUniqueInput!) {
-                design(where: $where) {
-                  id
-                  design {
-                    file { filename url }
-                  }
-                }
-            }
-          ` as import('../__generated__/ts-gql/DesignFiles').type
+    //       const DESIGN_FILES = gql`
+    //         query DesignFiles($where: DesignWhereUniqueInput!) {
+    //             design(where: $where) {
+    //               id
+    //               design {
+    //                 file { filename url }
+    //               }
+    //             }
+    //         }
+    //       ` as import('../__generated__/ts-gql/DesignFiles').type
 
-          const data = await context.graphql.run({
-            query: DESIGN_FILES,
-            variables: { where: { id } }
-          })
+    //       const data = await context.graphql.run({
+    //         query: DESIGN_FILES,
+    //         variables: { where: { id } }
+    //       })
 
-          return data.design?.design?.map(i => ({ url: i.file?.url, name: i.file?.filename })).filter(i => i.url) || []
-        },
-      }),
-    }),
+    //       return data.design?.design?.map(i => ({ url: i.file?.url, name: i.file?.filename })).filter(i => i.url) || []
+    //     },
+    //   }),
+    // }),
     category: relationship({
-      label: 'tags',
-      ref: 'Category',
-      many: true
+      ref: 'Category.Designs',
+      ui: {
+        views: "./src/custome-fields-view/folder-struct-relation.tsx",
+      }
+    }),
+    tags: relationship({
+      ref: 'Tag',
+
+      many: true,
+
+      ui: {
+        displayMode: 'cards',
+        cardFields: ['name'],
+        inlineEdit: { fields: ['name'] },
+        linkToItem: true,
+        inlineConnect: true,
+        inlineCreate: { fields: ['name'] },
+      },
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
