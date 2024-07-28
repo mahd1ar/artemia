@@ -1,8 +1,8 @@
-// ts-gql-integrity:926bbdf20950ca75f438c3f3db4f4520
+// ts-gql-integrity:4ede813a18d1104624ba4bd500d61d0c
 /*
 ts-gql-meta-begin
 {
-  "hash": "b3ff955f9be3331028604b4ca7b2d313"
+  "hash": "f290f31592d000ad8ff26f8741902027"
 }
 ts-gql-meta-end
 */
@@ -332,6 +332,7 @@ export type Statement = {
   readonly image: ImageFieldOutput | null;
   readonly attachments: ReadonlyArray<FileStore> | null;
   readonly attachmentsCount: number | null;
+  readonly visualItems: JSON | null;
   readonly items: ReadonlyArray<StatementItem> | null;
   readonly itemsCount: number | null;
   readonly peyments: ReadonlyArray<Payment> | null;
@@ -343,7 +344,6 @@ export type Statement = {
   readonly status: string | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
-  readonly updatedBy: User | null;
 };
 
 export type StatementattachmentsArgs = {
@@ -423,7 +423,6 @@ export type StatementWhereInput = {
   readonly status?: StringNullableFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
-  readonly updatedBy?: UserWhereInput | null;
 };
 
 export type BooleanFilter = {
@@ -507,7 +506,6 @@ export type StatementUpdateInput = {
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
-  readonly updatedBy?: UserRelateToOneForUpdateInput | null;
 };
 
 export type DescriptionRelateToOneForUpdateInput = {
@@ -566,7 +564,6 @@ export type StatementCreateInput = {
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
-  readonly updatedBy?: UserRelateToOneForCreateInput | null;
 };
 
 export type DescriptionRelateToOneForCreateInput = {
@@ -878,6 +875,7 @@ export type FileStore = {
   readonly id: string;
   readonly title: string | null;
   readonly file: FileFieldOutput | null;
+  readonly type: string | null;
   readonly statement: Statement | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
@@ -900,6 +898,7 @@ export type FileStoreWhereInput = {
   readonly NOT?: TSGQLMaybeArray<FileStoreWhereInput> | null;
   readonly id?: IDFilter | null;
   readonly title?: StringFilter | null;
+  readonly type?: StringNullableFilter | null;
   readonly statement?: StatementWhereInput | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
@@ -908,12 +907,14 @@ export type FileStoreWhereInput = {
 export type FileStoreOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly title?: OrderDirection | null;
+  readonly type?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
 };
 
 export type FileStoreUpdateInput = {
   readonly title?: string | null;
   readonly file?: FileFieldInput | null;
+  readonly type?: string | null;
   readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
@@ -931,6 +932,7 @@ export type FileStoreUpdateArgs = {
 export type FileStoreCreateInput = {
   readonly title?: string | null;
   readonly file?: FileFieldInput | null;
+  readonly type?: string | null;
   readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
@@ -1014,37 +1016,24 @@ export type Design = {
   readonly __typename: "Design";
   readonly id: string;
   readonly title: string | null;
-  readonly design: ReadonlyArray<FileStore> | null;
-  readonly designCount: number | null;
-  readonly download: JSON | null;
-  readonly category: ReadonlyArray<Category> | null;
-  readonly categoryCount: number | null;
+  readonly design: FileStore | null;
+  readonly category: Category | null;
+  readonly tags: ReadonlyArray<Tag> | null;
+  readonly tagsCount: number | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
 
-export type DesigndesignArgs = {
-  readonly where?: FileStoreWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<FileStoreOrderByInput>;
+export type DesigntagsArgs = {
+  readonly where?: TagWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<TagOrderByInput>;
   readonly take?: number | null;
   readonly skip?: number;
-  readonly cursor?: FileStoreWhereUniqueInput | null;
+  readonly cursor?: TagWhereUniqueInput | null;
 };
 
-export type DesigndesignCountArgs = {
-  readonly where?: FileStoreWhereInput;
-};
-
-export type DesigncategoryArgs = {
-  readonly where?: CategoryWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<CategoryOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: CategoryWhereUniqueInput | null;
-};
-
-export type DesigncategoryCountArgs = {
-  readonly where?: CategoryWhereInput;
+export type DesigntagsCountArgs = {
+  readonly where?: TagWhereInput;
 };
 
 export type DesignWhereUniqueInput = {
@@ -1057,16 +1046,17 @@ export type DesignWhereInput = {
   readonly NOT?: TSGQLMaybeArray<DesignWhereInput> | null;
   readonly id?: IDFilter | null;
   readonly title?: StringFilter | null;
-  readonly design?: FileStoreManyRelationFilter | null;
-  readonly category?: CategoryManyRelationFilter | null;
+  readonly design?: FileStoreWhereInput | null;
+  readonly category?: CategoryWhereInput | null;
+  readonly tags?: TagManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
 };
 
-export type CategoryManyRelationFilter = {
-  readonly every?: CategoryWhereInput | null;
-  readonly some?: CategoryWhereInput | null;
-  readonly none?: CategoryWhereInput | null;
+export type TagManyRelationFilter = {
+  readonly every?: TagWhereInput | null;
+  readonly some?: TagWhereInput | null;
+  readonly none?: TagWhereInput | null;
 };
 
 export type DesignOrderByInput = {
@@ -1077,17 +1067,30 @@ export type DesignOrderByInput = {
 
 export type DesignUpdateInput = {
   readonly title?: string | null;
-  readonly design?: FileStoreRelateToManyForUpdateInput | null;
-  readonly category?: CategoryRelateToManyForUpdateInput | null;
+  readonly design?: FileStoreRelateToOneForUpdateInput | null;
+  readonly category?: CategoryRelateToOneForUpdateInput | null;
+  readonly tags?: TagRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
 
-export type CategoryRelateToManyForUpdateInput = {
-  readonly disconnect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
-  readonly set?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
-  readonly create?: TSGQLMaybeArray<CategoryCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
+export type FileStoreRelateToOneForUpdateInput = {
+  readonly create?: FileStoreCreateInput | null;
+  readonly connect?: FileStoreWhereUniqueInput | null;
+  readonly disconnect?: boolean | null;
+};
+
+export type CategoryRelateToOneForUpdateInput = {
+  readonly create?: CategoryCreateInput | null;
+  readonly connect?: CategoryWhereUniqueInput | null;
+  readonly disconnect?: boolean | null;
+};
+
+export type TagRelateToManyForUpdateInput = {
+  readonly disconnect?: TSGQLMaybeArray<TagWhereUniqueInput> | null;
+  readonly set?: TSGQLMaybeArray<TagWhereUniqueInput> | null;
+  readonly create?: TSGQLMaybeArray<TagCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<TagWhereUniqueInput> | null;
 };
 
 export type DesignUpdateArgs = {
@@ -1097,23 +1100,34 @@ export type DesignUpdateArgs = {
 
 export type DesignCreateInput = {
   readonly title?: string | null;
-  readonly design?: FileStoreRelateToManyForCreateInput | null;
-  readonly category?: CategoryRelateToManyForCreateInput | null;
+  readonly design?: FileStoreRelateToOneForCreateInput | null;
+  readonly category?: CategoryRelateToOneForCreateInput | null;
+  readonly tags?: TagRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
 };
 
-export type CategoryRelateToManyForCreateInput = {
-  readonly create?: TSGQLMaybeArray<CategoryCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
+export type FileStoreRelateToOneForCreateInput = {
+  readonly create?: FileStoreCreateInput | null;
+  readonly connect?: FileStoreWhereUniqueInput | null;
+};
+
+export type CategoryRelateToOneForCreateInput = {
+  readonly create?: CategoryCreateInput | null;
+  readonly connect?: CategoryWhereUniqueInput | null;
+};
+
+export type TagRelateToManyForCreateInput = {
+  readonly create?: TSGQLMaybeArray<TagCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<TagWhereUniqueInput> | null;
 };
 
 export type DailyReport = {
   readonly __typename: "DailyReport";
   readonly id: string;
+  readonly date: DateTime | null;
   readonly document: FileFieldOutput | null;
   readonly createdBy: User | null;
-  readonly date: DateTime | null;
 };
 
 export type DailyReportWhereUniqueInput = {
@@ -1125,8 +1139,8 @@ export type DailyReportWhereInput = {
   readonly OR?: TSGQLMaybeArray<DailyReportWhereInput> | null;
   readonly NOT?: TSGQLMaybeArray<DailyReportWhereInput> | null;
   readonly id?: IDFilter | null;
-  readonly createdBy?: UserWhereInput | null;
   readonly date?: DateTimeNullableFilter | null;
+  readonly createdBy?: UserWhereInput | null;
 };
 
 export type DailyReportOrderByInput = {
@@ -1135,9 +1149,9 @@ export type DailyReportOrderByInput = {
 };
 
 export type DailyReportUpdateInput = {
+  readonly date?: DateTime | null;
   readonly document?: FileFieldInput | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
-  readonly date?: DateTime | null;
 };
 
 export type DailyReportUpdateArgs = {
@@ -1146,9 +1160,52 @@ export type DailyReportUpdateArgs = {
 };
 
 export type DailyReportCreateInput = {
+  readonly date?: DateTime | null;
   readonly document?: FileFieldInput | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
+};
+
+export type SafetyReport = {
+  readonly __typename: "SafetyReport";
+  readonly id: string;
+  readonly date: DateTime | null;
+  readonly document: FileFieldOutput | null;
+  readonly updatedBy: User | null;
+};
+
+export type SafetyReportWhereUniqueInput = {
+  readonly id?: string | null;
+};
+
+export type SafetyReportWhereInput = {
+  readonly AND?: TSGQLMaybeArray<SafetyReportWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<SafetyReportWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<SafetyReportWhereInput> | null;
+  readonly id?: IDFilter | null;
+  readonly date?: DateTimeNullableFilter | null;
+  readonly updatedBy?: UserWhereInput | null;
+};
+
+export type SafetyReportOrderByInput = {
+  readonly id?: OrderDirection | null;
+  readonly date?: OrderDirection | null;
+};
+
+export type SafetyReportUpdateInput = {
   readonly date?: DateTime | null;
+  readonly document?: FileFieldInput | null;
+  readonly updatedBy?: UserRelateToOneForUpdateInput | null;
+};
+
+export type SafetyReportUpdateArgs = {
+  readonly where: SafetyReportWhereUniqueInput;
+  readonly data: SafetyReportUpdateInput;
+};
+
+export type SafetyReportCreateInput = {
+  readonly date?: DateTime | null;
+  readonly document?: FileFieldInput | null;
+  readonly updatedBy?: UserRelateToOneForCreateInput | null;
 };
 
 export type User = {
@@ -1359,6 +1416,8 @@ export type Category = {
   readonly children: ReadonlyArray<Category> | null;
   readonly childrenCount: number | null;
   readonly parent: Category | null;
+  readonly Designs: ReadonlyArray<Design> | null;
+  readonly DesignsCount: number | null;
 };
 
 export type CategorychildrenArgs = {
@@ -1371,6 +1430,18 @@ export type CategorychildrenArgs = {
 
 export type CategorychildrenCountArgs = {
   readonly where?: CategoryWhereInput;
+};
+
+export type CategoryDesignsArgs = {
+  readonly where?: DesignWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<DesignOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: DesignWhereUniqueInput | null;
+};
+
+export type CategoryDesignsCountArgs = {
+  readonly where?: DesignWhereInput;
 };
 
 export type CategoryWhereUniqueInput = {
@@ -1386,6 +1457,13 @@ export type CategoryWhereInput = {
   readonly description?: StringFilter | null;
   readonly children?: CategoryManyRelationFilter | null;
   readonly parent?: CategoryWhereInput | null;
+  readonly Designs?: DesignManyRelationFilter | null;
+};
+
+export type CategoryManyRelationFilter = {
+  readonly every?: CategoryWhereInput | null;
+  readonly some?: CategoryWhereInput | null;
+  readonly none?: CategoryWhereInput | null;
 };
 
 export type CategoryOrderByInput = {
@@ -1399,12 +1477,14 @@ export type CategoryUpdateInput = {
   readonly description?: string | null;
   readonly children?: CategoryRelateToManyForUpdateInput | null;
   readonly parent?: CategoryRelateToOneForUpdateInput | null;
+  readonly Designs?: DesignRelateToManyForUpdateInput | null;
 };
 
-export type CategoryRelateToOneForUpdateInput = {
-  readonly create?: CategoryCreateInput | null;
-  readonly connect?: CategoryWhereUniqueInput | null;
-  readonly disconnect?: boolean | null;
+export type CategoryRelateToManyForUpdateInput = {
+  readonly disconnect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
+  readonly set?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
+  readonly create?: TSGQLMaybeArray<CategoryCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
 };
 
 export type CategoryUpdateArgs = {
@@ -1417,11 +1497,12 @@ export type CategoryCreateInput = {
   readonly description?: string | null;
   readonly children?: CategoryRelateToManyForCreateInput | null;
   readonly parent?: CategoryRelateToOneForCreateInput | null;
+  readonly Designs?: DesignRelateToManyForCreateInput | null;
 };
 
-export type CategoryRelateToOneForCreateInput = {
-  readonly create?: CategoryCreateInput | null;
-  readonly connect?: CategoryWhereUniqueInput | null;
+export type CategoryRelateToManyForCreateInput = {
+  readonly create?: TSGQLMaybeArray<CategoryCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<CategoryWhereUniqueInput> | null;
 };
 
 export type Log = {
@@ -1527,6 +1608,7 @@ export type Setting = {
   readonly __typename: "Setting";
   readonly id: string;
   readonly sendMessageToTelegram: boolean | null;
+  readonly parentCategoryOfDesignTag: string | null;
 };
 
 export type SettingWhereUniqueInput = {
@@ -1539,15 +1621,18 @@ export type SettingWhereInput = {
   readonly NOT?: TSGQLMaybeArray<SettingWhereInput> | null;
   readonly id?: IDFilter | null;
   readonly sendMessageToTelegram?: BooleanFilter | null;
+  readonly parentCategoryOfDesignTag?: StringFilter | null;
 };
 
 export type SettingOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly sendMessageToTelegram?: OrderDirection | null;
+  readonly parentCategoryOfDesignTag?: OrderDirection | null;
 };
 
 export type SettingUpdateInput = {
   readonly sendMessageToTelegram?: boolean | null;
+  readonly parentCategoryOfDesignTag?: string | null;
 };
 
 export type SettingUpdateArgs = {
@@ -1557,6 +1642,7 @@ export type SettingUpdateArgs = {
 
 export type SettingCreateInput = {
   readonly sendMessageToTelegram?: boolean | null;
+  readonly parentCategoryOfDesignTag?: string | null;
 };
 
 export type JSON = any;
@@ -1629,6 +1715,12 @@ export type Mutation = {
   readonly updateDailyReports: ReadonlyArray<DailyReport | null> | null;
   readonly deleteDailyReport: DailyReport | null;
   readonly deleteDailyReports: ReadonlyArray<DailyReport | null> | null;
+  readonly createSafetyReport: SafetyReport | null;
+  readonly createSafetyReports: ReadonlyArray<SafetyReport | null> | null;
+  readonly updateSafetyReport: SafetyReport | null;
+  readonly updateSafetyReports: ReadonlyArray<SafetyReport | null> | null;
+  readonly deleteSafetyReport: SafetyReport | null;
+  readonly deleteSafetyReports: ReadonlyArray<SafetyReport | null> | null;
   readonly createUser: User | null;
   readonly createUsers: ReadonlyArray<User | null> | null;
   readonly updateUser: User | null;
@@ -1939,6 +2031,31 @@ export type MutationdeleteDailyReportsArgs = {
   readonly where: TSGQLMaybeArray<DailyReportWhereUniqueInput>;
 };
 
+export type MutationcreateSafetyReportArgs = {
+  readonly data: SafetyReportCreateInput;
+};
+
+export type MutationcreateSafetyReportsArgs = {
+  readonly data: TSGQLMaybeArray<SafetyReportCreateInput>;
+};
+
+export type MutationupdateSafetyReportArgs = {
+  readonly where: SafetyReportWhereUniqueInput;
+  readonly data: SafetyReportUpdateInput;
+};
+
+export type MutationupdateSafetyReportsArgs = {
+  readonly data: TSGQLMaybeArray<SafetyReportUpdateArgs>;
+};
+
+export type MutationdeleteSafetyReportArgs = {
+  readonly where: SafetyReportWhereUniqueInput;
+};
+
+export type MutationdeleteSafetyReportsArgs = {
+  readonly where: TSGQLMaybeArray<SafetyReportWhereUniqueInput>;
+};
+
 export type MutationcreateUserArgs = {
   readonly data: UserCreateInput;
 };
@@ -2128,6 +2245,9 @@ export type Query = {
   readonly dailyReports: ReadonlyArray<DailyReport> | null;
   readonly dailyReport: DailyReport | null;
   readonly dailyReportsCount: number | null;
+  readonly safetyReports: ReadonlyArray<SafetyReport> | null;
+  readonly safetyReport: SafetyReport | null;
+  readonly safetyReportsCount: number | null;
   readonly users: ReadonlyArray<User> | null;
   readonly user: User | null;
   readonly usersCount: number | null;
@@ -2321,6 +2441,22 @@ export type QuerydailyReportArgs = {
 
 export type QuerydailyReportsCountArgs = {
   readonly where?: DailyReportWhereInput;
+};
+
+export type QuerysafetyReportsArgs = {
+  readonly where?: SafetyReportWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<SafetyReportOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: SafetyReportWhereUniqueInput | null;
+};
+
+export type QuerysafetyReportArgs = {
+  readonly where: SafetyReportWhereUniqueInput;
+};
+
+export type QuerysafetyReportsCountArgs = {
+  readonly where?: SafetyReportWhereInput;
 };
 
 export type QueryusersArgs = {
