@@ -18,7 +18,7 @@ export const Field = ({
 
   const StatementItemList = useList('StatementItem')
 
-  if (!value || value.length === 0) return <div>null</div>
+  if (!value || value.length === 0 || typeof value === 'symbol') return <div>null</div>
 
   const h = Object.keys(value[0])
 
