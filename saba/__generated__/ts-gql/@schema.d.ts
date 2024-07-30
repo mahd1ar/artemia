@@ -1,8 +1,8 @@
-// ts-gql-integrity:9d23e210f5c9a85744fe7dec2654bb94
+// ts-gql-integrity:02b4113d0f525d302ee3013ae85960ac
 /*
 ts-gql-meta-begin
 {
-  "hash": "d4e6fa99e6a0c687d5b36464b9d72ec4"
+  "hash": "4f3f68132791556828ef19d05bd40b97"
 }
 ts-gql-meta-end
 */
@@ -1416,8 +1416,8 @@ export type Category = {
   readonly children: ReadonlyArray<Category> | null;
   readonly childrenCount: number | null;
   readonly parent: Category | null;
-  readonly Designs: ReadonlyArray<Design> | null;
-  readonly DesignsCount: number | null;
+  readonly designs: ReadonlyArray<Design> | null;
+  readonly designsCount: number | null;
 };
 
 export type CategorychildrenArgs = {
@@ -1432,7 +1432,7 @@ export type CategorychildrenCountArgs = {
   readonly where?: CategoryWhereInput;
 };
 
-export type CategoryDesignsArgs = {
+export type CategorydesignsArgs = {
   readonly where?: DesignWhereInput;
   readonly orderBy?: TSGQLMaybeArray<DesignOrderByInput>;
   readonly take?: number | null;
@@ -1440,7 +1440,7 @@ export type CategoryDesignsArgs = {
   readonly cursor?: DesignWhereUniqueInput | null;
 };
 
-export type CategoryDesignsCountArgs = {
+export type CategorydesignsCountArgs = {
   readonly where?: DesignWhereInput;
 };
 
@@ -1457,7 +1457,7 @@ export type CategoryWhereInput = {
   readonly description?: StringFilter | null;
   readonly children?: CategoryManyRelationFilter | null;
   readonly parent?: CategoryWhereInput | null;
-  readonly Designs?: DesignManyRelationFilter | null;
+  readonly designs?: DesignManyRelationFilter | null;
 };
 
 export type CategoryManyRelationFilter = {
@@ -1477,7 +1477,7 @@ export type CategoryUpdateInput = {
   readonly description?: string | null;
   readonly children?: CategoryRelateToManyForUpdateInput | null;
   readonly parent?: CategoryRelateToOneForUpdateInput | null;
-  readonly Designs?: DesignRelateToManyForUpdateInput | null;
+  readonly designs?: DesignRelateToManyForUpdateInput | null;
 };
 
 export type CategoryRelateToManyForUpdateInput = {
@@ -1497,7 +1497,7 @@ export type CategoryCreateInput = {
   readonly description?: string | null;
   readonly children?: CategoryRelateToManyForCreateInput | null;
   readonly parent?: CategoryRelateToOneForCreateInput | null;
-  readonly Designs?: DesignRelateToManyForCreateInput | null;
+  readonly designs?: DesignRelateToManyForCreateInput | null;
 };
 
 export type CategoryRelateToManyForCreateInput = {

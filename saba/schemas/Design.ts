@@ -99,7 +99,7 @@ export const Design = list({
     //   }),
     // }),
     category: relationship({
-      ref: 'Category.Designs',
+      ref: 'Category.designs',
       ui: {
         views: "./src/custome-fields-view/folder-struct-relation.tsx",
       }

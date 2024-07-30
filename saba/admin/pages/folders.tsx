@@ -8,52 +8,44 @@ export default function CustomPage() {
     const parent = useSearchParams().get('parent')
 
     const FOLDERPATH = gql`
-    query FOLDERPATH($where: CategoryWhereInput!, $id: ID) {
-      categories(where: $where) {
-        id
-        title
-        childrenCount
-        parent {
-            id
-        }
-      }
+    query FOLDERPATH($id: ID!) {
       category(where: { id: $id }) {
         id
         title
+        childrenCount
+        children {
+            id
+            title
+        }
         parent {
             id
+            title
+        }
+        designs {
+            id
+            title
         }
       }
     }
   ` as import('../../__generated__/ts-gql/FOLDERPATH').type
 
-    const parentVariable = parent
-        ? {
-            where: {
-                parent: {
-                    id: {
-                        equals: parent
-                    }
-                }
-            }
-        }
-        : { where: {} }
-
-    const { data } = useQuery(FOLDERPATH, { variables: parentVariable })
-
-    const backUrl = React.useMemo(() => {
-        if (data?.category?.parent?.id) {
-            return `/folders?parent=${data.category.parent.id}`
-        } else
-            return "#"
-    }, [data])
+    const { data } = useQuery(FOLDERPATH, {
+        variables: {
+            id: parent!
+        },
+        fetchPolicy: 'no-cache'
+    })
 
     return (
         <PageContainer header='Dashboard'>
             <div dir='rtl'>
-                <h1>💖 آخرین بروزرسانی ها</h1>
+                <h1>
+                    ⚙️
+                    این بخش در حال توسعه میباشد
+
+                </h1>
             </div>
-            <Link href={`/designs/create`}>
+            <Link href={`/designs/create?with_category=` + parent}>
                 <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='1em'
@@ -74,15 +66,15 @@ export default function CustomPage() {
                 new
             </Link>
             <br />
-            {data?.categories?.at(0)?.parent?.id && <Link href={'/folders?parent=' + data?.categories?.at(0)?.parent?.id}>
-                <svg xmlns="http://www.w3.org/2000/svg" width={"1em"} height={"1em"} fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+            {data?.category?.parent?.id && <Link href={'/folders?parent=' + data.category.parent.id}>
+                <svg xmlns="http://www.w3.org/2000/svg" width={"1em"} height={"1em"} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                 </svg>
 
 
                 back</Link>}
             <ul>
-                {data?.categories?.map(i => (
+                {data?.category?.children?.map(i => (
                     <li key={i.id}>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
@@ -99,8 +91,19 @@ export default function CustomPage() {
                         <br />
                     </li>
                 ))}
-                {data?.categories?.length === 0 && <div>هیچ فایلی ای یافت نشد</div>}
+                {data?.category?.children?.length === 0 && data.category.designs?.length === 0 && <div>هیچ فایلی ای یافت نشد</div>}
             </ul>
+            {
+                data?.category?.designs?.map(i => (
+                    <div>
+
+                        <Link href={'/designs/' + i.id} key={i.id} >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256"><path fill="currentColor" d="m212.24 83.76l-56-56A6 6 0 0 0 152 26H56a14 14 0 0 0-14 14v176a14 14 0 0 0 14 14h144a14 14 0 0 0 14-14V88a6 6 0 0 0-1.76-4.24M158 46.48L193.52 82H158ZM200 218H56a2 2 0 0 1-2-2V40a2 2 0 0 1 2-2h90v50a6 6 0 0 0 6 6h50v122a2 2 0 0 1-2 2" /></svg>
+                            {i.title}</Link>
+                        <br />
+                    </div>
+                ))
+            }
         </PageContainer>
     )
 }

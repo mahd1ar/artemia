@@ -1,13 +1,13 @@
 {
-  "version": "ts-gql-document-validator@v1,schema@a96f703a1c3f4986f32eb80dc9f7ffd3",
-  "integrity": "__TS_GQL_INTEGRITY_18e0fc23dc59d0f562c6e31a74528da3_TS_GQL_INTEGRITY__",
+  "version": "ts-gql-document-validator@v1,schema@71ec55312eb66153243d3db8067f68f7",
+  "integrity": "__TS_GQL_INTEGRITY_3eefd6889846b3bac830c9c99977fc4a_TS_GQL_INTEGRITY__",
   "cache": {
-    "0e7b2985f58ab67a4f73a7a5dcc9b775": [],
-    "1c85f3aacdcbde15efb6fc2a2a7df6e3": [],
-    "d0a96de9d04408729c7af9d1e2b69e82": [],
-    "d776c56d84a3aeb47dce323e3efbe5fa": [],
-    "6a5c5cb3a0fd095781649ab2381da425": [],
-    "2c57a6b97d9d758ca06ba72e1e18884d": [],
-    "e21a92e919963ab0dfa4dbb32244de08": []
+    "ddac1b0d2c6d587ebd06e7e205cd2ce2": [],
+    "edcc3e307e263ca612044b810c87fb23": [],
+    "fa27317f0e2da3cf3c93dd680e6ef54f": [],
+    "5eaf0b9b11d8c994a46ae78d6a8740cf": [],
+    "d3de1c7461ebc3c23142ec4c882010c1": [],
+    "b0837deef4ec21dfe41e792226b67878": [],
+    "ba1beefc2556c237c01c4f1591d3efa6": []
   }
 }

@@ -10,11 +10,6 @@ import { gql } from '@ts-gql/tag/no-transform'
 import { useRouter } from "next/router";
 
 
-type Option = {
-  value: string,
-  label: string
-}
-
 export const Field = ({
   field,
   value,
@@ -24,10 +19,6 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
-
-  // console.log(value)
-
-  const router = useRouter()
 
   const PARENTCATEGORYOFRESOURSE = gql`
         query PARENTCATEGORYOFRESOURSE {
@@ -69,8 +60,20 @@ export const Field = ({
   const [cats, setCats] = useState<category[]>([])
   const [load, { data }] = useLazyQuery(FOLDERS)
   const [loadSettings] = useLazyQuery(PARENTCATEGORYOFRESOURSE)
+  const router = useRouter()
+  const [isDisabled] = useState(!onChange)
+
 
   useEffect(() => {
+
+    if (router.query.with_category && typeof router.query.with_category === 'string') {
+
+
+      fetchParent(router.query.with_category, [], true)
+
+
+      return
+    }
 
     if ('value' in value)
       if (value.value?.id)
@@ -86,7 +89,7 @@ export const Field = ({
 
   }, [])
 
-  async function fetchParent(id: string, arr: category[]) {
+  async function fetchParent(id: string, arr: category[], with_submit = false) {
 
     const res = await load({
       variables: {
@@ -111,17 +114,33 @@ export const Field = ({
     arr.push(item)
 
     if (res.data?.categories?.[0]?.parent?.id)
-      fetchParent(res.data?.categories[0].parent.id, arr)
+      await fetchParent(res.data?.categories[0].parent.id, arr, with_submit)
     else {
 
       arr.reverse()
+
       setCats(arr)
+
+      if (with_submit && arr.at(-2)) {
+        console.log("arr.at(-2)")
+        console.log(arr.at(-2))
+        onChange?.({
+          value: {
+            id: arr.at(-2)!.selectedChild!.value,
+            label: arr.at(-2)!.selectedChild!.label
+          },
+          kind: 'one',
+          id: value.id,
+          initialValue: value.initialValue
+        })
+      }
+
+
     }
 
 
   }
 
-  // TODO - get this from api
   async function fetchChildren(parentId: string, level = 0, title = '') {
 
     const res = await load({
@@ -187,6 +206,7 @@ export const Field = ({
 
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
+
       {
         cats.map((i, index) => {
 
@@ -202,7 +222,10 @@ export const Field = ({
               }}
               value={i.selectedChild}
               key={index}
-              options={i.children.map(j => ({ value: j.id, label: j.title }))} />
+              options={i.children.map(j => ({ value: j.id, label: j.title }))}
+              isRtl={true}
+              isDisabled={isDisabled}
+            />
 
           )
         })
