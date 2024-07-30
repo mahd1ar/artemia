@@ -73,40 +73,40 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
             // },
             ref: "Category.children",
             hooks: {
-                async resolveInput(args) {
-                    console.log(args.resolvedData);
-                    if (args.operation === "create") {
-                        const referer = args.context.req?.headers.referer;
-                        if (referer) {
-                            const from = new URL(referer).pathname
-                                .split("/")
-                                .filter(Boolean)
-                                .at(0);
-                            if (from === "categories") {
-                                return args.resolvedData.parent;
-                            } else {
-                                const prisma = args.context.prisma as PrismaClient;
-                                const settings = await prisma.setting.findFirst();
+                // async resolveInput(args) {
+                //     console.log(args.resolvedData);
+                //     if (args.operation === "create") {
+                //         const referer = args.context.req?.headers.referer;
+                //         if (referer) {
+                //             const from = new URL(referer).pathname
+                //                 .split("/")
+                //                 .filter(Boolean)
+                //                 .at(0);
+                //             if (from === "categories") {
+                //                 return args.resolvedData.parent;
+                //             } else {
+                //                 const prisma = args.context.prisma as PrismaClient;
+                //                 const settings = await prisma.setting.findFirst();
 
-                                if (from === "designs") {
-                                    if (settings?.parentCategoryOfDesignTag) {
-                                        console.log(99090);
-                                        console.log(settings?.parentCategoryOfDesignTag);
-                                        return {
-                                            connect: { id: settings.parentCategoryOfDesignTag },
-                                        };
-                                    }
-                                }
-                            }
-                        }
-                    }
+                //                 if (from === "designs") {
+                //                     if (settings?.parentCategoryOfDesignTag) {
+                //                         console.log(99090);
+                //                         console.log(settings?.parentCategoryOfDesignTag);
+                //                         return {
+                //                             connect: { id: settings.parentCategoryOfDesignTag },
+                //                         };
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
 
-                    return args.resolvedData.parent;
-                },
+                //     return args.resolvedData.parent;
+                // },
             },
         }),
 
-        Designs: relationship({
+        designs: relationship({
             ref: 'Design.category',
             many: true
         })

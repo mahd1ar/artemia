@@ -1,8 +1,6 @@
 import React from "react"
 import Link from 'next/link';
 import { PageContainer, } from '@keystone-6/core/admin-ui/components';
-import TableList from '../components/TableList';
-import { jsx, Heading, useManagedState, } from '@keystone-ui/core'
 
 import {
     gql,

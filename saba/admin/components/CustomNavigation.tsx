@@ -20,15 +20,16 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
     return (
         <NavigationContainer authenticatedItem={authenticatedItem}>
             <NavItem href="/">Dashboard</NavItem>
+
             {
                 data?.setting?.parentCategoryOfDesign
                 &&
-                <NavItem href={'/folders?parent=' + data.setting.parentCategoryOfDesign}>folders</NavItem>
+                <NavItem href={'/folders?parent=' + data.setting.parentCategoryOfDesign}>نقشه ها</NavItem>
 
             }
             <ListNavItems
                 lists={lists}
-                include={['Approval', 'Design', 'Statement',
+                include={['Approval', 'Statement',
                     'DailyReport', 'SafetyReport', 'FileStore',
                     'User',
                     'Log', 'Setting']} />
