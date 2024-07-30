@@ -1,12 +1,12 @@
 // import { graphql } from "@graphql-ts/schema";
 import { list, graphql } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { bigInt, image, relationship, text, timestamp, virtual } from "@keystone-6/core/fields";
+import { relationship, text, timestamp, virtual } from "@keystone-6/core/fields";
 import { Session } from "../data/types";
-import { NumUtils } from "../data/utils";
 import { PrismaClient } from '@prisma/client'
+import type { Lists } from ".keystone/types";
 
-export const Description = list({
+export const Description = list<Lists.Description.TypeInfo<any>>({
     access: allowAll, // FIXME
 
     ui: {
@@ -72,18 +72,19 @@ export const Description = list({
             field: graphql.field({
                 type: graphql.BigInt,
                 async resolve(item, args, context) {
-                    const { id } = item as unknown as { id: string }
+                    const { id } = item
                     const { statements } = await context.query.Description.findOne({
                         where: {
-                            id
+                            id,
                         },
-                        query: ' statements { grossTotal }'
+                        query: ' statements { confirmedByTheUploader grossTotal }'
                     })
 
                     let total = BigInt(0)
 
                     statements.forEach((i: any) => {
-                        total += BigInt(i.grossTotal)
+                        if (i.confirmedByTheUploader)
+                            total += BigInt(i.grossTotal)
                     })
 
                     return total
@@ -98,8 +99,9 @@ export const Description = list({
             field: graphql.field({
                 type: graphql.BigInt,
                 async resolve(item, args, context) {
-                    const { id } = item as unknown as { id: string }
-                    const prisma = context.prisma as PrismaClient
+                    const { id } = item
+                    const prisma = context.prisma
+                    // NOTICE: you can use query instead of prisma as well
                     const currentDescription = await prisma.description.findUnique({
                         where: {
                             id
@@ -107,6 +109,7 @@ export const Description = list({
                         select: {
                             statements: {
                                 select: {
+                                    confirmedByTheUploader: true,
                                     peyments: {
                                         select: {
                                             price: true
@@ -120,11 +123,12 @@ export const Description = list({
                     let total = BigInt(0)
 
                     currentDescription?.statements.forEach(i => {
-                        i.peyments.forEach(j => {
-                            if (j.price) {
-                                total += j.price + total
-                            }
-                        })
+                        if (i.confirmedByTheUploader)
+                            i.peyments.forEach(j => {
+                                if (j.price) {
+                                    total += j.price + total
+                                }
+                            })
                     })
 
                     return total

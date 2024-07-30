@@ -9,35 +9,35 @@ import type { Lists } from ".keystone/types";
 export const Category = list<Lists.Category.TypeInfo<any>>({
     access: {
         operation: allowAll,
-        filter: {
-            query: async (args) => {
-                const referer = args.context.req?.headers.referer;
-                if (!referer) return true;
+        // filter: {
+        //     query: async (args) => {
+        //         const referer = args.context.req?.headers.referer;
+        //         if (!referer) return true;
 
-                const from = new URL(referer).pathname.split("/").filter(Boolean).at(0);
+        //         const from = new URL(referer).pathname.split("/").filter(Boolean).at(0);
 
-                if (from === "categories") return true;
+        //         if (from === "categories") return true;
 
-                if (from === "designs") {
+        //         if (from === "designs") {
 
-                    const prisma = args.context.prisma as PrismaClient;
-                    const setting = await prisma.setting.findFirst();
-                    const parrentCategory = setting?.parentCategoryOfDesignTag;
+        //             const prisma = args.context.prisma as PrismaClient;
+        //             const setting = await prisma.setting.findFirst();
+        //             const parrentCategory = setting?.parentCategoryOfDesignTag;
 
-                    if (!parrentCategory) return true;
+        //             if (!parrentCategory) return true;
 
-                    return {
-                        parent: {
-                            id: {
-                                equals: parrentCategory,
-                            },
-                        },
-                    };
-                }
+        //             return {
+        //                 parent: {
+        //                     id: {
+        //                         equals: parrentCategory,
+        //                     },
+        //                 },
+        //             };
+        //         }
 
-                return true;
-            },
-        },
+        //         return true;
+        //     },
+        // },
     },
     ui: {
         itemView: {
