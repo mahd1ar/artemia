@@ -3,7 +3,6 @@ import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { Roles } from "../data/types";
 import { setPermitions } from "../data/utils";
-import { PrismaClient } from "@prisma/client";
 import type { Lists } from ".keystone/types";
 
 export const Category = list<Lists.Category.TypeInfo<any>>({

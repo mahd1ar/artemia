@@ -2,10 +2,17 @@ import React from 'react'
 import Link from 'next/link'
 import { PageContainer } from '@keystone-6/core/admin-ui/components'
 import { gql, useQuery } from '@apollo/client'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/router'
 
 export default function CustomPage() {
-    const parent = useSearchParams().get('parent')
+    const router = useRouter()
+    const params = router.query['']
+
+    if (typeof params === 'string')
+        return <div>err::typeof params is string!</div>
+
+    const parent = params?.at(-1)
+
 
     const FOLDERPATH = gql`
     query FOLDERPATH($id: ID!) {
@@ -27,7 +34,7 @@ export default function CustomPage() {
         }
       }
     }
-  ` as import('../../__generated__/ts-gql/FOLDERPATH').type
+  ` as import('../../../__generated__/ts-gql/FOLDERPATH').type
 
     const { data } = useQuery(FOLDERPATH, {
         variables: {
@@ -42,8 +49,8 @@ export default function CustomPage() {
                 <h1>
                     ⚙️
                     این بخش در حال توسعه میباشد
-
                 </h1>
+
             </div>
             <Link href={`/designs/create?with_category=` + parent}>
                 <svg
@@ -66,13 +73,14 @@ export default function CustomPage() {
                 new
             </Link>
             <br />
-            {data?.category?.parent?.id && <Link href={'/folders?parent=' + data.category.parent.id}>
+            {params!.at(-2) && <Link href={'/folders/' + params?.slice(0, -1)?.join('/')}>
                 <svg xmlns="http://www.w3.org/2000/svg" width={"1em"} height={"1em"} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                 </svg>
 
 
-                back</Link>}
+                back
+            </Link>}
             <ul>
                 {data?.category?.children?.map(i => (
                     <li key={i.id}>
@@ -87,7 +95,7 @@ export default function CustomPage() {
                                 d='M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h4.981l2 2h7.789q.69 0 1.153.463T21 8.616v8.769q0 .69-.462 1.153T19.385 19zm0-1h14.769q.269 0 .442-.173t.173-.442v-8.77q0-.269-.173-.442T19.385 8h-8.19l-2-2h-4.58q-.269 0-.442.173T4 6.616v10.769q0 .269.173.442t.443.173M4 18V6z'
                             />
                         </svg>
-                        <Link href={'/folders?parent=' + i.id}>{i.title}</Link>
+                        <Link href={router.asPath + '/' + i.id}>{i.title}*</Link>
                         <br />
                     </li>
                 ))}
