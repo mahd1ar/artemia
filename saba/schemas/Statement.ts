@@ -670,29 +670,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
       },
     }),
-    createdBy: relationship({
-      ref: "User.statements",
-      many: false,
-      ui: {
-        createView: { fieldMode: "hidden" },
-        itemView: {
-          fieldPosition: "sidebar",
-          fieldMode(args) {
-            return "read";
-          },
-        },
-      },
-      hooks: {
-        resolveInput(args) {
-          if (args.operation === "create") {
-            const session = args.context.session as Session;
-            args.resolvedData.createdBy = { connect: { id: session?.itemId } };
-          }
-
-          return args.resolvedData.createdBy;
-        },
-      },
-    }),
     changeLog: json({
       ui: {
         createView: { fieldMode: "hidden" },

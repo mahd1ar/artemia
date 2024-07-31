@@ -56,12 +56,11 @@ export namespace LogMessage {
 }
 
 export const getRoleFromArgs = (args: Record<string, any> & { session?: Session }, defaultValue = Roles.guest) => {
+
     if (!args.session) {
         return defaultValue
     }
+
     return args.session.data.role
 }
 
-export function isMemberOfAdminGroup(args: Record<string, any> & { session?: Session }) {
-    return getRoleFromArgs(args, Roles.guest) <= Roles.admin
-}

@@ -3,6 +3,7 @@ import { allowAll, allOperations } from "@keystone-6/core/access";
 import { password, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
 import { Roles, Session, getRoleFromArgs } from "../data/types";
 import type { Lists } from ".keystone/types";
+import { isMemberOfAdminGroup } from "../data/access";
 
 
 const ui = { itemView: { fieldMode(args: any) { return getRoleFromArgs(args) > Roles.operator ? 'hidden' : 'edit' } } }
@@ -20,19 +21,21 @@ export const User = list<Lists.User.TypeInfo<any>>({
     },
     filter: {
       query: args => {
-        // if (process.env.NODE_ENV !== 'production')
-        //   return true
 
-        if (getRoleFromArgs(args) <= Roles.operator)
+        if (isMemberOfAdminGroup(args))
           return true
 
-        else {
+        const resource = new URL((args.context.res?.req.headers.referer as string)).pathname.split('/').filter(Boolean).at(0)
+
+        if (resource === 'users')
           return {
             id: {
               equals: (args.session as Session)?.itemId
             }
           }
-        }
+
+        return true
+
       },
     }
   },
@@ -109,10 +112,10 @@ export const User = list<Lists.User.TypeInfo<any>>({
     ...group({
       label: 'data',
       fields: {
-
-        statements: relationship({ ui, ref: "Statement.createdBy", many: true }),
         approvals: relationship({ ui, ref: "Approval.createdBy", many: true }),
         descriptions: relationship({ ui, ref: "Description.createdBy", many: true }),
+        approvedContracts: relationship({ ui, ref: "Contract.approvedBy", many: true }),
+        contracts: relationship({ ui, ref: "Contract.createdBy", many: true }),
         Designs: relationship({ ui, ref: "Design.createdBy", many: true }),
         dailyReports: relationship({ ui, ref: "DailyReport.createdBy", many: true }),
       }
