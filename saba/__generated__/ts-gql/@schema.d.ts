@@ -1,8 +1,8 @@
-// ts-gql-integrity:02b4113d0f525d302ee3013ae85960ac
+// ts-gql-integrity:b80b615782863f622d5723fa5a633143
 /*
 ts-gql-meta-begin
 {
-  "hash": "4f3f68132791556828ef19d05bd40b97"
+  "hash": "ac0495c78c6e509fffbb714de1c4d1ff"
 }
 ts-gql-meta-end
 */
@@ -343,7 +343,7 @@ export type Statement = {
   readonly totalPayable: BigInt | null;
   readonly status: string | null;
   readonly createdAt: DateTime | null;
-  readonly createdBy: User | null;
+  readonly changeLog: JSON | null;
 };
 
 export type StatementattachmentsArgs = {
@@ -422,7 +422,6 @@ export type StatementWhereInput = {
   readonly tax?: BigIntFilter | null;
   readonly status?: StringNullableFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
-  readonly createdBy?: UserWhereInput | null;
 };
 
 export type BooleanFilter = {
@@ -505,7 +504,7 @@ export type StatementUpdateInput = {
   readonly tax?: BigInt | null;
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
-  readonly createdBy?: UserRelateToOneForUpdateInput | null;
+  readonly changeLog?: JSON | null;
 };
 
 export type DescriptionRelateToOneForUpdateInput = {
@@ -563,7 +562,7 @@ export type StatementCreateInput = {
   readonly tax?: BigInt | null;
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
-  readonly createdBy?: UserRelateToOneForCreateInput | null;
+  readonly changeLog?: JSON | null;
 };
 
 export type DescriptionRelateToOneForCreateInput = {
@@ -941,13 +940,17 @@ export type FileStoreCreateInput = {
 export type Contract = {
   readonly __typename: "Contract";
   readonly id: string;
+  readonly isApproved: boolean | null;
+  readonly approvedBy: User | null;
   readonly title: string | null;
   readonly description: string | null;
   readonly startFrom: number | null;
   readonly end: number | null;
-  readonly price: BigInt | null;
+  readonly cost: BigInt | null;
   readonly contractor: Constractor | null;
   readonly attachment: FileFieldOutput | null;
+  readonly createdAt: DateTime | null;
+  readonly createdBy: User | null;
 };
 
 export type ContractWhereUniqueInput = {
@@ -959,31 +962,41 @@ export type ContractWhereInput = {
   readonly OR?: TSGQLMaybeArray<ContractWhereInput> | null;
   readonly NOT?: TSGQLMaybeArray<ContractWhereInput> | null;
   readonly id?: IDFilter | null;
+  readonly isApproved?: BooleanFilter | null;
+  readonly approvedBy?: UserWhereInput | null;
   readonly title?: StringFilter | null;
   readonly description?: StringFilter | null;
   readonly startFrom?: PairFilter | null;
   readonly end?: PairFilter | null;
-  readonly price?: BigIntNullableFilter | null;
+  readonly cost?: BigIntNullableFilter | null;
   readonly contractor?: ConstractorWhereInput | null;
+  readonly createdAt?: DateTimeNullableFilter | null;
+  readonly createdBy?: UserWhereInput | null;
 };
 
 export type ContractOrderByInput = {
   readonly id?: OrderDirection | null;
+  readonly isApproved?: OrderDirection | null;
   readonly title?: OrderDirection | null;
   readonly description?: OrderDirection | null;
   readonly startFrom?: OrderDirection | null;
   readonly end?: OrderDirection | null;
-  readonly price?: OrderDirection | null;
+  readonly cost?: OrderDirection | null;
+  readonly createdAt?: OrderDirection | null;
 };
 
 export type ContractUpdateInput = {
+  readonly isApproved?: boolean | null;
+  readonly approvedBy?: UserRelateToOneForUpdateInput | null;
   readonly title?: string | null;
   readonly description?: string | null;
   readonly startFrom?: number | null;
   readonly end?: number | null;
-  readonly price?: BigInt | null;
+  readonly cost?: BigInt | null;
   readonly contractor?: ConstractorRelateToOneForUpdateInput | null;
   readonly attachment?: FileFieldInput | null;
+  readonly createdAt?: DateTime | null;
+  readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
 
 export type ConstractorRelateToOneForUpdateInput = {
@@ -998,13 +1011,17 @@ export type ContractUpdateArgs = {
 };
 
 export type ContractCreateInput = {
+  readonly isApproved?: boolean | null;
+  readonly approvedBy?: UserRelateToOneForCreateInput | null;
   readonly title?: string | null;
   readonly description?: string | null;
   readonly startFrom?: number | null;
   readonly end?: number | null;
-  readonly price?: BigInt | null;
+  readonly cost?: BigInt | null;
   readonly contractor?: ConstractorRelateToOneForCreateInput | null;
   readonly attachment?: FileFieldInput | null;
+  readonly createdAt?: DateTime | null;
+  readonly createdBy?: UserRelateToOneForCreateInput | null;
 };
 
 export type ConstractorRelateToOneForCreateInput = {
@@ -1216,29 +1233,19 @@ export type User = {
   readonly email: string | null;
   readonly role: number | null;
   readonly password: PasswordState | null;
-  readonly statements: ReadonlyArray<Statement> | null;
-  readonly statementsCount: number | null;
   readonly approvals: ReadonlyArray<Approval> | null;
   readonly approvalsCount: number | null;
   readonly descriptions: ReadonlyArray<Description> | null;
   readonly descriptionsCount: number | null;
+  readonly approvedContracts: ReadonlyArray<Contract> | null;
+  readonly approvedContractsCount: number | null;
+  readonly contracts: ReadonlyArray<Contract> | null;
+  readonly contractsCount: number | null;
   readonly Designs: ReadonlyArray<Design> | null;
   readonly DesignsCount: number | null;
   readonly dailyReports: ReadonlyArray<DailyReport> | null;
   readonly dailyReportsCount: number | null;
   readonly createdAt: DateTime | null;
-};
-
-export type UserstatementsArgs = {
-  readonly where?: StatementWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<StatementOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: StatementWhereUniqueInput | null;
-};
-
-export type UserstatementsCountArgs = {
-  readonly where?: StatementWhereInput;
 };
 
 export type UserapprovalsArgs = {
@@ -1263,6 +1270,30 @@ export type UserdescriptionsArgs = {
 
 export type UserdescriptionsCountArgs = {
   readonly where?: DescriptionWhereInput;
+};
+
+export type UserapprovedContractsArgs = {
+  readonly where?: ContractWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<ContractOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: ContractWhereUniqueInput | null;
+};
+
+export type UserapprovedContractsCountArgs = {
+  readonly where?: ContractWhereInput;
+};
+
+export type UsercontractsArgs = {
+  readonly where?: ContractWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<ContractOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: ContractWhereUniqueInput | null;
+};
+
+export type UsercontractsCountArgs = {
+  readonly where?: ContractWhereInput;
 };
 
 export type UserDesignsArgs = {
@@ -1307,9 +1338,10 @@ export type UserWhereInput = {
   readonly name?: StringFilter | null;
   readonly email?: StringFilter | null;
   readonly role?: IntNullableFilter | null;
-  readonly statements?: StatementManyRelationFilter | null;
   readonly approvals?: ApprovalManyRelationFilter | null;
   readonly descriptions?: DescriptionManyRelationFilter | null;
+  readonly approvedContracts?: ContractManyRelationFilter | null;
+  readonly contracts?: ContractManyRelationFilter | null;
   readonly Designs?: DesignManyRelationFilter | null;
   readonly dailyReports?: DailyReportManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
@@ -1346,9 +1378,10 @@ export type UserUpdateInput = {
   readonly email?: string | null;
   readonly role?: number | null;
   readonly password?: string | null;
-  readonly statements?: StatementRelateToManyForUpdateInput | null;
   readonly approvals?: ApprovalRelateToManyForUpdateInput | null;
   readonly descriptions?: DescriptionRelateToManyForUpdateInput | null;
+  readonly approvedContracts?: ContractRelateToManyForUpdateInput | null;
+  readonly contracts?: ContractRelateToManyForUpdateInput | null;
   readonly Designs?: DesignRelateToManyForUpdateInput | null;
   readonly dailyReports?: DailyReportRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
@@ -1385,9 +1418,10 @@ export type UserCreateInput = {
   readonly email?: string | null;
   readonly role?: number | null;
   readonly password?: string | null;
-  readonly statements?: StatementRelateToManyForCreateInput | null;
   readonly approvals?: ApprovalRelateToManyForCreateInput | null;
   readonly descriptions?: DescriptionRelateToManyForCreateInput | null;
+  readonly approvedContracts?: ContractRelateToManyForCreateInput | null;
+  readonly contracts?: ContractRelateToManyForCreateInput | null;
   readonly Designs?: DesignRelateToManyForCreateInput | null;
   readonly dailyReports?: DailyReportRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
