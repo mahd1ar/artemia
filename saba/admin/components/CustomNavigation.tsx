@@ -17,6 +17,7 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
 
     const { data } = useQuery(PARENTCATEGORYOFRESOURSE1)
 
+
     return (
         <NavigationContainer authenticatedItem={authenticatedItem}>
             <NavItem href="/">Dashboard</NavItem>

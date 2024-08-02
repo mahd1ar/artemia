@@ -1,7 +1,6 @@
 import React from "react"
 import Link from 'next/link';
 import { PageContainer, } from '@keystone-6/core/admin-ui/components';
-
 import {
     gql,
     useQuery
