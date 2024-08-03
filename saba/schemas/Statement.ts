@@ -403,6 +403,16 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       label: 'عنوان',
       validation: { isRequired: true }
     }),
+    contract: relationship({
+      label: 'قرارداد',
+      ref: "Contract.statements",
+      ui: {
+        displayMode: 'select',
+        searchFields: ['title'],
+        labelField: 'summery',
+        hideCreate: true
+      }
+    }),
     description: relationship({
       label: " شرح مصوبه متناظر",
       ref: "Description.statements",

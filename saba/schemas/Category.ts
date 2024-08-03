@@ -38,6 +38,32 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
         //     },
         // },
     },
+    hooks: {
+        beforeOperation: async (args) => {
+            const originalItem = args.item?.id;
+
+
+            if (args.operation === "delete" && originalItem) {
+
+                const sudo = args.context.sudo()
+
+                const children = await sudo.query.Category.findMany({
+                    where: {
+                        parent: {
+                            id: {
+                                equals: originalItem
+                            }
+                        }
+                    },
+                    query: "id"
+                })
+
+                await sudo.query.Category.deleteMany({
+                    where: children
+                })
+            }
+        }
+    },
     ui: {
         itemView: {
             defaultFieldMode(args) {

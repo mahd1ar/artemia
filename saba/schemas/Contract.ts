@@ -1,8 +1,18 @@
-import { list, group } from "@keystone-6/core";
+import { list, group, graphql } from "@keystone-6/core";
 import { allOperations } from "@keystone-6/core/access";
-import { bigInt, checkbox, file, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import {
+  bigInt,
+  checkbox,
+  file,
+  integer,
+  relationship,
+  select,
+  text,
+  timestamp,
+  virtual,
+} from "@keystone-6/core/fields";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
-import { Lists } from '.keystone/types'
+import { Lists } from ".keystone/types";
 import { isLoggedIn, isMemberOfAdminGroup } from "../data/access";
 import { Session } from "../data/types";
 
@@ -10,157 +20,212 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
   access: {
     operation: {
       ...allOperations(isLoggedIn),
-      delete: args => isMemberOfAdminGroup(args),
+      delete: (args) => isMemberOfAdminGroup(args),
     },
     filter: {
-      query: args => {
+      query: (args) => {
+        if (isMemberOfAdminGroup(args)) return true;
 
-        if (isMemberOfAdminGroup(args))
-          return true
+        const resource = new URL(
+          args.context.res?.req.headers.referer as string
+        ).pathname
+          .split("/")
+          .filter(Boolean)
+          .at(0);
 
-        const resource = new URL((args.context.res?.req.headers.referer as string)).pathname.split('/').filter(Boolean).at(0)
-
-        if (resource === 'contracts')
+        if (resource === "contracts")
           return {
             OR: [
               {
                 isApproved: { equals: true },
-              }, {
-                createdBy: { id: { equals: (args.context.session as Session)!.itemId } },
-              }
-            ]
-          }
-
+              },
+              {
+                createdBy: {
+                  id: { equals: (args.context.session as Session)!.itemId },
+                },
+              },
+            ],
+          };
 
         return {
           isApproved: { equals: true },
-        }
-      }
-    }
+        };
+      },
+    },
   },
   ui: {
-    label: 'قرارداد',
+    label: "قرارداد",
     listView: {
-      initialColumns: ['title', 'isApproved', 'contractor', 'cost'],
-    }
+      initialColumns: ["title", "isApproved", "contractor", "cost"],
+    },
   },
   hooks: {
     resolveInput(args) {
-
-      if (typeof args.inputData.isApproved === 'boolean' && !args.inputData.approvedBy) {
+      if (
+        typeof args.inputData.isApproved === "boolean" &&
+        !args.inputData.approvedBy
+      ) {
         if (args.inputData.isApproved)
-          args.resolvedData.approvedBy = { connect: { id: (args.context.session as Session)!.itemId } }
-        else
-          args.resolvedData.approvedBy = { disconnect: true }
-
+          args.resolvedData.approvedBy = {
+            connect: { id: (args.context.session as Session)!.itemId },
+          };
+        else args.resolvedData.approvedBy = { disconnect: true };
       }
 
-      return args.resolvedData
+      return args.resolvedData;
     },
     validate(args) {
-
-      const isFromAdminGroup = isMemberOfAdminGroup(args.context)
+      const isFromAdminGroup = isMemberOfAdminGroup(args.context);
 
       if (args.inputData?.isApproved && !isFromAdminGroup) {
-        args.addValidationError('تایید کننده این قرارداد باید از گروه ادمین باشد')
+        args.addValidationError(
+          "تایید کننده این قرارداد باید از گروه ادمین باشد"
+        );
       }
 
-      if (args.operation !== 'create' && args.item?.isApproved && !isFromAdminGroup) {
-        args.addValidationError('امکان تغییر قرارداد تایید شده وجود ندارد')
+      if (
+        args.operation !== "create" &&
+        args.item?.isApproved &&
+        !isFromAdminGroup
+      ) {
+        args.addValidationError("امکان تغییر قرارداد تایید شده وجود ندارد");
       }
-
     },
   },
   fields: {
+    summery: virtual({
+      label: "خلاصه",
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item, _, context) {
+          const startDate = item.startFrom
+            ? new Date(item.startFrom * 1000).toLocaleDateString("fa-IR")
+            : "";
+          const endDate = item.end
+            ? new Date(item.end * 1000).toLocaleDateString("fa-IR")
+            : "";
+          const dateTitle =
+            startDate && endDate ? `${endDate} ~ ${startDate} ` : "";
+
+          const contractor = await context.prisma.contract.findUnique({
+            where: {
+              id: item.id,
+            },
+            select: { id: true, contractor: { select: { name: true } } },
+          });
+          const result = [item.title, dateTitle, contractor?.contractor?.name]
+            .filter(Boolean)
+            .join(" - ");
+
+          return result;
+        },
+      }),
+    }),
     isApproved: checkbox({
-      label: 'تایید شده ',
+      label: "تایید شده ",
       ui: {
         createView: {
-          fieldMode: 'hidden'
+          fieldMode: "hidden",
         },
       },
-
     }),
     approvedBy: relationship({
-      label: 'تایید کننده',
+      label: "تایید کننده",
       ui: {
         createView: {
-          fieldMode: 'hidden'
+          fieldMode: "hidden",
         },
         itemView: {
-          fieldMode: 'read'
-        }
+          fieldMode: "read",
+        },
       },
-      ref: 'User.approvedContracts',
+      ref: "User.approvedContracts",
     }),
     title: text({
-      label: 'عنوان',
+      label: "عنوان",
     }),
     description: text({
-      label: 'توضیحات',
+      label: "توضیحات",
       ui: {
-        displayMode: 'textarea'
-      }
+        displayMode: "textarea",
+      },
     }),
     ...group({
-      label: 'تاریخ قرارداد',
+      label: "تاریخ قرارداد",
       fields: {
         startFrom: persianCalendar({
-          label: 'از تاریخ',
+          label: "از تاریخ",
         }),
         end: persianCalendar({
-          label: 'تا تاریخ',
+          label: "تا تاریخ",
         }),
-      }
+      },
     }),
     cost: bigInt({
-      label: 'مبلغ قرارداد',
+      label: "مبلغ قرارداد",
       ui: {
-        views: "./src/custome-fields-view/bigint-with-farsi-letters.tsx"
-      }
+        views: "./src/custome-fields-view/bigint-with-farsi-letters.tsx",
+      },
     }),
     contractor: relationship({
-      label: 'پیمانکار',
-      ref: 'Constractor.contracts',
+      label: "پیمانکار",
+      ref: "Constractor.contracts",
+    }),
+    statements: relationship({
+      label: "صورت وضعیت",
+      ref: "Statement.contract",
+      many: true,
+      ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
+        itemView: {
+          fieldMode({ context, item }) {
+            return "read";
+          },
+        },
+      },
     }),
     attachment: file({
       // temp hidden
       ui: {
         itemView: {
-          fieldMode: 'hidden'
+          fieldMode: "hidden",
         },
-        createView: { fieldMode: 'hidden' }
+        createView: { fieldMode: "hidden" },
       },
       storage: "file",
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
-        createView: { fieldMode: 'hidden' },
+        createView: { fieldMode: "hidden" },
         itemView: {
-          fieldMode: 'read',
-          fieldPosition: 'sidebar'
-        }
-      }
+          fieldMode: "read",
+          fieldPosition: "sidebar",
+        },
+      },
     }),
     createdBy: relationship({
       ref: "User.contracts",
       many: false,
       ui: {
-        createView: { fieldMode: 'hidden' },
+        createView: { fieldMode: "hidden" },
         itemView: {
           // fieldMode: 'read',
-          fieldPosition: 'sidebar'
-        }
+          fieldPosition: "sidebar",
+        },
       },
       hooks: {
         resolveInput(args) {
-          if (args.operation === 'create')
-            return { connect: { id: (args.context.session as Session)!.itemId } }
+          if (args.operation === "create")
+            return {
+              connect: { id: (args.context.session as Session)!.itemId },
+            };
 
-          return args.resolvedData.createdBy
-        }
-      }
-    })
+          return args.resolvedData.createdBy;
+        },
+      },
+    }),
   },
 });
