@@ -1,15 +1,15 @@
 {
-  "version": "ts-gql-document-validator@v1,schema@44f5a7d7babd551e53950acca4e6931b",
-  "integrity": "__TS_GQL_INTEGRITY_2cdb94f1bcb038e01977a6c54e30beb3_TS_GQL_INTEGRITY__",
+  "version": "ts-gql-document-validator@v1,schema@669ff1982d1b1bfd097d9fde1ece18c9",
+  "integrity": "__TS_GQL_INTEGRITY_270237ebb4fa6c6a3c46ae5ebac79310_TS_GQL_INTEGRITY__",
   "cache": {
-    "87d856613e5d7e670010aaff40b8be1d": [],
-    "3fedf37e6cddd4f3e5acc890a1fbe947": [],
-    "e757f248b495cc0656d723f138fca183": [],
-    "e0cb3152ddcff324aa2584dc7fc05baa": [],
-    "60a2b07660d0ee0ff268f7e8f0e26476": [],
-    "5dd5f1a2db5d0af1d739c91a9c530e90": [],
-    "8a27a6ad1b0b22114f5021ad536cf720": [],
-    "2737ef602de1557cab63b6794202165d": [],
-    "726afd0c4e3a5e6fb3ce549955146abc": []
+    "787ee095c070b9ee6b3046dbc8f8a853": [],
+    "8f16a5ed569acc33e48624b23436f5f5": [],
+    "e670a433b2c1e1ebcaa0821304a4c3ac": [],
+    "9f5ddbd56850278aa0dafef4ad2f6ebd": [],
+    "6649a6d486e37743c51324b58cca8f8a": [],
+    "c26b2d4a0d784235fa51d7d6bae47bd9": [],
+    "071436a77e452dc3ea068ec798000658": [],
+    "84d1abb148cc3dc60de1d6640f6dcb60": [],
+    "311a657f6ee37a0731e94b004184c13b": []
   }
 }

@@ -28,6 +28,8 @@
     "graphql": "^16.8.1",
     "markdown-it": "^14.1.0",
     "node-device-detector": "^2.1.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-multi-date-picker": "^4.4.1",
     "sass": "^1.77.2",
     "typescript": "^4.9.5",

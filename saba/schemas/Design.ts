@@ -12,40 +12,39 @@ import {
 } from "@keystone-6/core/fields";
 import { getRoleFromArgs, Roles, Session } from "../data/types";
 import { editIfAdmin, setPermitions } from "../data/utils";
-import { isAdmin, isMobayen } from "../data/access";
+import { isAdmin, isLoggedIn, isMobayen } from "../data/access";
 import { gql } from "@ts-gql/tag/no-transform";
+import { Lists } from ".keystone/types";
 
-export const Design = list({
+export const Design = list<Lists.Design.TypeInfo<Session>>({
   access: {
     operation: {
-      create: (args) => !isMobayen(args),
-      delete: (args) => !isMobayen(args),
-      update: (args) => !isMobayen(args),
+      ...allOperations(isLoggedIn),
       query: () => true,
+    },
+    item: {
+      update: args => {
+        return getRoleFromArgs(args) <= Roles.operator || args.item.createdById === args.context.session?.itemId
+      },
+      delete: args => {
+        return getRoleFromArgs(args) <= Roles.operator || args.item.createdById === args.context.session?.itemId
+      }
     }
   },
   ui: {
     label: 'نقشه',
+    hideCreate: true,
+    isHidden: true,
     listView: {
-      initialColumns: ['title', 'extension'],
+      initialColumns: ['title', 'category'],
+
     },
-    hideDelete(args) {
-      return isMobayen(args)
-    },
-    hideCreate(args) {
-      return isMobayen(args)
-    },
-    itemView: {
-      defaultFieldMode(args) {
-        return setPermitions(args, [
-          { role: Roles.operator, fieldMode: 'edit' },
-          { role: Roles.admin, fieldMode: 'edit' },
-        ], 'read')
-      },
-    },
+
   },
   fields: {
-    title: text(),
+    title: text({
+      label: 'عنوان',
+    }),
     design: relationship({
       ref: 'FileStore',
       ui: {
@@ -99,6 +98,7 @@ export const Design = list({
     //   }),
     // }),
     category: relationship({
+      label: ' ها دسته بندی',
       ref: 'Category.designs',
       ui: {
         views: "./src/custome-fields-view/folder-struct-relation.tsx",
@@ -106,7 +106,7 @@ export const Design = list({
     }),
     tags: relationship({
       ref: 'Tag',
-
+      label: 'برچسب ها',
       many: true,
 
       ui: {
@@ -140,10 +140,11 @@ export const Design = list({
       },
       hooks: {
         resolveInput(args) {
+
           if (args.operation === 'create') {
-            const session = args.context.session as Session
-            args.resolvedData.createdBy = { connect: { id: session?.itemId } }
+            return { connect: { id: args.context.session?.itemId } }
           }
+
           return args.resolvedData.createdBy
         },
       }

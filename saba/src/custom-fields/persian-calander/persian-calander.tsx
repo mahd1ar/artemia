@@ -26,7 +26,7 @@ export function JCalendarInput(props: JCalendarInputProps) {
       <div>
         {/* {props.value} */}
 
-        <div>
+        <div style={{ display: "flex", gap: '4px' }} >
           <DatePicker
             style={{
               appearance: 'none',
@@ -51,7 +51,7 @@ export function JCalendarInput(props: JCalendarInputProps) {
               width: '100%'
             }}
             value={props.value ? new Date(props.value * 1000) : null}
-            format='DD/MM/YYYY HH:mm:ss'
+            format='YYYY / MM / DD'
             calendar={persian}
             locale={persian_fa}
             onChange={changeTime}

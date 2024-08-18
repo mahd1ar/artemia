@@ -27,6 +27,7 @@ type Response = {
   payload?: any;
 };
 
+
 const configWithAuth = withAuth(
   config({
     db: {
@@ -45,6 +46,7 @@ const configWithAuth = withAuth(
 
         // add body parser
         app.use(bodyParser.json());
+
 
 
         app.get("/api/v1/changelog", async (req, res) => {

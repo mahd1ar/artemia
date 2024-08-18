@@ -13,29 +13,31 @@ import {
   Payment,
   Constractor,
   FileStore, User, Category, Log,
-  Statement, StatementItem, Contract, Design, DailyReport, SafetyReport
+  Statement, StatementItem, Contract, Design, DailyReport, SafetyReport, Invoice
 } from "./schemas";
 import { Roles, getRoleFromArgs } from "./data/types";
 
 export const lists: Lists = {
 
-  // @ts-ignore
+
   Approval,
-  // @ts-ignore
+
   Description,
-  // @ts-ignore
-  Statement, StatementItem, Payment,
-  // @ts-ignore
+
+  Invoice,
+  Statement,
+  StatementItem,
+  Payment,
   ImageStore,
 
-  // @ts-ignore
+
   Constractor,
-  // @ts-ignore
+
   FileStore,
-  // @ts-ignore
+
   Contract,
 
-  // @ts-ignore
+
   Design,
   DailyReport,
   SafetyReport,

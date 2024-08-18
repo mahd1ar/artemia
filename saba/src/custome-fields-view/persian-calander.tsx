@@ -132,6 +132,7 @@ export const Field = ({
                 calendar={persian}
                 locale={persian_fa}
                 onChange={e => changeTime(e)}
+
               />
               {/* plugins={[<TimePicker position='bottom' />]} */}
               <button

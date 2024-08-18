@@ -55,6 +55,11 @@ export const Description = list<Lists.Description.TypeInfo<any>>({
             many: true,
             label: 'صورت وضعیت',
         }),
+        invoices: relationship({
+            ref: 'Invoice.description',
+            many: true,
+            label: 'فاکتور ها',
+        }),
         approvals: relationship({
             ref: 'Approval.description',
             many: false,

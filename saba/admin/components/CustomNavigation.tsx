@@ -31,7 +31,7 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
             }
             <ListNavItems
                 lists={lists}
-                include={['Approval', 'Statement',
+                include={['Approval', 'Invoice', 'Statement',
                     'DailyReport', 'SafetyReport', 'FileStore',
                     "Contract",
                     'User',

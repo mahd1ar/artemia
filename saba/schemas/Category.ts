@@ -9,6 +9,17 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
     access: {
         operation: allowAll,
         // filter: {
+        //     query: async args => {
+        //         const referer = new URL(args.context.req!.headers.referer || '')
+
+        //         return referer.pathname === '/categories' && !referer.search ?
+        //             {
+        //                 parent: null
+        //             }
+        //             : true
+        //     }
+        // }
+        // filter: {
         //     query: async (args) => {
         //         const referer = args.context.req?.headers.referer;
         //         if (!referer) return true;
@@ -91,11 +102,11 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
             many: true,
         }),
         parent: relationship({
-            // ui: {
-            //     createView: {
-            //         fieldMode: "hidden",
-            //     },
-            // },
+            ui: {
+                itemView: {
+                    fieldPosition: 'sidebar'
+                }
+            },
             ref: "Category.children",
             hooks: {
                 // async resolveInput(args) {

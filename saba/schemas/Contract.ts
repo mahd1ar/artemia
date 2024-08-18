@@ -23,34 +23,34 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
       delete: (args) => isMemberOfAdminGroup(args),
     },
     filter: {
-      query: (args) => {
-        if (isMemberOfAdminGroup(args)) return true;
+      // query: (args) => {
+      //   if (isMemberOfAdminGroup(args)) return true;
 
-        const resource = new URL(
-          args.context.res?.req.headers.referer as string
-        ).pathname
-          .split("/")
-          .filter(Boolean)
-          .at(0);
+      //   const resource = new URL(
+      //     args.context.res?.req.headers.referer as string
+      //   ).pathname
+      //     .split("/")
+      //     .filter(Boolean)
+      //     .at(0);
 
-        if (resource === "contracts")
-          return {
-            OR: [
-              {
-                isApproved: { equals: true },
-              },
-              {
-                createdBy: {
-                  id: { equals: (args.context.session as Session)!.itemId },
-                },
-              },
-            ],
-          };
+      //   if (resource === "contracts")
+      //     return {
+      //       OR: [
+      //         {
+      //           isApproved: { equals: true },
+      //         },
+      //         {
+      //           createdBy: {
+      //             id: { equals: (args.context.session as Session)!.itemId },
+      //           },
+      //         },
+      //       ],
+      //     };
 
-        return {
-          isApproved: { equals: true },
-        };
-      },
+      //   return {
+      //     isApproved: { equals: true },
+      //   };
+      // },
     },
   },
   ui: {
@@ -172,8 +172,23 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
       ref: "Constractor.contracts",
     }),
     statements: relationship({
-      label: "صورت وضعیت",
+      label: " صورت وضعیت ها ",
       ref: "Statement.contract",
+      many: true,
+      ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
+        itemView: {
+          fieldMode({ context, item }) {
+            return "read";
+          },
+        },
+      },
+    }),
+    invoices: relationship({
+      label: "فاکتور ها",
+      ref: "Invoice.contract",
       many: true,
       ui: {
         createView: {

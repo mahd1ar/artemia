@@ -5,7 +5,7 @@ import { editIfAdmin } from "../data/utils";
 import { getRoleFromArgs, Roles, Session } from "../data/types";
 import type { Lists } from ".keystone/types";
 
-export const FileStore = list<Lists.FileStore.TypeInfo<any>>({
+export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
   access: allowAll,
   ui: {
     label: 'فایل ها',
@@ -16,7 +16,7 @@ export const FileStore = list<Lists.FileStore.TypeInfo<any>>({
 
       if (args.operation === 'create' && !args.inputData.title) {
 
-        args.resolvedData.title = args.resolvedData.file.filename;
+        return args.resolvedData.file.filename || "";
       }
 
       return args.resolvedData;
@@ -81,6 +81,16 @@ export const FileStore = list<Lists.FileStore.TypeInfo<any>>({
         }
       },
       ref: 'Statement.attachments'
+    }),
+    invoice: relationship({
+      ui: {
+        itemView: {
+          fieldMode(args) {
+            return !!args.item.invoiceId ? 'read' : 'hidden'
+          },
+        }
+      },
+      ref: 'Invoice.attachments'
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
