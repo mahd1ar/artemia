@@ -25,6 +25,7 @@ import {
     Typography,
 } from "@mui/material";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { LoadingDots } from '@keystone-ui/loading'
 
 export default function CustomPage() {
     const style = {
@@ -117,6 +118,7 @@ mutation REMOVEFOLDER($id: ID!) {
         fetchPolicy: "no-cache",
     });
 
+
     function getName(id: string): string {
         return folderNames.find((i) => i.value === id)?.label || "..";
     }
@@ -163,6 +165,15 @@ mutation REMOVEFOLDER($id: ID!) {
 
         setFolderNames(_folderNames);
     }, [data]);
+
+
+    if (loading)
+        return <PageContainer header='نقشه ها' title='نقشه ها'  >
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "300px" }} >
+
+                <LoadingDots label='loadinggg' />
+            </Box>
+        </PageContainer>
 
     return (
         <PageContainer header="نقشه ها" title="نقشه ها">
