@@ -1,8 +1,8 @@
-// ts-gql-integrity:7097ee1f85b6497ab795753d6e3804f3
+// ts-gql-integrity:549309b15282262559d68666409ae014
 /*
 ts-gql-meta-begin
 {
-  "hash": "f9cd708ef0841f2f6c0598aa599b281f"
+  "hash": "ec65e7e89f533bc4e1e4376783114f59"
 }
 ts-gql-meta-end
 */
@@ -1628,6 +1628,7 @@ export type DailyReportRelateToManyForCreateInput = {
 export type Category = {
   readonly __typename: "Category";
   readonly id: string;
+  readonly code: string | null;
   readonly title: string | null;
   readonly description: string | null;
   readonly children: ReadonlyArray<Category> | null;
@@ -1670,6 +1671,7 @@ export type CategoryWhereInput = {
   readonly OR?: TSGQLMaybeArray<CategoryWhereInput> | null;
   readonly NOT?: TSGQLMaybeArray<CategoryWhereInput> | null;
   readonly id?: IDFilter | null;
+  readonly code?: StringFilter | null;
   readonly title?: StringFilter | null;
   readonly description?: StringFilter | null;
   readonly children?: CategoryManyRelationFilter | null;
@@ -1685,11 +1687,13 @@ export type CategoryManyRelationFilter = {
 
 export type CategoryOrderByInput = {
   readonly id?: OrderDirection | null;
+  readonly code?: OrderDirection | null;
   readonly title?: OrderDirection | null;
   readonly description?: OrderDirection | null;
 };
 
 export type CategoryUpdateInput = {
+  readonly code?: string | null;
   readonly title?: string | null;
   readonly description?: string | null;
   readonly children?: CategoryRelateToManyForUpdateInput | null;
@@ -1710,6 +1714,7 @@ export type CategoryUpdateArgs = {
 };
 
 export type CategoryCreateInput = {
+  readonly code?: string | null;
   readonly title?: string | null;
   readonly description?: string | null;
   readonly children?: CategoryRelateToManyForCreateInput | null;

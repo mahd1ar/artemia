@@ -36,6 +36,9 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
                     "Contract",
                     'User',
                     'Log', 'Setting']} />
+            <NavItem href="/groups/index">
+                گروه بندی ها
+            </NavItem>
             <NavItem href="/changelog">Change Log</NavItem>
         </NavigationContainer>
     )

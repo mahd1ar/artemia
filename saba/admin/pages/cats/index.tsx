@@ -3,7 +3,14 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDrag, useDrop } from 'react-dnd';
 import { Item } from '../../../schemas/Item';
+import { gql } from '@ts-gql/tag/no-transform';
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import { Tree } from '../../../data/utils';
 
+
+
+
+type MenuItem = { title: string, order: number }
 
 
 interface Item {
@@ -21,6 +28,7 @@ interface CardProps {
     moveCard: (dragIndex: number, hoverIndex: number) => void;
     isDragging: (isDragging: boolean) => void;
     setDraggableElement: (draggableElement: string) => void;
+
 }
 
 interface DropZoneProps {
@@ -151,6 +159,49 @@ const Container: React.FC<ContainerProps> = ({ items }) => {
 };
 
 const App: React.FC = () => {
+
+    const CATEGORYPARENT = gql`
+    query CATEGORYPARENT {
+      categories {
+        id
+        title
+        # childrenCount
+        # children {
+        #   id
+        #   title
+        # }
+        parent {
+          id
+        }
+      }
+    }
+  ` as import("../../../__generated__/ts-gql/CATEGORYPARENT").type;
+
+    const [load, data] = useLazyQuery(CATEGORYPARENT)
+
+    React.useEffect(() => {
+        // fetch data
+        console.log("fetch data")
+
+        load().then(res => {
+            console.log(res)
+            const tree = new Tree<MenuItem>('root', { order: 0, title: '' })
+
+            res.data?.categories?.forEach(i => {
+                tree.insert(i.parent?.id || 'root', i.id, { title: i.title || i.id, order: 0 })
+            })
+
+
+
+            console.log(tree)
+
+        })
+
+
+        // console.log(tree.getRoot())
+
+    }, [])
+
     const items: Item[] = [
         { id: 1, text: 'Item 1' },
         { id: 2, text: 'Item 2' },

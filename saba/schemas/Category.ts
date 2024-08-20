@@ -1,11 +1,26 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
-import { Roles } from "../data/types";
+import { Roles, Session } from "../data/types";
 import { setPermitions } from "../data/utils";
 import type { Lists } from ".keystone/types";
 
-export const Category = list<Lists.Category.TypeInfo<any>>({
+
+function findMissingNumber(arr: number[]) {
+    if (arr.length <= 1) {
+        return false; // Not enough elements for a sequence
+    }
+
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i + 1] - arr[i] !== 1) {
+            return arr[i] + 1; // Missing number
+        }
+    }
+
+    return false; // Sequence is complete
+}
+
+export const Category = list<Lists.Category.TypeInfo<Session>>({
     access: {
         operation: allowAll,
         // filter: {
@@ -50,6 +65,7 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
         // },
     },
     hooks: {
+
         beforeOperation: async (args) => {
             const originalItem = args.item?.id;
 
@@ -87,6 +103,58 @@ export const Category = list<Lists.Category.TypeInfo<any>>({
         },
     },
     fields: {
+        code: text({
+            hooks: {
+                async resolveInput(args) {
+
+                    if (args.operation === 'create') {
+                        if (!args.inputData.code) {
+                            const parentId = args.inputData.parent?.connect?.id ||
+                                args.resolvedData.parent?.connect?.id ||
+                                args.resolvedData.parent?.create?.id
+
+                            if (parentId) {
+                                const parentCategory = await args.context.prisma.category.findUnique({
+                                    where: {
+                                        id: parentId
+                                    },
+                                    select: {
+                                        code: true,
+                                        children: {
+                                            select: {
+                                                id: true,
+                                                code: true
+                                            }
+                                        }
+                                    }
+                                })
+
+                                if (parentCategory) {
+                                    const regex = new RegExp(`^${parentCategory.code}`);
+
+                                    const numbers = parentCategory.children.map(child => +(child.code.replace(regex, ''))).filter(Boolean)
+
+                                    if (numbers.length) {
+                                        const missingNumber = findMissingNumber(numbers)
+                                        if (missingNumber) return `${parentCategory.code}${missingNumber > 9 ? missingNumber : `0${missingNumber}`}`
+                                        else {
+                                            const code = Math.max(...numbers) + 1
+                                            return `${parentCategory.code}${code > 9 ? code : `0${code}`}`
+                                        }
+                                    } else return `${parentCategory.code}01`
+
+                                }
+                            }
+
+                        }
+
+
+                    }
+
+                    return args.resolvedData.code
+                },
+            }
+        }),
         title: text({
             validation: { isRequired: true },
             label: "عنوان",

@@ -3,7 +3,7 @@ require("dotenv").config({
   override: true,
   path: resolve(
     process.cwd(),
-    process.env.NODE_ENV === "production" ? ".env" : `.dev.env`
+    process.env.NODE_ENV === "production" ? ".env" : ".env.dev"
   ),
 });
 import { storage } from "./storage";
@@ -11,8 +11,6 @@ import { config } from "@keystone-6/core";
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import bodyParser from "body-parser";
-import { Session } from "./data/types";
-import { PrismaClient } from "@prisma/client";
 import { CronJob } from "cron";
 import { getContext } from '@keystone-6/core/context';
 import { Context } from '.keystone/types';
