@@ -12,7 +12,7 @@ sleep 2
 cd ~/public_html/artemia || exit
 
 unset GIT_DIR
-
+git restore .
 git pull hub master
 
 echo "build frontend"
