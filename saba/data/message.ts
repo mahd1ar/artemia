@@ -121,4 +121,23 @@ ${hasPayments ? "🔗 رسید های پرداختی: \n" + peymentsUrl!.join("\
     }
 
 
+    export async function newInvoiceCreated(args: { title: string, uploader: string, attachmentsUrl: string[], invoiceUrl: string }) {
+
+        let msg = `( ربات کنترل پروژه صبا )
+        
+📜 فاکتور جدید با عنوان "${args.title}" در سامانه کنترل پروژه صبا ایجاد 
+
+🔗 فایل های ضمیمه شده:
+
+${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join("\n\n") || " ** هیچ فایلی ضمیمه نشده **"}
+
+🙋‍♂️ بارگذاری این فاکتور توسط: ${args.uploader}
+
+🛟  ${args.invoiceUrl}
+`
+
+        await sendMessage(msg)
+
+    }
+
 }

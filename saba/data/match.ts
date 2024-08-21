@@ -1,3 +1,5 @@
+import { Roles } from "./types"
+
 export namespace Match {
     export function AclRole(key: string) {
 
@@ -21,6 +23,30 @@ export namespace Match {
 
             default:
                 return '[undefined]'
+        }
+    }
+
+    export function Role(key: Roles) {
+
+        switch (key) {
+            case Roles.admin:
+                return "ادمین سیستم"
+            case Roles.financial:
+                return "مالی"
+            case Roles.technical:
+                return "فنی"
+            case Roles.projectControl:
+                return "کنترل پروژه"
+            case Roles.supervisor:
+                return "سرپرست"
+            case Roles.operator:
+                return "اپراتور"
+            case Roles.workshop:
+                return "کارگاه"
+            case Roles.guest:
+                return "مهمان"
+            default:
+                break;
         }
     }
 }

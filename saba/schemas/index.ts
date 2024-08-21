@@ -11,6 +11,7 @@ export { Contract } from './Contract';
 export { Design } from "./Design"
 export { Category } from "./Category"
 export { Log } from "./Log"
+export { Note } from "./Note"
 export { DailyReport } from "./DailyReport"
 export { SafetyReport } from "./SafetyReport"
 export { Invoice } from "./Invoice"

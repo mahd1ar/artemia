@@ -1,6 +1,7 @@
 import { BaseItem, BaseKeystoneTypeInfo, BaseListTypeInfo, KeystoneContext, MaybeItemFunction, MaybeSessionFunction } from "@keystone-6/core/types";
 import axios from "axios";
 import { Roles, Session } from "./types";
+import { createTheme } from "@mui/material";
 
 
 export namespace NumUtils {
@@ -134,3 +135,11 @@ export class Tree<T> {
     return this.root
   }
 }
+
+
+export const theme = createTheme({
+  typography: {
+    fontFamily:
+      'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif',
+  },
+});

@@ -12,7 +12,7 @@ import {
   Approval,
   Payment,
   Constractor,
-  FileStore, User, Category, Log,
+  FileStore, User, Category, Log, Note,
   Statement, StatementItem, Contract, Design, DailyReport, SafetyReport, Invoice
 } from "./schemas";
 import { Roles, getRoleFromArgs } from "./data/types";
@@ -70,6 +70,7 @@ export const lists: Lists = {
         }
       })
     }
-  })
+  }),
+  Note
 
 };

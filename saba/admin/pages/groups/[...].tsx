@@ -58,6 +58,7 @@ const Group: React.FC<{
     query CATEGORY_BY_PARENT($categoryWhereInput: CategoryWhereInput!) {
       categories(where:  $categoryWhereInput  ) {
         id
+        code
         title
         childrenCount
         children {
@@ -106,12 +107,14 @@ const Group: React.FC<{
                 {
                     data?.categories?.map(i => (
                         <ListItem key={i.id} disablePadding onClick={() => props.onClick?.(i.id)}>
-                            <ListItemButton style={{ color: i.id !== myParam ? '#787878' : undefined }} selected={i.id === myParam}  >
+                            <ListItemButton style={{ color: i.id !== myParam ? '#777' : undefined }} selected={i.id === myParam}  >
                                 <ListItemIcon  >
                                     <GroupIcon width='1.2em' height='1.2em' />
 
                                 </ListItemIcon>
-                                <ListItemText primary={i.title} />
+                                <ListItemText primary={i.title} secondary={<code style={{ color: '#888', fontWeight: 'bold', fontSize: '11px' }} >
+                                    ({i.code || "/"})
+                                </code>} />
                                 <ListItemSecondaryAction
                                     onClick={(e) => {
                                         e.stopPropagation()
@@ -139,13 +142,9 @@ const Group: React.FC<{
                             setOpen(true)
                         }}
                     >
-                        ساختن گروه جدید
+                        گروه جدید
 
                     </MuiButton>
-                    {/* <ListItemIcon  >
-                        <PlusIcon />
-                    </ListItemIcon>
-                    <ListItemText color='pink.400' primary={"add"} /> */}
 
                 </ListItem>
 
@@ -241,8 +240,8 @@ mutation DELETE_CATEGORY($id: ID!) {
         )
 
     return (
-        <Box sx={{ width: 350 }} padding={2} role="presentation">
-            <FieldContainer>
+        <Box sx={{ width: 350 }} height={'100%'} padding={2} role="presentation">
+            <FieldContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }} >
                 <div style={{ marginTop: "20px" }}>
                     <FieldLabel>title</FieldLabel>
                     <Stack gap="small">
@@ -258,7 +257,7 @@ mutation DELETE_CATEGORY($id: ID!) {
                         <TextInput value={editableInfo.code} onChange={e => setEditableInfo({ ...editableInfo, code: e.target.value })} />
                     </Stack>
                 </div>
-                <div style={{ marginTop: "auto" }}>
+                <div style={{ marginTop: "20px" }}>
 
                     <FieldLabel  >Description</FieldLabel>
                     <Stack gap="small">
@@ -267,7 +266,7 @@ mutation DELETE_CATEGORY($id: ID!) {
                     </Stack>
                 </div>
 
-                <Grid container spacing={2} style={{ marginTop: "20px" }}>
+                <Grid container spacing={2} style={{ marginTop: "auto" }}>
                     <Grid item xs={props.itemId ? 8 : 12}>
                         <Button tone='active' weight='bold' style={{ width: "100%" }} onClick={async () => {
 

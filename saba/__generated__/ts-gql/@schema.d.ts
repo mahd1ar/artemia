@@ -1,8 +1,8 @@
-// ts-gql-integrity:549309b15282262559d68666409ae014
+// ts-gql-integrity:567282f238791f0704dcbca6ed4fcdfb
 /*
 ts-gql-meta-begin
 {
-  "hash": "ec65e7e89f533bc4e1e4376783114f59"
+  "hash": "cb4ad7f113ce46057d5a542c7f681356"
 }
 ts-gql-meta-end
 */
@@ -358,13 +358,26 @@ export type Invoice = {
   readonly title: string | null;
   readonly contract: Contract | null;
   readonly description: Description | null;
-  readonly sateOfStatement: number | null;
+  readonly dateOfStatement: number | null;
+  readonly notes: ReadonlyArray<Note> | null;
+  readonly notesCount: number | null;
   readonly attachments: ReadonlyArray<FileStore> | null;
   readonly attachmentsCount: number | null;
-  readonly price: BigInt | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
   readonly changeLog: JSON | null;
+};
+
+export type InvoicenotesArgs = {
+  readonly where?: NoteWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<NoteOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: NoteWhereUniqueInput | null;
+};
+
+export type InvoicenotesCountArgs = {
+  readonly where?: NoteWhereInput;
 };
 
 export type InvoiceattachmentsArgs = {
@@ -391,11 +404,17 @@ export type InvoiceWhereInput = {
   readonly title?: StringFilter | null;
   readonly contract?: ContractWhereInput | null;
   readonly description?: DescriptionWhereInput | null;
-  readonly sateOfStatement?: PairFilter | null;
+  readonly dateOfStatement?: PairFilter | null;
+  readonly notes?: NoteManyRelationFilter | null;
   readonly attachments?: FileStoreManyRelationFilter | null;
-  readonly price?: BigIntNullableFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
+};
+
+export type NoteManyRelationFilter = {
+  readonly every?: NoteWhereInput | null;
+  readonly some?: NoteWhereInput | null;
+  readonly none?: NoteWhereInput | null;
 };
 
 export type FileStoreManyRelationFilter = {
@@ -407,8 +426,7 @@ export type FileStoreManyRelationFilter = {
 export type InvoiceOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly title?: OrderDirection | null;
-  readonly sateOfStatement?: OrderDirection | null;
-  readonly price?: OrderDirection | null;
+  readonly dateOfStatement?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
 };
 
@@ -416,9 +434,9 @@ export type InvoiceUpdateInput = {
   readonly title?: string | null;
   readonly contract?: ContractRelateToOneForUpdateInput | null;
   readonly description?: DescriptionRelateToOneForUpdateInput | null;
-  readonly sateOfStatement?: number | null;
+  readonly dateOfStatement?: number | null;
+  readonly notes?: NoteRelateToManyForUpdateInput | null;
   readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
-  readonly price?: BigInt | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
   readonly changeLog?: JSON | null;
@@ -434,6 +452,13 @@ export type DescriptionRelateToOneForUpdateInput = {
   readonly create?: DescriptionCreateInput | null;
   readonly connect?: DescriptionWhereUniqueInput | null;
   readonly disconnect?: boolean | null;
+};
+
+export type NoteRelateToManyForUpdateInput = {
+  readonly disconnect?: TSGQLMaybeArray<NoteWhereUniqueInput> | null;
+  readonly set?: TSGQLMaybeArray<NoteWhereUniqueInput> | null;
+  readonly create?: TSGQLMaybeArray<NoteCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<NoteWhereUniqueInput> | null;
 };
 
 export type FileStoreRelateToManyForUpdateInput = {
@@ -452,9 +477,9 @@ export type InvoiceCreateInput = {
   readonly title?: string | null;
   readonly contract?: ContractRelateToOneForCreateInput | null;
   readonly description?: DescriptionRelateToOneForCreateInput | null;
-  readonly sateOfStatement?: number | null;
+  readonly dateOfStatement?: number | null;
+  readonly notes?: NoteRelateToManyForCreateInput | null;
   readonly attachments?: FileStoreRelateToManyForCreateInput | null;
-  readonly price?: BigInt | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
   readonly changeLog?: JSON | null;
@@ -468,6 +493,11 @@ export type ContractRelateToOneForCreateInput = {
 export type DescriptionRelateToOneForCreateInput = {
   readonly create?: DescriptionCreateInput | null;
   readonly connect?: DescriptionWhereUniqueInput | null;
+};
+
+export type NoteRelateToManyForCreateInput = {
+  readonly create?: TSGQLMaybeArray<NoteCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<NoteWhereUniqueInput> | null;
 };
 
 export type FileStoreRelateToManyForCreateInput = {
@@ -1867,6 +1897,60 @@ export type SettingCreateInput = {
   readonly parentCategoryOfDesign?: string | null;
 };
 
+export type Note = {
+  readonly __typename: "Note";
+  readonly id: string;
+  readonly message: string | null;
+  readonly invoice: Invoice | null;
+  readonly createdAt: DateTime | null;
+  readonly updatedAt: DateTime | null;
+  readonly createdBy: User | null;
+};
+
+export type NoteWhereUniqueInput = {
+  readonly id?: string | null;
+};
+
+export type NoteWhereInput = {
+  readonly AND?: TSGQLMaybeArray<NoteWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<NoteWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<NoteWhereInput> | null;
+  readonly id?: IDFilter | null;
+  readonly message?: StringFilter | null;
+  readonly invoice?: InvoiceWhereInput | null;
+  readonly createdAt?: DateTimeNullableFilter | null;
+  readonly updatedAt?: DateTimeNullableFilter | null;
+  readonly createdBy?: UserWhereInput | null;
+};
+
+export type NoteOrderByInput = {
+  readonly id?: OrderDirection | null;
+  readonly message?: OrderDirection | null;
+  readonly createdAt?: OrderDirection | null;
+  readonly updatedAt?: OrderDirection | null;
+};
+
+export type NoteUpdateInput = {
+  readonly message?: string | null;
+  readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
+  readonly createdAt?: DateTime | null;
+  readonly updatedAt?: DateTime | null;
+  readonly createdBy?: UserRelateToOneForUpdateInput | null;
+};
+
+export type NoteUpdateArgs = {
+  readonly where: NoteWhereUniqueInput;
+  readonly data: NoteUpdateInput;
+};
+
+export type NoteCreateInput = {
+  readonly message?: string | null;
+  readonly invoice?: InvoiceRelateToOneForCreateInput | null;
+  readonly createdAt?: DateTime | null;
+  readonly updatedAt?: DateTime | null;
+  readonly createdBy?: UserRelateToOneForCreateInput | null;
+};
+
 export type JSON = any;
 
 export type Mutation = {
@@ -1979,6 +2063,12 @@ export type Mutation = {
   readonly updateSettings: ReadonlyArray<Setting | null> | null;
   readonly deleteSetting: Setting | null;
   readonly deleteSettings: ReadonlyArray<Setting | null> | null;
+  readonly createNote: Note | null;
+  readonly createNotes: ReadonlyArray<Note | null> | null;
+  readonly updateNote: Note | null;
+  readonly updateNotes: ReadonlyArray<Note | null> | null;
+  readonly deleteNote: Note | null;
+  readonly deleteNotes: ReadonlyArray<Note | null> | null;
   readonly endSession: boolean;
   readonly authenticateUserWithPassword: UserAuthenticationWithPasswordResult | null;
   readonly createInitialUser: UserAuthenticationWithPasswordSuccess;
@@ -2434,6 +2524,31 @@ export type MutationdeleteSettingsArgs = {
   readonly where: TSGQLMaybeArray<SettingWhereUniqueInput>;
 };
 
+export type MutationcreateNoteArgs = {
+  readonly data: NoteCreateInput;
+};
+
+export type MutationcreateNotesArgs = {
+  readonly data: TSGQLMaybeArray<NoteCreateInput>;
+};
+
+export type MutationupdateNoteArgs = {
+  readonly where: NoteWhereUniqueInput;
+  readonly data: NoteUpdateInput;
+};
+
+export type MutationupdateNotesArgs = {
+  readonly data: TSGQLMaybeArray<NoteUpdateArgs>;
+};
+
+export type MutationdeleteNoteArgs = {
+  readonly where: NoteWhereUniqueInput;
+};
+
+export type MutationdeleteNotesArgs = {
+  readonly where: TSGQLMaybeArray<NoteWhereUniqueInput>;
+};
+
 export type MutationauthenticateUserWithPasswordArgs = {
   readonly email: string;
   readonly password: string;
@@ -2519,6 +2634,9 @@ export type Query = {
   readonly settings: ReadonlyArray<Setting> | null;
   readonly setting: Setting | null;
   readonly settingsCount: number | null;
+  readonly notes: ReadonlyArray<Note> | null;
+  readonly note: Note | null;
+  readonly notesCount: number | null;
   readonly keystone: KeystoneMeta;
   readonly authenticatedItem: AuthenticatedItem | null;
 };
@@ -2809,6 +2927,22 @@ export type QuerysettingArgs = {
 
 export type QuerysettingsCountArgs = {
   readonly where?: SettingWhereInput;
+};
+
+export type QuerynotesArgs = {
+  readonly where?: NoteWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<NoteOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: NoteWhereUniqueInput | null;
+};
+
+export type QuerynoteArgs = {
+  readonly where: NoteWhereUniqueInput;
+};
+
+export type QuerynotesCountArgs = {
+  readonly where?: NoteWhereInput;
 };
 
 export type AuthenticatedItem = User;

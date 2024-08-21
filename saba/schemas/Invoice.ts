@@ -2,16 +2,10 @@ import { graphql, list } from "@keystone-6/core";
 import { allOperations, allowAll } from "@keystone-6/core/access";
 import {
   bigInt,
-  checkbox,
-  file,
-  image,
-  integer,
   json,
   relationship,
-  select,
   text,
   timestamp,
-  virtual,
 } from "@keystone-6/core/fields";
 import { persianCalendar } from "../src/custom-fields/persian-calander";
 import { ExcludesFalse, NumUtils, setPermitions } from "../data/utils";
@@ -20,6 +14,7 @@ import type { Lists } from ".keystone/types";
 import { Notif } from '../data/message'
 import DeviceDetector from "node-device-detector";
 import { isLoggedIn } from "../data/access";
+import { gql } from "@ts-gql/tag/no-transform";
 
 const detector = new DeviceDetector({
   clientIndexes: false,
@@ -43,7 +38,52 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
 
   },
   hooks: {
+    async afterOperation(args) {
+      if (args.operation === 'create') {
 
+        const setting = await args.context.prisma.setting.findFirst({
+          select: {
+            sendMessageToTelegram: true
+          }
+        })
+
+        if (setting?.sendMessageToTelegram) {
+
+          const CURRENT_INVOICE = gql`
+          query CURRENT_INVOICE($id: ID!) {
+  invoice(where: {id: $id }) {
+    attachments {
+      id
+      file {
+        filename
+        url
+      }
+    }
+    createdBy {
+      fullname
+    }
+  }
+}` as import("../__generated__/ts-gql/CURRENT_INVOICE").type
+
+          const sudo = args.context.sudo()
+
+          const result = await sudo.graphql.run({
+            query: CURRENT_INVOICE,
+            variables: {
+              id: args.item.id
+            }
+          })
+
+          Notif.newInvoiceCreated({
+            attachmentsUrl: result.invoice?.attachments?.map(i => i.file?.url).filter(Boolean as unknown as ExcludesFalse) ?? [],
+            invoiceUrl: process.env.PUBLICURL + "/invoices/" + args.item.id,
+            title: args.item.title,
+            uploader: result.invoice?.createdBy?.fullname || ''
+          })
+        }
+
+      }
+    },
 
   },
   ui: {
@@ -51,7 +91,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
     listView: {
       initialColumns: ["title", "status", 'statementConfirmationStatus'],
       initialSort: {
-        field: "sateOfStatement",
+        field: "dateOfStatement",
         direction: "DESC",
       },
     },
@@ -100,10 +140,20 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         // displayMode: 'select'
       },
     }),
-    sateOfStatement: persianCalendar({
+    dateOfStatement: persianCalendar({
       label: "تاریخ فاکتور",
     }),
-
+    notes: relationship({
+      ref: "Note.invoice",
+      many: true,
+      label: "یادداشت ها",
+      ui: {
+        itemView: {
+          fieldMode: 'edit'
+        },
+        views: "./src/custome-fields-view/note-relation.tsx"
+      }
+    }),
     attachments: relationship({
       label: 'فایل های ضمیمه شده',
       ref: 'FileStore.invoice',
@@ -195,12 +245,6 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
     //   },
     // }),
 
-    price: bigInt({
-      label: 'مبلغ',
-      validation: {
-        min: BigInt(0)
-      }
-    }),
 
 
 
