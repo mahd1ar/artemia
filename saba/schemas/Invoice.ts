@@ -156,7 +156,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
           fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total']
         },
 
-        views: "./src/custome-fields-view/table-relation.tsx"
+        views: "./src/custome-fields-view/table-relation"
       }
     }),
     attachments: relationship({
