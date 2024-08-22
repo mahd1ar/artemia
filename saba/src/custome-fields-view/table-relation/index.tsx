@@ -180,7 +180,6 @@ export const Field = ({
 
         onChange({
           ...value,
-          itemBeingCreated: false,
           currentIds: field.many ? new Set([...value.currentIds, createdRow.id]) : new Set([createdRow.id]),
         })
         // refetch
@@ -306,8 +305,7 @@ export const Field = ({
               </Box>
             </AlertDialog>
 
-            {/* <TextInput value={modelData.commodityLabel} onClick={() => settreeIsOpen(true)} /> */}
-            <button onClick={() => settreeIsOpen(true)} >clicme {modelData.commodityLabel}</button>
+            <TextInput value={modelData.commodityLabel} onClick={() => settreeIsOpen(true)} />
             <FieldLabel  >unit</FieldLabel>
             <Select options={unitOptions} value={unitOptions.find(i => i.value === modelData.unit) || null}
               onChange={
