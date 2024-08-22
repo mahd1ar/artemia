@@ -40,7 +40,7 @@ export const CardValue: CardValueComponent = ({ item, field }) => {
             onClick={() => window.open(url)}
             className={styls.flexcenter}
           >
-            Download {ext} File
+            Download File {/* TODO its best have a corespondig file icon  */}
             <ArrowDownIcon />
           </Button>
         )

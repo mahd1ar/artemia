@@ -512,6 +512,15 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
       }),
     }),
+    rows: relationship({
+      label: "ردیف ها",
+      ref: "Row.statement",
+      many: true,
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' }
+      }
+    }),
     items: relationship({
       label: "آیتم ها",
       ref: "StatementItem.statement",

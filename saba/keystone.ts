@@ -18,6 +18,8 @@ import * as PrismaModule from '.prisma/client';
 import markdownit from 'markdown-it'
 import fs from "fs/promises"
 import path from 'path'
+import type { PrismaClient } from '@prisma/client'
+import { Tree } from "./data/utils";
 
 type Response = {
   message: string;
@@ -75,6 +77,51 @@ const configWithAuth = withAuth(
             res.send('<pre>' + String(error) + '<pre>')
           }
         })
+
+        app.get("/api/v1/health", (req, res) => {
+          res.send("ok")
+        })
+
+        app.get("/api/v1/category-by-root/:code", async (req, res) => {
+
+          const code = req.params.code || '' as string
+
+
+          const data = await (context.prisma as PrismaClient).category.findMany({
+            where: {
+              code: {
+                startsWith: code
+              }
+            },
+            select: {
+              code: true,
+              title: true,
+              id: true,
+              parentId: true
+            }
+          })
+
+          const root = data.find(i => i.code === code)
+
+          if (!root) {
+            res.send(null)
+            return
+          }
+
+          type Data = Omit<typeof data[0], 'id' | 'parentId'>
+
+          const tree = new Tree<Data>(root.id, { code, title: root.title })
+
+          data.sort((a, b) => +(a.code ?? 0) - +(b.code ?? 0)).forEach(i => {
+            tree.insert(i.parentId!, i.id, { code: i.code, title: i.title })
+          })
+
+
+          res.json(tree.getRoot())
+
+        })
+
+
 
       },
       maxFileSize: 1024_000_000,

@@ -16,7 +16,7 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
 
       if (args.operation === 'create' && !args.inputData.title) {
 
-        return args.resolvedData.file.filename || "";
+        args.resolvedData.title = args.resolvedData.file.filename || "";
       }
 
       return args.resolvedData;
@@ -24,7 +24,7 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
   },
   fields: {
     title: text({
-      label: "name",
+      label: "عنوان",
     }),
     file: file({
       storage: "file",
@@ -74,6 +74,9 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
     }),
     statement: relationship({
       ui: {
+        createView: {
+          fieldMode: 'hidden'
+        },
         itemView: {
           fieldMode(args) {
             return !!args.item.statementId ? 'read' : 'hidden'
@@ -84,6 +87,9 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
     }),
     invoice: relationship({
       ui: {
+        createView: {
+          fieldMode: 'hidden'
+        },
         itemView: {
           fieldMode(args) {
             return !!args.item.invoiceId ? 'read' : 'hidden'
@@ -105,7 +111,7 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldMode(args) { return editIfAdmin(args) },
+          fieldMode(args) { return getRoleFromArgs(args) <= Roles.operator ? 'edit' : 'read' },
           fieldPosition: 'sidebar'
         }
       },

@@ -13,18 +13,12 @@ import {
   Payment,
   Constractor,
   FileStore, User, Category, Log, Note,
-  Statement, StatementItem, Contract, Design, DailyReport, SafetyReport, Invoice
+  Statement, StatementItem, Contract, Design, DailyReport, SafetyReport, Invoice, Row
 } from "./schemas";
 import { Roles, getRoleFromArgs } from "./data/types";
 
 export const lists: Lists = {
-
-
-  Approval,
-
-  Description,
-
-  Invoice,
+  Approval, Description, Invoice, Row,
   Statement,
   StatementItem,
   Payment,
@@ -68,7 +62,8 @@ export const lists: Lists = {
         fields: {
           parentCategoryOfDesign: text(),
         }
-      })
+      }),
+      classificationOfGoodsAndServices: text()
     }
   }),
   Note

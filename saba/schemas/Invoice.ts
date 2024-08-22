@@ -103,13 +103,12 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       label: 'عنوان',
       validation: { isRequired: true }
     }),
-    contract: relationship({
-      label: 'قرارداد',
-      ref: "Contract.invoices",
+    contractor: relationship({
+      label: 'پیمانکار',
+      ref: "Constractor.invoices",
       ui: {
         displayMode: 'select',
-        searchFields: ['title'],
-        labelField: 'summery',
+        searchFields: ['name'],
         hideCreate: true
       }
     }),
@@ -143,15 +142,21 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
     dateOfStatement: persianCalendar({
       label: "تاریخ فاکتور",
     }),
-    notes: relationship({
-      ref: "Note.invoice",
+    rows: relationship({
+      label: "آیتم ها",
+      ref: "Row.invoice",
       many: true,
-      label: "یادداشت ها",
       ui: {
         itemView: {
           fieldMode: 'edit'
         },
-        views: "./src/custome-fields-view/note-relation.tsx"
+        displayMode: 'cards',
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],
+        inlineCreate: {
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total']
+        },
+
+        views: "./src/custome-fields-view/table-relation.tsx"
       }
     }),
     attachments: relationship({
@@ -177,6 +182,18 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         linkToItem: false
       }
     }),
+    notes: relationship({
+      ref: "Note.invoice",
+      many: true,
+      label: "یادداشت ها",
+      ui: {
+        itemView: {
+          fieldMode: 'edit'
+        },
+        views: "./src/custome-fields-view/note-relation.tsx"
+      }
+    }),
+
     // visualItems: virtual({
     //   label: "آیتم ها",
     //   ui: {

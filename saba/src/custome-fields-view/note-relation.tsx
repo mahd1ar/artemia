@@ -26,7 +26,6 @@ type Option = {
   date: string,
 }
 
-
 export const Field = ({
   field,
   value,
@@ -195,7 +194,7 @@ export const Field = ({
   async function tryUpdate() {
 
     try {
-      alert(candidateNoteId)
+
       const res = await updateNote({
         variables: {
           where: {
@@ -270,7 +269,7 @@ export const Field = ({
       <ThemeProvider theme={theme}>
         {
           data.map((note) => (
-            <Card elevation={0} variant="outlined" raised key={note.id} sx={{ maxWidth: 400, marginTop: 2 }}>
+            <Card variant="outlined" key={note.id} sx={{ maxWidth: 400, marginTop: 2 }}>
               <CardHeader
                 avatar={
                   <Avatar variant="rounded" aria-label="recipe">
@@ -306,14 +305,14 @@ export const Field = ({
               </CardContent>
 
               <CardActions >
-                <Typography marginLeft={'auto'} variant="caption" color="text.secondary" align="right" >
+                <Typography dir="rtl" marginLeft={'auto'} variant="caption" color="text.secondary" align="right" >
 
-                  {note.date && Intl.DateTimeFormat('fa-IR', { timeStyle: 'short' }).format(new Date(note.date))}
+                  {note.date && Intl.DateTimeFormat('fa-IR', { dateStyle: 'medium' }).format(new Date(note.date))}
                   <span style={{ marginLeft: '6px', marginRight: '6px' }} >
                     •
                   </span>
+                  {note.date && Intl.DateTimeFormat('fa-IR', { timeStyle: 'short' }).format(new Date(note.date))}
 
-                  {note.date && Intl.DateTimeFormat('fa-IR', { dateStyle: 'medium' }).format(new Date(note.date))}
 
                 </Typography>
               </CardActions>

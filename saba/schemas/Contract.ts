@@ -186,21 +186,7 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
         },
       },
     }),
-    invoices: relationship({
-      label: "فاکتور ها",
-      ref: "Invoice.contract",
-      many: true,
-      ui: {
-        createView: {
-          fieldMode: "hidden",
-        },
-        itemView: {
-          fieldMode({ context, item }) {
-            return "read";
-          },
-        },
-      },
-    }),
+
     attachment: file({
       // temp hidden
       ui: {

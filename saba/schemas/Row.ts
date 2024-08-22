@@ -1,21 +1,23 @@
-// NOTICE : this file is deprecated 
 import { graphql, group, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { float, integer, relationship, select, text, virtual } from "@keystone-6/core/fields";
 import { NumUtils } from "../data/utils";
 import { Roles, Session } from "../data/types";
+import { Lists } from ".keystone/types";
 
-/**
- * @deprecated
- */
-export const StatementItem = list({
+export const Row = list<Lists.Row.TypeInfo<Session>>({
   access: allowAll,
   ui: {
     isHidden(args) {
-      return !((args.session as Session)?.data.role === Roles.admin)
+      return !(args.session?.data.role === Roles.admin)
     },
   },
   fields: {
+    commodity: relationship({
+      ref: 'Category',
+      label: 'کالا',
+      many: false,
+    }),
     description: text({
       label: 'توضیحات'
     }),
@@ -111,13 +113,9 @@ export const StatementItem = list({
       field: graphql.field({
         type: graphql.BigInt,
         resolve(item) {
-          const { unitPrice = 0, quantity = 0, percentageOfWorkDone = 100 } = item as unknown as {
-            unitPrice: number
-            quantity: number,
-            percentageOfWorkDone: number
-          }
+          const { unitPrice, quantity, percentageOfWorkDone } = item
 
-          return BigInt(Math.round(unitPrice * quantity * percentageOfWorkDone / 100))
+          return BigInt(Math.round((unitPrice ?? 0) * (quantity ?? 0) * (percentageOfWorkDone ?? 100) / 100))
         }
       }),
       ui: {
@@ -127,6 +125,8 @@ export const StatementItem = list({
         views: './src/custome-fields-view/bigint-viewer.tsx'
       }
     }),
-    statement: relationship({ ref: 'Statement.items', many: false })
+
+    invoice: relationship({ ref: 'Invoice.rows', many: false }),
+    statement: relationship({ ref: 'Statement.rows', many: false })
   },
 });

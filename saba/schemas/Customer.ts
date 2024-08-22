@@ -23,9 +23,15 @@ export const Constractor = list({
       type: 'string',
     }),
     contracts: relationship({
-      ref: 'Contract.contractor.',
+      ref: 'Contract.contractor',
       many: true,
       ui: { createView: { fieldMode: 'hidden' } }
     }),
+    invoices: relationship({
+      ref: 'Invoice.contractor',
+      many: true,
+      ui: { createView: { fieldMode: 'hidden' } }
+    }),
+
   },
 });
