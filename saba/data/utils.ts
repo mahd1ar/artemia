@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import { BaseItem, BaseKeystoneTypeInfo, BaseListTypeInfo, KeystoneContext, MaybeItemFunction, MaybeSessionFunction } from "@keystone-6/core/types";
-import axios from "axios";
 import { Roles, Session } from "./types";
 import { createTheme } from "@mui/material";
 
@@ -143,3 +143,31 @@ export const theme = createTheme({
       'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif',
   },
 });
+
+
+export const useDebouncedValue = <T>(inputValue: T, delay: number) => {
+
+  const [debouncedValue, setDebouncedValue] = useState(inputValue);
+
+
+  useEffect(() => {
+
+    const handler = setTimeout(() => {
+
+      setDebouncedValue(inputValue);
+
+    }, delay);
+
+
+    return () => {
+
+      clearTimeout(handler);
+
+    };
+
+  }, [inputValue, delay]);
+
+
+  return debouncedValue;
+
+};

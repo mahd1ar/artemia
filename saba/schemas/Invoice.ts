@@ -16,6 +16,7 @@ import DeviceDetector from "node-device-detector";
 import { isLoggedIn } from "../data/access";
 import { gql } from "@ts-gql/tag/no-transform";
 
+
 const detector = new DeviceDetector({
   clientIndexes: false,
   deviceIndexes: true,
@@ -148,7 +149,10 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       many: true,
       ui: {
         itemView: {
-          fieldMode: 'edit'
+          fieldMode(args) {
+            const rule = getRoleFromArgs(args)
+            return rule <= Roles.operator || args.item.createdById === args.session?.itemId ? 'edit' : 'read'
+          }
         },
         displayMode: 'cards',
         cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],

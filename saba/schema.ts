@@ -63,7 +63,11 @@ export const lists: Lists = {
           parentCategoryOfDesign: text(),
         }
       }),
-      classificationOfGoodsAndServices: text()
+      rootCategoryOfGoodsAndServices: text({
+        ui: {
+          description: '2 digit code from the category. eg. 42 '
+        }
+      })
     }
   }),
   Note

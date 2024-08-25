@@ -133,12 +133,12 @@ export const Category = list<Lists.Category.TypeInfo<Session>>({
                                     const regex = new RegExp(`^${parentCategory.code}`);
 
                                     const numbers = parentCategory.children.map(child => +(child.code.replace(regex, ''))).filter(Boolean)
-
                                     if (numbers.length) {
-                                        const missingNumber = findMissingNumber(numbers)
+                                        const missingNumber = findMissingNumber(numbers.sort())
                                         if (missingNumber) return `${parentCategory.code}${missingNumber > 9 ? missingNumber : `0${missingNumber}`}`
                                         else {
                                             const code = Math.max(...numbers) + 1
+
                                             return `${parentCategory.code}${code > 9 ? code : `0${code}`}`
                                         }
                                     } else return `${parentCategory.code}01`
@@ -148,6 +148,11 @@ export const Category = list<Lists.Category.TypeInfo<Session>>({
 
                         }
 
+
+                    }
+
+                    if (args.operation === 'update') {
+                        // FIXME update code on change parent
 
                     }
 

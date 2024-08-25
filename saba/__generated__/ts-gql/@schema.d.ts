@@ -1,8 +1,8 @@
-// ts-gql-integrity:03e0694701a8511c9029c0575df58174
+// ts-gql-integrity:d5551b598b612bed7d4a8f6e7abb398b
 /*
 ts-gql-meta-begin
 {
-  "hash": "658252efcd51149f3bad7013c8d29410"
+  "hash": "5aff45fde026db82786ac182ad724270"
 }
 ts-gql-meta-end
 */
@@ -1982,7 +1982,7 @@ export type Setting = {
   readonly id: string;
   readonly sendMessageToTelegram: boolean | null;
   readonly parentCategoryOfDesign: string | null;
-  readonly classificationOfGoodsAndServices: string | null;
+  readonly rootCategoryOfGoodsAndServices: string | null;
 };
 
 export type SettingWhereUniqueInput = {
@@ -1996,20 +1996,20 @@ export type SettingWhereInput = {
   readonly id?: IDFilter | null;
   readonly sendMessageToTelegram?: BooleanFilter | null;
   readonly parentCategoryOfDesign?: StringFilter | null;
-  readonly classificationOfGoodsAndServices?: StringFilter | null;
+  readonly rootCategoryOfGoodsAndServices?: StringFilter | null;
 };
 
 export type SettingOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly sendMessageToTelegram?: OrderDirection | null;
   readonly parentCategoryOfDesign?: OrderDirection | null;
-  readonly classificationOfGoodsAndServices?: OrderDirection | null;
+  readonly rootCategoryOfGoodsAndServices?: OrderDirection | null;
 };
 
 export type SettingUpdateInput = {
   readonly sendMessageToTelegram?: boolean | null;
   readonly parentCategoryOfDesign?: string | null;
-  readonly classificationOfGoodsAndServices?: string | null;
+  readonly rootCategoryOfGoodsAndServices?: string | null;
 };
 
 export type SettingUpdateArgs = {
@@ -2020,7 +2020,7 @@ export type SettingUpdateArgs = {
 export type SettingCreateInput = {
   readonly sendMessageToTelegram?: boolean | null;
   readonly parentCategoryOfDesign?: string | null;
-  readonly classificationOfGoodsAndServices?: string | null;
+  readonly rootCategoryOfGoodsAndServices?: string | null;
 };
 
 export type Note = {

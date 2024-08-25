@@ -104,7 +104,13 @@ const configWithAuth = withAuth(
           const root = data.find(i => i.code === code)
 
           if (!root) {
-            res.send(null)
+            res.send({
+              children: [],
+              hasChildren: false,
+              isLeaf: false,
+              key: "0",
+              value: { code: "0", title: "notFound any groups" }
+            })
             return
           }
 

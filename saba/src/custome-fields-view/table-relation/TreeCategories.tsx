@@ -21,7 +21,7 @@ const RecursiveTreeItem: React.FC<{ item: GeneralTreeItem, onSelect: (currentIte
 
 const TreeCategories: React.FC<{ rootCode: string, onSelect: (currentItem: { id: string, code: string, title: string }) => void }> = (props) => {
 
-
+    const [isLoading, setIsLoading] = useState(false);
     const [treeData, setTreeData] = useState<GeneralTreeItem>({
         key: 'root',
         value: { code: 'root', title: 'root' },
@@ -29,17 +29,21 @@ const TreeCategories: React.FC<{ rootCode: string, onSelect: (currentItem: { id:
     });
 
     useEffect(() => {
-        fetch("/api/v1/category-by-root/78").then((res) => res.json()).then((res) => {
+        setIsLoading(true);
+        fetch("/api/v1/category-by-root/" + props.rootCode).then((res) => res.json()).then((res) => {
 
             setTreeData(res);
+            setIsLoading(false);
+            console.log(res)
         })
     }, [props.rootCode]);
 
 
+    if (isLoading) return <div>Loading...</div>
 
     return (
 
-        <SimpleTreeView>
+        <SimpleTreeView defaultExpandedItems={[treeData.key]}>
             <RecursiveTreeItem item={treeData} onSelect={props.onSelect} />
         </SimpleTreeView>
 
