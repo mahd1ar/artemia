@@ -7,13 +7,10 @@ import {
 
 import type { Lists } from ".keystone/types";
 import {
-  ImageStore,
-  Description,
-  Approval,
-  Payment,
-  Constractor,
+  ImageStore, Description, Approval, Payment, Constractor,
   FileStore, User, Category, Log, Note,
-  Statement, StatementItem, Contract, Design, DailyReport, SafetyReport, Invoice, Row
+  Statement, StatementItem, Contract, Design,
+  DailyReport, SafetyReport, Invoice, Row, Setting
 } from "./schemas";
 import { Roles, getRoleFromArgs } from "./data/types";
 
@@ -47,29 +44,7 @@ export const lists: Lists = {
       name: text(),
     },
   }),
-  Setting: list({
-    access: allowAll,
-    isSingleton: true,
-    ui: {
-      isHidden(args) {
-        return getRoleFromArgs(args) > Roles.operator
-      },
-    },
-    fields: {
-      sendMessageToTelegram: checkbox(),
-      ...group({
-        label: 'Categories',
-        fields: {
-          parentCategoryOfDesign: text(),
-        }
-      }),
-      rootCategoryOfGoodsAndServices: text({
-        ui: {
-          description: '2 digit code from the category. eg. 42 '
-        }
-      })
-    }
-  }),
+  Setting,
   Note
 
 };

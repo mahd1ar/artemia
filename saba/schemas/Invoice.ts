@@ -110,7 +110,6 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       ui: {
         displayMode: 'select',
         searchFields: ['name'],
-        hideCreate: true
       }
     }),
     description: relationship({

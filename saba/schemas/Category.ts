@@ -151,8 +151,71 @@ export const Category = list<Lists.Category.TypeInfo<Session>>({
 
                     }
 
-                    if (args.operation === 'update') {
-                        // FIXME update code on change parent
+                    if (args.operation === 'update' && args.inputData.parent?.connect?.id) {
+
+                        const parentId = args.inputData.parent.connect.id
+
+
+                        const parentCategory = await args.context.prisma.category.findUnique({
+                            where: {
+                                id: parentId
+                            },
+                            select: {
+                                code: true,
+                                children: {
+                                    select: {
+                                        id: true,
+                                        code: true
+                                    }
+                                }
+                            }
+                        })
+
+                        if (parentCategory) {
+                            const regex = new RegExp(`^${parentCategory.code}`);
+
+                            const numbers = parentCategory.children.map(child => +(child.code.replace(regex, ''))).filter(Boolean)
+                            if (numbers.length) {
+                                const missingNumber = findMissingNumber(numbers.sort())
+                                if (missingNumber) return `${parentCategory.code}${missingNumber > 9 ? missingNumber : `0${missingNumber}`}`
+                                else {
+                                    const code = Math.max(...numbers) + 1
+
+                                    return `${parentCategory.code}${code > 9 ? code : `0${code}`}`
+                                }
+                            } else return `${parentCategory.code}01`
+
+                        }
+
+                    }
+
+                    // TODO test this
+                    if (args.operation === 'update' && args.inputData.parent?.disconnect) {
+
+                        const siblings = await args.context.prisma.category.findMany({
+                            where: {
+                                parent: null
+                            },
+                            select: {
+                                code: true,
+                            }
+                        })
+
+                        if (siblings) {
+
+                            const numbers = siblings.map(child => +child.code).filter(Boolean)
+
+                            if (numbers.length) {
+                                const missingNumber = findMissingNumber(numbers.sort())
+                                if (missingNumber) return `${missingNumber > 9 ? missingNumber : `0${missingNumber}`}`
+                                else {
+                                    const code = Math.max(...numbers) + 1
+
+                                    return `${code > 9 ? code : `0${code}`}`
+                                }
+                            } else return `01`
+
+                        }
 
                     }
 

@@ -8,6 +8,7 @@ import { LoadingDots } from '@keystone-ui/loading';
 import {
     Alert,
     Box,
+    Collapse,
     Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemSecondaryAction, ListItemText,
     Modal,
     Paper,
@@ -22,6 +23,7 @@ import { gql } from '@ts-gql/tag/no-transform';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useDebouncedValue } from '../../../data/utils';
+
 
 
 type PageState = {
@@ -53,7 +55,7 @@ const GroupIcon: React.FC<{ width: string, height: string }> = ({ width: w, heig
     return <svg xmlns="http://www.w3.org/2000/svg" width={w} height={h} viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><circle cx={17} cy={7} r={3}></circle><circle cx={7} cy={17} r={3}></circle><path d="M14 14h6v5a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 4h6v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"></path></g></svg>
 }
 
-function ChangeParent(props: { value: string | null, id: string, onChange: (i: string) => void }) {
+function ChangeParent(props: { parentId: string | null, id: string, onChange: (i: string) => void }) {
 
 
     const [isOpen, setIsOpen] = React.useState(false)
@@ -61,56 +63,77 @@ function ChangeParent(props: { value: string | null, id: string, onChange: (i: s
     const debounceNewParent = useDebouncedValue(newParentId, 1300)
     const theme = useTheme()
 
-    const CATEGORY_BY_ID = gql`
-    query CATEGORY_BY_ID($id: ID!) {
-        category(where:  { id:  $id} ) {
-            id
-            title
-            code
-        }
-    }` as import("../../../__generated__/ts-gql/CATEGORY_BY_ID").type
+    const CATEGORIES_1 = gql`
+query CATEGORIES_1($where: CategoryWhereInput!) {
+    categories(where: $where) {
+        id
+        title
+        code
+    }
+}
+` as import("../../../__generated__/ts-gql/CATEGORIES_1").type
 
-    const UPDATE_CATEGORY = gql`
-mutation UPDATE_CATEGORY($id: ID!, $data: CategoryUpdateInput!) {
+    const UPDATE_CATEGORY_1 = gql`
+mutation UPDATE_CATEGORY_1($id: ID!, $data: CategoryUpdateInput!) {
     updateCategory(where: { id: $id }, data: $data) {
         id
         title
         code
     }
 }
-` as import("../../../__generated__/ts-gql/UPDATE_CATEGORY").type
+` as import("../../../__generated__/ts-gql/UPDATE_CATEGORY_1").type
 
 
-    const [load, { data, loading, refetch }] = useLazyQuery(CATEGORY_BY_ID, {})
-    const [updateCategoryMutation, { loading: updateLoading }] = useMutation(UPDATE_CATEGORY)
+    const [load, { data, loading, refetch }] = useLazyQuery(CATEGORIES_1, {})
+    const [updateCategoryMutation, { loading: updateLoading }] = useMutation(UPDATE_CATEGORY_1)
     const [pageState, setPageState] = React.useContext(GroupContext)
 
     React.useEffect(() => {
         if (debounceNewParent)
-            load({ variables: { id: debounceNewParent }, fetchPolicy: "no-cache" })
+            load({
+                variables: {
+                    where: {
+                        OR: [
+                            { id: { equals: debounceNewParent } },
+                            { code: { equals: debounceNewParent } }
+                        ]
+                    }
+                }, fetchPolicy: "no-cache"
+            })
     }, [debounceNewParent])
 
     const isLoading = React.useMemo(() => {
         return loading || updateLoading || newParentId !== debounceNewParent
     }, [loading, newParentId, debounceNewParent, updateLoading])
 
+    const candidateCategory = React.useMemo(() => {
+        if (data?.categories?.at(0))
+            return data.categories.at(0)
+        else
+            return null
+    }, [data])
+
     async function tryUpdate() {
-        if (data?.category) {
+
+        if (candidateCategory) {
             try {
 
                 const res = await updateCategoryMutation({
                     variables: {
                         id: props.id,
                         data: {
-                            parent: { connect: { id: debounceNewParent } }
+                            parent: { connect: { id: candidateCategory.id } }
                         }
                     }
                 })
 
                 if (res.errors)
                     throw new Error(res.errors[0].message)
+                if (!res.data?.updateCategory)
+                    throw new Error("دسته بندی یافت نشد")
 
-                props.onChange(data.category.id)
+                props.onChange(res.data.updateCategory.id)
+
                 setTimeout(() => {
                     window.location.reload()
                 }, 1000);
@@ -118,6 +141,28 @@ mutation UPDATE_CATEGORY($id: ID!, $data: CategoryUpdateInput!) {
                 setPageState({ ...pageState, snackbarIsOpen: true, snackbarMessage: String(error), snackbarSeverity: "error" })
             }
             setIsOpen(false)
+        } else {
+            if (!confirm("?انتقال به دسته بندی اصلی"))
+                return
+            try {
+                const res = await updateCategoryMutation({
+                    variables: {
+                        id: props.id,
+                        data: {
+                            parent: { disconnect: true }
+                        }
+                    }
+                })
+
+                if (res.errors)
+                    throw new Error(res.errors[0].message)
+                if (!res.data?.updateCategory)
+                    throw new Error("دسته بندی یافت نشد")
+                alert("انتقال به دسته بندی اصلی با موفقیت انجام شد")
+                location.reload()
+            } catch (error) {
+                setPageState({ ...pageState, snackbarIsOpen: true, snackbarMessage: String(error), snackbarSeverity: "error" })
+            }
         }
     }
 
@@ -165,7 +210,7 @@ mutation UPDATE_CATEGORY($id: ID!, $data: CategoryUpdateInput!) {
                     </FieldLabel>
                     <TextInput
 
-                        placeholder={props.value || ''}
+                        placeholder={props.parentId || ''}
                         value={newParentId}
                         onChange={e => {
                             setNewParentId(e.target.value)
@@ -176,14 +221,14 @@ mutation UPDATE_CATEGORY($id: ID!, $data: CategoryUpdateInput!) {
                             isLoading && <LoadingDots size='small' label='loading' />
                         }
                         {
-                            !isLoading && debounceNewParent !== '' && !data?.category?.id && <span style={{ padding: theme.spacing.small, color: theme.tones.negative.fill['1'] }}>
-                                not found
+                            !isLoading && debounceNewParent !== '' && !candidateCategory && <span style={{ padding: theme.spacing.small, color: theme.tones.negative.fill['1'] }}>
+                                دسته بندی یافت نشد
                             </span>
                         }
                         {
 
-                            !isLoading && data?.category?.id && <span style={{ color: theme.tones.positive.fill['1'] }}>
-                                {data.category.title} - {data.category.code}
+                            !isLoading && candidateCategory && <span style={{ color: theme.tones.positive.fill['1'] }}>
+                                {candidateCategory.title} - {candidateCategory.code}
                             </span>
                         }
                     </div>
@@ -204,6 +249,7 @@ const Group: React.FC<{
     parentId: string | null,
     index: number,
     onClick?: (categoryId: string) => void,
+    collapsed?: boolean
 }> = (props) => {
 
 
@@ -263,25 +309,32 @@ const Group: React.FC<{
                     data?.categories?.map(i => (
                         <ListItem key={i.id} disablePadding onClick={() => props.onClick?.(i.id)}>
                             <ListItemButton style={{ color: i.id !== myParam ? '#777' : undefined }} selected={i.id === myParam}  >
-                                <ListItemIcon  >
+                                <ListItemIcon sx={{ minWidth: "32px" }} >
                                     <GroupIcon width='1.2em' height='1.2em' />
 
                                 </ListItemIcon>
-                                <ListItemText primary={i.title} secondary={<code style={{ color: '#888', fontWeight: 'bold', fontSize: '11px' }} >
-                                    ({i.code || "/"})
-                                </code>} />
-                                <ListItemSecondaryAction
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        setSelectedItemToEdit?.(i.id)
-                                        setOpen(true)
-                                    }}
-                                    style={{ display: 'flex', alignItems: 'center' }}
-                                >
-                                    <MoreVerticalIcon size={"small"} />
 
-                                    {i.id === myParam && <ChevronRightIcon size={14} />}
-                                </ListItemSecondaryAction>
+                                <ListItemText primary={props.collapsed && i.title ? "" : i.title} secondary={<code style={{ color: '#888', fontWeight: 'bold', fontSize: '11px' }} >
+                                    {i.code || "/"}
+                                </code>} />
+
+                                {
+                                    !props.collapsed && (
+
+                                        <ListItemSecondaryAction
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setSelectedItemToEdit?.(i.id)
+                                                setOpen(true)
+                                            }}
+                                            style={{ display: 'flex', alignItems: 'center' }}
+                                        >
+                                            <MoreVerticalIcon size={"small"} />
+
+                                            {i.id === myParam && <ChevronRightIcon size={14} />}
+                                        </ListItemSecondaryAction>
+                                    )
+                                }
                             </ListItemButton>
 
                         </ListItem>
@@ -297,7 +350,11 @@ const Group: React.FC<{
                             setOpen(true)
                         }}
                     >
-                        گروه جدید
+                        {
+
+                            !props.collapsed && "گروه جدید"
+                        }
+
 
                     </MuiButton>
 
@@ -543,7 +600,7 @@ mutation DELETE_CATEGORY($id: ID!) {
                             <Stack gap='large' >
 
                                 <FieldLabel>change parent</FieldLabel>
-                                <ChangeParent id={props.itemId} value={props.parentId} onChange={i => console.log(i)} />
+                                <ChangeParent id={props.itemId} parentId={props.parentId} onChange={i => console.log(i)} />
 
                                 <MuiButton variant="outlined" color="error"
                                     onClick={async () => {
@@ -589,16 +646,17 @@ export default function GroupsPage() {
             <ThemeProvider theme={theme}>
 
                 <GroupContext.Provider value={[pageState, setPageState]}>
-                    <Grid container direction="row" spacing={1}   >
+                    <Grid container direction="row" spacing={0} sx={{ height: '100%' }} >
 
                         {
-                            params?.map((i, inx) => <Grid xs={params.length === 1 ? 8 : 12 / params.length} key={i} item > <Item> <Group
+                            params?.map((i, inx) => <Grid xs={params.length < 3 ? 4 : inx < params.length - 3 ? 1 : 12 / params.length} key={i} item > <Item> <Group
                                 index={inx}
                                 parentId={i === "index" ? null : i}
                                 onClick={(i) => {
                                     console.log(i)
                                     router.push(`/groups/${params.slice(0, inx + 1).join("/")}/${i}`)
                                 }}
+                                collapsed={inx < params.length - 3}
                             /> </Item> </Grid>)
                         }
                     </Grid>

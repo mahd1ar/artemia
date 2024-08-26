@@ -7,19 +7,28 @@ type GeneralTreeItem = {
     value: { code: string, title: string }
 
 }
-const RecursiveTreeItem: React.FC<{ item: GeneralTreeItem, onSelect: (currentItem: { id: string, code: string, title: string }) => void }> = (props) => {
+const RecursiveTreeItem: React.FC<{
+    item: GeneralTreeItem,
+    onSelect: (currentItem: { id: string, code: string, title: string }) => void,
+    onClicked: (currentItem: { id: string, code: string, title: string }) => void
+}> = (props) => {
     return (
         <TreeItem itemId={props.item.key} label={props.item.value.title + ' - ' + props.item.value.code}
             onDoubleClickCapture={() => props.onSelect({ code: props.item.value.code, title: props.item.value.title, id: props.item.key })}
+            onClick={() => props.onClicked({ code: props.item.value.code, title: props.item.value.title, id: props.item.key })}
         >
             {props.item.children?.map((node) => (
-                <RecursiveTreeItem onSelect={props.onSelect} key={node.key} item={node} />
+                <RecursiveTreeItem onSelect={props.onSelect} onClicked={props.onClicked} key={node.key} item={node} />
             ))}
         </TreeItem>
     );
 }
 
-const TreeCategories: React.FC<{ rootCode: string, onSelect: (currentItem: { id: string, code: string, title: string }) => void }> = (props) => {
+const TreeCategories: React.FC<{
+    rootCode: string,
+    onSelect: (currentItem: { id: string, code: string, title: string }) => void
+    onClicked: (currentItem: { id: string, code: string, title: string }) => void
+}> = (props) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [treeData, setTreeData] = useState<GeneralTreeItem>({
@@ -44,7 +53,7 @@ const TreeCategories: React.FC<{ rootCode: string, onSelect: (currentItem: { id:
     return (
 
         <SimpleTreeView defaultExpandedItems={[treeData.key]}>
-            <RecursiveTreeItem item={treeData} onSelect={props.onSelect} />
+            <RecursiveTreeItem item={treeData} onSelect={props.onSelect} onClicked={props.onClicked} />
         </SimpleTreeView>
 
 

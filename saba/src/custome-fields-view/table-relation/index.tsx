@@ -157,6 +157,7 @@ export const Field = ({
     total: ""
   })
   const [data, setData] = useState<Array<typeof modelData>>([])
+  const [candidateCommodity, setCandidateCommodity] = useState<{ id: string, title: string, code: string } | null>(null)
 
   function resetModelData() {
     setModelData({
@@ -237,7 +238,6 @@ export const Field = ({
 
       // @ts-ignore
       setDateFromApi(res.data?.rows ?? [])
-
 
     })
 
@@ -387,8 +387,6 @@ export const Field = ({
   if (loadingData) return <div>loading...</div>
 
 
-
-
   return (
 
 
@@ -433,25 +431,33 @@ export const Field = ({
           <fieldset disabled={!onChange} >
             <Stack gap="small" >
 
-              <FieldLabel  >commodityId</FieldLabel>
+              <FieldLabel  > کالا </FieldLabel>
 
               <AutoCompeleteCategory
                 rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '78'}
                 value={modelData.commodityId}
-                onChange={(i) => setModelData({ ...modelData, commodityId: i.value, commodity: i.label })}
+                onChange={(i) => {
+                  if (i)
+                    setModelData({ ...modelData, commodityId: i.value, commodity: i.label })
+                }}
               />
               <AlertDialog isOpen={treeIsOpen} title="انتخاب دسته بندی کالا و خدمات" tone={'active'} actions={{
                 confirm: {
                   label: 'انتخاب  ',
                   action: async () => {
-
                     settreeIsOpen(false)
+                    if (candidateCommodity) {
+
+                      setModelData({ ...modelData, commodityId: candidateCommodity.id, commodity: candidateCommodity.title + ' - ' + candidateCommodity.code })
+                      setCandidateCommodity(null)
+                    }
                   },
                   // TODO loading: loadingCreate || loadingUpdate 
                 },
                 cancel: {
                   label: 'لغو',
                   action() {
+                    setCandidateCommodity(null)
                     settreeIsOpen(false)
                   },
                 }
@@ -459,16 +465,22 @@ export const Field = ({
 
                 <Box sx={{ minHeight: 352, minWidth: 250 }}>
 
-                  <TreeCategories rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '78'}
+                  <TreeCategories
+                    rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '78'}
                     onSelect={(i) => {
                       settreeIsOpen(false)
                       setModelData({ ...modelData, commodityId: i.id, commodity: i.title + ' - ' + i.code })
-                    }} />
+                    }}
+                    onClicked={(i) => {
+                      console.log(i)
+                      setCandidateCommodity(i)
+                    }}
+                  />
 
                 </Box>
               </AlertDialog>
               <Button onClick={() => settreeIsOpen(true)} >انتخاب دسته بندی کالا و خدمات</Button>
-              <FieldLabel  >unit</FieldLabel>
+              <FieldLabel  > واحد </FieldLabel>
               <Select options={unitOptions} value={unitOptions.find(i => i.value === modelData.unit) || null}
                 onChange={
                   (e) => {
@@ -477,17 +489,17 @@ export const Field = ({
                 } />
 
 
-              <FieldLabel  >unitPrice</FieldLabel>
+              <FieldLabel  > قیمت واحد </FieldLabel>
               <TextInput value={modelData.unitPrice} onChange={(e) => setModelData({ ...modelData, unitPrice: e.target.value })} />
 
-              <FieldLabel  >quantity</FieldLabel>
+              <FieldLabel  >مقدار</FieldLabel>
               <TextInput value={modelData.quantity} onChange={(e) => setModelData({ ...modelData, quantity: e.target.value })} />
 
-              <FieldLabel  >percentageOfWorkDone</FieldLabel>
+              <FieldLabel  >درصد انجام کار</FieldLabel>
               <TextInput
                 value={modelData.percentageOfWorkDone} onChange={(e) => setModelData({ ...modelData, percentageOfWorkDone: e.target.value })} />
 
-              <FieldLabel  >Total</FieldLabel>
+              <FieldLabel  >جمع </FieldLabel>
 
 
               <TextInput disabled value={computedFinalPrice}
@@ -529,10 +541,10 @@ export const Field = ({
                   <TableRow>
                     <StyledTableCell colSpan={headers.length - 2} />
                     <StyledTableCell >Subtotal</StyledTableCell>
-                    <StyledTableCell align="right">{
-                      Intl.NumberFormat().format(totalPrice)
+                    <StyledTableCell align="right" sx={{ fontWeight: 'bold' }} >
+                      {Intl.NumberFormat().format(totalPrice)}
 
-                    }</StyledTableCell>
+                    </StyledTableCell>
                   </TableRow> :
                   <TableRow>
                     <StyledTableCell colSpan={headers.length} align='center' >
