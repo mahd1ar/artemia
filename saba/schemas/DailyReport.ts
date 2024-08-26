@@ -49,9 +49,9 @@ export const DailyReport = list<Lists.DailyReport.TypeInfo<any>>({
                     // check if user is not exceeded 48 hours
                     const diff = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60);
 
-                    if (diff > 48) {
+                    if (diff > 120) {
                         args.addValidationError(
-                            "48 ساعت از مهلت بارگذاری این گزارش گذشته است"
+                            "مهلت بارگذاری این گزارش گذشته است"
                         );
                     }
                 }
