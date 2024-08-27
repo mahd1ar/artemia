@@ -24,7 +24,7 @@ function findMissingNumber(arr: number[]) {
 async function generateCode(itemId: string | null, parentId: string | null, prisma: Lists.Category.TypeInfo<Session>['all']['prisma']) {
 
 
-    console.log({ parentId })
+
     let siblings = await prisma.category.findMany({
         where: {
             parent: parentId ? {
@@ -123,7 +123,6 @@ export const Category = list<Lists.Category.TypeInfo<Session>>({
 
 
             if (args.operation === 'update' && (args.inputData.parent?.connect?.id || args.inputData.parent?.disconnect)) {
-                console.log("aslan ejra mishe")
 
                 const oldCode = args.originalItem.code
                 const newCode = args.item.code
@@ -157,11 +156,8 @@ export const Category = list<Lists.Category.TypeInfo<Session>>({
                 })
 
                 allChildren.sort((a, b) => +a.code - +b.code)
-                console.log("allChildren")
-                console.log(allChildren)
+
                 if (allChildren.length === 0) return
-
-
 
                 let range = {
                     from: 0,
