@@ -23,7 +23,7 @@ import { gql } from '@ts-gql/tag/no-transform';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useDebouncedValue } from '../../../data/utils';
-
+import MinimalThemeProvider from "../../../src/theme"
 
 
 type PageState = {
@@ -314,7 +314,7 @@ const Group: React.FC<{
 
                                 </ListItemIcon>
 
-                                <ListItemText primary={props.collapsed && i.title ? "" : i.title} secondary={<code style={{ color: '#888', fontWeight: 'bold', fontSize: '11px' }} >
+                                <ListItemText primary={props.collapsed && i.title ? "" : i.title} secondary={<code  >
                                     {i.code || "/"}
                                 </code>} />
 
@@ -461,7 +461,7 @@ mutation DELETE_CATEGORY($id: ID!) {
 
     return (
         <>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 1 }}>
                 <Tabs value={tabIndex} onChange={(_, nv) => {
                     setTabIndex(nv)
                 }} aria-label="basic tabs example">
@@ -643,7 +643,7 @@ export default function GroupsPage() {
 
     return (
         <PageContainer header="گروه بندی ها" title="گروه بندی ها">
-            <ThemeProvider theme={theme}>
+            <MinimalThemeProvider>
 
                 <GroupContext.Provider value={[pageState, setPageState]}>
                     <Grid container direction="row" spacing={0} sx={{ height: '100%' }} >
@@ -670,7 +670,10 @@ export default function GroupsPage() {
                         </Alert>
                     </Snackbar>
                 </GroupContext.Provider>
-            </ThemeProvider>
+            </MinimalThemeProvider>
+            {/* <ThemeProvider theme={theme}>
+
+            </ThemeProvider> */}
         </PageContainer>
     )
 }
