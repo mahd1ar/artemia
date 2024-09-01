@@ -57,6 +57,10 @@ export namespace LogMessage {
 
 export const getRoleFromArgs = (args: Record<string, any> & { session?: Session }, defaultValue = Roles.guest) => {
 
+    if (!args.session && !defaultValue) {
+        throw new Error("Session required")
+    }
+
     if (!args.session) {
         return defaultValue
     }

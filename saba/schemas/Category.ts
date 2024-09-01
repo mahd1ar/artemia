@@ -1,7 +1,7 @@
 import { list } from "@keystone-6/core";
 import { allOperations, allowAll } from "@keystone-6/core/access";
-import { relationship, select, text, timestamp } from "@keystone-6/core/fields";
-import { Roles, Session } from "../data/types";
+import { checkbox, relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { getRoleFromArgs, Roles, Session } from "../data/types";
 import { setPermitions } from "../data/utils";
 import type { Lists } from ".keystone/types";
 import { isLoggedIn } from "../data/access";
@@ -10,6 +10,12 @@ import { isLoggedIn } from "../data/access";
 function findMissingNumber(arr: number[]) {
     if (arr.length <= 1) {
         return false; // Not enough elements for a sequence
+    }
+
+    const min = Math.min(...arr)
+
+    if (min !== 0 && min !== 1) {
+        arr.unshift(0)
     }
 
     for (let i = 0; i < arr.length - 1; i++) {
@@ -92,6 +98,14 @@ export const Category = list<Lists.Category.TypeInfo<Session>>({
         operation: {
             ...allOperations(isLoggedIn)
         },
+        item: {
+            delete: args => {
+
+                const role = getRoleFromArgs(args.context)
+
+                return role <= Roles.operator || !args.item.isProtected
+            }
+        }
     },
     hooks: {
 
@@ -250,6 +264,7 @@ export const Category = list<Lists.Category.TypeInfo<Session>>({
             label: "عنوان",
         }),
         description: text({ ui: { displayMode: "textarea" } }),
+        isProtected: checkbox(),
         children: relationship({
             // ui: {
             //     createView: {
