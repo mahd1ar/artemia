@@ -16,6 +16,7 @@ import { Avatar, Card, CardActions, CardContent, CardHeader, createTheme, IconBu
 import { Roles } from "../../data/types";
 import { Match } from "../../data/match";
 import { theme } from "../../data/utils";
+import { useList, useKeystone } from "@keystone-6/core/admin-ui/context";
 
 type Option = {
   id: string,
@@ -24,6 +25,7 @@ type Option = {
   userId: string,
   userRole: Roles,
   date: string,
+  avatar: string | null
 }
 
 export const Field = ({
@@ -46,8 +48,21 @@ export const Field = ({
   const [mode, setMode] = useState<'create' | 'update'>('create')
   const [data, setData] = useState<Option[]>([])
   const [candidateNoteId, setCandidateNoteId] = useState<string | undefined>(undefined)
+  const currentPath = router.pathname.split("/").filter(Boolean).at(0)
 
-  const { colors: ksColors } = useTheme()
+  let itemQueryName = ''
+
+  const keystoneLists = useKeystone().adminMeta.lists
+
+  for (let i in keystoneLists) {
+    if (keystoneLists[i].plural.toLowerCase() === currentPath) {
+
+      itemQueryName = (keystoneLists[i].key).toLowerCase()
+      break
+    }
+  }
+
+
 
   const NOTES = gql`
   query NOTES($where: NoteWhereInput!) {
@@ -59,6 +74,9 @@ export const Field = ({
       fullname
       id
       role
+      avatar {
+        url
+      }
     }
   }
   authenticatedItem {
@@ -78,6 +96,9 @@ export const Field = ({
         id
         fullname
         role
+        avatar {
+          url
+        }
       }
     }
   }
@@ -93,6 +114,9 @@ export const Field = ({
         id
         fullname
         role
+        avatar {
+          url
+        }
       }
     }
   }
@@ -102,7 +126,7 @@ export const Field = ({
     nextFetchPolicy: 'network-only',
     variables: {
       where: {
-        invoice: { // TODO <-  you can change this to a dynamic value based on url!!
+        [itemQueryName]: {
           id: {
             equals: value.id
           }
@@ -125,7 +149,8 @@ export const Field = ({
         userName: i.createdBy?.fullname || '',
         userId: i.createdBy?.id || '',
         userRole: i.createdBy?.role || Roles.guest,
-        date: i.createdAt
+        date: i.createdAt,
+        avatar: i.createdBy?.avatar?.url || null
       })) || [])
     })
 
@@ -174,7 +199,8 @@ export const Field = ({
             userName: createdNote.createdBy?.fullname || '',
             userId: createdNote.createdBy?.id || '',
             date: createdNote.createdAt,
-            userRole: createdNote.createdBy?.role || Roles.guest
+            userRole: createdNote.createdBy?.role || Roles.guest,
+            avatar: createdNote.createdBy?.avatar?.url || null
           }
         ])
 
@@ -217,7 +243,7 @@ export const Field = ({
         return
 
       setData([
-        ...data.map(i => i.id === candidateNoteId ? { id: i.id, message: message || '', userName: i.userName, userId: i.userId, userRole: i.userRole, date: i.date } : i)
+        ...data.map(i => i.id === candidateNoteId ? { id: i.id, message: message || '', userName: i.userName, userId: i.userId, userRole: i.userRole, date: i.date, avatar: i.avatar } : i)
       ])
 
 
@@ -273,7 +299,11 @@ export const Field = ({
               <CardHeader
                 avatar={
                   <Avatar variant="rounded" aria-label="recipe">
-                    {note.userName.at(0)}
+                    {
+                      note.avatar ? <img style={{
+                        objectFit: 'cover', width: "100%", height: "100%"
+                      }} src={note.avatar} alt={note.userName.at(0)} /> : note.userName.at(0)
+                    }
                   </Avatar>
                 }
                 action={

@@ -1,6 +1,6 @@
 import { list, graphql, group } from "@keystone-6/core";
 import { allowAll, allOperations } from "@keystone-6/core/access";
-import { password, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
+import { image, password, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
 import { Roles, Session, getRoleFromArgs } from "../data/types";
 import type { Lists } from ".keystone/types";
 import { isMemberOfAdminGroup } from "../data/access";
@@ -66,6 +66,9 @@ export const User = list<Lists.User.TypeInfo<any>>({
     email: text({
       validation: { isRequired: true },
       isIndexed: "unique",
+    }),
+    avatar: image({
+      storage: "image",
     }),
     role: select({
       ui: {

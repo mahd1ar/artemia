@@ -1,8 +1,8 @@
-// ts-gql-integrity:d5551b598b612bed7d4a8f6e7abb398b
+// ts-gql-integrity:0b557e78062a234f4f55ca66dd4248bd
 /*
 ts-gql-meta-begin
 {
-  "hash": "5aff45fde026db82786ac182ad724270"
+  "hash": "4e29034dcfef986e67d269f686849f2d"
 }
 ts-gql-meta-end
 */
@@ -1565,6 +1565,7 @@ export type User = {
   readonly fullname: string | null;
   readonly name: string | null;
   readonly email: string | null;
+  readonly avatar: ImageFieldOutput | null;
   readonly role: number | null;
   readonly password: PasswordState | null;
   readonly approvals: ReadonlyArray<Approval> | null;
@@ -1710,6 +1711,7 @@ export type UserOrderByInput = {
 export type UserUpdateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
+  readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;
   readonly approvals?: ApprovalRelateToManyForUpdateInput | null;
@@ -1750,6 +1752,7 @@ export type UserUpdateArgs = {
 export type UserCreateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
+  readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;
   readonly approvals?: ApprovalRelateToManyForCreateInput | null;
@@ -1782,6 +1785,7 @@ export type Category = {
   readonly code: string | null;
   readonly title: string | null;
   readonly description: string | null;
+  readonly isProtected: boolean | null;
   readonly children: ReadonlyArray<Category> | null;
   readonly childrenCount: number | null;
   readonly parent: Category | null;
@@ -1825,6 +1829,7 @@ export type CategoryWhereInput = {
   readonly code?: StringFilter | null;
   readonly title?: StringFilter | null;
   readonly description?: StringFilter | null;
+  readonly isProtected?: BooleanFilter | null;
   readonly children?: CategoryManyRelationFilter | null;
   readonly parent?: CategoryWhereInput | null;
   readonly designs?: DesignManyRelationFilter | null;
@@ -1841,12 +1846,14 @@ export type CategoryOrderByInput = {
   readonly code?: OrderDirection | null;
   readonly title?: OrderDirection | null;
   readonly description?: OrderDirection | null;
+  readonly isProtected?: OrderDirection | null;
 };
 
 export type CategoryUpdateInput = {
   readonly code?: string | null;
   readonly title?: string | null;
   readonly description?: string | null;
+  readonly isProtected?: boolean | null;
   readonly children?: CategoryRelateToManyForUpdateInput | null;
   readonly parent?: CategoryRelateToOneForUpdateInput | null;
   readonly designs?: DesignRelateToManyForUpdateInput | null;
@@ -1868,6 +1875,7 @@ export type CategoryCreateInput = {
   readonly code?: string | null;
   readonly title?: string | null;
   readonly description?: string | null;
+  readonly isProtected?: boolean | null;
   readonly children?: CategoryRelateToManyForCreateInput | null;
   readonly parent?: CategoryRelateToOneForCreateInput | null;
   readonly designs?: DesignRelateToManyForCreateInput | null;
