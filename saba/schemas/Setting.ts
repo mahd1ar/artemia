@@ -9,6 +9,7 @@ export const Setting = list<Lists.Setting.TypeInfo<Session>>({
     access: {
         operation: {
             ...allOperations(isAdmin),
+            query: allowAll
         }
     },
     isSingleton: true,
