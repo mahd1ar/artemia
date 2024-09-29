@@ -2,7 +2,7 @@ node_modules
 .keystone/admin
 .keystone/config.js
 .keystone/config.js.map
-saba.db
+*.db
 *.log
 schema.graphql
 schema.prisma

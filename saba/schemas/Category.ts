@@ -54,6 +54,7 @@ async function generateCode(itemId: string | null, parentId: string | null, pris
     if (itemId)
         siblings = siblings.filter(child => child.id !== itemId)
 
+
     let parentCode: string | null = null
 
     if (parentId) {
@@ -71,26 +72,25 @@ async function generateCode(itemId: string | null, parentId: string | null, pris
     }
 
 
-
-
-    let numbers: number[]
-
+    let ss: string[]
     if (parentCode) {
         const regex = new RegExp(`^${parentCode}`);
-        numbers = siblings.map(child => +(child.code.replace(regex, ''))).filter(Boolean)
+        ss = siblings.map(child => child.code.replace(regex, ''))
     } else {
-        numbers = siblings.map(child => +(child.code)).filter(Boolean)
+        ss = siblings.map(child => child.code)
     }
 
-    if (numbers.length) {
-        const missingNumber = findMissingNumber(numbers.sort())
-        if (missingNumber) return `${parentCode || ''}${missingNumber > 9 ? missingNumber : `0${missingNumber}`}`
-        else {
-            const code = Math.max(...numbers) + 1
+    const siblingsCode = ss.map(i => +i.replace(/\//s, '')).filter(Boolean)
 
-            return `${parentCode || ''}${code > 9 ? code : `0${code}`}`
+    if (siblingsCode.length) {
+        const missingNumber = findMissingNumber(siblingsCode.sort())
+        if (missingNumber) return (parentCode || '') + '/' + (missingNumber > 9 ? missingNumber : `0${missingNumber}`)
+        else {
+            const code = Math.max(...siblingsCode) + 1
+
+            return (parentCode || '') + '/' + (code > 9 ? code : `0${code}`)
         }
-    } else return `${parentCode || ''}01`
+    } else return `${parentCode || ''}/01`
 }
 
 export const Category = list<Lists.Category.TypeInfo<Session>>({
