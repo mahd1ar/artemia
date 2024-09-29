@@ -1,10 +1,10 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { useList } from "@keystone-6/core/admin-ui/context";
+import { useKeystone, useList } from "@keystone-6/core/admin-ui/context";
 import { type controller } from "@keystone-6/core/fields/types/relationship/views";
 import { type FieldProps } from "@keystone-6/core/types";
 import { Button } from "@keystone-ui/button";
 import { Stack } from "@keystone-ui/core";
-import { FieldContainer, FieldLabel, Select, TextInput } from "@keystone-ui/fields";
+import { FieldContainer, FieldLabel, Select, TextInput, TextArea } from "@keystone-ui/fields";
 import { AlertDialog } from "@keystone-ui/modals";
 import { Box, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, ThemeProvider } from "@mui/material";
 import { green } from '@mui/material/colors';
@@ -62,7 +62,11 @@ export const Field = ({
 
   const router = useRouter()
 
-  console.log(router.asPath.split('/').filter(Boolean).at(0))
+  const param = router.asPath.split('/').filter(Boolean).at(0)
+  const resource = param === 'invoices' ? 'invoice' : param === 'statements' ? 'statement' : null
+
+  if (!resource) return <div>cant</div>
+
   const RowList = useList('Row')
   // @ts-ignore
   const unitOptions = RowList.fields.unit.controller.options as { label: string, value: string }[]
@@ -75,6 +79,7 @@ export const Field = ({
     unit
     unitPrice
     total
+    description
     commodity {
       code
       id
@@ -96,6 +101,7 @@ export const Field = ({
       unit
       unitPrice
       total
+      description
       commodity {
         code
         id
@@ -129,7 +135,7 @@ export const Field = ({
     nextFetchPolicy: 'network-only',
     variables: {
       where: {
-        invoice: { // TODO <-  you can change this to a dynamic value based on url!!
+        [resource]: {
           id: {
             equals: value.id
           }
@@ -149,6 +155,7 @@ export const Field = ({
   const [modelData, setModelData] = useState({
     id: '',
     commodityId: '',
+    description: '',
     commodity: '',
     quantity: '0',
     unitPrice: '0',
@@ -163,6 +170,7 @@ export const Field = ({
     setModelData({
       id: '',
       commodityId: '',
+      description: '',
       commodity: '',
       quantity: '0',
       unitPrice: '0',
@@ -180,6 +188,7 @@ export const Field = ({
         commodityId: serverData?.commodity?.id || '',
         commodity: serverData.commodity?.title || '',
         percentageOfWorkDone: String(serverData.percentageOfWorkDone || 0),
+        description: serverData?.description || '',
         quantity: String(serverData.quantity || 0),
         unitPrice: Intl.NumberFormat().format(serverData.unitPrice || 0),
         unit: serverData.unit || '',
@@ -224,6 +233,7 @@ export const Field = ({
       commodityId: row.commodityId,
       commodity: row.commodity,
       quantity: row.quantity,
+      description: row.description,
       unitPrice: stripUselessChars(row.unitPrice),
       percentageOfWorkDone: row.percentageOfWorkDone,
       unit: row.unit,
@@ -292,7 +302,7 @@ export const Field = ({
                 id: modelData.commodityId
               }
             },
-            // description: modelData.description,
+            description: modelData.description,
             unit: modelData.unit,
             unitPrice: parseInt(modelData.unitPrice),
             quantity: parseFloat(modelData.quantity),
@@ -357,7 +367,7 @@ export const Field = ({
             unitPrice: parseInt(modelData.unitPrice),
             quantity: parseFloat(modelData.quantity),
             unit: modelData.unit,
-            // description: modelData.description,
+            description: modelData.description,
           }
         }
       })
@@ -428,7 +438,7 @@ export const Field = ({
             },
           }
         }} >
-          <fieldset disabled={!onChange} >
+          <fieldset disabled={!onChange} style={{ height: ' calc( 96dvh - 143px)', overflow: 'auto' }} >
             <Stack gap="small" >
 
               <FieldLabel  > کالا </FieldLabel>
@@ -463,7 +473,7 @@ export const Field = ({
                 }
               }} >
 
-                <Box sx={{ minHeight: 352, minWidth: 250 }}>
+                <Box sx={{ minHeight: 352, minWidth: 250, maxHeight: 'calc(98dvh - 148px)', overflow: 'auto' }}>
 
                   <TreeCategories
                     rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '78'}
@@ -488,6 +498,9 @@ export const Field = ({
                   }
                 } />
 
+
+              <FieldLabel  > توضیحات </FieldLabel>
+              <TextArea value={modelData.description} onChange={(e) => setModelData({ ...modelData, description: e.target.value })} />
 
               <FieldLabel  > قیمت واحد </FieldLabel>
               <TextInput value={modelData.unitPrice} onChange={(e) => setModelData({ ...modelData, unitPrice: e.target.value })} />

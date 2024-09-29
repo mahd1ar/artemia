@@ -72,8 +72,6 @@ const AutoCompeleteCategory: React.FC<{ value: string | null, rootCode: string, 
                 setValue(e)
             }}
             onInputChange={e => {
-                console.log("on input change")
-                console.log({ e })
                 if (!e) return
                 setQuery(e)
             }}

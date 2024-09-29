@@ -482,43 +482,52 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         linkToItem: false
       }
     }),
-    visualItems: virtual({
-      label: "آیتم ها",
-      ui: {
-        itemView: {
-          fieldMode: args => getRoleFromArgs(args) !== Roles.workshop ? 'edit' : 'hidden',
-        },
-        views: './src/custome-fields-view/statement-items-table'
-      },
-      field: graphql.field({
-        type: graphql.JSON,
-        async resolve(item, args, context) {
+    // visualItems: virtual({
+    //   label: "آیتم ها",
+    //   ui: {
+    //     itemView: {
+    //       fieldMode: args => getRoleFromArgs(args) !== Roles.workshop ? 'edit' : 'hidden',
+    //     },
+    //     views: './src/custome-fields-view/statement-items-table'
+    //   },
+    //   field: graphql.field({
+    //     type: graphql.JSON,
+    //     async resolve(item, args, context) {
 
-          if (item.id) {
-            const x = await context.query.StatementItem.findMany({
-              where: {
-                statement: {
-                  id: {
-                    equals: item.id,
-                  },
-                },
-              },
-              query: "description unit  unitPrice quantity percentageOfWorkDone total",
-            })
+    //       if (item.id) {
+    //         const x = await context.query.StatementItem.findMany({
+    //           where: {
+    //             statement: {
+    //               id: {
+    //                 equals: item.id,
+    //               },
+    //             },
+    //           },
+    //           query: "description unit  unitPrice quantity percentageOfWorkDone total",
+    //         })
 
-            return x
+    //         return x
 
-          } else return [];
-        },
-      }),
-    }),
+    //       } else return [];
+    //     },
+    //   }),
+    // }),
+
     rows: relationship({
       label: "ردیف ها",
       ref: "Row.statement",
       many: true,
       ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'hidden' }
+        itemView: {
+          fieldMode: args => getRoleFromArgs(args) === Roles.workshop ? 'edit' : 'read',
+        },
+        displayMode: 'cards',
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],
+        inlineCreate: {
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total']
+        },
+
+        views: "./src/custome-fields-view/table-relation"
       }
     }),
     items: relationship({
@@ -526,8 +535,13 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       ref: "StatementItem.statement",
       many: true,
       ui: {
+        description: "این آیتم به زودی از درسترس خارج میشود لطفا از قسمت ردیف ها استفاده کنید.",
+        createView: {
+          fieldMode: 'hidden'
+        },
         itemView: {
-          fieldMode: args => getRoleFromArgs(args) === Roles.workshop ? 'edit' : 'hidden',
+          fieldMode: 'read'
+          // fieldMode: args => getRoleFromArgs(args) === Roles.workshop ? 'edit' : 'hidden',
         },
         displayMode: "cards",
         cardFields: [

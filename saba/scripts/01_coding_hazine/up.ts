@@ -29,7 +29,7 @@ import { ExcludesFalse } from "../../data/utils";
     const root = await $tx.category.create({
         data: {
             isProtected: true,
-            title: 'OMG',
+            title: 'کالا و خدمات',
             code: '8'
         }
     })
@@ -57,7 +57,7 @@ import { ExcludesFalse } from "../../data/utils";
 
                 const parent = all.find(ii => {
 
-                    return ii.code === splitedCode.slice(0, 2).join("/")
+                    return +ii.code.replace(/[\s\/]/g, '') === +splitedCode.slice(0, 2).join("")
                 }) || null
 
                 // console.log(parent?.id + ' for ' + i.code)
