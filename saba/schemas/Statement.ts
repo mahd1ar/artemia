@@ -519,7 +519,10 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       many: true,
       ui: {
         itemView: {
-          fieldMode: args => getRoleFromArgs(args) === Roles.workshop ? 'edit' : 'read',
+          fieldMode: args => {
+            const role = getRoleFromArgs(args)
+            return role === Roles.workshop || role <= Roles.operator ? 'edit' : 'read'
+          },
         },
         displayMode: 'cards',
         cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],

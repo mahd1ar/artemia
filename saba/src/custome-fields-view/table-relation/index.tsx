@@ -444,7 +444,7 @@ export const Field = ({
               <FieldLabel  > کالا </FieldLabel>
 
               <AutoCompeleteCategory
-                rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '78'}
+                rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '8'}
                 value={modelData.commodityId}
                 onChange={(i) => {
                   if (i)
