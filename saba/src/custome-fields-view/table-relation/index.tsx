@@ -438,7 +438,7 @@ export const Field = ({
             },
           }
         }} >
-          <fieldset disabled={!onChange} style={{ height: ' calc( 96dvh - 143px)', overflow: 'auto' }} >
+          <fieldset disabled={!onChange} style={{ maxHeight: ' calc( 96dvh - 143px)', overflow: 'auto' }} >
             <Stack gap="small" >
 
               <FieldLabel  > کالا </FieldLabel>
@@ -554,9 +554,12 @@ export const Field = ({
                   <TableRow>
                     <StyledTableCell colSpan={headers.length - 2} />
                     <StyledTableCell >Subtotal</StyledTableCell>
-                    <StyledTableCell align="right" sx={{ fontWeight: 'bold' }} >
-                      {Intl.NumberFormat().format(totalPrice)}
+                    <StyledTableCell align="right" sx={{ fontWeight: 'bold', display: 'flex', gap: 1 }} >
 
+                      <bdi>
+                        {Intl.NumberFormat().format(totalPrice)}
+                      </bdi>
+                      ریال
                     </StyledTableCell>
                   </TableRow> :
                   <TableRow>

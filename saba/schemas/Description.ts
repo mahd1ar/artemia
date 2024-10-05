@@ -50,6 +50,7 @@ export const Description = list<Lists.Description.TypeInfo<any>>({
             // graphQLReturnType: "String",
         }),
         title: text(),
+        code: text(),
         statements: relationship({
             ref: 'Statement.description',
             many: true,
