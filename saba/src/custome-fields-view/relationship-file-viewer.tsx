@@ -1,10 +1,56 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import Link from "next/link";
 import { CellComponent, CardValueComponent, type FieldProps } from "@keystone-6/core/types";
 import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
 import { Button } from "@keystone-ui/button";
 import { CheckIcon, ArrowDownIcon } from "@keystone-ui/icons";
 import { css } from "@emotion/css";
+
+const ImageWrapper = ({ children, url }: { children: ReactNode, url?: string }) => {
+  if (url) {
+    return (
+      <a
+        style={{
+          position: 'relative',
+          display: 'block',
+          overflow: 'hidden',
+          flexShrink: 0,
+          lineHeight: 0,
+          backgroundColor: '#fafbfc',
+          borderRadius: '6px',
+          textAlign: 'center',
+          width: '120px', // 120px image + chrome
+          height: '120px',
+          border: '1px solid #e1e5e9',
+        }}
+        target="_blank"
+        href={url}
+      >
+        {children}
+      </a>
+    )
+  }
+  return (
+    <div
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        flexShrink: 0,
+        lineHeight: 0,
+        backgroundColor: '#fafbfc',
+        borderRadius: '6px',
+        textAlign: 'center',
+        width: '120px', // 120px image + chrome
+        height: '120px',
+        border: '1px solid #e1e5e9',
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+
 
 const styls = {
 
@@ -22,28 +68,37 @@ export const CardValue: CardValueComponent = ({ item, field }) => {
 
   let url: string = ""
   let ext: string = ""
+  const imgextensions = ['jpg', 'png', 'jpeg', 'tiff', 'jfif']
 
   try {
 
     url = item.file.url
     ext = item?.file?.filename?.split(".")?.at(-1) || ''
+
+
   } catch (error) {
     console.error(error)
   }
   return (
     <FieldContainer>
-      <FieldLabel>{field.label}</FieldLabel>
-
+      <FieldLabel>
+        {url && ext ? imgextensions.includes(ext) ? 'عکس' : 'فایل' : field.label}
+      </FieldLabel>
       {
-        url && (
-          <Button
-            onClick={() => window.open(url)}
-            className={styls.flexcenter}
-          >
-            Download File {/* TODO its best have a corespondig file icon  */}
-            <ArrowDownIcon />
-          </Button>
-        )
+        url && ext && imgextensions.includes(ext) ?
+          <ImageWrapper url={url} >
+            <img src={url} width='100%' alt="" />
+          </ImageWrapper>
+
+          : (
+            <a href={url} target="_blank"
+
+              className={styls.flexcenter}
+            >
+              Download File {/* TODO its best have a corespondig file icon  */}
+              <ArrowDownIcon />
+            </a>
+          )
 
 
       }

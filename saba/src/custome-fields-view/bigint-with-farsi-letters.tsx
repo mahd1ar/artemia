@@ -137,6 +137,31 @@ export const Field = ({
   const message = validate(value, field.validation, field.label, field.hasAutoIncrementDefault)
 
 
+  function addComma<T>(arg: T) {
+
+    if (typeof arg === 'bigint') {
+
+      return arg.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    }
+
+    return arg
+
+  }
+
+  function removeComma<T>(arg: T) {
+
+    if (typeof arg === 'string') {
+
+      try {
+        const strWitoutCamma = arg.replace(/,/g, '')
+        return BigInt(strWitoutCamma)
+      } catch (error) { }
+    }
+
+    return arg
+  }
+
+
   return (
 
     <FieldContainer>
@@ -145,6 +170,7 @@ export const Field = ({
 
       {onChange ? (
         <span>
+          {/* <pre>{String(value.value)}</pre> */}
           <BigIntInput
             id={field.path}
             autoFocus={autoFocus}

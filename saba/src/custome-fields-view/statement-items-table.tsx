@@ -16,6 +16,8 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
+
+
   const StatementItemList = useList('StatementItem')
 
   if (!value || value.length === 0 || typeof value === 'symbol') return <div>null</div>

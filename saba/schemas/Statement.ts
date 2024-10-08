@@ -399,6 +399,24 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       },
     }),
 
+    type: select({
+      label: 'نوع صورت وضعیت',
+      options: [
+        {
+          label: 'موقت',
+          value: 'temporary'
+        },
+        {
+          label: 'نهایی',
+          value: 'final'
+        }
+      ],
+      defaultValue: 'temporary',
+      ui: {
+        displayMode: 'segmented-control'
+      }
+    }),
+
     title: text({
       label: 'عنوان',
       validation: { isRequired: true }
@@ -460,7 +478,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     }),
 
     attachments: relationship({
-      label: 'فایل های ضمیمه شده',
+      label: ' عکس و فایل های ضمیمه شده',
       ref: 'FileStore.statement',
       many: true,
       ui: {
@@ -481,6 +499,33 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         inlineEdit: { fields: ['title', 'file'] },
         linkToItem: false
       }
+    }),
+
+    peyments: relationship({
+      label: "رسید پرداختی",
+      ref: "Payment.statement",
+      many: true,
+      ui: {
+        itemView: {
+          fieldPosition(args) {
+            const userAgent = (args.context.req?.headers["user-agent"])
+
+            if (userAgent)
+              return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
+
+            return 'sidebar'
+          }
+        },
+        cardFields: ["attachment", "price", "dateOfPayment", "description"],
+        displayMode: "cards",
+        inlineConnect: false,
+        inlineCreate: {
+          fields: ["attachment", "price", "dateOfPayment", "description"],
+        },
+        inlineEdit: {
+          fields: ["attachment", "price", "dateOfPayment", "description"],
+        },
+      },
     }),
     // visualItems: virtual({
     //   label: "آیتم ها",
@@ -513,26 +558,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     //   }),
     // }),
 
-    rows: relationship({
-      label: "ردیف ها",
-      ref: "Row.statement",
-      many: true,
-      ui: {
-        itemView: {
-          fieldMode: args => {
-            const role = getRoleFromArgs(args)
-            return role === Roles.workshop || role <= Roles.operator ? 'edit' : 'read'
-          },
-        },
-        displayMode: 'cards',
-        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],
-        inlineCreate: {
-          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total']
-        },
-
-        views: "./src/custome-fields-view/table-relation"
-      }
-    }),
     items: relationship({
       label: "آیتم ها",
       ref: "StatementItem.statement",
@@ -541,10 +566,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         description: "این آیتم به زودی از درسترس خارج میشود لطفا از قسمت ردیف ها استفاده کنید.",
         createView: {
           fieldMode: 'hidden'
-        },
-        itemView: {
-          fieldMode: 'read'
-          // fieldMode: args => getRoleFromArgs(args) === Roles.workshop ? 'edit' : 'hidden',
         },
         displayMode: "cards",
         cardFields: [
@@ -575,25 +596,36 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
       },
     }),
-    peyments: relationship({
-      label: "رسید پرداختی",
-      ref: "Payment.statement",
+
+    rows: relationship({
+      label: "ردیف ها",
+      ref: "Row.statement",
       many: true,
       ui: {
-
-        cardFields: ["attachment", "price", "dateOfPayment", "description"],
-        displayMode: "cards",
-        inlineConnect: false,
+        itemView: {
+          fieldMode: args => {
+            const role = getRoleFromArgs(args)
+            return role === Roles.workshop || role <= Roles.operator ? 'edit' : 'read'
+          },
+        },
+        displayMode: 'cards',
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],
         inlineCreate: {
-          fields: ["attachment", "price", "dateOfPayment", "description"],
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total']
         },
-        inlineEdit: {
-          fields: ["attachment", "price", "dateOfPayment", "description"],
-        },
-      },
+
+        views: "./src/custome-fields-view/table-relation"
+      }
     }),
+
+
     grossTotal: virtual({
       ui: {
+        itemView: {
+          fieldMode(args) {
+            return getRoleFromArgs(args) === Roles.admin ? 'read' : 'hidden'
+          },
+        },
         views: './src/custome-fields-view/bigint-viewer.tsx'
       },
       label: "جمع کل صورت وضعیت",
@@ -602,7 +634,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         async resolve(item, args, context) {
 
           if (item.id) {
-            const x = await context.query.StatementItem.findMany({
+            const x = await context.query.Row.findMany({
               where: {
                 statement: {
                   id: {
@@ -627,6 +659,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     deductionOnAccountOfAdvancePayment: bigInt({
       label: "کسر علی الحساب",
       ui: {
+        description: "جمع پرداختی های قبلی",
         // itemView: { fieldMode: 'edit' },
         views: "./src/custome-fields-view/bigint-with-farsi-letters",
       },
@@ -634,12 +667,20 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     }),
 
     tax: bigInt({
-      label: "مالیات",
+      label: "مالیات و عوارض",
       validation: { isRequired: true },
       defaultValue: 0n,
       ui: {
         views: "./src/custome-fields-view/bigint-with-farsi-letters",
       }
+    }),
+
+    workGuarantee: bigInt({
+      label: "حسن انجام کار",
+      ui: {
+        views: "./src/custome-fields-view/bigint-with-farsi-letters",
+      },
+      defaultValue: 0n,
     }),
 
     totalPayable: virtual({
@@ -650,14 +691,16 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
+
           const {
             id: itemid,
             deductionOnAccountOfAdvancePayment: deduction,
             tax,
+            workGuarantee
           } = item
 
           if (itemid) {
-            const x = await context.query.StatementItem.findMany({
+            const x = await context.query.Row.findMany({
               where: {
                 statement: {
                   id: {
@@ -672,10 +715,10 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
             for (const i of x) {
 
-              total += BigInt(i.total) /*.replace(/,/g, "") */;
+              total += BigInt(i.total);
             }
 
-            return BigInt(total - (deduction || 0n) + (tax || 0n));
+            return BigInt(total - (deduction || 0n) - (workGuarantee || 0n) + (tax || 0n));
           } else return 0n;
         },
       }),
