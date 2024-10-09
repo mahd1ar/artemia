@@ -553,7 +553,7 @@ export const Field = ({
                 data.length ?
                   <TableRow>
                     <StyledTableCell colSpan={headers.length - 2} />
-                    <StyledTableCell >جمع کل بدون عوارض</StyledTableCell>
+                    <StyledTableCell align="right" sx={{ p: 0 }} >جمع کل بدون مالیات‌و‌عوارض</StyledTableCell>
                     <StyledTableCell align="right" sx={{ fontWeight: 'bold', display: 'flex', gap: 1 }} >
 
                       <bdi>
