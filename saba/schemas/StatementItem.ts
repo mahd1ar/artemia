@@ -127,6 +127,5 @@ export const StatementItem = list({
         views: './src/custome-fields-view/bigint-viewer.tsx'
       }
     }),
-    statement: relationship({ ref: 'Statement.items', many: false })
   },
 });
