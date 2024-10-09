@@ -553,7 +553,7 @@ export const Field = ({
                 data.length ?
                   <TableRow>
                     <StyledTableCell colSpan={headers.length - 2} />
-                    <StyledTableCell >Subtotal</StyledTableCell>
+                    <StyledTableCell >جمع کل بدون عوارض</StyledTableCell>
                     <StyledTableCell align="right" sx={{ fontWeight: 'bold', display: 'flex', gap: 1 }} >
 
                       <bdi>

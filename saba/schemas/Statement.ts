@@ -623,7 +623,8 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       ui: {
         itemView: {
           fieldMode(args) {
-            return getRoleFromArgs(args) === Roles.admin ? 'read' : 'hidden'
+            return "hidden"
+            // return getRoleFromArgs(args) === Roles.admin ? 'read' : 'hidden'
           },
         },
         views: './src/custome-fields-view/bigint-viewer.tsx'
@@ -659,7 +660,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     deductionOnAccountOfAdvancePayment: bigInt({
       label: "کسر علی الحساب",
       ui: {
-        description: "جمع پرداختی های قبلی",
+        description: "جمع پرداختی های گذشته",
         // itemView: { fieldMode: 'edit' },
         views: "./src/custome-fields-view/bigint-with-farsi-letters",
       },
