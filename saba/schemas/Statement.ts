@@ -108,7 +108,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
       if (args.operation === "delete") {
 
-        await prisma.statementItem.deleteMany({
+        await prisma.row.deleteMany({
           where: {
             statement: {
               id: {
@@ -464,7 +464,11 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     image: image({
       storage: "image",
       ui: {
+        description: '(این ایتم به زودی از دسترس خارج میشود)',
         itemView: {
+          fieldMode(args) {
+            return 'read'
+          },
           fieldPosition(args) {
             const userAgent = (args.context.req?.headers["user-agent"])
 
@@ -524,75 +528,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         },
         inlineEdit: {
           fields: ["attachment", "price", "dateOfPayment", "description"],
-        },
-      },
-    }),
-    // visualItems: virtual({
-    //   label: "آیتم ها",
-    //   ui: {
-    //     itemView: {
-    //       fieldMode: args => getRoleFromArgs(args) !== Roles.workshop ? 'edit' : 'hidden',
-    //     },
-    //     views: './src/custome-fields-view/statement-items-table'
-    //   },
-    //   field: graphql.field({
-    //     type: graphql.JSON,
-    //     async resolve(item, args, context) {
-
-    //       if (item.id) {
-    //         const x = await context.query.StatementItem.findMany({
-    //           where: {
-    //             statement: {
-    //               id: {
-    //                 equals: item.id,
-    //               },
-    //             },
-    //           },
-    //           query: "description unit  unitPrice quantity percentageOfWorkDone total",
-    //         })
-
-    //         return x
-
-    //       } else return [];
-    //     },
-    //   }),
-    // }),
-
-    items: relationship({
-      label: "آیتم ها",
-      ref: "StatementItem.statement",
-      many: true,
-      ui: {
-        description: "این آیتم به زودی از درسترس خارج میشود لطفا از قسمت ردیف ها استفاده کنید.",
-        createView: {
-          fieldMode: 'hidden'
-        },
-        displayMode: "cards",
-        cardFields: [
-          "description",
-          "unit",
-          "unitPrice",
-          "quantity",
-          "percentageOfWorkDone",
-          "total",
-        ],
-        inlineCreate: {
-          fields: [
-            "description",
-            "unit",
-            "unitPrice",
-            "quantity",
-            "percentageOfWorkDone",
-          ],
-        },
-        inlineEdit: {
-          fields: [
-            "description",
-            "unit",
-            "unitPrice",
-            "quantity",
-            "percentageOfWorkDone",
-          ],
         },
       },
     }),
