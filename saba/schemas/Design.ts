@@ -60,7 +60,7 @@ export const Design = list<Lists.Design.TypeInfo<Session>>({
         displayMode: 'cards',
         inlineCreate: { fields: ['file'] },
         inlineEdit: { fields: ['file'] },
-        cardFields: ['title'],
+        cardFields: ['title', 'file'],
       }
     }),
 

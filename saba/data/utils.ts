@@ -43,10 +43,8 @@ export function setPermitions(
 
 }
 
-export function editIfAdmin(args: {
-  context: KeystoneContext<BaseKeystoneTypeInfo<any>>;
+export function editIfAdmin(args: object & {
   session?: Session;
-  item: BaseItem;
 },
   defaultValue?: "read" | "edit" | "hidden"
 ) {
