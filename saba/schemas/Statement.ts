@@ -20,6 +20,7 @@ import { PrismaClient } from "@prisma/client";
 import type { Lists } from ".keystone/types";
 import { Notif } from '../data/message'
 import DeviceDetector from "node-device-detector";
+import { gql } from "@ts-gql/tag/no-transform";
 
 const detector = new DeviceDetector({
   clientIndexes: false,
@@ -42,6 +43,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
     filter: {
       query: args => {
+
         const role = getRoleFromArgs(args, Roles.guest)
 
         if (role === Roles.admin || role === Roles.workshop || role === Roles.operator)
@@ -196,36 +198,65 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
                 // send files to telegram
 
-                const currentStatement = await prisma
-                  .statement
-                  .findUnique({
-                    where: { id: args.item.id },
-                    select: {
-                      image_extension: true,
-                      image_id: true,
-                      attachments: {
-                        select: {
-                          file_filename: true,
-                        }
-                      },
-                      peyments: {
-                        select: {
-                          attachment_id: true,
-                          attachment_extension: true
+                const CURRENT_STATEMENT = gql`
+                  query CURRENT_STATEMENT($id: ID!) {
+                    statement(where: { id:  $id  }) {
+                      id
+                      title
+                      attachments {
+                        id
+                        title
+                        file {
+                          url
                         }
                       }
-                    },
-                  })
+                      peyments {
+                        id
+                        title
+                        attachment {
+                          url
+                        }
+                      }
+                    }
+                  }
+                ` as import("../__generated__/ts-gql/CURRENT_STATEMENT").type
 
-                if (currentStatement) {
-                  const imageUrl = currentStatement.image_id && "saba.netdom.ir/image/" + currentStatement.image_id + "." + currentStatement.image_extension
-                  const attachmentsUrl = currentStatement.attachments.map(item => item ? "saba.netdom.ir/image/" + item.file_filename : null).filter(Boolean as unknown as ExcludesFalse)
-                  if (imageUrl)
-                    attachmentsUrl.unshift(imageUrl)
-                  const peymentsUrl = currentStatement.peyments.map(item => item.attachment_id ? "saba.netdom.ir/image/" + item.attachment_id + "." + item.attachment_extension : null).filter(Boolean as unknown as ExcludesFalse)
+                const currentStatement = await args.context.graphql.run({
+                  query: CURRENT_STATEMENT,
+                  variables: {
+                    id: args.item.id
+                  }
+                })
+
+                // const currentStatement = await prisma
+                //   .statement
+                //   .findUnique({
+                //     where: { id: args.item.id },
+                //     select: {
+                //       image_extension: true,
+                //       image_id: true,
+                //       attachments: {
+                //         select: {
+                //           file_filename: true,
+                //         }
+                //       },
+                //       peyments: {
+                //         select: {
+                //           attachment_id: true,
+                //           attachment_extension: true
+                //         }
+                //       }
+                //     },
+                //   })
+
+                if (currentStatement.statement) {
 
                   setTimeout(async () => {
-                    await Notif.sendStatementAttachmenets(notif_statementTile, attachmentsUrl, peymentsUrl)
+                    await Notif.sendStatementAttachmenets(
+                      currentStatement.statement?.title || '',
+                      currentStatement.statement?.attachments?.map(i => i.file?.url).filter(Boolean as unknown as ExcludesFalse) || [],
+                      currentStatement.statement?.peyments?.map(i => i.attachment?.url).filter(Boolean as unknown as ExcludesFalse) || [],
+                    )
                   }, 1000);
 
                 }
@@ -243,13 +274,12 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
                 await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
 
               }
-
               else if (args.inputData.confirmedByTechnicalSupervisor) {
-
+                
                 await Notif.statementIsConfirmedByTechnicalGroup(notif_statementTile, notif_username, notif_url)
-
+                
               }
-
+              
             }
 
 
@@ -465,6 +495,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       storage: "image",
       ui: {
         description: '(این ایتم به زودی از دسترس خارج میشود)',
+        createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) {
             return 'read'
