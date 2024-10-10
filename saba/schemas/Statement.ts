@@ -3,9 +3,6 @@ import { allOperations, allowAll } from "@keystone-6/core/access";
 import {
   bigInt,
   checkbox,
-  file,
-  image,
-  integer,
   json,
   relationship,
   select,
@@ -227,27 +224,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
                     id: args.item.id
                   }
                 })
-
-                // const currentStatement = await prisma
-                //   .statement
-                //   .findUnique({
-                //     where: { id: args.item.id },
-                //     select: {
-                //       image_extension: true,
-                //       image_id: true,
-                //       attachments: {
-                //         select: {
-                //           file_filename: true,
-                //         }
-                //       },
-                //       peyments: {
-                //         select: {
-                //           attachment_id: true,
-                //           attachment_extension: true
-                //         }
-                //       }
-                //     },
-                //   })
 
                 if (currentStatement.statement) {
 
@@ -491,26 +467,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     sateOfStatement: persianCalendar({
       label: "تاریخ صورت وضعیت",
     }),
-    image: image({
-      storage: "image",
-      ui: {
-        description: '(این ایتم به زودی از دسترس خارج میشود)',
-        createView: { fieldMode: 'hidden' },
-        itemView: {
-          fieldMode(args) {
-            return 'read'
-          },
-          fieldPosition(args) {
-            const userAgent = (args.context.req?.headers["user-agent"])
 
-            if (userAgent)
-              return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
-
-            return "sidebar"
-          },
-        },
-      },
-    }),
 
     attachments: relationship({
       label: ' عکس و فایل های ضمیمه شده',
