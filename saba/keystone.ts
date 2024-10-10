@@ -154,7 +154,7 @@ new CronJob(
     })
 
     // find statement items without statement
-    const statementItemsBatchPayload = await keystoneContext.prisma.statementItem.deleteMany({
+    const statementItemsBatchPayload = await keystoneContext.prisma.row.deleteMany({
       where: {
         statement: null
       },
