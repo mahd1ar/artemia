@@ -1,8 +1,8 @@
-// ts-gql-integrity:dc39d518da8f07720a356e32397edca2
+// ts-gql-integrity:e7897e6242d42132061861185a4fc970
 /*
 ts-gql-meta-begin
 {
-  "hash": "9241bab7555418094f3677943fae81a8"
+  "hash": "768244e777ea3f5a33737175907de52c"
 }
 ts-gql-meta-end
 */
@@ -708,7 +708,6 @@ export type Statement = {
   readonly contract: Contract | null;
   readonly description: Description | null;
   readonly sateOfStatement: number | null;
-  readonly image: ImageFieldOutput | null;
   readonly attachments: ReadonlyArray<FileStore> | null;
   readonly attachmentsCount: number | null;
   readonly peyments: ReadonlyArray<Payment> | null;
@@ -760,22 +759,6 @@ export type StatementrowsArgs = {
 export type StatementrowsCountArgs = {
   readonly where?: RowWhereInput;
 };
-
-export type ImageFieldOutput = {
-  readonly __typename: "ImageFieldOutput";
-  readonly id: string;
-  readonly filesize: number;
-  readonly width: number;
-  readonly height: number;
-  readonly extension: ImageExtension;
-  readonly url: string;
-};
-
-export type ImageExtension =
-  | "jpg"
-  | "png"
-  | "webp"
-  | "gif";
 
 export type StatementWhereUniqueInput = {
   readonly id?: string | null;
@@ -856,7 +839,6 @@ export type StatementUpdateInput = {
   readonly contract?: ContractRelateToOneForUpdateInput | null;
   readonly description?: DescriptionRelateToOneForUpdateInput | null;
   readonly sateOfStatement?: number | null;
-  readonly image?: ImageFieldInput | null;
   readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
   readonly peyments?: PaymentRelateToManyForUpdateInput | null;
   readonly rows?: RowRelateToManyForUpdateInput | null;
@@ -873,12 +855,6 @@ export type ContractRelateToOneForUpdateInput = {
   readonly connect?: ContractWhereUniqueInput | null;
   readonly disconnect?: boolean | null;
 };
-
-export type ImageFieldInput = {
-  readonly upload: Upload;
-};
-
-export type Upload = any;
 
 export type PaymentRelateToManyForUpdateInput = {
   readonly disconnect?: TSGQLMaybeArray<PaymentWhereUniqueInput> | null;
@@ -903,7 +879,6 @@ export type StatementCreateInput = {
   readonly contract?: ContractRelateToOneForCreateInput | null;
   readonly description?: DescriptionRelateToOneForCreateInput | null;
   readonly sateOfStatement?: number | null;
-  readonly image?: ImageFieldInput | null;
   readonly attachments?: FileStoreRelateToManyForCreateInput | null;
   readonly peyments?: PaymentRelateToManyForCreateInput | null;
   readonly rows?: RowRelateToManyForCreateInput | null;
@@ -993,6 +968,22 @@ export type Payment = {
   readonly attachment: ImageFieldOutput | null;
 };
 
+export type ImageFieldOutput = {
+  readonly __typename: "ImageFieldOutput";
+  readonly id: string;
+  readonly filesize: number;
+  readonly width: number;
+  readonly height: number;
+  readonly extension: ImageExtension;
+  readonly url: string;
+};
+
+export type ImageExtension =
+  | "jpg"
+  | "png"
+  | "webp"
+  | "gif";
+
 export type PaymentWhereUniqueInput = {
   readonly id?: string | null;
 };
@@ -1025,6 +1016,12 @@ export type PaymentUpdateInput = {
   readonly price?: BigInt | null;
   readonly attachment?: ImageFieldInput | null;
 };
+
+export type ImageFieldInput = {
+  readonly upload: Upload;
+};
+
+export type Upload = any;
 
 export type PaymentUpdateArgs = {
   readonly where: PaymentWhereUniqueInput;

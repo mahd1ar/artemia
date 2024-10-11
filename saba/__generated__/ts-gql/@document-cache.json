@@ -1,124 +1,119 @@
 {
   "version": "ts-gql-document-extractor@v3,@babel/parser@7.24.5",
-  "integrity": "__TS_GQL_INTEGRITY_cc5b80e5b75676619e5b25a405c6c5e3_TS_GQL_INTEGRITY__",
+  "integrity": "__TS_GQL_INTEGRITY_3e6ade3b50dc4304a3b6ff21e0cffb45_TS_GQL_INTEGRITY__",
   "cache": {
-    "C:/Users/User/Documents/proj/artemia/saba/keystone.ts": {
-      "hash": "faa543a8518644461f88228b75608306",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/auth.ts": {
+      "hash": "205f8534f8fa6253d992d7b1a6f377c9",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/auth.ts": {
-      "hash": "5a62168124718cf09eec90f9d681e9a0",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/keystone.ts": {
+      "hash": "d7913b10795f15c7c9054fa79e12578d",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schema.ts": {
-      "hash": "6c4837324d296421767da36e292ba3c4",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schema.ts": {
+      "hash": "78f706fec9017e5e610a2c7cda9a429a",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/config.tsx": {
-      "hash": "2d88c586f3a6957d3049ad596a341982",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/storage.ts": {
+      "hash": "1ba7647397dc2268cd2a3b98de61cd13",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/storage.ts": {
-      "hash": "2694032ab299a2c2729ecb1efd34748f",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/config.tsx": {
+      "hash": "253284c4ad305357cdf7be4cacde96b6",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/data/access.ts": {
-      "hash": "072e33b46aaf77d8d68dc20739497145",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/data/match.ts": {
+      "hash": "b9bc0f49dc314585afdacf2aef944b30",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/data/message.ts": {
-      "hash": "b14ffabd66b356f9710a774e831b8ef8",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/data/message.ts": {
+      "hash": "2760daa6a92072d0eaa9b9557e91b274",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/data/match.ts": {
-      "hash": "c051863d368a268d7358be7fd76eab96",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/data/access.ts": {
+      "hash": "000774e9fbeea6cfefc17154bd3407bb",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/document-field-customisation/hero.tsx": {
-      "hash": "d53e80d1c7c10188a5d06a80a2c72ffd",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/data/types.ts": {
+      "hash": "bcf285643bdd4fc28d1a6be15276c6ac",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/data/types.ts": {
-      "hash": "e39478bd4662ca02bac90e612c4f2369",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/document-field-customisation/hero.tsx": {
+      "hash": "b0be5b79ce830ac469a546f0656516eb",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/data/utils.ts": {
-      "hash": "cf1c36f78a5efedeb1b2eaa3f2bd6dad",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/data/utils.ts": {
+      "hash": "712c5826b96856652b57aa9bab7f5573",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/document-field-customisation/index.tsx": {
-      "hash": "d72792604ff81fad5e99e1c3aeac0541",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/document-field-customisation/index.tsx": {
+      "hash": "2dbecfff9e077c01da8311f0d72f5fb2",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Contract.ts": {
-      "hash": "3fd6f9cf07555a1482de47754ba59e26",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Approval.ts": {
+      "hash": "503c137bc09586b7086fa8acce0326d4",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Approval.ts": {
-      "hash": "c14c082cedf926721be752ce475d1b27",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Category.ts": {
+      "hash": "3a472d76652d0464f7819343d8f9eaf5",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Category.ts": {
-      "hash": "e23f9155c195b1860abddd5633f2ee36",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Contract.ts": {
+      "hash": "20e743bede497d0cfba2326f1ed32b3a",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Customer.ts": {
-      "hash": "f79cbb2964bc5ae00a604f21a6a3f4fb",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Customer.ts": {
+      "hash": "7619fcc4e1f4edc9c8fed7fc8556b63f",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/DailyReport.ts": {
-      "hash": "8fa09ee0a695ea13c0cd8b5fd5125930",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/DailyReport.ts": {
+      "hash": "8510ace24e59ccef94a9149636633e2e",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/ImageStore.ts": {
-      "hash": "0ec57e306195b7b49edf7c9f4c32db10",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Description.ts": {
+      "hash": "997627b2248f59ba17915e9418816d30",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/index.ts": {
-      "hash": "a6e5be997b31ec6e6aa33ea743b84933",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Design.ts": {
+      "hash": "e0034994537338541f79e6bba1a4ed43",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Description.ts": {
-      "hash": "add597282420c78b912a097135350867",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/FileStore.ts": {
+      "hash": "8f8be1601167d39389277b3983ade5d8",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Design.ts": {
-      "hash": "e0d9e798c8683ea3e5fc5acb07ce0a17",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/ImageStore.ts": {
+      "hash": "e796490c5de3d4bfbb039411ce167bd1",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Log.ts": {
-      "hash": "cef282377ecb8f74fb1bfc321c5f7126",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/index.ts": {
+      "hash": "011921419ed29ad4c4516b59988c14a8",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/FileStore.ts": {
-      "hash": "3478cba246ba0b6a6c1484907625472a",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Invoice.ts": {
-      "hash": "4bb05ff91c483088def0eb5b93989f41",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Invoice.ts": {
+      "hash": "01e9c243d6d6fc91da30db22deff76a7",
       "errors": [],
       "documents": [
         {
@@ -126,91 +121,96 @@
             "start": {
               "line": 53,
               "column": 37,
-              "index": 1641
+              "index": 1589
             },
             "end": {
               "line": 67,
               "column": 2,
-              "index": 1858
+              "index": 1792
             }
           },
           "document": "\n          query CURRENT_INVOICE($id: ID!) {\n  invoice(where: {id: $id }) {\n    attachments {\n      id\n      file {\n        filename\n        url\n      }\n    }\n    createdBy {\n      fullname\n    }\n  }\n}"
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Item.ts": {
-      "hash": "4b315a3751f6a4518c583d49e5b85310",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Item.ts": {
+      "hash": "4b368948169730e135d1762316cb2a62",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Payment.ts": {
-      "hash": "522e439e86a0f47f6e13c2cd9da57b1c",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Log.ts": {
+      "hash": "c5c4312297ad315e42dcd649fc3bbbda",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/PaymentItem.ts": {
-      "hash": "78c25deb38bcc806120986c97f114d9e",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Note.ts": {
+      "hash": "a59ddecce195efa011f5ff667b3bc391",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/SafetyReport.ts": {
-      "hash": "abc0fdafc23fc6e28874212d6a871069",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Payment.ts": {
+      "hash": "b81fcb43db6257eea35aad7a7546a03b",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Row.ts": {
-      "hash": "c156838cd710019ce092cc1150813d41",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/PaymentItem.ts": {
+      "hash": "d6902d56bf58e99b1db5456149d8c277",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Note.ts": {
-      "hash": "f59f5a782f50127bb6863bcc258801e6",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Row.ts": {
+      "hash": "2dc9716412b8907d0450d406c6f8730a",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Setting.ts": {
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/SafetyReport.ts": {
+      "hash": "872cb7dcec3c54e22795301585f2debf",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Setting.ts": {
       "hash": "949eb8ef446bb27a10689218ade8a9ba",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/StatementItem.ts": {
-      "hash": "a58c4cabc15d57031c9363d4e64e2ad6",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/User.ts": {
-      "hash": "2f33ce1224b888ba564d4bfd526ece74",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/components/changelog.tsx": {
-      "hash": "91a73c17f04e53275a60df6375b5ab33",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/Statement.ts": {
-      "hash": "6a8823d1eb1483c875ea939dc7667fb1",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/Statement.ts": {
+      "hash": "34619cda84c67912378f00ce3d1558e8",
       "errors": [],
       "documents": [
         {
           "loc": {
             "start": {
-              "line": 201,
+              "line": 198,
               "column": 45,
-              "index": 5608
+              "index": 5380
             },
             "end": {
-              "line": 222,
+              "line": 219,
               "column": 17,
-              "index": 6262
+              "index": 6013
             }
           },
           "document": "\n                  query CURRENT_STATEMENT($id: ID!) {\n                    statement(where: { id:  $id  }) {\n                      id\n                      title\n                      attachments {\n                        id\n                        title\n                        file {\n                          url\n                        }\n                      }\n                      peyments {\n                        id\n                        title\n                        attachment {\n                          url\n                        }\n                      }\n                    }\n                  }\n                "
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/components/CustomNavigation.tsx": {
-      "hash": "2d5043fded9c0b5814544f523fda4de5",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/StatementItem.ts": {
+      "hash": "b818ef06f080f0826090c6994a984877",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/User.ts": {
+      "hash": "ac51e7aae33e51d95366652226b9f48a",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/components/changelog.tsx": {
+      "hash": "91a73c17f04e53275a60df6375b5ab33",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/components/CustomNavigation.tsx": {
+      "hash": "8fc0d6f21bf3e2eb939a73f01efde06f",
       "errors": [],
       "documents": [
         {
@@ -218,96 +218,70 @@
             "start": {
               "line": 10,
               "column": 41,
-              "index": 488
+              "index": 479
             },
             "end": {
               "line": 16,
               "column": 3,
-              "index": 626
+              "index": 611
             }
           },
           "document": "\n        query PARENTCATEGORYOFRESOURSE1 {\n            setting {\n              parentCategoryOfDesign\n            }\n          }\n  "
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/pages/changelog.tsx": {
-      "hash": "464cad44ca94144ef176fc37af051207",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/pages/changelog.tsx": {
+      "hash": "39f1504e08cc8411bea808e20a61bb3c",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/pages/index.tsx": {
-      "hash": "c4d4a0171d6b43be652c81a9f6e97f89",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/pages/index.tsx": {
+      "hash": "ab3bfdf7bdbc77ef407da69788bfee36",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/scripts/temp__change_image_to_attachment/index.ts": {
-      "hash": "b60a388e846dc93dd1206804b5772f1a",
-      "errors": [],
-      "documents": [
-        {
-          "loc": {
-            "start": {
-              "line": 17,
-              "column": 30,
-              "index": 530
-            },
-            "end": {
-              "line": 30,
-              "column": 9,
-              "index": 827
-            }
-          },
-          "document": "\n        query STATEMENTIMAGS {\n            statements {\n                id\n                image {\n                    id\n                    url\n                    extension\n                    filesize\n                }\n                createdAt\n            }\n        }\n        "
-        }
-      ]
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/schemas/common_fields/changeLogs.ts": {
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/schemas/common_fields/changeLogs.ts": {
       "hash": "43d9b88432a759c08d4003d6a5d911ab",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/scripts/01_coding_hazine/up.ts": {
-      "hash": "40db91d3fd0a5a7a589ee50ba9859661",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/scripts/01_coding_hazine/down.ts": {
+      "hash": "fcb009de6aa9e13100bdc182bf88d8cb",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/scripts/01_coding_hazine/down.ts": {
-      "hash": "3d1fec4a7d0665b38cedfec1afa39681",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/scripts/01_coding_hazine/up.ts": {
+      "hash": "5ea587e6f882e7c9b4d91fd8f1146dda",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/bigint-viewer.tsx": {
-      "hash": "54254ecd1355e4ddddc278c13e726f87",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/bigint-with-farsi-letters.tsx": {
+      "hash": "f6f73d965676a09493fbb5af55755db1",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/scripts/temp__change_item_to_row/index.ts": {
-      "hash": "3659fdcf615c3d778ac69c3c3055d83d",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/bigint-viewer.tsx": {
+      "hash": "16bd4010661e292558b2d77a2473f8c8",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/bigint-with-farsi-letters.tsx": {
-      "hash": "5052dda4d74fb9cda639b36a8de80020",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/confirm-statement-by.tsx": {
+      "hash": "7ae4cb019cbae11af62018a87790d02b",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/confirm-statement-by.tsx": {
-      "hash": "30e70d02b65b3333c324029682659dd4",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/confirmed-box.tsx": {
+      "hash": "b0eddff274bbf2968ae1e77f478570d6",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/confirmed-box.tsx": {
-      "hash": "bb2179ce044eefe46c07d83c2a9c4716",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/date-persian-cell.tsx": {
+      "hash": "a60f821a89b4e4c65bbfb40183f9e3af",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/date-persian-cell.tsx": {
-      "hash": "4d40a92513bd80c1a4945e0a7ebf75d0",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/folder-struct-relation.tsx": {
-      "hash": "62b114ea62b3d27159720907a63791cf",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/folder-struct-relation.tsx": {
+      "hash": "97e077c709c24c46f72a1b7530f1a0c7",
       "errors": [],
       "documents": [
         {
@@ -315,12 +289,12 @@
             "start": {
               "line": 23,
               "column": 38,
-              "index": 782
+              "index": 760
             },
             "end": {
               "line": 29,
               "column": 3,
-              "index": 919
+              "index": 891
             }
           },
           "document": "\n        query PARENTCATEGORYOFRESOURSE {\n            setting {\n              parentCategoryOfDesign\n            }\n          }\n  "
@@ -330,25 +304,25 @@
             "start": {
               "line": 31,
               "column": 21,
-              "index": 1014
+              "index": 984
             },
             "end": {
               "line": 47,
               "column": 3,
-              "index": 1381
+              "index": 1335
             }
           },
           "document": "\n        query FOLDERS($where: CategoryWhereInput!) {\n            categories(where: $where) {\n              id\n              title\n              childrenCount\n              children {\n                id\n                title\n              }\n              parent {\n                id\n                title\n              }\n            }\n          }\n  "
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/link-viewer.tsx": {
-      "hash": "9858b07fedf35ff41ad4d3c35ef0fa08",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/link-viewer.tsx": {
+      "hash": "e308dff7a5f4a49446769fc19b19dcff",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/note-relation.tsx": {
-      "hash": "c2299de87c511faac507d4c4e0d8b243",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/note-relation.tsx": {
+      "hash": "37b4cbb5f68523855ccfd68d81a45c06",
       "errors": [],
       "documents": [
         {
@@ -356,12 +330,12 @@
             "start": {
               "line": 67,
               "column": 19,
-              "index": 2256
+              "index": 2190
             },
             "end": {
               "line": 87,
               "column": 2,
-              "index": 2540
+              "index": 2454
             }
           },
           "document": "\n  query NOTES($where: NoteWhereInput!) {\n  notes(where: $where) {\n    message\n    createdAt\n    id\n    createdBy {\n      fullname\n      id\n      role\n      avatar {\n        url\n      }\n    }\n  }\n  authenticatedItem {\n    ... on User {\n      id\n    }\n  }      \n}"
@@ -371,12 +345,12 @@
             "start": {
               "line": 89,
               "column": 26,
-              "index": 2622
+              "index": 2534
             },
             "end": {
               "line": 105,
               "column": 1,
-              "index": 2879
+              "index": 2775
             }
           },
           "document": "\n  mutation NOTES_CREATE($data: NoteCreateInput!) {\n    createNote(data: $data) {\n      id\n      message\n      createdAt\n      createdBy {\n        id\n        fullname\n        role\n        avatar {\n          url\n        }\n      }\n    }\n  }\n"
@@ -386,35 +360,35 @@
             "start": {
               "line": 107,
               "column": 25,
-              "index": 2966
+              "index": 2860
             },
             "end": {
               "line": 123,
               "column": 1,
-              "index": 3268
+              "index": 3146
             }
           },
           "document": "\n  mutation NOTE_UPDATE($data: NoteUpdateInput!, $where: NoteWhereUniqueInput!) {\n    updateNote(data: $data, where: $where) {\n      id\n      message\n      createdAt\n      createdBy {\n        id\n        fullname\n        role\n        avatar {\n          url\n        }\n      }\n    }\n  }\n"
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/relationship-file-viewer.tsx": {
-      "hash": "de3c3f8b8e345fe0ce43d5489ae4dc84",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/persian-calander.tsx": {
+      "hash": "5682beccc878295bf51675a4e97b154e",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/persian-calander.tsx": {
-      "hash": "82e23241992a8f5c3dba4e445c4bfa23",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/relationship-file-viewer.tsx": {
+      "hash": "72ed0df472915120ab37462bf298ed54",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/statement-confirmation-status.tsx": {
-      "hash": "d6cbce6bfddbe58c88796f0eeca31f43",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/statement-confirmation-status.tsx": {
+      "hash": "7662944f50a4e90e48d5721e640f55cd",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/statement-description-realtion.tsx": {
-      "hash": "201ad005cd3c68b57cb2b24f52c5e6c0",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/statement-description-realtion.tsx": {
+      "hash": "768a5e22c86c713f3c4aec00dfb205a8",
       "errors": [],
       "documents": [
         {
@@ -422,12 +396,12 @@
             "start": {
               "line": 40,
               "column": 44,
-              "index": 1233
+              "index": 1194
             },
             "end": {
               "line": 47,
               "column": 1,
-              "index": 1399
+              "index": 1353
             }
           },
           "document": "\n      query DESCRIPTIONS_OF_APPROVAL_QUERY($id: ID!) { \n      descriptions(where: {approvals:{id: {equals: $id}}}) {\n        id\n        title\n      }\n    }\n"
@@ -437,12 +411,12 @@
             "start": {
               "line": 49,
               "column": 25,
-              "index": 1504
+              "index": 1456
             },
             "end": {
               "line": 55,
               "column": 8,
-              "index": 1616
+              "index": 1562
             }
           },
           "document": "\n        query APPROVALS_Q {\n          approvals {\n            id\n            title\n          } \n      }"
@@ -452,286 +426,175 @@
             "start": {
               "line": 57,
               "column": 36,
-              "index": 1714
+              "index": 1658
             },
             "end": {
               "line": 67,
               "column": 8,
-              "index": 1946
+              "index": 1880
             }
           },
           "document": "\n        query DESCRIPTION_APPROVAL_Q($id: ID!) {\n          description(where: {id: $id}) {\n            id\n            title\n            approvals {\n              id\n              title\n            }\n          } \n      }"
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/statement-items-table.tsx": {
-      "hash": "0eb6052a4a0bc608ea2c0550230dd472",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/statement-items-table.tsx": {
+      "hash": "adcc036990646830481c879b55c3aa36",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORIES.ts": {
-      "hash": "2e925469db5a5f21d18221742af34211",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/APPROVALS_Q.ts": {
+      "hash": "8c8873368018617ce7eeb596429bd000",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/APPROVALS_Q.ts": {
-      "hash": "c35560bedd36ac591d3f2c637a51a672",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORIES.ts": {
+      "hash": "34622af454f9b435be3a0296984786de",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORIES_1.ts": {
-      "hash": "6799aaef4d34665a2655142f23971bc8",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORIES_1.ts": {
+      "hash": "b557b9ad27c3de019dd257a677783828",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORY_BY_PARENT.ts": {
-      "hash": "7031d43582757db83ccbfd502474f602",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORY_BY_PARENT.ts": {
+      "hash": "013e317e6cc69cb26c56ec9e604364cf",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORY_DETAIL.ts": {
-      "hash": "c8c3c1d39f14d6025efbfd8f06ddaf52",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CATEGORY_DETAIL.ts": {
+      "hash": "c855152017ad05d2c119c96f33dc340e",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CREATEFOLDER.ts": {
-      "hash": "e07dff6e95b2ea447eb9dd6f235f447b",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CREATEFOLDER.ts": {
+      "hash": "1e5726a9198edebb1845c5197e163338",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CREATE_CATEGORY.ts": {
-      "hash": "4b39dfd0e20418a3b7905c6c1146e186",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CREATE_CATEGORY.ts": {
+      "hash": "08e0b95660693328d1bce55a04218443",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CURRENT_INVOICE.ts": {
-      "hash": "76b0e7ab0713bf431a112952180bb3e4",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CURRENT_INVOICE.ts": {
+      "hash": "8e16201f8c97fbeb82b9ca344c3a0eb2",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/CURRENT_STATEMENT.ts": {
-      "hash": "1459cc2af5204fdd219e156f7069ffbd",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/CURRENT_STATEMENT.ts": {
+      "hash": "b72abd8919f47ce2538dbc3f5691d0a7",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/DELETE_CATEGORY.ts": {
-      "hash": "d1ff08d557b63ab2a8cd5cfba7976ef4",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/DELETE_CATEGORY.ts": {
+      "hash": "c374959888258d8ca713760733376fa7",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/DESCRIPTION_APPROVAL_Q.ts": {
-      "hash": "bd36f287ff893be021ea1bcf31c0056d",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/DESCRIPTIONS_OF_APPROVAL_QUERY.ts": {
+      "hash": "5dbc307ba3ed564bd588e207ce11b37c",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/FOLDERPATH.ts": {
-      "hash": "abef3d79a0a124b6712de702ab2d0c2f",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/DESCRIPTION_APPROVAL_Q.ts": {
+      "hash": "022ef60b303fe71cdd4ec626af268057",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/DESCRIPTIONS_OF_APPROVAL_QUERY.ts": {
-      "hash": "1e56012adaa9e7debce469d0a13520f4",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/FOLDERPATH.ts": {
+      "hash": "dca8ee3b1c74fe8f63ef5766a9259a0d",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/FOLDERS.ts": {
-      "hash": "14302108dfd3a7e6d98cece511bb36c4",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/FOLDERS.ts": {
+      "hash": "cb96897dc205ea4d50eacffd9c1f2ac8",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/NOTES.ts": {
-      "hash": "98ac4450151a26d15c42b6c4463940fc",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/NOTES.ts": {
+      "hash": "341d4a0c24695020de015571a9a131a8",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/NOTES_CREATE.ts": {
-      "hash": "8b6ce30b8af74c28e860e01b5abdfa50",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/NOTES_CREATE.ts": {
+      "hash": "3a4203d55a9698f40c7afe1c81396b29",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/NOTE_UPDATE.ts": {
-      "hash": "5a47c38036fc04865873dc572f716ec8",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/NOTE_UPDATE.ts": {
+      "hash": "25ede21fedbcefe6b9e382de9b8161d4",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/PARENTCATEGORYOFRESOURSE1.ts": {
-      "hash": "a8468418581112df5b716d1da24d5250",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/PARENTCATEGORYOFRESOURSE.ts": {
+      "hash": "b0bed260f6bc5348076cebd3786821a5",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/PARENTCATEGORYOFRESOURSE.ts": {
-      "hash": "8dd5b160b53699ee1e4cc2358ede3be3",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/PARENTCATEGORYOFRESOURSE1.ts": {
+      "hash": "0e01c47a2df657650d9ce2d8fd89ad1c",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/ROWS_ITEM.ts": {
-      "hash": "f1f2fe24dbfd3ec3fbff561831f28b00",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/REMOVEFOLDER.ts": {
+      "hash": "4b33ae9e371fda50073bcd7638ca6440",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/REMOVEFOLDER.ts": {
-      "hash": "5f46968717f27e6058657ae29e134078",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/ROWS_ITEM.ts": {
+      "hash": "fb2f8a60670df8c9d0e20c9a1f2622f9",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/ROW_UPDATE.ts": {
-      "hash": "f0a51fd256e4c07d85b7de9e93ff47f7",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/ROW_CREATE.ts": {
+      "hash": "b921665649821269fb331be0656024cf",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/ROW_CREATE.ts": {
-      "hash": "b7a95b4198feda38fb2ea0260b76eb45",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/ROW_UPDATE.ts": {
+      "hash": "a54be8b31c622095e8420f12a914cc25",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/STATEMENTIMAGS.ts": {
-      "hash": "22990881bf5e02db9c27383ac060f370",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/STATEMENTIMAGS.ts": {
+      "hash": "9ab2d67a08d66f111ff8b99233ab4409",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/UPDATE_CATEGORY_1.ts": {
-      "hash": "c9d9fa915a5774c2631763ede098f498",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/UPDATE_CATEGORY.ts": {
+      "hash": "e2933c914253beb9c94b69b87f070d15",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/UPDATE_CATEGORY.ts": {
-      "hash": "b2cef37b749104ff476b8a33dc1288d1",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/UPDATE_CATEGORY_1.ts": {
+      "hash": "a4659e02ff631c841caf7d15174682c3",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/components/TableList/index.tsx": {
-      "hash": "9eed2201724ade7b278b14d62a4e2c52",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/.keystone/admin/pages/changelog.tsx": {
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/.keystone/admin/pages/changelog.tsx": {
       "hash": "e331e9cad4e15814a8b2e3774525d0cd",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/__generated__/ts-gql/@introspection.ts": {
-      "hash": "dbe82c033ebd0ff0698cb2141aca87f6",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/.keystone/admin/pages/index.tsx": {
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/.keystone/admin/pages/index.tsx": {
       "hash": "53433383f39b5f316573a846ac8bc1ec",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/pages/groups/[...].tsx": {
-      "hash": "779d027dcc67a4d54e3c2501bd1325af",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/__generated__/ts-gql/@introspection.ts": {
+      "hash": "3660cbbdead9f60ff3137e6258b7e251",
       "errors": [],
-      "documents": [
-        {
-          "loc": {
-            "start": {
-              "line": 66,
-              "column": 28,
-              "index": 2676
-            },
-            "end": {
-              "line": 74,
-              "column": 1,
-              "index": 2815
-            }
-          },
-          "document": "\nquery CATEGORIES_1($where: CategoryWhereInput!) {\n    categories(where: $where) {\n        id\n        title\n        code\n    }\n}\n"
-        },
-        {
-          "loc": {
-            "start": {
-              "line": 76,
-              "column": 33,
-              "index": 2913
-            },
-            "end": {
-              "line": 84,
-              "column": 1,
-              "index": 3092
-            }
-          },
-          "document": "\nmutation UPDATE_CATEGORY_1($id: ID!, $data: CategoryUpdateInput!) {\n    updateCategory(where: { id: $id }, data: $data) {\n        id\n        title\n        code\n    }\n}\n"
-        },
-        {
-          "loc": {
-            "start": {
-              "line": 256,
-              "column": 34,
-              "index": 9147
-            },
-            "end": {
-              "line": 269,
-              "column": 3,
-              "index": 9420
-            }
-          },
-          "document": "\n    query CATEGORY_BY_PARENT($categoryWhereInput: CategoryWhereInput!) {\n      categories(where:  $categoryWhereInput  ) {\n        id\n        code\n        title\n        childrenCount\n        children {\n          id\n          title\n        }\n      }\n    }\n  "
-        },
-        {
-          "loc": {
-            "start": {
-              "line": 386,
-              "column": 31,
-              "index": 13757
-            },
-            "end": {
-              "line": 399,
-              "column": 6,
-              "index": 14000
-            }
-          },
-          "document": "\n    query CATEGORY_DETAIL($id: ID!) {\n      category(where: { id: $id } ) {\n        id\n        code\n        title\n        description\n        childrenCount\n        children {\n          id\n          title\n        }\n      }\n    }"
-        },
-        {
-          "loc": {
-            "start": {
-              "line": 402,
-              "column": 31,
-              "index": 14102
-            },
-            "end": {
-              "line": 407,
-              "column": 6,
-              "index": 14256
-            }
-          },
-          "document": "\n    mutation UPDATE_CATEGORY($id: ID!, $data: CategoryUpdateInput!) {\n    updateCategory(where: { id: $id }, data: $data) {\n        id\n    }\n    }"
-        },
-        {
-          "loc": {
-            "start": {
-              "line": 409,
-              "column": 31,
-              "index": 14356
-            },
-            "end": {
-              "line": 414,
-              "column": 6,
-              "index": 14480
-            }
-          },
-          "document": "\n    mutation CREATE_CATEGORY($data: CategoryCreateInput!) {\n    createCategory(data: $data) {\n        id\n    }\n    }"
-        },
-        {
-          "loc": {
-            "start": {
-              "line": 416,
-              "column": 31,
-              "index": 14580
-            },
-            "end": {
-              "line": 421,
-              "column": 2,
-              "index": 14676
-            }
-          },
-          "document": "\nmutation DELETE_CATEGORY($id: ID!) {\n  deleteCategory(where: { id: $id }) {\n    id\n  }\n}"
-        }
-      ]
+      "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/admin/pages/folders/[...].tsx": {
-      "hash": "bc7d39d507caa88d5aa002b042496991",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/components/TableList/index.tsx": {
+      "hash": "9eed2201724ade7b278b14d62a4e2c52",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/pages/folders/[...].tsx": {
+      "hash": "64378aeee60b52a1370b021af5f4ec1f",
       "errors": [],
       "documents": [
         {
@@ -739,12 +602,12 @@
             "start": {
               "line": 67,
               "column": 26,
-              "index": 1906
+              "index": 1840
             },
             "end": {
               "line": 88,
               "column": 3,
-              "index": 2254
+              "index": 2167
             }
           },
           "document": "\n    query FOLDERPATH($id: ID!) {\n      category(where: { id: $id }) {\n        id\n        title\n        childrenCount\n        children {\n          id\n          title\n        }\n        parent {\n          id\n          title\n        }\n        designs {\n          id\n          title\n          createdAt\n        }\n      }\n    }\n  "
@@ -754,12 +617,12 @@
             "start": {
               "line": 90,
               "column": 28,
-              "index": 2346
+              "index": 2257
             },
             "end": {
               "line": 96,
               "column": 3,
-              "index": 2475
+              "index": 2380
             }
           },
           "document": "\n    mutation CREATEFOLDER($data: CategoryCreateInput!) {\n      createCategory(data: $data) {\n        id\n      }\n    }\n  "
@@ -769,75 +632,212 @@
             "start": {
               "line": 98,
               "column": 28,
-              "index": 2569
+              "index": 2472
             },
             "end": {
               "line": 104,
               "column": 1,
-              "index": 2664
+              "index": 2561
             }
           },
           "document": "\nmutation REMOVEFOLDER($id: ID!) {\n  deleteCategory(where: { id: $id }) {\n    id\n  }\n}\n"
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/confirm-by/index.ts": {
-      "hash": "f5fc222d52669a0ae745858e42462164",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/confirm-by/confirmed-by.tsx": {
+      "hash": "7f20f767c55b98aff7f09718c52aba02",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/confirm-by/confirmed-by.tsx": {
-      "hash": "4548602bf5ae51146bec768d8b6e2e2a",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/admin/pages/groups/[...].tsx": {
+      "hash": "ef599428e05a40c136a8cb5b31c26bf0",
+      "errors": [],
+      "documents": [
+        {
+          "loc": {
+            "start": {
+              "line": 66,
+              "column": 28,
+              "index": 2611
+            },
+            "end": {
+              "line": 74,
+              "column": 1,
+              "index": 2742
+            }
+          },
+          "document": "\nquery CATEGORIES_1($where: CategoryWhereInput!) {\n    categories(where: $where) {\n        id\n        title\n        code\n    }\n}\n"
+        },
+        {
+          "loc": {
+            "start": {
+              "line": 76,
+              "column": 33,
+              "index": 2838
+            },
+            "end": {
+              "line": 84,
+              "column": 1,
+              "index": 3009
+            }
+          },
+          "document": "\nmutation UPDATE_CATEGORY_1($id: ID!, $data: CategoryUpdateInput!) {\n    updateCategory(where: { id: $id }, data: $data) {\n        id\n        title\n        code\n    }\n}\n"
+        },
+        {
+          "loc": {
+            "start": {
+              "line": 256,
+              "column": 34,
+              "index": 8892
+            },
+            "end": {
+              "line": 269,
+              "column": 3,
+              "index": 9152
+            }
+          },
+          "document": "\n    query CATEGORY_BY_PARENT($categoryWhereInput: CategoryWhereInput!) {\n      categories(where:  $categoryWhereInput  ) {\n        id\n        code\n        title\n        childrenCount\n        children {\n          id\n          title\n        }\n      }\n    }\n  "
+        },
+        {
+          "loc": {
+            "start": {
+              "line": 386,
+              "column": 31,
+              "index": 13372
+            },
+            "end": {
+              "line": 399,
+              "column": 6,
+              "index": 13602
+            }
+          },
+          "document": "\n    query CATEGORY_DETAIL($id: ID!) {\n      category(where: { id: $id } ) {\n        id\n        code\n        title\n        description\n        childrenCount\n        children {\n          id\n          title\n        }\n      }\n    }"
+        },
+        {
+          "loc": {
+            "start": {
+              "line": 402,
+              "column": 31,
+              "index": 13701
+            },
+            "end": {
+              "line": 407,
+              "column": 6,
+              "index": 13850
+            }
+          },
+          "document": "\n    mutation UPDATE_CATEGORY($id: ID!, $data: CategoryUpdateInput!) {\n    updateCategory(where: { id: $id }, data: $data) {\n        id\n    }\n    }"
+        },
+        {
+          "loc": {
+            "start": {
+              "line": 409,
+              "column": 31,
+              "index": 13948
+            },
+            "end": {
+              "line": 414,
+              "column": 6,
+              "index": 14067
+            }
+          },
+          "document": "\n    mutation CREATE_CATEGORY($data: CategoryCreateInput!) {\n    createCategory(data: $data) {\n        id\n    }\n    }"
+        },
+        {
+          "loc": {
+            "start": {
+              "line": 416,
+              "column": 31,
+              "index": 14165
+            },
+            "end": {
+              "line": 421,
+              "column": 2,
+              "index": 14256
+            }
+          },
+          "document": "\nmutation DELETE_CATEGORY($id: ID!) {\n  deleteCategory(where: { id: $id }) {\n    id\n  }\n}"
+        }
+      ]
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/confirm-by/index.ts": {
+      "hash": "ec0f558ec991f32e04c52a5e3b5b134c",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/confirm-by/views.tsx": {
-      "hash": "3c14228e98a5bdf81c785afe95a51972",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/confirm-by/views.tsx": {
+      "hash": "edd96d963594be2ac89f6732d360ca0b",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/persian-calander/index.ts": {
-      "hash": "5ba53765585cfd2774b09e0d7d71e180",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/link-viewer/link-viewer.tsx": {
+      "hash": "21337f77c8af916fdb391fbfed8f3530",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/persian-calander/persian-calander.tsx": {
-      "hash": "0b34f9cec82a6a3ea4324257d4fceffb",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/link-viewer/index.ts": {
+      "hash": "19611f3cc5241a7862000964270317bb",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/link-viewer/index.ts": {
-      "hash": "822c08072f2cc7d285596ad94699b0af",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/link-viewer/views.tsx": {
+      "hash": "0005354c4c9016f386f4554a85e98eb1",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/persian-calander/views.tsx": {
-      "hash": "bfd5048454e40cf8f0cacd3346908e1f",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/persian-calander/index.ts": {
+      "hash": "177e9d4f7885dda5fa8621e8d74a793a",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/link-viewer/link-viewer.tsx": {
-      "hash": "c53882ace36ff73fae713dd024e155e7",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/persian-calander/persian-calander.tsx": {
+      "hash": "b0d7fdc77087ba71c5466421dc7fa899",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/stepper-progress/index.tsx": {
-      "hash": "adad0815f4b87a26961caead02f071fb",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custom-fields/persian-calander/views.tsx": {
+      "hash": "75edc361ffabfe226cb1885103df2411",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/simple-table/index.tsx": {
-      "hash": "fc9ec7a1eb94a16bfdebf19d3d7b5c4c",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/simple-table/index.tsx": {
+      "hash": "e4b63353737da7cdcbee2d82979b72d9",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custom-fields/link-viewer/views.tsx": {
-      "hash": "12154662019ce8cd40293402f590d2c1",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/stepper-progress/index.tsx": {
+      "hash": "3a73564854b7e61aa316d338ee8d951e",
       "errors": [],
       "documents": []
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/table-relation/index.tsx": {
-      "hash": "89af438d24e34078af32c11cb0cd86b6",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/table-relation/AutoCompeleteCategory.tsx": {
+      "hash": "2a45b1dba7bbda18e7095796a392ccf6",
+      "errors": [],
+      "documents": [
+        {
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 26,
+              "index": 554
+            },
+            "end": {
+              "line": 27,
+              "column": 5,
+              "index": 741
+            }
+          },
+          "document": "\n    query CATEGORIES($where: CategoryWhereInput!) {\n            categories(where: $where) {\n                id\n                code\n                title  \n            }\n        }\n    "
+        }
+      ]
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/table-relation/TreeCategories.tsx": {
+      "hash": "982c299026eb2599de0aeaea79961300",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/table-relation/index.tsx": {
+      "hash": "d9220e91d20c862162a2ec792dc6c411",
       "errors": [],
       "documents": [
         {
@@ -845,12 +845,12 @@
             "start": {
               "line": 75,
               "column": 23,
-              "index": 2460
+              "index": 2386
             },
             "end": {
               "line": 95,
               "column": 2,
-              "index": 2773
+              "index": 2679
             }
           },
           "document": "\n  query ROWS_ITEM($where: RowWhereInput!) {\n  rows(where: $where) {\n    id  \n    unit\n    unitPrice\n    total\n    description\n    commodity {\n      code\n      id\n      title\n    }\n    description\n    quantity\n    percentageOfWorkDone\n  }\n  setting {\n    rootCategoryOfGoodsAndServices\n  }\n}"
@@ -860,12 +860,12 @@
             "start": {
               "line": 97,
               "column": 24,
-              "index": 2860
+              "index": 2764
             },
             "end": {
               "line": 114,
               "column": 4,
-              "index": 3158
+              "index": 3045
             }
           },
           "document": "\n  mutation ROW_CREATE($data: RowCreateInput!) {\n    createRow(data: $data) {\n      id  \n      unit\n      unitPrice\n      total\n      description\n      commodity {\n        code\n        id\n        title\n      }\n      description\n      quantity\n      percentageOfWorkDone\n    }\n  }"
@@ -875,63 +875,58 @@
             "start": {
               "line": 116,
               "column": 23,
-              "index": 3244
+              "index": 3129
             },
             "end": {
               "line": 132,
               "column": 4,
-              "index": 3567
+              "index": 3436
             }
           },
           "document": "\n  mutation ROW_UPDATE($where: RowWhereUniqueInput!,$data: RowUpdateInput!) {\n    updateRow(data: $data, where: $where) {\n      id  \n      unit\n      unitPrice\n      total\n      commodity {\n        code\n        id\n        title\n      }\n      description\n      quantity\n      percentageOfWorkDone\n    }\n  }"
         }
       ]
     },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/table-relation/AutoCompeleteCategory.tsx": {
-      "hash": "af852a4e3e56cdda945f98d0bb55069c",
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/utils/num2persian.ts": {
+      "hash": "5f1ca42b7f5369c90161870393b57593",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/src/custome-fields-view/utils/utils.tsx": {
+      "hash": "71cd181bf0d4707ec3b20403b9c057f5",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/.keystone/admin/pages/folders/[...].tsx": {
+      "hash": "4558d7f0f89512f93e0230c84e55cf49",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/.keystone/admin/pages/groups/[...].tsx": {
+      "hash": "9eff15d95ca6f79944ca5ac11a7060d7",
+      "errors": [],
+      "documents": []
+    },
+    "C:/Users/DFMRendering/Documents/proj/artemia/saba/scripts/temp__delete_statement_images/index.ts": {
+      "hash": "93fbf433d8598b12aef384fb08d2e7e8",
       "errors": [],
       "documents": [
         {
           "loc": {
             "start": {
-              "line": 19,
-              "column": 26,
-              "index": 572
+              "line": 17,
+              "column": 30,
+              "index": 514
             },
             "end": {
-              "line": 27,
-              "column": 5,
-              "index": 767
+              "line": 28,
+              "column": 9,
+              "index": 749
             }
           },
-          "document": "\n    query CATEGORIES($where: CategoryWhereInput!) {\n            categories(where: $where) {\n                id\n                code\n                title  \n            }\n        }\n    "
+          "document": "\n        query STATEMENTIMAGS {\n            statements {\n                id\n                attachments {\n                    file {\n                        url\n                    }\n                }\n            }\n        }\n        "
         }
       ]
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/table-relation/TreeCategories.tsx": {
-      "hash": "bac69e5373184cfb4117ffc77a41d4eb",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/utils/num2persian.ts": {
-      "hash": "ab85da3df3c4672fe4e47196ca7934af",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/src/custome-fields-view/utils/utils.tsx": {
-      "hash": "85984d5236d6307a02bdcbc3668fcdcd",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/.keystone/admin/pages/folders/[...].tsx": {
-      "hash": "4558d7f0f89512f93e0230c84e55cf49",
-      "errors": [],
-      "documents": []
-    },
-    "C:/Users/User/Documents/proj/artemia/saba/.keystone/admin/pages/groups/[...].tsx": {
-      "hash": "9eff15d95ca6f79944ca5ac11a7060d7",
-      "errors": [],
-      "documents": []
     }
   }
 }

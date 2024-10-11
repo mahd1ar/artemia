@@ -3,7 +3,7 @@ import * as PrismaModule from '.prisma/client';
 import { getContext } from "@keystone-6/core/context";
 import { gql } from "@ts-gql/tag/no-transform";
 import configWithAuth from "../../keystone";
-import fs from "node:fs/promises"
+import fs from "fs"
 
 (async () => {
 
@@ -18,13 +18,11 @@ import fs from "node:fs/promises"
         query STATEMENTIMAGS {
             statements {
                 id
-                image {
-                    id
-                    url
-                    extension
-                    filesize
+                attachments {
+                    file {
+                        url
+                    }
                 }
-                createdAt
             }
         }
         ` as import("../../__generated__/ts-gql/STATEMENTIMAGS").type
@@ -33,32 +31,23 @@ import fs from "node:fs/promises"
         query: STATEMENTIMAGS
     })
 
-    console.log('count:' + data.statements?.length)
 
-    const images = data.statements?.map(i => ({
-        statementid: i.id,
-        extension: i.image?.extension,
-        size: i.image?.filesize,
-        filename: i.image?.url.split('/').pop(),
-        createdAt: i.createdAt
-    }))
 
-    const prisma = keystoneContext.prisma
+    const images = data.statements?.map(i => (i.attachments?.map(ii => `./../../public/images/${ii.file?.url.split('/').pop()}` ))).flat()!
 
-    const x = await prisma.fileStore.createMany({
-        data: images!.map(i => {
-            return {
-                createdAt: i.createdAt,
-                file_filename: i.filename,
-                file_filesize: i.size,
-                createdById: 'clvdw2dc4002u43yc4smzda77',
-                statementId: i.statementid,
-                type: 'image',
-            }
-        })
+    console.log('count is', images.length)
+    images?.forEach(async i => {
+        if(i){
+
+            if(fs.existsSync(i))
+                fs.rmSync(i)
+                
+        }
+        else {
+            console.log('i is undefined')
+        }
     })
-
-    console.log(x)
+ 
     // .forEach(async i => {
     //     // check if file exists
 
