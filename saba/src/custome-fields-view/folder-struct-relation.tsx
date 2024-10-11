@@ -19,7 +19,6 @@ export const Field = ({
   forceValidation
 }: FieldProps<typeof controller>) => {
 
-
   const PARENTCATEGORYOFRESOURSE = gql`
         query PARENTCATEGORYOFRESOURSE {
             setting {
@@ -64,8 +63,21 @@ export const Field = ({
   const [isDisabled] = useState(!onChange)
 
 
+
   useEffect(() => {
 
+    const callbackurl = router.query.callbackurl
+
+    if (typeof callbackurl === 'string') {
+      document.querySelectorAll('a[href="/designs"]').forEach((link) => {
+        (link as HTMLLinkElement).addEventListener('click', ev => {
+          ev.preventDefault()
+          router.push(callbackurl)
+        })
+
+      })
+    }
+    
     if (router.query.with_category && typeof router.query.with_category === 'string') {
 
 
@@ -86,6 +98,7 @@ export const Field = ({
             fetchChildren(d.data.setting.parentCategoryOfDesign)
         })
       }
+
 
   }, [])
 

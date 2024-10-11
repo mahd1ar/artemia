@@ -648,6 +648,18 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       }),
     }),
 
+    notes: relationship({
+      ref: "Note.statement",
+      many: true,
+      label: "یادداشت ها",
+      ui: {
+        itemView: {
+          fieldMode: 'edit'
+        },
+        views: "./src/custome-fields-view/note-relation.tsx"
+      }
+    }),
+
     status: select({
       label: 'وضعیت پرداخت',
       options: [
