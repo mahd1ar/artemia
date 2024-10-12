@@ -15,6 +15,17 @@ import { persianCalendar } from "../src/custom-fields/persian-calander";
 import { Lists } from ".keystone/types";
 import { isLoggedIn, isMemberOfAdminGroup } from "../data/access";
 import { Session } from "../data/types";
+import DeviceDetector from "node-device-detector";
+
+const detector = new DeviceDetector({
+  clientIndexes: false,
+  deviceIndexes: true,
+  deviceAliasCode: false,
+  deviceTrusted: false,
+  deviceInfo: false,
+  maxUserAgentSize: 500,
+});
+
 
 export const Contract = list<Lists.Contract.TypeInfo<any>>({
   access: {
@@ -166,6 +177,32 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
       ui: {
         views: "./src/custome-fields-view/bigint-with-farsi-letters.tsx",
       },
+    }),
+
+    attachments: relationship({
+      label: 'فایل های ضمیمه شده',
+      ref: "FileStore.contract",
+      many: true,
+      ui: {
+        itemView: {
+          fieldPosition(args) {
+            const userAgent = (args.context.req?.headers["user-agent"])
+
+            if (userAgent)
+              return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
+
+            return 'sidebar'
+          },
+        },
+        displayMode: 'cards',
+        cardFields: ['title', 'file'],
+        inlineCreate: { fields: ['title', 'file'] },
+        inlineConnect: false,
+        inlineEdit: { fields: ['title', 'file'] },
+        linkToItem: false,
+        views: "./src/custome-fields-view/relationship-file-viewer.tsx"
+      },
+
     }),
     contractor: relationship({
       label: "پیمانکار",

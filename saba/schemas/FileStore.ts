@@ -101,6 +101,16 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
       },
       ref: 'Invoice.attachments'
     }),
+    contract: relationship({
+      ref: 'Contract.attachments',
+      ui: {
+        itemView: {
+          fieldMode(args) {
+            return !!args.item.contractId ? 'read' : 'hidden'
+          },
+        }
+      }
+    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -121,7 +131,7 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
       hooks: {
         resolveInput(args) {
           if (args.operation === 'create') {
-            const session = args.context.session as Session
+            const session = args.context.session
             args.resolvedData.createdBy = { connect: { id: session?.itemId } }
           }
           return args.resolvedData.createdBy
