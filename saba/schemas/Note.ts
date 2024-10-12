@@ -41,6 +41,9 @@ export const Note = list<Lists.Note.TypeInfo<Session>>({
                 }
             }
         }),
+        statement: relationship({
+            ref: 'Statement.notes',
+        }),
         createdAt: timestamp({ defaultValue: { kind: "now" } }),
         updatedAt: timestamp({
             hooks: {

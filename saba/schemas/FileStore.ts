@@ -25,6 +25,9 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
   fields: {
     title: text({
       label: "عنوان",
+      ui: {
+        views: './src/custome-fields-view/relationship-file-title-viewer.tsx'
+      }
     }),
     file: file({
       storage: "file",

@@ -204,7 +204,13 @@ mutation REMOVEFOLDER($id: ID!) {
                         endIcon={<PlusIcon />}
                         variant="contained"
                         onClick={() =>
-                            router.push("/designs/create?with_category=" + parent)
+                            router.push({
+                                pathname: '/designs/create',
+                                query: {
+                                    with_category: parent,
+                                    callbackurl: router.asPath
+                                }
+                            })
                         }
                     >
                         نقشه جدید
@@ -255,7 +261,7 @@ mutation REMOVEFOLDER($id: ID!) {
                         <ListItemButton
                             key={i.id}
                             onClick={(e) => {
-                                router.push("/designs/" + i.id);
+                                router.push("/designs/" + i.id + '?callbackurl=' + router.asPath);
                             }}
                         >
                             <ListItemIcon>
