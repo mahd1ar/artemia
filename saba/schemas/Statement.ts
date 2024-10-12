@@ -679,12 +679,13 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         itemView: {
           fieldPosition: "sidebar",
           fieldMode(args) {
-            if ((args.session as Session)?.data.role === Roles.admin)
+            if (args.session?.data.role <= Roles.operator)
               return "read";
             else
               return 'hidden'
           },
         },
+        views: './src/custome-fields-view/changelog-view.tsx'
       },
       hooks: {
         resolveInput(args) {
@@ -693,7 +694,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           const info = {
             ops: args.operation,
             items: Object.keys(args.inputData),
-            by: (args.context.session as Session)?.itemId,
+            by: args.context.session?.itemId,
             at: new Date()
           }
 
