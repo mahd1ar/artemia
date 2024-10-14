@@ -149,34 +149,27 @@ export const Field = ({
 
   type Data = Omit<NonNullable<NonNullable<typeof persistedData>['rows']>, '__typename'>[0]
 
-
-  const [isOpen, setIsOpen] = useState(false)
-  const [treeIsOpen, settreeIsOpen] = useState(false)
-  const [modelData, setModelData] = useState({
+  const initalDataModel = {
     id: '',
     commodityId: '',
     description: '',
     commodity: '',
-    quantity: '0',
+    quantity: '1',
     unitPrice: '0',
     percentageOfWorkDone: '100',
     unit: '',
     total: ""
-  })
+  }
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [treeIsOpen, settreeIsOpen] = useState(false)
+  const [modelData, setModelData] = useState(initalDataModel)
   const [data, setData] = useState<Array<typeof modelData>>([])
   const [candidateCommodity, setCandidateCommodity] = useState<{ id: string, title: string, code: string } | null>(null)
 
   function resetModelData() {
     setModelData({
-      id: '',
-      commodityId: '',
-      description: '',
-      commodity: '',
-      quantity: '0',
-      unitPrice: '0',
-      percentageOfWorkDone: '100',
-      unit: '',
-      total: ""
+      ...initalDataModel,
     })
   }
 

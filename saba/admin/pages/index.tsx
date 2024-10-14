@@ -1,12 +1,37 @@
-import React from "react"
-import Link from 'next/link';
-import { PageContainer, } from '@keystone-6/core/admin-ui/components';
 import {
     gql,
     useQuery
-} from '@apollo/client'
+} from '@apollo/client';
+import { PageContainer, } from '@keystone-6/core/admin-ui/components';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import Collapse from '@mui/material/Collapse';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
+import Link from 'next/link';
+import React from "react";
 import { Roles } from '../../data/types';
+import { Box, Button, ButtonGroup, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { useRouter } from 'next/router';
+// import FavoriteIcon from '@mui/icons-material/Favorite';
+// import ShareIcon from '@mui/icons-material/Share';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+
+function Dashboard(props: {role: Roles}) {
+    return (
+        <div>
+
+        </div>
+    )
+}
 
 export default function CustomPage() {
 
@@ -60,7 +85,7 @@ export default function CustomPage() {
 
             </div>
 
-            {/* <TableList /> */}
+            {data?.authenticatedItem?.role && data?.authenticatedItem?.role === Roles.admin && <Dashboard role={data.authenticatedItem.role} />  }
 
         </PageContainer>
     )

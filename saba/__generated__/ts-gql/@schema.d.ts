@@ -1,8 +1,8 @@
-// ts-gql-integrity:e7897e6242d42132061861185a4fc970
+// ts-gql-integrity:7f0f226a03b7087b53553edccb47453f
 /*
 ts-gql-meta-begin
 {
-  "hash": "768244e777ea3f5a33737175907de52c"
+  "hash": "199a960943ac6ea176946d978459b15f"
 }
 ts-gql-meta-end
 */
@@ -719,6 +719,8 @@ export type Statement = {
   readonly tax: BigInt | null;
   readonly workGuarantee: BigInt | null;
   readonly totalPayable: BigInt | null;
+  readonly notes: ReadonlyArray<Note> | null;
+  readonly notesCount: number | null;
   readonly status: string | null;
   readonly createdAt: DateTime | null;
   readonly changeLog: JSON | null;
@@ -760,6 +762,18 @@ export type StatementrowsCountArgs = {
   readonly where?: RowWhereInput;
 };
 
+export type StatementnotesArgs = {
+  readonly where?: NoteWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<NoteOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: NoteWhereUniqueInput | null;
+};
+
+export type StatementnotesCountArgs = {
+  readonly where?: NoteWhereInput;
+};
+
 export type StatementWhereUniqueInput = {
   readonly id?: string | null;
 };
@@ -785,6 +799,7 @@ export type StatementWhereInput = {
   readonly deductionOnAccountOfAdvancePayment?: BigIntNullableFilter | null;
   readonly tax?: BigIntFilter | null;
   readonly workGuarantee?: BigIntNullableFilter | null;
+  readonly notes?: NoteManyRelationFilter | null;
   readonly status?: StringNullableFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
 };
@@ -845,6 +860,7 @@ export type StatementUpdateInput = {
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
   readonly tax?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
+  readonly notes?: NoteRelateToManyForUpdateInput | null;
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
@@ -885,6 +901,7 @@ export type StatementCreateInput = {
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
   readonly tax?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
+  readonly notes?: NoteRelateToManyForCreateInput | null;
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
@@ -1183,6 +1200,7 @@ export type FileStore = {
   readonly type: string | null;
   readonly statement: Statement | null;
   readonly invoice: Invoice | null;
+  readonly contract: Contract | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
@@ -1207,6 +1225,7 @@ export type FileStoreWhereInput = {
   readonly type?: StringNullableFilter | null;
   readonly statement?: StatementWhereInput | null;
   readonly invoice?: InvoiceWhereInput | null;
+  readonly contract?: ContractWhereInput | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
 };
@@ -1224,6 +1243,7 @@ export type FileStoreUpdateInput = {
   readonly type?: string | null;
   readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
+  readonly contract?: ContractRelateToOneForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
@@ -1243,6 +1263,7 @@ export type FileStoreCreateInput = {
   readonly type?: string | null;
   readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
+  readonly contract?: ContractRelateToOneForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
 };
@@ -1258,12 +1279,26 @@ export type Contract = {
   readonly startFrom: number | null;
   readonly end: number | null;
   readonly cost: BigInt | null;
+  readonly attachments: ReadonlyArray<FileStore> | null;
+  readonly attachmentsCount: number | null;
   readonly contractor: Constractor | null;
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statementsCount: number | null;
   readonly attachment: FileFieldOutput | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
+};
+
+export type ContractattachmentsArgs = {
+  readonly where?: FileStoreWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<FileStoreOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: FileStoreWhereUniqueInput | null;
+};
+
+export type ContractattachmentsCountArgs = {
+  readonly where?: FileStoreWhereInput;
 };
 
 export type ContractstatementsArgs = {
@@ -1294,6 +1329,7 @@ export type ContractWhereInput = {
   readonly startFrom?: PairFilter | null;
   readonly end?: PairFilter | null;
   readonly cost?: BigIntNullableFilter | null;
+  readonly attachments?: FileStoreManyRelationFilter | null;
   readonly contractor?: ConstractorWhereInput | null;
   readonly statements?: StatementManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
@@ -1319,6 +1355,7 @@ export type ContractUpdateInput = {
   readonly startFrom?: number | null;
   readonly end?: number | null;
   readonly cost?: BigInt | null;
+  readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
   readonly contractor?: ConstractorRelateToOneForUpdateInput | null;
   readonly statements?: StatementRelateToManyForUpdateInput | null;
   readonly attachment?: FileFieldInput | null;
@@ -1339,6 +1376,7 @@ export type ContractCreateInput = {
   readonly startFrom?: number | null;
   readonly end?: number | null;
   readonly cost?: BigInt | null;
+  readonly attachments?: FileStoreRelateToManyForCreateInput | null;
   readonly contractor?: ConstractorRelateToOneForCreateInput | null;
   readonly statements?: StatementRelateToManyForCreateInput | null;
   readonly attachment?: FileFieldInput | null;
@@ -2008,6 +2046,7 @@ export type Note = {
   readonly id: string;
   readonly message: string | null;
   readonly invoice: Invoice | null;
+  readonly statement: Statement | null;
   readonly createdAt: DateTime | null;
   readonly updatedAt: DateTime | null;
   readonly createdBy: User | null;
@@ -2024,6 +2063,7 @@ export type NoteWhereInput = {
   readonly id?: IDFilter | null;
   readonly message?: StringFilter | null;
   readonly invoice?: InvoiceWhereInput | null;
+  readonly statement?: StatementWhereInput | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly updatedAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
@@ -2039,6 +2079,7 @@ export type NoteOrderByInput = {
 export type NoteUpdateInput = {
   readonly message?: string | null;
   readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
+  readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly updatedAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
@@ -2052,6 +2093,7 @@ export type NoteUpdateArgs = {
 export type NoteCreateInput = {
   readonly message?: string | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
+  readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly updatedAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;

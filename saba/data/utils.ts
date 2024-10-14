@@ -140,6 +140,11 @@ export const theme = createTheme({
     fontFamily:
       'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif',
   },
+  palette: {
+    primary: {
+      main: '#1d4ed8', // Change this to your desired primary color
+    }
+  }
 });
 
 
