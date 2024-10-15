@@ -52,9 +52,6 @@ export function Field({
   field,
   value,
   onChange,
-  autoFocus,
-  itemValue,
-  forceValidation,
 }: FieldProps<typeof controller>) {
   if (value.kind !== 'cards-view')
     return <div>cant</div>
@@ -412,7 +409,7 @@ export function Field({
 
         <AlertDialog
           isOpen={isOpen}
-          title="اضافه  یا ویرایش کردن"
+          title=" اضافه  یا ویرایش کردن ردیف "
           tone="active"
           actions={{
             confirm: {
@@ -511,11 +508,15 @@ export function Field({
               <FieldLabel>مالیات</FieldLabel>
               <TextInput value={modelData.tax} onChange={e => setModelData({ ...modelData, tax: e.target.value })} />
 
-              {/* <FieldLabel>درصد انجام کار</FieldLabel>
+              <FieldLabel>
+                درصد انجام کار
+
+                (این مقدار از ساختار ردیف ها حذف خواهد شد)
+              </FieldLabel>
               <TextInput
                 value={modelData.percentageOfWorkDone}
                 onChange={e => setModelData({ ...modelData, percentageOfWorkDone: e.target.value })}
-              /> */}
+              />
 
               <FieldLabel>جمع </FieldLabel>
 
@@ -550,6 +551,7 @@ export function Field({
                     headers.map(({ value: h }, inx) => (
                       <StyledTableCell key={inx} component={inx === 0 ? 'th' : undefined} scope={inx === 0 ? 'row' : undefined} align="right">
                         {
+                          // eslint-disable-next-line ts/ban-ts-comment
                           // @ts-ignore
                           h in row ? typeof row[h] === 'object' ? `${row[h].code} - ${row[h].title} ` : row[h] : '-'
                         }
