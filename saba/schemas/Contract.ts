@@ -26,7 +26,7 @@ const detector = new DeviceDetector({
   maxUserAgentSize: 500,
 })
 
-export const Contract = list<Lists.Contract.TypeInfo<any>>({
+export const Contract = list<Lists.Contract.TypeInfo<Session>>({
   access: {
     operation: {
       ...allOperations(isLoggedIn),
@@ -77,7 +77,7 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
       ) {
         if (args.inputData.isApproved) {
           args.resolvedData.approvedBy = {
-            connect: { id: (args.context.session as Session)!.itemId },
+            connect: { id: (args.context.session)!.itemId },
           }
         }
         else {
@@ -219,9 +219,7 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
           fieldMode: 'hidden',
         },
         itemView: {
-          fieldMode({ context, item }) {
-            return 'read'
-          },
+          fieldMode: 'read',
         },
       },
     }),
@@ -260,7 +258,7 @@ export const Contract = list<Lists.Contract.TypeInfo<any>>({
         resolveInput(args) {
           if (args.operation === 'create') {
             return {
-              connect: { id: (args.context.session as Session)!.itemId },
+              connect: { id: args.context.session!.itemId },
             }
           }
 
