@@ -54,6 +54,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           }
         }
 
+        // fucking // FIXME get rid of this
         const zz = {} as Record<(typeof alc)[number]['gqlkey'], any>
         alc.some((i) => {
           if (i.for !== role) {
@@ -83,10 +84,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       }
 
       if (args.operation === 'delete') {
-        if (role === Roles.admin || role === Roles.operator || role === Roles.supervisor) {
-
-        }
-        else {
+        if (role !== Roles.admin && role !== Roles.operator && role !== Roles.supervisor) {
           if (args.item.confirmedByTheUploader) {
             args.addValidationError('این صورت وضعیت تایید شده و قابل حذف نیست، لطفا با اپراتور تماس بگیرید')
           }
@@ -557,6 +555,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       validation: { isRequired: true },
       defaultValue: 0n,
       ui: {
+        description: '**این فیلد به زودی حذف خواهد شد**',
         views: './src/custome-fields-view/bigint-with-farsi-letters',
       },
     }),

@@ -1,8 +1,8 @@
-// ts-gql-integrity:e5bd5daca4387426d344c1760f94fac7
+// ts-gql-integrity:1624c55f36cc6dc189c5aedbbebbb344
 /*
 ts-gql-meta-begin
 {
-  "hash": "e1806d31777c9000e5c959c6d6aa849b"
+  "hash": "fda8ec5ccc878675c7389f3957b94c1f"
 }
 ts-gql-meta-end
 */
@@ -366,6 +366,7 @@ export type Invoice = {
   readonly dateOfStatement: number | null;
   readonly rows: ReadonlyArray<Row> | null;
   readonly rowsCount: number | null;
+  readonly totalPayable: BigInt | null;
   readonly attachments: ReadonlyArray<FileStore> | null;
   readonly attachmentsCount: number | null;
   readonly notes: ReadonlyArray<Note> | null;
