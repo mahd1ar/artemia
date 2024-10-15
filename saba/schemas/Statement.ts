@@ -504,7 +504,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     grossTotal: virtual({
       ui: {
         itemView: {
-          fieldMode(args) {
+          fieldMode(_args) {
             return 'hidden'
             // return getRoleFromArgs(args) === Roles.admin ? 'read' : 'hidden'
           },

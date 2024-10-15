@@ -1,3 +1,4 @@
+/* eslint-disable node/prefer-global/process */
 import type { Lists } from '.keystone/types'
 import type { Session } from '../data/types'
 import type { ExcludesFalse } from '../data/utils'
@@ -219,6 +220,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         linkToItem: false,
       },
     }),
+
     notes: relationship({
       ref: 'Note.invoice',
       many: true,
@@ -231,81 +233,13 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       },
     }),
 
-    // visualItems: virtual({
-    //   label: "آیتم ها",
-    //   ui: {
-    //     itemView: {
-    //       fieldMode: args => getRoleFromArgs(args) !== Roles.workshop ? 'edit' : 'hidden',
-    //     },
-    //     views: './src/custome-fields-view/statement-items-table'
-    //   },
-    //   field: graphql.field({
-    //     type: graphql.JSON,
-    //     async resolve(item, args, context) {
-
-    //       if (item.id) {
-    //         const x = await context.query.StatementItem.findMany({
-    //           where: {
-    //             statement: {
-    //               id: {
-    //                 equals: item.id,
-    //               },
-    //             },
-    //           },
-    //           query: "description unit  unitPrice quantity percentageOfWorkDone total",
-    //         })
-
-    //         return x
-
-    //       } else return [];
-    //     },
-    //   }),
-    // }),
-    // items: relationship({
-    //   label: "آیتم ها",
-    //   ref: "StatementItem.statement",
-    //   many: true,
-    //   ui: {
-    //     itemView: {
-    //       fieldMode: args => getRoleFromArgs(args) === Roles.workshop ? 'edit' : 'hidden',
-    //     },
-    //     displayMode: "cards",
-    //     cardFields: [
-    //       "description",
-    //       "unit",
-    //       "unitPrice",
-    //       "quantity",
-    //       "percentageOfWorkDone",
-    //       "total",
-    //     ],
-    //     inlineCreate: {
-    //       fields: [
-    //         "description",
-    //         "unit",
-    //         "unitPrice",
-    //         "quantity",
-    //         "percentageOfWorkDone",
-    //       ],
-    //     },
-    //     inlineEdit: {
-    //       fields: [
-    //         "description",
-    //         "unit",
-    //         "unitPrice",
-    //         "quantity",
-    //         "percentageOfWorkDone",
-    //       ],
-    //     },
-    //   },
-    // }),
-
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldPosition: 'sidebar',
-          fieldMode(args) {
+          fieldMode(_args) {
             return 'read'
           },
         },
@@ -326,7 +260,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldPosition: 'sidebar',
-          fieldMode(args) {
+          fieldMode(_args) {
             return 'read'
           },
         },
@@ -344,6 +278,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
               return 'hidden'
           },
         },
+        views: './src/custome-fields-view/changelog-view.tsx',
       },
       hooks: {
         resolveInput(args) {
@@ -364,17 +299,3 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
 
   },
 })
-
-//
-//   field: graphql.field({
-//     type: graphql.Float,
-//     resolve(item) {
-//       const { unitPrice = 0, quantity = 0 } = item as unknown as {
-//         unitPrice: number
-//         quantity: number
-//       }
-
-//       return 2
-//     },
-//   }),
-// },

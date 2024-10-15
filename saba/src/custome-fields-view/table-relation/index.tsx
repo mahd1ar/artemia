@@ -53,8 +53,13 @@ export function Field({
   value,
   onChange,
 }: FieldProps<typeof controller>) {
-  if (value.kind !== 'cards-view')
-    return <div>cant</div>
+  if (value.kind !== 'cards-view') {
+    return (
+      <div>
+        cant
+      </div>
+    )
+  }
 
   const router = useRouter()
 

@@ -1,34 +1,34 @@
-import { graphql, list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
+import type { Lists } from '.keystone/types'
+import type { Session } from '../data/types'
+import { graphql, list } from '@keystone-6/core'
+import { allowAll } from '@keystone-6/core/access'
 import {
   bigInt,
-  integer,
   relationship,
-  select,
   text,
   timestamp,
   virtual,
-} from "@keystone-6/core/fields";
-import { Roles, Session, getRoleFromArgs } from "../data/types";
-import { editIfAdmin, setPermitions } from "../data/utils";
-import { persianCalendar } from "../src/custom-fields/persian-calander";
+} from '@keystone-6/core/fields'
+import { getRoleFromArgs, Roles } from '../data/types'
+import { editIfAdmin } from '../data/utils'
+import { persianCalendar } from '../src/custom-fields/persian-calander'
 
-export const Approval = list({
+export const Approval = list<Lists.Approval.TypeInfo<Session>>({
   access: allowAll,
   ui: {
     label: 'مصوبات',
     listView: {
-      initialColumns: ["code", 'title', 'estimatedBudget', 'totalStatementsPayable'],
+      initialColumns: ['code', 'title', 'estimatedBudget', 'totalStatementsPayable'],
     },
     isHidden(args) {
-      return (args.session as Session)?.data.role === Roles.workshop
+      return (args.session)?.data.role === Roles.workshop
     },
     itemView: {
       defaultFieldMode(args) {
         const currentRole = getRoleFromArgs(args)
         return currentRole > Roles.operator ? 'read' : 'edit'
       },
-    }
+    },
   },
   fields: {
     code: text(),
@@ -38,44 +38,43 @@ export const Approval = list({
     estimatedBudget: bigInt({
       label: 'بودجه تخمینی',
       ui: {
-        views: './src/custome-fields-view/bigint-with-farsi-letters.tsx'
-      }
+        views: './src/custome-fields-view/bigint-with-farsi-letters.tsx',
+      },
     }),
 
     totalStatementsPayable: virtual({
       ui: {
-        views: './src/custome-fields-view/bigint-viewer.tsx'
+        views: './src/custome-fields-view/bigint-viewer.tsx',
       },
-      label: "مجموع پرداخت شده",
+      label: 'مجموع پرداخت شده',
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
-
           if (!item.id)
             return 0n
 
           let cost = 0n
           const data = await context.query.Approval.findOne({
             where: { id: item.id.toString() },
-            query: 'description { id totalStatementsPayable } '
+            query: 'description { id totalStatementsPayable } ',
           })
           data.description.forEach((i: any) => {
             cost = cost + BigInt(i.totalStatementsPayable)
           })
 
           return cost
-        }
-      })
+        },
+      }),
     }),
 
     startDate: persianCalendar({
       label: 'تاریخ شروع',
       ui: {
 
-      }
+      },
     }),
     estimatedEndDate: persianCalendar({
-      label: 'تاریخ تخمینی پایان پروژه'
+      label: 'تاریخ تخمینی پایان پروژه',
     }),
 
     description: relationship({
@@ -86,36 +85,37 @@ export const Approval = list({
         createView: {
           fieldMode: 'hidden',
         },
-      }
+        views: './src/custome-fields-view/list-relationship.tsx',
+      },
     }),
     createdAt: timestamp({
-      defaultValue: { kind: "now" },
+      defaultValue: { kind: 'now' },
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldPosition: 'sidebar'
-        }
-      }
+          fieldPosition: 'sidebar',
+        },
+      },
     }),
     createdBy: relationship({
-      ref: "User.approvals",
+      ref: 'User.approvals',
       many: false,
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) { return editIfAdmin(args) },
-          fieldPosition: 'sidebar'
-        }
+          fieldPosition: 'sidebar',
+        },
       },
       hooks: {
         resolveInput(args) {
           if (args.operation === 'create') {
-            const session = args.context.session as Session
+            const session = args.context.session
             args.resolvedData.createdBy = { connect: { id: session?.itemId } }
           }
           return args.resolvedData.createdBy
         },
-      }
+      },
     }),
   },
-});
+})
