@@ -1,8 +1,8 @@
-// ts-gql-integrity:7f0f226a03b7087b53553edccb47453f
+// ts-gql-integrity:e5bd5daca4387426d344c1760f94fac7
 /*
 ts-gql-meta-begin
 {
-  "hash": "199a960943ac6ea176946d978459b15f"
+  "hash": "e1806d31777c9000e5c959c6d6aa849b"
 }
 ts-gql-meta-end
 */
@@ -554,6 +554,7 @@ export type Row = {
   readonly unitPrice: number | null;
   readonly quantity: number | null;
   readonly percentageOfWorkDone: number | null;
+  readonly tax: BigInt | null;
   readonly total: BigInt | null;
   readonly invoice: Invoice | null;
   readonly statement: Statement | null;
@@ -574,6 +575,7 @@ export type RowWhereInput = {
   readonly unitPrice?: IntFilter | null;
   readonly quantity?: FloatFilter | null;
   readonly percentageOfWorkDone?: IntNullableFilter | null;
+  readonly tax?: BigIntNullableFilter | null;
   readonly invoice?: InvoiceWhereInput | null;
   readonly statement?: StatementWhereInput | null;
 };
@@ -632,6 +634,7 @@ export type RowOrderByInput = {
   readonly unitPrice?: OrderDirection | null;
   readonly quantity?: OrderDirection | null;
   readonly percentageOfWorkDone?: OrderDirection | null;
+  readonly tax?: OrderDirection | null;
 };
 
 export type RowUpdateInput = {
@@ -641,6 +644,7 @@ export type RowUpdateInput = {
   readonly unitPrice?: number | null;
   readonly quantity?: number | null;
   readonly percentageOfWorkDone?: number | null;
+  readonly tax?: BigInt | null;
   readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
   readonly statement?: StatementRelateToOneForUpdateInput | null;
 };
@@ -675,6 +679,7 @@ export type RowCreateInput = {
   readonly unitPrice?: number | null;
   readonly quantity?: number | null;
   readonly percentageOfWorkDone?: number | null;
+  readonly tax?: BigInt | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
   readonly statement?: StatementRelateToOneForCreateInput | null;
 };

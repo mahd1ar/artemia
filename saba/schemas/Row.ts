@@ -1,9 +1,10 @@
-import { graphql, group, list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
-import { float, integer, relationship, select, text, virtual } from "@keystone-6/core/fields";
-import { NumUtils } from "../data/utils";
-import { Roles, Session } from "../data/types";
-import { Lists } from ".keystone/types";
+import type { Lists } from '.keystone/types'
+import type { Session } from '../data/types'
+import { graphql, group, list } from '@keystone-6/core'
+import { allowAll } from '@keystone-6/core/access'
+import { bigInt, float, integer, relationship, select, text, virtual } from '@keystone-6/core/fields'
+import { Roles } from '../data/types'
+import { NumUtils } from '../data/utils'
 
 export const Row = list<Lists.Row.TypeInfo<Session>>({
   access: allowAll,
@@ -19,7 +20,7 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
       many: false,
     }),
     description: text({
-      label: 'توضیحات'
+      label: 'توضیحات',
     }),
     unit: select({
       label: 'واحد',
@@ -33,55 +34,64 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
           label: 'ساعت',
         },
         {
-          value: "kilograms",
+          value: 'kilograms',
           label: 'کیلوگرم',
         },
         {
           label: 'لیتر',
-          value: "litre",
+          value: 'litre',
         },
         {
           value: 'days',
           label: 'روز',
-        }, {
+        },
+        {
           label: 'پرس',
-          value: 'press'
+          value: 'press',
         },
         {
           label: 'سرویس',
-          value: 'service'
-        }, {
+          value: 'service',
+        },
+        {
           label: 'مقطوع',
-          value: 'piece'
-        }, {
+          value: 'piece',
+        },
+        {
           label: 'فاکتوری',
-          value: 'facture'
-        }, {
+          value: 'facture',
+        },
+        {
           label: 'کیسه',
           value: 'bag',
         },
         {
           label: 'متر طول',
-          value: 'meter long'
-        }, {
-          label: 'متر مکعب',
-          value: 'meter cubed'
-        }, {
-          label: 'متر مربع',
-          value: 'meter square'
-        }, {
-          label: 'نفر / روز',
-          value: 'person/day',
-        }, {
-          label: 'حلقه',
-          value: 'ring'
-        }, {
-          label: 'دستگاه',
-          value: 'device'
+          value: 'meter long',
         },
         {
-          label: "شاخه",
-          value: "section",
+          label: 'متر مکعب',
+          value: 'meter cubed',
+        },
+        {
+          label: 'متر مربع',
+          value: 'meter square',
+        },
+        {
+          label: 'نفر / روز',
+          value: 'person/day',
+        },
+        {
+          label: 'حلقه',
+          value: 'ring',
+        },
+        {
+          label: 'دستگاه',
+          value: 'device',
+        },
+        {
+          label: 'شاخه',
+          value: 'section',
         },
         {
           label: 'شیت / رول',
@@ -89,15 +99,15 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
         },
         {
           label: 'عدد',
-          value: 'number'
+          value: 'number',
         },
 
-      ]
+      ],
     }),
     unitPrice: integer({ label: 'قیمت واحد', validation: { isRequired: true } }),
     quantity: float({
       label: 'مقدار',
-      validation: { isRequired: true }
+      validation: { isRequired: true },
     }),
     // pi: float({
     //   label: 'maghdar',
@@ -106,27 +116,31 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
     // }),
     percentageOfWorkDone: integer({
       label: 'درصد انجام کار',
-      defaultValue: 100
+      defaultValue: 100,
+    }),
+    tax: bigInt({
+      defaultValue: 0n,
+      label: 'مالیات و عوارض',
     }),
     total: virtual({
       label: 'جمع کل',
       field: graphql.field({
         type: graphql.BigInt,
         resolve(item) {
-          const { unitPrice, quantity, percentageOfWorkDone } = item
+          const { unitPrice, quantity, percentageOfWorkDone, tax } = item
 
-          return BigInt(Math.round((unitPrice ?? 0) * (quantity ?? 0) * (percentageOfWorkDone ?? 100) / 100))
-        }
+          return BigInt(Math.round((unitPrice ?? 0) * (quantity ?? 0) * (percentageOfWorkDone ?? 100) / 100)) + BigInt(tax ?? 0)
+        },
       }),
       ui: {
         itemView: {
           // fieldMode: 'hidden'
         },
-        views: './src/custome-fields-view/bigint-viewer.tsx'
-      }
+        views: './src/custome-fields-view/bigint-viewer.tsx',
+      },
     }),
 
     invoice: relationship({ ref: 'Invoice.rows', many: false }),
-    statement: relationship({ ref: 'Statement.rows', many: false })
+    statement: relationship({ ref: 'Statement.rows', many: false }),
   },
-});
+})

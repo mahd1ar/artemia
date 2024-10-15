@@ -1,5 +1,9 @@
-import { graphql, list } from "@keystone-6/core";
-import { allOperations, allowAll } from "@keystone-6/core/access";
+import type { Lists } from '.keystone/types'
+import type { PrismaClient } from '@prisma/client'
+import type { LogMessage, Session } from '../data/types'
+import type { ExcludesFalse } from '../data/utils'
+import { graphql, list } from '@keystone-6/core'
+import { allOperations, allowAll } from '@keystone-6/core/access'
 import {
   bigInt,
   checkbox,
@@ -9,15 +13,13 @@ import {
   text,
   timestamp,
   virtual,
-} from "@keystone-6/core/fields";
-import { persianCalendar } from "../src/custom-fields/persian-calander";
-import { ExcludesFalse, NumUtils, setPermitions } from "../data/utils";
-import { LogMessage, Roles, Session, alc, getRoleFromArgs } from "../data/types";
-import { PrismaClient } from "@prisma/client";
-import type { Lists } from ".keystone/types";
+} from '@keystone-6/core/fields'
+import { gql } from '@ts-gql/tag/no-transform'
+import DeviceDetector from 'node-device-detector'
 import { Notif } from '../data/message'
-import DeviceDetector from "node-device-detector";
-import { gql } from "@ts-gql/tag/no-transform";
+import { alc, getRoleFromArgs, Roles } from '../data/types'
+import { NumUtils, setPermitions } from '../data/utils'
+import { persianCalendar } from '../src/custom-fields/persian-calander'
 
 const detector = new DeviceDetector({
   clientIndexes: false,
@@ -26,8 +28,7 @@ const detector = new DeviceDetector({
   deviceTrusted: false,
   deviceInfo: false,
   maxUserAgentSize: 500,
-});
-
+})
 
 export const Statement = list<Lists.Statement.TypeInfo<any>>({
   access: {
@@ -39,22 +40,22 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     },
 
     filter: {
-      query: args => {
-
+      query: (args) => {
         const role = getRoleFromArgs(args, Roles.guest)
 
         if (role === Roles.admin || role === Roles.workshop || role === Roles.operator)
           return true
 
-        if (role === Roles.supervisor)
+        if (role === Roles.supervisor) {
           return {
             confirmedByTheUploader: {
-              equals: true
+              equals: true,
             },
           }
+        }
 
         const zz = {} as Record<(typeof alc)[number]['gqlkey'], any>
-        alc.some(i => {
+        alc.some((i) => {
           if (i.for !== role) {
             zz[i.gqlkey] = { equals: true }
             return false
@@ -64,49 +65,41 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         })
 
         return zz
-      }
-    }
+      },
+    },
   },
   hooks: {
     async validate(args) {
-      const session = args.context.session as Session;
+      const session = args.context.session as Session
       const role = getRoleFromArgs(args.context)
 
-
       if (args.operation === 'update') {
-
-
-
         if (role > Roles.operator && args.item.confirmedByTheUploader) {
           // @ts-ignore
           if (!alc.find(i => args.inputData![i.gqlkey] === true && role === i.for)) {
-            args.addValidationError("این صورت وضعیت قبلا تایید شده است و فقط اپراتور میتواند این صورت وضعیت را ویرایش کند");
+            args.addValidationError('این صورت وضعیت قبلا تایید شده است و فقط اپراتور میتواند این صورت وضعیت را ویرایش کند')
           }
         }
-
       }
 
       if (args.operation === 'delete') {
         if (role === Roles.admin || role === Roles.operator || role === Roles.supervisor) {
-          return
-        } else {
+
+        }
+        else {
           if (args.item.confirmedByTheUploader) {
             args.addValidationError('این صورت وضعیت تایید شده و قابل حذف نیست، لطفا با اپراتور تماس بگیرید')
           }
         }
       }
-
-
     },
 
     async afterOperation(args) {
+      const session = args.context.session as Session
 
-      const session = args.context.session as Session;
+      const prisma = args.context.prisma as PrismaClient
 
-      const prisma = args.context.prisma as PrismaClient;
-
-      if (args.operation === "delete") {
-
+      if (args.operation === 'delete') {
         await prisma.row.deleteMany({
           where: {
             statement: {
@@ -115,11 +108,11 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
               },
             },
           },
-        });
+        })
 
         // TODO DELETE PAYMENT
-      } else {
-
+      }
+      else {
         if (args.inputData.peyments) {
           if (args.item!.id) {
             await prisma.payment.updateMany({
@@ -133,64 +126,51 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
               data: {
                 // TODO check this on create item (operation===create)
                 title:
-                  (args.inputData.title ||
-                    args.originalItem!.title ||
-                    args.resolvedData.title) + " رسید ",
+                  `${args.inputData.title
+                  || args.originalItem!.title
+                  || args.resolvedData.title} رسید `,
               },
-            });
+            })
           }
         }
       }
 
-      if (args.operation === "update") {
-
+      if (args.operation === 'update') {
         let conformationHappend = false
 
         alc.forEach(async ({ gqlkey: key, for: forr }) => {
-
-          if (typeof args.inputData![key] === "boolean") {
-
+          if (typeof args.inputData![key] === 'boolean') {
             conformationHappend = true
-            const confirmed = !!args.inputData![key];
+            const confirmed = !!args.inputData![key]
 
             const logMessage: LogMessage.Statement = {
               confirmed,
               id: args.item.id,
-              user: session!.itemId
+              user: session!.itemId,
             }
 
             await prisma.log.create({
               data: {
-                action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : "STATEMENT_CONFIRMED",
-                type: "info",
+                action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : 'STATEMENT_CONFIRMED',
+                type: 'info',
                 message: JSON.stringify(logMessage),
               },
               select: { id: true },
-            });
-
-
-
+            })
           }
-
-
-
         })
 
         if (conformationHappend) { // confirmation or un confirmation has happend
-
           const settings = await prisma.setting.findFirst()
 
           if (settings?.sendMessageToTelegram) {
-
             const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
             const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
 
             if (session && session.data.role > Roles.operator) {
-
               const notif_username = session.data.name
 
               if (args.inputData.confirmedByTheUploader) {
-
                 await Notif.workShopIsDoneUploadingStatement(notif_statementTile, notif_username, notif_url)
 
                 // send files to telegram
@@ -216,78 +196,63 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
                       }
                     }
                   }
-                ` as import("../__generated__/ts-gql/CURRENT_STATEMENT").type
+                ` as import('../__generated__/ts-gql/CURRENT_STATEMENT').type
 
                 const currentStatement = await args.context.graphql.run({
                   query: CURRENT_STATEMENT,
                   variables: {
-                    id: args.item.id
-                  }
+                    id: args.item.id,
+                  },
                 })
 
                 if (currentStatement.statement) {
-
                   setTimeout(async () => {
                     await Notif.sendStatementAttachmenets(
                       currentStatement.statement?.title || '',
                       currentStatement.statement?.attachments?.map(i => i.file?.url).filter(Boolean as unknown as ExcludesFalse) || [],
                       currentStatement.statement?.peyments?.map(i => i.attachment?.url).filter(Boolean as unknown as ExcludesFalse) || [],
                     )
-                  }, 1000);
-
+                  }, 1000)
                 }
-
               }
 
               else if (args.inputData.confirmedByProjectControlSupervisor) {
-
                 await Notif.statementIsConfirmedByProjectManager(notif_statementTile, notif_username, notif_url)
-
               }
 
               else if (args.inputData.confirmedByFinancialSupervisor) {
-
                 await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
-
               }
               else if (args.inputData.confirmedByTechnicalSupervisor) {
-                
                 await Notif.statementIsConfirmedByTechnicalGroup(notif_statementTile, notif_username, notif_url)
-                
               }
-              
             }
-
-
           }
-
         }
       }
     },
   },
   ui: {
-    label: "صورت وضعیت",
+    label: 'صورت وضعیت',
     listView: {
-      initialColumns: ["title", "status", 'statementConfirmationStatus'],
+      initialColumns: ['title', 'status', 'statementConfirmationStatus'],
       initialSort: {
-        field: "sateOfStatement",
-        direction: "DESC",
+        field: 'sateOfStatement',
+        direction: 'DESC',
       },
     },
     hideCreate(args) {
-
       const role = getRoleFromArgs(args)
 
       return Roles.workshop !== role && role > Roles.operator
-
     },
     itemView: {
       defaultFieldMode: args =>
-        [Roles.admin, Roles.workshop, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : 'read'
+        [Roles.admin, Roles.workshop, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : 'read',
     },
     hideDelete(args) {
       const role = getRoleFromArgs(args)
-      return role > Roles.operator && role !== Roles.workshop;
+      return role > Roles.operator && role !== Roles.workshop
     },
   },
   fields: {
@@ -296,28 +261,26 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       ui: {
         // itemView: { fieldMode: 'hidden' },
         createView: { fieldMode: 'hidden' },
-        views: './src/custome-fields-view/statement-confirmation-status.tsx'
+        views: './src/custome-fields-view/statement-confirmation-status.tsx',
       },
       field: graphql.field({
         type: graphql.JSON,
-        // @ts-ignore
-        async resolve(item, args, context) {
 
+        async resolve(item, args, context) {
           return {
             ok: !!item.id,
-            userRole: (context.session as Session)?.data.role,
+            userRole: context.session?.data.role,
             data: alc.map(i => ({
               key: i.gqlkey,
-              value: !!item.id ? item[i.gqlkey] as boolean : null,
-              isCurrent: (context.session as Session)?.data.role === i.for
-            }))
+              value: item.id ? item[i.gqlkey] as boolean : null,
+              isCurrent: context.session?.data.role === i.for,
+            })),
           }
-
         },
       }),
     }),
     confirmedByTheUploader: checkbox({
-      label: "تایید توسط ناظر کارگاه",
+      label: 'تایید توسط ناظر کارگاه',
       ui: {
         itemView: {
           fieldMode(args) {
@@ -329,12 +292,12 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             ], 'hidden')
           },
         },
-        createView: { fieldMode: "hidden" },
-        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+        createView: { fieldMode: 'hidden' },
+        views: './src/custome-fields-view/confirm-statement-by.tsx',
       },
     }),
     confirmedByFinancialSupervisor: checkbox({
-      label: "تایید توسط ناظر مالی",
+      label: 'تایید توسط ناظر مالی',
 
       ui: {
         itemView: {
@@ -347,12 +310,12 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             ], 'hidden')
           },
         },
-        createView: { fieldMode: "hidden" },
-        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+        createView: { fieldMode: 'hidden' },
+        views: './src/custome-fields-view/confirm-statement-by.tsx',
       },
     }),
     confirmedByProjectControlSupervisor: checkbox({
-      label: "تایید توسط ناظر کنترل پروژه",
+      label: 'تایید توسط ناظر کنترل پروژه',
 
       ui: {
         itemView: {
@@ -365,12 +328,12 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             ], 'hidden')
           },
         },
-        createView: { fieldMode: "hidden" },
-        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+        createView: { fieldMode: 'hidden' },
+        views: './src/custome-fields-view/confirm-statement-by.tsx',
       },
     }),
     confirmedByTechnicalSupervisor: checkbox({
-      label: "تایید توسط ناظر فنی پروژه",
+      label: 'تایید توسط ناظر فنی پروژه',
 
       ui: {
         itemView: {
@@ -383,12 +346,12 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             ], 'hidden')
           },
         },
-        createView: { fieldMode: "hidden" },
-        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+        createView: { fieldMode: 'hidden' },
+        views: './src/custome-fields-view/confirm-statement-by.tsx',
       },
     }),
     confirmedBySupervisor: checkbox({
-      label: "تایید توسط سرپرست کل ",
+      label: 'تایید توسط سرپرست کل ',
 
       ui: {
         itemView: {
@@ -400,8 +363,8 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
             ], 'hidden')
           },
         },
-        createView: { fieldMode: "hidden" },
-        views: "./src/custome-fields-view/confirm-statement-by.tsx",
+        createView: { fieldMode: 'hidden' },
+        views: './src/custome-fields-view/confirm-statement-by.tsx',
       },
     }),
 
@@ -410,47 +373,47 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       options: [
         {
           label: 'موقت',
-          value: 'temporary'
+          value: 'temporary',
         },
         {
           label: 'نهایی',
-          value: 'final'
-        }
+          value: 'final',
+        },
       ],
       defaultValue: 'temporary',
       ui: {
-        displayMode: 'segmented-control'
-      }
+        displayMode: 'segmented-control',
+      },
     }),
 
     title: text({
       label: 'عنوان',
-      validation: { isRequired: true }
+      validation: { isRequired: true },
     }),
     contract: relationship({
       label: 'قرارداد',
-      ref: "Contract.statements",
+      ref: 'Contract.statements',
       ui: {
         displayMode: 'select',
         searchFields: ['title'],
         labelField: 'summery',
-        hideCreate: true
-      }
+        hideCreate: true,
+      },
     }),
     description: relationship({
-      label: " شرح مصوبه متناظر",
-      ref: "Description.statements",
+      label: ' شرح مصوبه متناظر',
+      ref: 'Description.statements',
       many: false,
       ui: {
-        views: "./src/custome-fields-view/statement-description-realtion.tsx",
+        views: './src/custome-fields-view/statement-description-realtion.tsx',
         itemView: {
           fieldPosition(args) {
-            const userAgent = (args.context.req?.headers["user-agent"])
+            const userAgent = (args.context.req?.headers['user-agent'])
 
             if (userAgent)
               return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
 
-            return "sidebar";
+            return 'sidebar'
           },
         },
         // createView: {
@@ -465,9 +428,8 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       },
     }),
     sateOfStatement: persianCalendar({
-      label: "تاریخ صورت وضعیت",
+      label: 'تاریخ صورت وضعیت',
     }),
-
 
     attachments: relationship({
       label: ' عکس و فایل های ضمیمه شده',
@@ -476,87 +438,85 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       ui: {
         itemView: {
           fieldPosition(args) {
-            const userAgent = (args.context.req?.headers["user-agent"])
+            const userAgent = (args.context.req?.headers['user-agent'])
 
             if (userAgent)
               return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
 
             return 'sidebar'
-          }
+          },
         },
         displayMode: 'cards',
         cardFields: ['title', 'file'],
         inlineCreate: { fields: ['title', 'file'] },
         inlineConnect: false,
         inlineEdit: { fields: ['title', 'file'] },
-        linkToItem: false
-      }
+        linkToItem: false,
+      },
     }),
 
     peyments: relationship({
-      label: "رسید پرداختی",
-      ref: "Payment.statement",
+      label: 'رسید پرداختی',
+      ref: 'Payment.statement',
       many: true,
       ui: {
         itemView: {
           fieldPosition(args) {
-            const userAgent = (args.context.req?.headers["user-agent"])
+            const userAgent = (args.context.req?.headers['user-agent'])
 
             if (userAgent)
               return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
 
             return 'sidebar'
-          }
+          },
         },
-        cardFields: ["attachment", "price", "dateOfPayment", "description"],
-        displayMode: "cards",
+        cardFields: ['attachment', 'price', 'dateOfPayment', 'description'],
+        displayMode: 'cards',
         inlineConnect: false,
         inlineCreate: {
-          fields: ["attachment", "price", "dateOfPayment", "description"],
+          fields: ['attachment', 'price', 'dateOfPayment', 'description'],
         },
         inlineEdit: {
-          fields: ["attachment", "price", "dateOfPayment", "description"],
+          fields: ['attachment', 'price', 'dateOfPayment', 'description'],
         },
       },
     }),
 
     rows: relationship({
-      label: "ردیف ها",
-      ref: "Row.statement",
+      label: 'ردیف ها',
+      ref: 'Row.statement',
       many: true,
       ui: {
         itemView: {
-          fieldMode: args => {
+          fieldMode: (args) => {
             const role = getRoleFromArgs(args)
             return role === Roles.workshop || role <= Roles.operator ? 'edit' : 'read'
           },
         },
         displayMode: 'cards',
-        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'tax', 'total'],
         inlineCreate: {
-          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total']
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'tax', 'total'],
         },
 
-        views: "./src/custome-fields-view/table-relation"
-      }
+        views: './src/custome-fields-view/table-relation',
+      },
     }),
-
 
     grossTotal: virtual({
       ui: {
         itemView: {
           fieldMode(args) {
-            return "hidden"
+            return 'hidden'
             // return getRoleFromArgs(args) === Roles.admin ? 'read' : 'hidden'
           },
         },
-        views: './src/custome-fields-view/bigint-viewer.tsx'
+        views: './src/custome-fields-view/bigint-viewer.tsx',
       },
-      label: "جمع کل صورت وضعیت",
+      label: 'جمع کل صورت وضعیت',
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
-
           if (item.id) {
             const x = await context.query.Row.findMany({
               where: {
@@ -566,61 +526,62 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
                   },
                 },
               },
-              query: "total",
+              query: 'total',
             })
 
-            let total = 0n;
+            let total = 0n
 
             for (const i of x)
-              total += BigInt(i.total);
+              total += BigInt(i.total)
 
             return total
-
-          } else return 0n;
+          }
+          else {
+            return 0n
+          }
         },
       }),
     }),
     deductionOnAccountOfAdvancePayment: bigInt({
-      label: "کسر علی الحساب",
+      label: 'کسر علی الحساب',
       ui: {
-        description: "جمع پرداختی های گذشته",
+        description: 'جمع پرداختی های گذشته',
         // itemView: { fieldMode: 'edit' },
-        views: "./src/custome-fields-view/bigint-with-farsi-letters",
+        views: './src/custome-fields-view/bigint-with-farsi-letters',
       },
       defaultValue: 0n,
     }),
 
     tax: bigInt({
-      label: "مالیات و عوارض",
+      label: 'مالیات و عوارض',
       validation: { isRequired: true },
       defaultValue: 0n,
       ui: {
-        views: "./src/custome-fields-view/bigint-with-farsi-letters",
-      }
+        views: './src/custome-fields-view/bigint-with-farsi-letters',
+      },
     }),
 
     workGuarantee: bigInt({
-      label: "حسن انجام کار",
+      label: 'حسن انجام کار',
       ui: {
-        views: "./src/custome-fields-view/bigint-with-farsi-letters",
+        views: './src/custome-fields-view/bigint-with-farsi-letters',
       },
       defaultValue: 0n,
     }),
 
     totalPayable: virtual({
       ui: {
-        views: './src/custome-fields-view/bigint-viewer.tsx'
+        views: './src/custome-fields-view/bigint-viewer.tsx',
       },
-      label: "جمع  کل قابل پرداخت",
+      label: 'جمع  کل قابل پرداخت',
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
-
           const {
             id: itemid,
             deductionOnAccountOfAdvancePayment: deduction,
             tax,
-            workGuarantee
+            workGuarantee,
           } = item
 
           if (itemid) {
@@ -632,94 +593,94 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
                   },
                 },
               },
-              query: "total",
-            });
+              query: 'total',
+            })
 
-            let total = 0n;
+            let total = 0n
 
             for (const i of x) {
-
-              total += BigInt(i.total);
+              total += BigInt(i.total)
             }
 
-            return BigInt(total - (deduction || 0n) - (workGuarantee || 0n) + (tax || 0n));
-          } else return 0n;
+            return BigInt(total - (deduction || 0n) - (workGuarantee || 0n) + (tax || 0n))
+          }
+          else {
+            return 0n
+          }
         },
       }),
     }),
 
     notes: relationship({
-      ref: "Note.statement",
+      ref: 'Note.statement',
       many: true,
-      label: "یادداشت ها",
+      label: 'یادداشت ها',
       ui: {
         itemView: {
-          fieldMode: 'edit'
+          fieldMode: 'edit',
         },
-        views: "./src/custome-fields-view/note-relation.tsx"
-      }
+        views: './src/custome-fields-view/note-relation.tsx',
+      },
     }),
 
     status: select({
       label: 'وضعیت پرداخت',
       options: [
-        { label: "در انتظار پرداخت", value: "pending" },
-        { label: "پرداخت شد", value: "paid" },
+        { label: 'در انتظار پرداخت', value: 'pending' },
+        { label: 'پرداخت شد', value: 'paid' },
       ],
-      defaultValue: "pending",
+      defaultValue: 'pending',
       ui: {
-        displayMode: "segmented-control",
-        createView: { fieldMode: "hidden" },
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'hidden' },
       },
     }),
 
     createdAt: timestamp({
-      defaultValue: { kind: "now" },
+      defaultValue: { kind: 'now' },
       ui: {
-        createView: { fieldMode: "hidden" },
+        createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldPosition: "sidebar",
+          fieldPosition: 'sidebar',
           fieldMode(args) {
-            return "read";
+            return 'read'
           },
         },
       },
     }),
     changeLog: json({
       ui: {
-        createView: { fieldMode: "hidden" },
+        createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldPosition: "sidebar",
+          fieldPosition: 'sidebar',
           fieldMode(args) {
             if (args.session?.data.role <= Roles.operator)
-              return "read";
+              return 'read'
             else
               return 'hidden'
           },
         },
-        views: './src/custome-fields-view/changelog-view.tsx'
+        views: './src/custome-fields-view/changelog-view.tsx',
       },
       hooks: {
         resolveInput(args) {
-
-          const state = (args.item?.changeLog) ? JSON.parse(args.item.changeLog) : [];
+          const state = (args.item?.changeLog) ? JSON.parse(args.item.changeLog) : []
           const info = {
             ops: args.operation,
             items: Object.keys(args.inputData),
             by: args.context.session?.itemId,
-            at: new Date()
+            at: new Date(),
           }
 
           state.push(info)
 
           return JSON.stringify(state)
-
         },
-      }
-    })
+      },
+    }),
 
   },
-});
+})
 
 //
 //   field: graphql.field({
