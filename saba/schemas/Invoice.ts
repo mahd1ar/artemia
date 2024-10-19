@@ -151,9 +151,9 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
           },
         },
         displayMode: 'cards',
-        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity','tax', 'percentageOfWorkDone', 'total'],
         inlineCreate: {
-          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'total'],
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity','tax', 'percentageOfWorkDone', 'total'],
         },
 
         views: './src/custome-fields-view/table-relation',
@@ -162,6 +162,9 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
     totalPayable: virtual({
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx',
+        itemView: {
+          fieldMode: 'hidden'
+        }
       },
       label: 'جمع  کل قابل پرداخت',
       field: graphql.field({
@@ -174,7 +177,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
           if (itemid) {
             const x = await context.query.Row.findMany({
               where: {
-                statement: {
+                invoice: {
                   id: {
                     equals: itemid,
                   },
