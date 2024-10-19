@@ -154,13 +154,15 @@ new CronJob(
     })
 
     // find statement items without statement
-    const statementItemsBatchPayload = await keystoneContext.prisma.row.deleteMany({
-      where: {
-        statement: null
-      },
-    })
+    // FIXME fucking fix this : all rows that are part of invoces are deleting aswell
+    // const statementItemsBatchPayload = await keystoneContext.prisma.row.deleteMany({
+    //   where: {
+    //     statement: null,
 
-    console.info(statementItemsBatchPayload.count + ' items are deleted')
+    //   },
+    // })
+
+    // console.info(statementItemsBatchPayload.count + ' items are deleted')
 
     // create safety report in first day of each mounth
     const isFirstDayOfMounth = Intl.DateTimeFormat("us", { calendar: "persian", day: "numeric" }).format(today) === '3'
