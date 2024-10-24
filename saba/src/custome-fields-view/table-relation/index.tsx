@@ -64,7 +64,11 @@ export function Field({
   const router = useRouter()
 
   const param = router.asPath.split('/').filter(Boolean).at(0)
-  const resource = param === 'invoices' ? 'invoice' : param === 'statements' ? 'statement' : null
+  const resource = param === 'invoices'
+    ? 'invoice'
+    : param === 'statements'
+      ? 'statement'
+      : param === 'contracts' ? 'contract' : null
 
   if (!resource)
     return <div>cant</div>

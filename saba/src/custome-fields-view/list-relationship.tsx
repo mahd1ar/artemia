@@ -29,13 +29,7 @@ import { theme } from '../../data/utils'
 export function Field({
   field,
   value,
-  onChange,
-  autoFocus,
-  itemValue,
-  forceValidation,
 }: FieldProps<typeof controller>) {
-  console.log(value)
-
   if (typeof value === 'symbol')
     return null
 

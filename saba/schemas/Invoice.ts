@@ -151,9 +151,9 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
           },
         },
         displayMode: 'cards',
-        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity','tax', 'percentageOfWorkDone', 'total'],
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
         inlineCreate: {
-          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity','tax', 'percentageOfWorkDone', 'total'],
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
         },
 
         views: './src/custome-fields-view/table-relation',
@@ -163,8 +163,8 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx',
         itemView: {
-          fieldMode: 'hidden'
-        }
+          fieldMode: 'hidden',
+        },
       },
       label: 'جمع  کل قابل پرداخت',
       field: graphql.field({

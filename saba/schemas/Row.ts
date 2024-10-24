@@ -142,5 +142,6 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
 
     invoice: relationship({ ref: 'Invoice.rows', many: false }),
     statement: relationship({ ref: 'Statement.rows', many: false }),
+    contract: relationship({ ref: 'Contract.rows', many: false }),
   },
 })

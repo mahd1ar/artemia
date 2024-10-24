@@ -492,9 +492,9 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           },
         },
         displayMode: 'cards',
-        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'tax', 'total'],
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
         inlineCreate: {
-          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'percentageOfWorkDone', 'tax', 'total'],
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
         },
 
         views: './src/custome-fields-view/table-relation',
