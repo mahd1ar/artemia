@@ -56,11 +56,21 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
       ref: 'Statement.description',
       many: true,
       label: 'صورت وضعیت',
+      ui: {
+        createView: {
+          fieldMode: 'hidden'
+        }
+      }
     }),
     invoices: relationship({
       ref: 'Invoice.description',
       many: true,
       label: 'فاکتور ها',
+      ui: {
+        createView: {
+          fieldMode: 'hidden'
+        }
+      }
     }),
     approvals: relationship({
       ref: 'Approval.description',
@@ -69,12 +79,18 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
         itemView: {
           fieldMode: 'hidden',
         },
-      },
+        createView: {
+          fieldMode: 'hidden'
+        }
+      }
     }),
     totalStatementsPayable: virtual({
       label: 'مجموع قابل پرداخت',
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx',
+        createView: {
+          fieldMode: 'hidden'
+        }
       },
       field: graphql.field({
         type: graphql.BigInt,
@@ -120,6 +136,9 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
       label: 'مجموع پرداختی ها',
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx',
+        createView: {
+          fieldMode: 'hidden'
+        }
       },
       field: graphql.field({
         type: graphql.BigInt,

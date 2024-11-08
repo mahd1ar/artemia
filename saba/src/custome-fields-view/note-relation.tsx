@@ -1,22 +1,19 @@
-import React, { useEffect } from "react";
-import { type FieldProps } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel, Select } from "@keystone-ui/fields";
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { type controller } from "@keystone-6/core/fields/types/relationship/views";
-import { Fragment, useState } from "react";
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
-import { gql } from '@ts-gql/tag/no-transform'
-// import { useRouter } from "@keystone-6/core/dist/declarations/src/admin-ui/router";
+import { type FieldProps } from "@keystone-6/core/types";
+import { FieldContainer, FieldLabel } from "@keystone-ui/fields";
+import { gql } from '@ts-gql/tag/no-transform';
+import React, { useEffect, useState } from "react";
+import { useKeystone } from "@keystone-6/core/admin-ui/context";
+import { Button } from "@keystone-ui/button";
+import { TextArea } from "@keystone-ui/fields";
+import { EditIcon, TrashIcon } from "@keystone-ui/icons";
+import { AlertDialog } from "@keystone-ui/modals";
+import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ThemeProvider, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { Button } from "@keystone-ui/button"
-import { TextArea } from "@keystone-ui/fields"
-import { AlertDialog } from "@keystone-ui/modals"
-import { useTheme } from "@keystone-ui/core"
-import { TrashIcon, Trash2Icon, EditIcon } from "@keystone-ui/icons"
-import { Avatar, Card, CardActions, CardContent, CardHeader, createTheme, IconButton, ThemeProvider, Typography } from "@mui/material";
-import { Roles } from "../../data/types";
 import { Match } from "../../data/match";
+import { Roles } from "../../data/types";
 import { theme } from "../../data/utils";
-import { useList, useKeystone } from "@keystone-6/core/admin-ui/context";
 
 type Option = {
   id: string,

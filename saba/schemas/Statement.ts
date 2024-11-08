@@ -1,12 +1,9 @@
 import type { Lists } from '.keystone/types'
-import type { PrismaClient } from '@prisma/client'
-import type { LogMessage, Session } from '../data/types'
-import type { ExcludesFalse } from '../data/utils'
 import { graphql, list } from '@keystone-6/core'
-import { allOperations, allowAll } from '@keystone-6/core/access'
 import {
   bigInt,
   checkbox,
+  integer,
   json,
   relationship,
   select,
@@ -14,11 +11,14 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
+import type { PrismaClient } from '@prisma/client'
 import { gql } from '@ts-gql/tag/no-transform'
 import DeviceDetector from 'node-device-detector'
 import { Notif } from '../data/message'
+import type { LogMessage, Session } from '../data/types'
 import { alc, getRoleFromArgs, Roles } from '../data/types'
-import { NumUtils, setPermitions } from '../data/utils'
+import type { ExcludesFalse } from '../data/utils'
+import { setPermitions } from '../data/utils'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
 
 const detector = new DeviceDetector({
@@ -46,26 +46,25 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         if (role === Roles.admin || role === Roles.workshop || role === Roles.operator)
           return true
 
-        if (role === Roles.supervisor) {
-          return {
-            confirmedByTheUploader: {
-              equals: true,
-            },
-          }
+        return {
+          confirmedByTheUploader: {
+            equals: true,
+          },
         }
 
+
         // fucking // FIXME get rid of this
-        const zz = {} as Record<(typeof alc)[number]['gqlkey'], any>
-        alc.some((i) => {
-          if (i.for !== role) {
-            zz[i.gqlkey] = { equals: true }
-            return false
-          }
+        // const zz = {} as Record<(typeof alc)[number]['gqlkey'], any>
+        // alc.some((i) => {
+        //   if (i.for !== role) {
+        //     zz[i.gqlkey] = { equals: true }
+        //     return false
+        //   }
 
-          return true
-        })
+        //   return true
+        // })
 
-        return zz
+        // return zz
       },
     },
   },
@@ -374,7 +373,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           value: 'temporary',
         },
         {
-          label: 'نهایی',
+          label: 'قطعی',
           value: 'final',
         },
       ],
@@ -386,8 +385,27 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
 
     title: text({
       label: 'عنوان',
-      validation: { isRequired: true },
+      hooks: {
+        // afterOperation(args) {
+        //   if(args.operation === 'create') {
+        //     args.
+        //   }
+        // },
+      },
+      ui: {
+        createView: {
+          fieldMode: 'hidden'
+        }
+      }
     }),
+
+    statementNumber: integer({
+      label: 'شماره صورت وضعیت',
+      ui: {
+        description: `ie: 1,2,3`
+      }
+    }),
+
     contract: relationship({
       label: 'قرارداد',
       ref: 'Contract.statements',
@@ -396,10 +414,13 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         searchFields: ['title'],
         labelField: 'summery',
         hideCreate: true,
+        createView: {
+          fieldMode: 'hidden'
+        }
       },
     }),
     description: relationship({
-      label: ' شرح مصوبه متناظر',
+      label: ' شرح مصوبه',
       ref: 'Description.statements',
       many: false,
       ui: {

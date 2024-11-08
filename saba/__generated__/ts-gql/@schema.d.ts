@@ -1,8 +1,8 @@
-// ts-gql-integrity:1624c55f36cc6dc189c5aedbbebbb344
+// ts-gql-integrity:00857df160e2ae6b6440e4a9975d53b2
 /*
 ts-gql-meta-begin
 {
-  "hash": "fda8ec5ccc878675c7389f3957b94c1f"
+  "hash": "483582fb18816246d345bbc29453db07"
 }
 ts-gql-meta-end
 */
@@ -559,6 +559,7 @@ export type Row = {
   readonly total: BigInt | null;
   readonly invoice: Invoice | null;
   readonly statement: Statement | null;
+  readonly contract: Contract | null;
 };
 
 export type RowWhereUniqueInput = {
@@ -579,6 +580,7 @@ export type RowWhereInput = {
   readonly tax?: BigIntNullableFilter | null;
   readonly invoice?: InvoiceWhereInput | null;
   readonly statement?: StatementWhereInput | null;
+  readonly contract?: ContractWhereInput | null;
 };
 
 export type StringNullableFilter = {
@@ -648,6 +650,7 @@ export type RowUpdateInput = {
   readonly tax?: BigInt | null;
   readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
   readonly statement?: StatementRelateToOneForUpdateInput | null;
+  readonly contract?: ContractRelateToOneForUpdateInput | null;
 };
 
 export type CategoryRelateToOneForUpdateInput = {
@@ -668,6 +671,12 @@ export type StatementRelateToOneForUpdateInput = {
   readonly disconnect?: boolean | null;
 };
 
+export type ContractRelateToOneForUpdateInput = {
+  readonly create?: ContractCreateInput | null;
+  readonly connect?: ContractWhereUniqueInput | null;
+  readonly disconnect?: boolean | null;
+};
+
 export type RowUpdateArgs = {
   readonly where: RowWhereUniqueInput;
   readonly data: RowUpdateInput;
@@ -683,6 +692,7 @@ export type RowCreateInput = {
   readonly tax?: BigInt | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
   readonly statement?: StatementRelateToOneForCreateInput | null;
+  readonly contract?: ContractRelateToOneForCreateInput | null;
 };
 
 export type CategoryRelateToOneForCreateInput = {
@@ -700,6 +710,11 @@ export type StatementRelateToOneForCreateInput = {
   readonly connect?: StatementWhereUniqueInput | null;
 };
 
+export type ContractRelateToOneForCreateInput = {
+  readonly create?: ContractCreateInput | null;
+  readonly connect?: ContractWhereUniqueInput | null;
+};
+
 export type Statement = {
   readonly __typename: "Statement";
   readonly id: string;
@@ -711,6 +726,7 @@ export type Statement = {
   readonly confirmedBySupervisor: boolean | null;
   readonly type: string | null;
   readonly title: string | null;
+  readonly statementNumber: number | null;
   readonly contract: Contract | null;
   readonly description: Description | null;
   readonly sateOfStatement: number | null;
@@ -796,6 +812,7 @@ export type StatementWhereInput = {
   readonly confirmedBySupervisor?: BooleanFilter | null;
   readonly type?: StringNullableFilter | null;
   readonly title?: StringFilter | null;
+  readonly statementNumber?: IntNullableFilter | null;
   readonly contract?: ContractWhereInput | null;
   readonly description?: DescriptionWhereInput | null;
   readonly sateOfStatement?: PairFilter | null;
@@ -841,6 +858,7 @@ export type StatementOrderByInput = {
   readonly confirmedBySupervisor?: OrderDirection | null;
   readonly type?: OrderDirection | null;
   readonly title?: OrderDirection | null;
+  readonly statementNumber?: OrderDirection | null;
   readonly sateOfStatement?: OrderDirection | null;
   readonly deductionOnAccountOfAdvancePayment?: OrderDirection | null;
   readonly tax?: OrderDirection | null;
@@ -857,6 +875,7 @@ export type StatementUpdateInput = {
   readonly confirmedBySupervisor?: boolean | null;
   readonly type?: string | null;
   readonly title?: string | null;
+  readonly statementNumber?: number | null;
   readonly contract?: ContractRelateToOneForUpdateInput | null;
   readonly description?: DescriptionRelateToOneForUpdateInput | null;
   readonly sateOfStatement?: number | null;
@@ -870,12 +889,6 @@ export type StatementUpdateInput = {
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
-};
-
-export type ContractRelateToOneForUpdateInput = {
-  readonly create?: ContractCreateInput | null;
-  readonly connect?: ContractWhereUniqueInput | null;
-  readonly disconnect?: boolean | null;
 };
 
 export type PaymentRelateToManyForUpdateInput = {
@@ -898,6 +911,7 @@ export type StatementCreateInput = {
   readonly confirmedBySupervisor?: boolean | null;
   readonly type?: string | null;
   readonly title?: string | null;
+  readonly statementNumber?: number | null;
   readonly contract?: ContractRelateToOneForCreateInput | null;
   readonly description?: DescriptionRelateToOneForCreateInput | null;
   readonly sateOfStatement?: number | null;
@@ -911,11 +925,6 @@ export type StatementCreateInput = {
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
-};
-
-export type ContractRelateToOneForCreateInput = {
-  readonly create?: ContractCreateInput | null;
-  readonly connect?: ContractWhereUniqueInput | null;
 };
 
 export type PaymentRelateToManyForCreateInput = {
@@ -1282,6 +1291,8 @@ export type Contract = {
   readonly approvedBy: User | null;
   readonly title: string | null;
   readonly description: string | null;
+  readonly rows: ReadonlyArray<Row> | null;
+  readonly rowsCount: number | null;
   readonly startFrom: number | null;
   readonly end: number | null;
   readonly cost: BigInt | null;
@@ -1293,6 +1304,18 @@ export type Contract = {
   readonly attachment: FileFieldOutput | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
+};
+
+export type ContractrowsArgs = {
+  readonly where?: RowWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<RowOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: RowWhereUniqueInput | null;
+};
+
+export type ContractrowsCountArgs = {
+  readonly where?: RowWhereInput;
 };
 
 export type ContractattachmentsArgs = {
@@ -1332,6 +1355,7 @@ export type ContractWhereInput = {
   readonly approvedBy?: UserWhereInput | null;
   readonly title?: StringFilter | null;
   readonly description?: StringFilter | null;
+  readonly rows?: RowManyRelationFilter | null;
   readonly startFrom?: PairFilter | null;
   readonly end?: PairFilter | null;
   readonly cost?: BigIntNullableFilter | null;
@@ -1358,6 +1382,7 @@ export type ContractUpdateInput = {
   readonly approvedBy?: UserRelateToOneForUpdateInput | null;
   readonly title?: string | null;
   readonly description?: string | null;
+  readonly rows?: RowRelateToManyForUpdateInput | null;
   readonly startFrom?: number | null;
   readonly end?: number | null;
   readonly cost?: BigInt | null;
@@ -1379,6 +1404,7 @@ export type ContractCreateInput = {
   readonly approvedBy?: UserRelateToOneForCreateInput | null;
   readonly title?: string | null;
   readonly description?: string | null;
+  readonly rows?: RowRelateToManyForCreateInput | null;
   readonly startFrom?: number | null;
   readonly end?: number | null;
   readonly cost?: BigInt | null;

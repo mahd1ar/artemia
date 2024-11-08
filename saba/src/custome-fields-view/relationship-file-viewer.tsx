@@ -1,10 +1,8 @@
-import React, { ReactNode } from "react";
-import Link from "next/link";
-import { CellComponent, CardValueComponent, type FieldProps } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
-import { Button } from "@keystone-ui/button";
-import { CheckIcon, ArrowDownIcon } from "@keystone-ui/icons";
 import { css } from "@emotion/css";
+import { CardValueComponent } from "@keystone-6/core/types";
+import { FieldContainer, FieldLabel } from "@keystone-ui/fields";
+import { ArrowDownIcon } from "@keystone-ui/icons";
+import React, { ReactNode } from "react";
 
 const ImageWrapper = ({ children, url }: { children: ReactNode, url?: string }) => {
   if (url) {

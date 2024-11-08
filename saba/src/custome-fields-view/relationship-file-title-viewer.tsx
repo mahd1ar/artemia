@@ -6,8 +6,9 @@ import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
 export const CardValue: CardValueComponent = ({ item, field }) => {
 
   if(!item.title) {
+    return <span></span>
     return  <FieldContainer>
-     <div style={{color: 'gray'}} >[هیچ عنوانی مشخص نشده]</div>
+     <div style={{color: 'gray'}} ></div>
     </FieldContainer>
   }
  

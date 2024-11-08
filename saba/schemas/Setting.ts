@@ -26,7 +26,7 @@ export const Setting = list<Lists.Setting.TypeInfo<Session>>({
                 parentCategoryOfDesign: text(),
                 rootCategoryOfGoodsAndServices: text({
                     ui: {
-                        description: '2 digit code from the category. eg. 42 '
+                        description: '2 digit code from the category. eg, 42 '
                     }
                 })
             },

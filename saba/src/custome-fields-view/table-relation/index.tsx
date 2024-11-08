@@ -481,7 +481,7 @@ export function Field({
                 <Box sx={{ minHeight: 352, minWidth: 250, maxHeight: 'calc(98dvh - 148px)', overflow: 'auto' }}>
 
                   <TreeCategories
-                    rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '78'}
+                    rootCode={persistedData?.setting?.rootCategoryOfGoodsAndServices || '8'}
                     onSelect={(i) => {
                       settreeIsOpen(false)
                       setModelData({ ...modelData, commodityId: i.id, commodity: `${i.title} - ${i.code}` })

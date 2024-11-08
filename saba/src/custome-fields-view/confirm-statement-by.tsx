@@ -71,9 +71,10 @@ export const Field = ({
                 variables: { "id": pn.split('/').at(-1), state: !value }
             })
 
-            router.push("/statements");
+            // router.push("/statements");
+            router.back();
             setIsOpen(false);
-            addToast({ title: "Confirmed", tone: "positive" })
+            addToast({ title: "تایید شد!", tone: "positive" })
 
         }
         // onChange?.(true)

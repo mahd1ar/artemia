@@ -16,6 +16,7 @@ import DeviceDetector from 'node-device-detector'
 import { isLoggedIn, isMemberOfAdminGroup } from '../data/access'
 import { getRoleFromArgs, Roles, type Session } from '../data/types'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
+import { setPermitions } from '../data/utils'
 
 const detector = new DeviceDetector({
   clientIndexes: false,
@@ -107,7 +108,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
   },
   fields: {
     summery: virtual({
-      label: 'خلاصه',
+      label: 'عنوان',
       field: graphql.field({
         type: graphql.String,
         async resolve(item, _, context) {
@@ -197,7 +198,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       },
     }),
     cost: bigInt({
-      label: 'مبلغ قرارداد',
+      label: 'پیشبینی مبلغ قرارداد',
       ui: {
         views: './src/custome-fields-view/bigint-with-farsi-letters.tsx',
       },
@@ -237,12 +238,22 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       ref: 'Statement.contract',
       many: true,
       ui: {
+        labelField: 'id' ,
         createView: {
           fieldMode: 'hidden',
         },
         itemView: {
-          fieldMode: 'read',
+          // fieldMode: 'read',
+          fieldMode(args) {
+            return setPermitions(args ,[
+              { role: Roles.admin, fieldMode: 'edit' },
+              { role: Roles.workshop, fieldMode: 'edit' },
+              { role: Roles.operator, fieldMode: 'edit' },
+              { role: Roles.supervisor, fieldMode: 'edit' },
+            ],'read') 
+          },
         },
+        views: './src/custome-fields-view/contract-statement-list-relationship-view.tsx'
       },
     }),
 

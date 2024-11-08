@@ -110,7 +110,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       },
     }),
     description: relationship({
-      label: ' شرح مصوبه متناظر',
+      label: ' شرح مصوبه',
       ref: 'Description.invoices',
       many: false,
       ui: {
