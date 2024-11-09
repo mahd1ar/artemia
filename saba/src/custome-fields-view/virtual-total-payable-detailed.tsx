@@ -117,11 +117,7 @@ export function Field({
 
               <BasicTable items={rows} />
             </CardContent>
-            <CardActions>
-              <Button size="small" LinkComponent={Link} href={`/descriptions?%21approvals_matches=%22${router.query.id}%22&fields=subject%2CtotalStatementsPayable%2CtotalInvoicesPayed`}>
-                جزئیات
-              </Button>
-            </CardActions>
+
           </Card>
         </ThemeContext.Provider>
       </FieldContainer>

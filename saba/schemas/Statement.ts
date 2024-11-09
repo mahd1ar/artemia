@@ -566,16 +566,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       defaultValue: 0n,
     }),
 
-    tax: bigInt({
-      label: 'مالیات و عوارض',
-      validation: { isRequired: true },
-      defaultValue: 0n,
-      ui: {
-        description: '**این فیلد به زودی حذف خواهد شد**',
-        views: './src/custome-fields-view/bigint-with-farsi-letters',
-      },
-    }),
-
     workGuarantee: bigInt({
       label: 'حسن انجام کار',
       ui: {
@@ -595,7 +585,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
           const {
             id: itemid,
             deductionOnAccountOfAdvancePayment: deduction,
-            tax,
             workGuarantee,
           } = item
 
@@ -617,7 +606,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
               total += BigInt(i.total)
             }
 
-            return BigInt(total - (deduction || 0n) - (workGuarantee || 0n) + (tax || 0n))
+            return BigInt(total - (deduction || 0n) - (workGuarantee || 0n))
           }
           else {
             return 0n
@@ -657,9 +646,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldPosition: 'sidebar',
-          fieldMode(args) {
-            return 'read'
-          },
+          fieldMode: 'read',
         },
       },
     }),
@@ -669,7 +656,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         itemView: {
           fieldPosition: 'sidebar',
           fieldMode(args) {
-            if (args.session?.data.role <= Roles.operator)
+            if (args.session?.data && args.session.data.role <= Roles.operator)
               return 'read'
             else
               return 'hidden'
