@@ -1,4 +1,7 @@
 import type { Lists } from '.keystone/types'
+import type { PrismaClient } from '@prisma/client'
+import type { LogMessage, Session } from '../data/types'
+import type { ExcludesFalse } from '../data/utils'
 import { graphql, list } from '@keystone-6/core'
 import {
   bigInt,
@@ -11,13 +14,10 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
-import type { PrismaClient } from '@prisma/client'
 import { gql } from '@ts-gql/tag/no-transform'
 import DeviceDetector from 'node-device-detector'
 import { Notif } from '../data/message'
-import type { LogMessage, Session } from '../data/types'
 import { alc, getRoleFromArgs, Roles } from '../data/types'
-import type { ExcludesFalse } from '../data/utils'
 import { setPermitions } from '../data/utils'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
 
@@ -30,7 +30,7 @@ const detector = new DeviceDetector({
   maxUserAgentSize: 500,
 })
 
-export const Statement = list<Lists.Statement.TypeInfo<any>>({
+export const Statement = list<Lists.Statement.TypeInfo<Session>>({
   access: {
     operation: {
       create: args => !!args.session,
@@ -52,7 +52,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
           },
         }
 
-
         // fucking // FIXME get rid of this
         // const zz = {} as Record<(typeof alc)[number]['gqlkey'], any>
         // alc.some((i) => {
@@ -70,7 +69,6 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
   },
   hooks: {
     async validate(args) {
-      const session = args.context.session as Session
       const role = getRoleFromArgs(args.context)
 
       if (args.operation === 'update') {
@@ -230,6 +228,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
     },
   },
   ui: {
+
     label: 'صورت وضعیت',
     listView: {
       initialColumns: ['title', 'status', 'statementConfirmationStatus'],
@@ -238,11 +237,7 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         direction: 'DESC',
       },
     },
-    hideCreate(args) {
-      const role = getRoleFromArgs(args)
-
-      return Roles.workshop !== role && role > Roles.operator
-    },
+    hideCreate: true,
     itemView: {
       defaultFieldMode: args =>
         [Roles.admin, Roles.workshop, Roles.operator].includes(getRoleFromArgs(args)) ? 'edit' : 'read',
@@ -394,16 +389,16 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
       },
       ui: {
         createView: {
-          fieldMode: 'hidden'
-        }
-      }
+          fieldMode: 'hidden',
+        },
+      },
     }),
 
     statementNumber: integer({
       label: 'شماره صورت وضعیت',
       ui: {
-        description: `ie: 1,2,3`
-      }
+        description: `ie: 1,2,3`,
+      },
     }),
 
     contract: relationship({
@@ -415,8 +410,8 @@ export const Statement = list<Lists.Statement.TypeInfo<any>>({
         labelField: 'summery',
         hideCreate: true,
         createView: {
-          fieldMode: 'hidden'
-        }
+          fieldMode: 'hidden',
+        },
       },
     }),
     description: relationship({

@@ -1,38 +1,37 @@
-import { useEffect, useState } from "react";
-import { BaseItem, BaseKeystoneTypeInfo, BaseListTypeInfo, KeystoneContext, MaybeItemFunction, MaybeSessionFunction } from "@keystone-6/core/types";
-import { Roles, Session } from "./types";
-import { createTheme } from "@mui/material";
-
+import type { Session } from './types'
+import { BaseItem, BaseKeystoneTypeInfo, BaseListTypeInfo, KeystoneContext, MaybeItemFunction, MaybeSessionFunction } from '@keystone-6/core/types'
+import { createTheme } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Roles } from './types'
 
 export namespace NumUtils {
-  export function format(number: number | BigInt) {
+  export function format(number: number | bigint) {
     if (typeof number === 'number') {
-      return Intl.NumberFormat('en-US').format(number);
-    } else
+      return Intl.NumberFormat('en-US').format(number)
+    }
+    else
       if (typeof number === 'bigint') {
-        return Intl.NumberFormat('en-US').format(number);
+        return Intl.NumberFormat('en-US').format(number)
       }
   }
 
   export function deformat(number: string) {
-    return BigInt(number.replace(/,/g, ''));
+    return BigInt(number.replace(/,/g, ''))
   }
 }
 
-
 export function setPermitions(
   args: object & {
-    session?: Session;
+    session?: Session
   },
 
   permittions: {
-    role: Roles,
-    fieldMode: "read" | "edit" | "hidden"
+    role: Roles
+    fieldMode: 'read' | 'edit' | 'hidden'
   }[],
-  defaultValue: "read" | "edit" | "hidden"
+  defaultValue: 'read' | 'edit' | 'hidden',
 
-): "read" | "edit" | "hidden" {
-
+): 'read' | 'edit' | 'hidden' {
   for (const per of permittions) {
     if (per.role === args.session?.data.role) {
       return per.fieldMode
@@ -40,100 +39,95 @@ export function setPermitions(
   }
 
   return defaultValue
-
 }
 
 export function editIfAdmin(args: object & {
-  session?: Session;
-},
-  defaultValue?: "read" | "edit" | "hidden"
-) {
+  session?: Session
+}, defaultValue?: 'read' | 'edit' | 'hidden') {
   return setPermitions(args, [{ role: Roles.admin, fieldMode: 'edit' }], defaultValue || 'read')
 }
 
-
-export type ExcludesFalse = <T>(x: T | false | undefined | null) => x is T;
-
+export type ExcludesFalse = <T>(x: T | false | undefined | null) => x is T
 
 class TreeNode<T> {
-  key: string;
-  value: T;
-  #parent: TreeNode<T> | null;
-  children: TreeNode<T>[];
+  key: string
+  value: T
+  #parent: TreeNode<T> | null
+  children: TreeNode<T>[]
 
   constructor(key: string, value: T, parent: TreeNode<T> | null = null) {
-    this.key = key;
-    this.value = value;
-    this.#parent = parent;
-    this.children = [];
+    this.key = key
+    this.value = value
+    this.#parent = parent
+    this.children = []
   }
 
   get isLeaf() {
-    return this.children.length === 0;
+    return this.children.length === 0
   }
 
   get hasChildren() {
-    return !this.isLeaf;
+    return !this.isLeaf
   }
 }
 
 export class Tree<T> {
   private root: TreeNode<T>
   constructor(key: string, value: T) {
-    this.root = new TreeNode(key, value);
+    this.root = new TreeNode(key, value)
   }
 
   *preOrderTraversal(node = this.root): Generator<TreeNode<T>> {
-    yield node;
+    yield node
     if (node.children.length) {
-      for (let child of node.children) {
-        yield* this.preOrderTraversal(child);
+      for (const child of node.children) {
+        yield * this.preOrderTraversal(child)
       }
     }
   }
 
   *postOrderTraversal(node = this.root): Generator<TreeNode<T>> {
     if (node.children.length) {
-      for (let child of node.children) {
-        yield* this.postOrderTraversal(child);
+      for (const child of node.children) {
+        yield * this.postOrderTraversal(child)
       }
     }
-    yield node;
+    yield node
   }
 
   insert(parentNodeKey: string, key: string, value: T) {
-    for (let node of this.preOrderTraversal()) {
+    for (const node of this.preOrderTraversal()) {
       if (node.key === parentNodeKey) {
-        node.children.push(new TreeNode(key, value, node));
-        return true;
+        node.children.push(new TreeNode(key, value, node))
+        return true
       }
     }
-    return false;
+    return false
   }
 
   remove(key: string) {
-    for (let node of this.preOrderTraversal()) {
-      const filtered = node.children.filter(c => c.key !== key);
+    for (const node of this.preOrderTraversal()) {
+      const filtered = node.children.filter(c => c.key !== key)
       if (filtered.length !== node.children.length) {
-        node.children = filtered;
-        return true;
+        node.children = filtered
+        return true
       }
     }
-    return false;
+    return false
   }
 
   find(key: string) {
-    for (let node of this.preOrderTraversal()) {
-      if (node.key === key) return node;
+    for (const node of this.preOrderTraversal()) {
+      if (node.key === key)
+        return node
     }
-    return undefined;
+    return undefined
   }
 
   getRoot() {
     return this.root
   }
 }
-
 
 export const theme = createTheme({
   typography: {
@@ -143,34 +137,22 @@ export const theme = createTheme({
   palette: {
     primary: {
       main: '#1d4ed8', // Change this to your desired primary color
-    }
-  }
-});
+    },
+  },
+})
 
-
-export const useDebouncedValue = <T>(inputValue: T, delay: number) => {
-
-  const [debouncedValue, setDebouncedValue] = useState(inputValue);
-
+export function useDebouncedValue<T>(inputValue: T, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(inputValue)
 
   useEffect(() => {
-
     const handler = setTimeout(() => {
-
-      setDebouncedValue(inputValue);
-
-    }, delay);
-
+      setDebouncedValue(inputValue)
+    }, delay)
 
     return () => {
+      clearTimeout(handler)
+    }
+  }, [inputValue, delay])
 
-      clearTimeout(handler);
-
-    };
-
-  }, [inputValue, delay]);
-
-
-  return debouncedValue;
-
-};
+  return debouncedValue
+}

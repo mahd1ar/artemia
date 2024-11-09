@@ -13,7 +13,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
     label: 'شرح مصوبه',
     plural: 'شرح مصوبات',
     listView: {
-      initialColumns: ['subject', 'totalStatementsPayed', 'totalStatementsPayable'],
+      initialColumns: ['subject', 'totalStatementsPayed', 'totalInvoicesPayable'],
       initialSort: {
         field: 'title',
         direction: 'ASC',
@@ -58,9 +58,9 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
       label: 'صورت وضعیت',
       ui: {
         createView: {
-          fieldMode: 'hidden'
-        }
-      }
+          fieldMode: 'hidden',
+        },
+      },
     }),
     invoices: relationship({
       ref: 'Invoice.description',
@@ -68,9 +68,9 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
       label: 'فاکتور ها',
       ui: {
         createView: {
-          fieldMode: 'hidden'
-        }
-      }
+          fieldMode: 'hidden',
+        },
+      },
     }),
     approvals: relationship({
       ref: 'Approval.description',
@@ -80,17 +80,18 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
           fieldMode: 'hidden',
         },
         createView: {
-          fieldMode: 'hidden'
-        }
-      }
+          fieldMode: 'hidden',
+        },
+      },
     }),
     totalStatementsPayable: virtual({
       label: 'مجموع قابل پرداخت',
       ui: {
-        views: './src/custome-fields-view/bigint-viewer.tsx',
+        views: './src/custome-fields-view/hidden.tsx',
         createView: {
-          fieldMode: 'hidden'
-        }
+          fieldMode: 'hidden',
+        },
+
       },
       field: graphql.field({
         type: graphql.BigInt,
@@ -132,54 +133,83 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
         },
       }),
     }),
-    totalStatementsPayed: virtual({
-      label: 'مجموع پرداختی ها',
+    totalInvoicesPayed: virtual({
+      label: 'مجموع پرداختی فاکتور ها',
       ui: {
-        views: './src/custome-fields-view/bigint-viewer.tsx',
+        views: './src/custome-fields-view/hidden.tsx',
         createView: {
-          fieldMode: 'hidden'
-        }
+          fieldMode: 'hidden',
+        },
+
       },
       field: graphql.field({
         type: graphql.BigInt,
-        async resolve(item, args, context) {
+        async resolve(item, _, context) {
           const { id } = item
-          const prisma = context.prisma
-          // NOTICE: you can use query instead of prisma as well
-          const currentDescription = await prisma.description.findUnique({
-            where: {
-              id,
-            },
-            select: {
-              statements: {
-                select: {
-                  confirmedByTheUploader: true,
-                  peyments: {
-                    select: {
-                      price: true,
-                    },
-                  },
-                },
+
+          const CURRENT_DESCRIPTION_INVOCES = gql`
+          query CURRENT_DESCRIPTION_INVOCES($where: DescriptionWhereUniqueInput!) {
+            description(where: $where) {
+              invoices {
+                totalPayable
+              }
+            }
+          }` as import('../__generated__/ts-gql/CURRENT_DESCRIPTION_INVOCES').type
+
+          const sudo = context.sudo()
+          const { description } = await sudo.graphql.run({
+            query: CURRENT_DESCRIPTION_INVOCES,
+            variables: {
+              where: {
+                id,
               },
             },
           })
 
-          let total = BigInt(0)
+          if (description) {
+            let total = BigInt(0)
 
-          currentDescription?.statements.forEach((i) => {
-            if (i.confirmedByTheUploader) {
-              i.peyments.forEach((j) => {
-                if (j.price) {
-                  total += j.price + total
-                }
-              })
-            }
-          })
+            description.invoices?.forEach((i) => {
+              total += BigInt(i.totalPayable)
+            })
 
-          return total
+            return total
+          }
+
+          return BigInt(0)
         },
       }),
     }),
+    totalPayed: virtual({
+      label: 'مجموع پرداختی  ها',
+      ui: {
+        views: './src/custome-fields-view/virtual-total-payable-detailed.tsx',
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldPosition() {
+            return 'sidebar'
+          },
+        },
+      },
+      field: graphql.field({
+        type: graphql.JSON,
+        async resolve() {
+          return [
+            {
+              id: 'totalInvoicesPayed',
+              label: 'مجموع  فاکتور ها',
+            },
+            {
+              id: 'totalStatementsPayable',
+              label: 'مجموع صورت وضعیت ها',
+            },
+          ]
+        },
+      }),
+    }),
+
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
       ui: {

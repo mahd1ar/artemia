@@ -10,6 +10,7 @@ import { AlertDialog } from '@keystone-ui/modals'
 import { Box, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, ThemeProvider } from '@mui/material'
 import { green } from '@mui/material/colors'
 import { gql } from '@ts-gql/tag/no-transform'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 import { theme } from '../../../data/utils'
@@ -439,7 +440,20 @@ export function Field({
             },
           }}
         >
-          <fieldset disabled={!onChange} style={{ maxHeight: ' calc( 96dvh - 143px)', overflow: 'auto' }}>
+          <div style={{ position: 'relative' }}>
+
+            <Link
+              href={`/rows/${modelData.id}`}
+              style={{
+                position: 'absolute',
+                top: -50,
+                right: 0,
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 10.5L21 3m-5 0h5v5m0 6v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path></svg>
+            </Link>
+          </div>
+          <fieldset disabled={!onChange} style={{ maxHeight: ' calc( 96dvh - 143px)', overflow: 'auto', position: 'relative' }}>
             <Stack gap="small">
 
               <FieldLabel> کالا </FieldLabel>

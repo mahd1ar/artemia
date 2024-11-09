@@ -1,8 +1,8 @@
-// ts-gql-integrity:00857df160e2ae6b6440e4a9975d53b2
+// ts-gql-integrity:3070b8cca36d7898c15d379797b4b11c
 /*
 ts-gql-meta-begin
 {
-  "hash": "483582fb18816246d345bbc29453db07"
+  "hash": "9fc6f26333fa7b2492d165950e78248d"
 }
 ts-gql-meta-end
 */
@@ -231,7 +231,7 @@ export type Description = {
   readonly invoicesCount: number | null;
   readonly approvals: Approval | null;
   readonly totalStatementsPayable: BigInt | null;
-  readonly totalStatementsPayed: BigInt | null;
+  readonly totalInvoicesPayed: BigInt | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
