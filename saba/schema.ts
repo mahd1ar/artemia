@@ -16,6 +16,7 @@ import { Roles, getRoleFromArgs } from "./data/types";
 
 export const lists: Lists = {
   Approval, Description, Invoice, Row,
+  Contract,
   Statement,
   StatementItem,
   Payment,
@@ -26,7 +27,6 @@ export const lists: Lists = {
 
   FileStore,
 
-  Contract,
 
 
   Design,

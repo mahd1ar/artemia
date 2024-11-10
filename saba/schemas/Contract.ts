@@ -15,8 +15,8 @@ import {
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn, isMemberOfAdminGroup } from '../data/access'
 import { getRoleFromArgs, Roles, type Session } from '../data/types'
-import { persianCalendar } from '../src/custom-fields/persian-calander'
 import { setPermitions } from '../data/utils'
+import { persianCalendar } from '../src/custom-fields/persian-calander'
 
 const detector = new DeviceDetector({
   clientIndexes: false,
@@ -204,6 +204,34 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       },
     }),
 
+    statementDescription: relationship({
+      label: ' شرح مصوبه',
+      ref: 'Description.contracts',
+      many: false,
+      ui: {
+        views: './src/custome-fields-view/statement-description-realtion.tsx',
+        itemView: {
+          fieldPosition(args) {
+            const userAgent = (args.context.req?.headers['user-agent'])
+
+            if (userAgent)
+              return detector.detect(userAgent).device.type === 'desktop' ? 'sidebar' : 'form'
+
+            return 'sidebar'
+          },
+        },
+        // createView: {
+        //   fieldMode(args) {
+        //     // TODO abstract this to function
+        //     const reff = new URL((args.context.res?.req.headers.referer as string))
+        //     const referer = (reff.pathname.split('/').filter(Boolean).at(0))
+        //     return referer === 'descriptions' ? 'hidden' : 'edit'
+        //   },
+        // },
+        // displayMode: 'select'
+      },
+    }),
+
     attachments: relationship({
       label: 'فایل های ضمیمه شده',
       ref: 'FileStore.contract',
@@ -238,22 +266,22 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       ref: 'Statement.contract',
       many: true,
       ui: {
-        labelField: 'id' ,
+        labelField: 'id',
         createView: {
           fieldMode: 'hidden',
         },
         itemView: {
           // fieldMode: 'read',
           fieldMode(args) {
-            return setPermitions(args ,[
+            return setPermitions(args, [
               { role: Roles.admin, fieldMode: 'edit' },
               { role: Roles.workshop, fieldMode: 'edit' },
               { role: Roles.operator, fieldMode: 'edit' },
               { role: Roles.supervisor, fieldMode: 'edit' },
-            ],'read') 
+            ], 'read')
           },
         },
-        views: './src/custome-fields-view/contract-statement-list-relationship-view.tsx'
+        views: './src/custome-fields-view/contract-statement-list-relationship-view.tsx',
       },
     }),
 

@@ -1,37 +1,34 @@
-import React, { useEffect } from "react";
-import { type FieldProps } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel, Select } from "@keystone-ui/fields";
-import { CheckIcon } from "@keystone-ui/icons";
-import { type controller } from "@keystone-6/core/fields/types/relationship/views";
-import { Fragment, useState } from "react";
-import { useQuery, useLazyQuery } from '@apollo/client'
+import type { controller } from '@keystone-6/core/fields/types/relationship/views'
+import type { FieldProps } from '@keystone-6/core/types'
+import { useLazyQuery, useQuery } from '@apollo/client'
+import { FieldContainer, FieldLabel, Select } from '@keystone-ui/fields'
+import { CheckIcon } from '@keystone-ui/icons'
+import { useToasts } from '@keystone-ui/toast'
 import { gql } from '@ts-gql/tag/no-transform'
+import React, { Fragment, useEffect, useState } from 'react'
+
 // import { useRouter } from "@keystone-6/core/dist/declarations/src/admin-ui/router";
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router'
 
-
-type Option = {
-  value: string,
+interface Option {
+  value: string
   label: string
 }
 
-export const Field = ({
+export function Field({
   field,
   value,
   onChange,
-  autoFocus,
-  itemValue,
-  forceValidation
-}: FieldProps<typeof controller>) => {
-
+}: FieldProps<typeof controller>) {
   const firstOption: Option = {
     value: '',
-    label: 'انتخاب کنید'
+    label: 'انتخاب کنید',
   }
 
-  const router = useRouter()
-  const [isHidden] = useState(router.pathname.split("/").filter(Boolean).at(0) === 'descriptions')
+  const toast = useToasts()
 
+  const router = useRouter()
+  const [isHidden] = useState(router.pathname.split('/').filter(Boolean).at(0) === 'descriptions')
 
   const [selectedApproval, setSelectedApproval] = useState<Option>(firstOption)
 
@@ -52,7 +49,7 @@ export const Field = ({
             id
             title
           } 
-      }`  as import('../../__generated__/ts-gql/APPROVALS_Q').type
+      }` as import('../../__generated__/ts-gql/APPROVALS_Q').type
 
   const DESCRIPTION_APPROVAL_Q = gql`
         query DESCRIPTION_APPROVAL_Q($id: ID!) {
@@ -64,19 +61,17 @@ export const Field = ({
               title
             }
           } 
-      }`  as import('../../__generated__/ts-gql/DESCRIPTION_APPROVAL_Q').type
+      }` as import('../../__generated__/ts-gql/DESCRIPTION_APPROVAL_Q').type
 
   const { data } = useQuery(APPROVALS_Q)
   const [load, { data: dataApprovalDescriptions }] = useLazyQuery(DESCRIPTION_APPROVAL_Q)
   const [loadCoresponsiveDescriptions, { data: dataDescriptions }] = useLazyQuery(DESCRIPTIONS_OF_APPROVAL_QUERY)
 
   useEffect(() => {
-
     if (value && value.initialValue) {
       {
         load({ variables: value.initialValue })
-          .then(res => {
-
+          .then((res) => {
             const id = res.data?.description?.approvals?.id
             const title = res.data?.description?.approvals?.title
 
@@ -85,28 +80,25 @@ export const Field = ({
               loadCoresponsiveDescriptions({ variables: { id } })
               setSelectedDescriptoins({ label: res.data?.description?.title || '', value: res.data?.description?.id || '' })
             }
-
-
-
           })
-
       }
     }
   }, [data])
-
-
 
   async function onChangeApproval(option: Option) {
     setSelectedApproval(option)
     const res = await loadCoresponsiveDescriptions({ variables: { id: option.value } })
     if (res.data?.descriptions) {
       setSelectedDescriptoins(
-        firstOption
+        firstOption,
       )
-
     }
-    else
-      alert("ERROR - no coresponsive descriptions")
+    else {
+      toast.addToast({
+        title: 'ERROR - no coresponsive descriptions',
+        tone: 'negative',
+      })
+    }
   }
 
   async function onChangeDescription(option: Option) {
@@ -118,37 +110,39 @@ export const Field = ({
       },
       kind: 'one',
       id: value.id,
-      initialValue: value.initialValue
+      initialValue: value.initialValue,
     })
   }
 
-
   return (
     <>
-      {!isHidden &&
+      {!isHidden
 
+      && (
         <FieldContainer>
           <FieldLabel>{field.label}</FieldLabel>
 
-          <Select onChange={onChangeApproval} value={selectedApproval}
+          <Select
+            onChange={onChangeApproval}
+            value={selectedApproval}
             options={data?.approvals?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
             isDisabled={!onChange}
           />
 
-          {dataDescriptions &&
-            (
-              <Select
-                isDisabled={!onChange}
-                css={{ marginTop: '0.5rem' }}
-                onChange={onChangeDescription}
-                value={selectedDescriptoins}
-                options={dataDescriptions?.descriptions?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
-              />
-            )}
+          {dataDescriptions
+          && (
+            <Select
+              isDisabled={!onChange}
+              css={{ marginTop: '0.5rem' }}
+              onChange={onChangeDescription}
+              value={selectedDescriptoins}
+              options={dataDescriptions?.descriptions?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
+            />
+          )}
 
         </FieldContainer>
-      }
+      )}
 
     </>
-  );
-};
+  )
+}

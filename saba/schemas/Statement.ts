@@ -366,6 +366,11 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         {
           label: 'موقت',
           value: 'temporary',
+
+        },
+        {
+          label: 'ماقبل قطعی ',
+          value: 'before-final',
         },
         {
           label: 'قطعی',
@@ -398,6 +403,18 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       label: 'شماره صورت وضعیت',
       ui: {
         description: `ie: 1,2,3`,
+        views: './src/custome-fields-view/integer_conditonal.tsx',
+      },
+      hooks: {
+        resolveInput(args) {
+          if (args.operation === 'create' || args.operation === 'update') {
+            if (args.inputData?.type && args.inputData.type !== 'temporary') {
+              return null
+            }
+          }
+
+          return args.resolvedData.statementNumber
+        },
       },
     }),
 

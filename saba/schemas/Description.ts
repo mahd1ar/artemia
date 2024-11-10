@@ -52,11 +52,20 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
     }),
     title: text(),
     code: text(),
+    contracts: relationship({
+      ref: 'Contract.statementDescription',
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
     statements: relationship({
       ref: 'Statement.description',
       many: true,
       label: 'صورت وضعیت',
       ui: {
+        description: 'این ایتم به زودی حذف خواهد شد',
         createView: {
           fieldMode: 'hidden',
         },
