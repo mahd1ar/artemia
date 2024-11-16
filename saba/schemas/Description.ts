@@ -53,6 +53,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
     title: text(),
     code: text(),
     contracts: relationship({
+      label: 'قرارداد ها',
       ref: 'Contract.statementDescription',
       ui: {
         createView: {

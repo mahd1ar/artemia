@@ -4,13 +4,14 @@ import { ThemeContext } from '@emotion/react'
 import { useKeystone } from '@keystone-6/core/admin-ui/context'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { Button, Card, CardActions, CardContent, CardMedia, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { green, teal } from '@mui/material/colors'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
 
+import React from 'react'
 // @ts-expect-error: can not find types
-import moneyPic from '../../admin/money.jpg'
 import { theme } from '../../data/utils'
+// import moneyPic from '../../admin/money.jpg'
 
 interface Item {
   id: string
@@ -76,12 +77,12 @@ export function Field({
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" sx={{ color: green[50] }}>
                   {row.label}
                 </TableCell>
-                <TableCell align="right">{row.price.toLocaleString()}</TableCell>
+                <TableCell sx={{ color: green[50] }} align="right">{row.price.toLocaleString()}</TableCell>
                 <TableCell align="right">
-                  <Link href="/#">
+                  <Link style={{ color: green[50] }} href="/#">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024">
                       <path fill="currentColor" d="M768 256H353.6a32 32 0 1 1 0-64H800a32 32 0 0 1 32 32v448a32 32 0 0 1-64 0z"></path>
                       <path fill="currentColor" d="M777.344 201.344a32 32 0 0 1 45.312 45.312l-544 544a32 32 0 0 1-45.312-45.312z"></path>
@@ -101,13 +102,13 @@ export function Field({
     <>
       <FieldContainer>
         <ThemeContext.Provider value={theme}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
+          <Card sx={{ maxWidth: 345, backgroundColor: teal[600], color: green[100] }}>
+            {/* <CardMedia
               component="img"
               alt="green iguana"
               height="140"
               image={moneyPic.src}
-            />
+            /> */}
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 { totalPrice.toLocaleString() }

@@ -1,16 +1,16 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
-import { jsx } from '@keystone-ui/core'
-import { CellComponent, type FieldProps } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel, FieldDescription, TextInput } from "@keystone-ui/fields";
-import { type controller } from "@keystone-6/core/fields/types/bigInt/views";
-import { useState } from "react";
-import Num2persian from "./utils/num2persian";
-import { useFormattedInput } from "./utils/utils";
-import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components';
-import { NumUtils } from '../../data/utils';
+import type { controller } from '@keystone-6/core/fields/types/bigInt/views'
+import type { CellComponent, FieldProps } from '@keystone-6/core/types'
+import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
 
+import { jsx } from '@keystone-ui/core'
+import { FieldContainer, FieldDescription, FieldLabel, TextInput } from '@keystone-ui/fields'
+import { useState } from 'react'
+import { NumUtils } from '../../data/utils'
+import Num2persian from './utils/num2persian'
+import { useFormattedInput } from './utils/utils'
 
 function BigIntInput({
   value,
@@ -32,21 +32,28 @@ function BigIntInput({
   const [hasBlurred, setHasBlurred] = useState(false)
   const props = useFormattedInput<bigint | null>(
     {
-      format: value => (value === null ? '' : value.toString()),
-      parse: raw => {
-        raw = raw.trim()
+      format: (value) => {
+        if (value === null)
+          return ''
+
+        return Intl.NumberFormat('en').format(value)
+      },
+      parse: (raw) => {
+        raw = raw.trim().replace(/,/g, '')
         if (raw === '') {
           return null
         }
         if (/^[+-]?\d+$/.test(raw)) {
           try {
             return BigInt(raw)
-          } catch {
+          }
+          catch {
             return raw
           }
         }
         return raw
       },
+
     },
     {
       value,
@@ -54,7 +61,7 @@ function BigIntInput({
       onBlur: () => {
         setHasBlurred(true)
       },
-    }
+    },
   )
 
   return (
@@ -66,7 +73,7 @@ function BigIntInput({
         inputMode="numeric"
         {...props}
       />
-      <div css={{ color: 'gray', fontSize: '12px', fontWeight: 'bold' }} >
+      <div css={{ color: 'gray', fontSize: '12px', fontWeight: 'bold' }}>
 
         {props.value ? ` ${Num2persian(props.value)} ریال` : ''}
       </div>
@@ -81,7 +88,7 @@ type Value =
   | { kind: 'create', value: string | bigint | null }
   | { kind: 'update', value: string | bigint | null, initial: unknown | null }
 
-type Validation = {
+interface Validation {
   isRequired: boolean
   min: bigint
   max: bigint
@@ -91,7 +98,7 @@ function validate(
   state: Value,
   validation: Validation,
   label: string,
-  hasAutoIncrementDefault: boolean
+  hasAutoIncrementDefault: boolean,
 ): string | undefined {
   const { kind, value } = state
   if (typeof value === 'string') {
@@ -125,42 +132,14 @@ function validate(
   return undefined
 }
 
-export const Field = ({
+export function Field({
   field,
   value,
   onChange,
   autoFocus,
-  itemValue,
-  forceValidation
-}: FieldProps<typeof controller>) => {
-
+  forceValidation,
+}: FieldProps<typeof controller>) {
   const message = validate(value, field.validation, field.label, field.hasAutoIncrementDefault)
-
-
-  function addComma<T>(arg: T) {
-
-    if (typeof arg === 'bigint') {
-
-      return arg.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    }
-
-    return arg
-
-  }
-
-  function removeComma<T>(arg: T) {
-
-    if (typeof arg === 'string') {
-
-      try {
-        const strWitoutCamma = arg.replace(/,/g, '')
-        return BigInt(strWitoutCamma)
-      } catch (error) { }
-    }
-
-    return arg
-  }
-
 
   return (
 
@@ -168,53 +147,57 @@ export const Field = ({
       <FieldLabel>{field.label}</FieldLabel>
       <FieldDescription id={`${field.path}-description`}>{field.description}</FieldDescription>
 
-      {onChange ? (
-        <span>
-          {/* <pre>{String(value.value)}</pre> */}
-          <BigIntInput
-            id={field.path}
-            autoFocus={autoFocus}
-            onChange={val => {
-              onChange({ ...value, value: val })
-            }}
-            value={value.value}
-            forceValidation={forceValidation}
-            placeholder={
-              field.hasAutoIncrementDefault && value.kind === 'create'
-                ? 'Defaults to an incremented number'
-                : undefined
-            }
-            validationMessage={message}
-            aria-describedby={field.description === null ? undefined : `${field.path}-description`}
-          />
-        </span>
-      ) : value.value === null ? (
-        ' 0'
-      ) : (
-        <span dir='rtl' >
-          {Intl.NumberFormat('ir-fa').format(+value.value.toString())}
-          <span style={{ fontSize: 12, display: +value.value.toString() ? 'inline' : 'none' }} >
+      {onChange
+        ? (
+            <span>
+              <BigIntInput
+                id={field.path}
+                autoFocus={autoFocus}
+                onChange={(val) => {
+                  onChange({ ...value, value: val })
+                }}
+                value={value.value}
+                forceValidation={forceValidation}
+                placeholder={
+                  field.hasAutoIncrementDefault && value.kind === 'create'
+                    ? 'Defaults to an incremented number'
+                    : undefined
+                }
+                validationMessage={message}
+                aria-describedby={field.description === null ? undefined : `${field.path}-description`}
+              />
+            </span>
+          )
+        : value.value === null
+          ? (
+              ' 0'
+            )
+          : (
+              <span dir="rtl">
+                {Intl.NumberFormat('ir-fa').format(+value.value.toString())}
+                <span style={{ fontSize: 12, display: +value.value.toString() ? 'inline' : 'none' }}>
 
-            ریال
-          </span>
+                  ریال
+                </span>
 
-        </span>
-      )}
-
+              </span>
+            )}
 
     </FieldContainer>
 
-
-  );
-};
-
+  )
+}
 
 export const Cell: CellComponent = ({ item, field, linkTo }) => {
-
-  let value = item[field.path] + ''
-  return linkTo ? <CellLink {...linkTo}>{value}</CellLink> : <CellContainer>{
-    value !== 'null' ? NumUtils.format(+(value)) : '0'
-  }</CellContainer>
-
+  const value = `${item[field.path]}`
+  return linkTo
+    ? <CellLink {...linkTo}>{value}</CellLink>
+    : (
+        <CellContainer>
+          {
+            value !== 'null' ? NumUtils.format(+(value)) : '0'
+          }
+        </CellContainer>
+      )
 }
 Cell.supportsLinkTo = true

@@ -69,19 +69,17 @@ export function Field({
 
   useEffect(() => {
     if (value && value.initialValue) {
-      {
-        load({ variables: value.initialValue })
-          .then((res) => {
-            const id = res.data?.description?.approvals?.id
-            const title = res.data?.description?.approvals?.title
+      load({ variables: value.initialValue })
+        .then((res) => {
+          const id = res.data?.description?.approvals?.id
+          const title = res.data?.description?.approvals?.title
 
-            if (id && title) {
-              setSelectedApproval({ label: title || '', value: id })
-              loadCoresponsiveDescriptions({ variables: { id } })
-              setSelectedDescriptoins({ label: res.data?.description?.title || '', value: res.data?.description?.id || '' })
-            }
-          })
-      }
+          if (id && title) {
+            setSelectedApproval({ label: title || '', value: id })
+            loadCoresponsiveDescriptions({ variables: { id } })
+            setSelectedDescriptoins({ label: res.data?.description?.title || '', value: res.data?.description?.id || '' })
+          }
+        })
     }
   }, [data])
 

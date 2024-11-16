@@ -138,6 +138,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
     isApproved: checkbox({
       label: 'تایید شده ',
       ui: {
+        views: './src/custome-fields-view/confirm-btn-for-contact.tsx',
         createView: {
           fieldMode: 'hidden',
         },

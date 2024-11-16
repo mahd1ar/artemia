@@ -3,12 +3,13 @@ import type { FieldProps } from '@keystone-6/core/types'
 import { ThemeContext } from '@emotion/react'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
+import { green, teal } from '@mui/material/colors'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
+
 // @ts-expect-error: can not find types
 import moneyPic from '../../admin/money.jpg'
-
 import { theme } from '../../data/utils'
 
 export function Field({
@@ -25,27 +26,26 @@ export function Field({
     <>
       <FieldContainer>
         <ThemeContext.Provider value={theme}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
+          <Card sx={{ maxWidth: 345, backgroundColor: teal[600] }}>
+            {/* <CardMedia
               component="img"
               alt="green iguana"
               height="140"
               image={moneyPic.src}
-            />
+            /> */}
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {value && Intl.NumberFormat('en').format(value)}
 
-                Rials
+              <Typography gutterBottom variant="h4" component="div" sx={{ color: green[50] }}>
+                {value && Intl.NumberFormat('en').format(value)}
+&nbsp;Rials
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {/* Lizards are a widespread group of squamate reptiles, with over 6,000
-                species, ranging across all continents except Antarctica */}
+              <Typography variant="body2" sx={{ color: green[100] }}>
+
                 {field.label}
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" LinkComponent={Link} href={`/descriptions?%21approvals_matches=%22${router.query.id}%22&fields=subject%2CtotalStatementsPayable%2CtotalInvoicesPayed`}>
+              <Button size="small" sx={{ color: green[50], fontWeight: 'bold' }} LinkComponent={Link} href={`/descriptions?%21approvals_matches=%22${router.query.id}%22&fields=subject%2CtotalStatementsPayable%2CtotalInvoicesPayed`}>
                 جزئیات
               </Button>
             </CardActions>
