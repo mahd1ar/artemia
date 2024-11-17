@@ -109,6 +109,9 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
             return args.item.contractId ? 'read' : 'hidden'
           },
         },
+        createView: {
+          fieldMode: 'hidden',
+        },
       },
     }),
     createdAt: timestamp({

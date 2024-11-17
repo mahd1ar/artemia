@@ -328,5 +328,33 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
         },
       },
     }),
+    contractSample: virtual({
+      label: 'نمونه قرارداد',
+      field: graphql.field({
+        type: graphql.JSON,
+        async resolve(item, _, context) {
+          const sudo = context.sudo()
+          const result = await sudo.prisma.setting.findFirst({
+            where: { id: 1 },
+            select: {
+              contractSample: {
+                select: {
+                  id: true,
+                  title: true,
+                  file_filename: true,
+                },
+              },
+            },
+          })
+
+          return result?.contractSample.map((i) => {
+            return {
+              title: i.title,
+              link: i.file_filename ? `files/${i.file_filename}` : '#',
+            }
+          }) || []
+        },
+      }),
+    }),
   },
 })
