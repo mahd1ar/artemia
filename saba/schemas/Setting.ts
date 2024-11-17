@@ -36,6 +36,9 @@ export const Setting = list<Lists.Setting.TypeInfo<Session>>({
       ref: 'FileStore',
       label: 'نمونه قرارداد',
       many: true,
+      ui: {
+        labelField: 'title',
+      },
     }),
   },
 })

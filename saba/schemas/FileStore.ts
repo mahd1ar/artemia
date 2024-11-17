@@ -8,9 +8,16 @@ import { editIfAdmin } from '../data/utils'
 
 export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
   access: allowAll,
+
   ui: {
     label: 'فایل ها',
     // isHidden: args =>  getRoleFromArgs(args) > Roles.operator,
+    listView: {
+      initialSort: {
+        direction: 'DESC',
+        field: 'createdAt',
+      },
+    },
   },
   hooks: {
     resolveInput(args) {
