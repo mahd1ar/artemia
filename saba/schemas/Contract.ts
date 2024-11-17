@@ -6,6 +6,7 @@ import {
   checkbox,
   file,
   integer,
+  json,
   relationship,
   select,
   text,
@@ -166,6 +167,18 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       },
     }),
 
+    ...group({
+      label: 'تاریخ قرارداد',
+      fields: {
+        startFrom: persianCalendar({
+          label: 'از تاریخ',
+        }),
+        end: persianCalendar({
+          label: 'تا تاریخ',
+        }),
+      },
+    }),
+
     rows: relationship({
       label: 'آیتم ها',
       ref: 'Row.contract',
@@ -187,17 +200,6 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       },
     }),
 
-    ...group({
-      label: 'تاریخ قرارداد',
-      fields: {
-        startFrom: persianCalendar({
-          label: 'از تاریخ',
-        }),
-        end: persianCalendar({
-          label: 'تا تاریخ',
-        }),
-      },
-    }),
     cost: bigInt({
       label: 'پیشبینی مبلغ قرارداد',
       ui: {
@@ -360,6 +362,36 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
           fieldPosition: 'sidebar',
         },
         views: './src/custome-fields-view/links-viewer.tsx',
+      },
+    }),
+    changeLog: json({
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldPosition: 'sidebar',
+          fieldMode(args) {
+            if (args.session?.data.role === Roles.admin)
+              return 'read'
+            else
+              return 'hidden'
+          },
+        },
+        views: './src/custome-fields-view/changelog-view.tsx',
+      },
+      hooks: {
+        resolveInput(args) {
+          const state = (args.item?.changeLog) ? JSON.parse(args.item.changeLog || '[]') : []
+          const info = {
+            ops: args.operation,
+            items: Object.keys(args.inputData),
+            by: args.context.session?.itemId,
+            at: new Date(),
+          }
+
+          state.push(info)
+
+          return JSON.stringify(state)
+        },
       },
     }),
   },

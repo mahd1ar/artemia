@@ -2,7 +2,7 @@
 /** @jsx jsx */
 
 import type { controller } from '@keystone-6/core/fields/types/bigInt/views'
-import type { CellComponent, FieldProps } from '@keystone-6/core/types'
+import type { CardValueComponent, CellComponent, FieldProps } from '@keystone-6/core/types'
 import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
 
 import { jsx } from '@keystone-ui/core'
@@ -201,3 +201,17 @@ export const Cell: CellComponent = ({ item, field, linkTo }) => {
       )
 }
 Cell.supportsLinkTo = true
+
+export const CardValue: CardValueComponent = ({ item, field }) => {
+  return (
+    <FieldContainer>
+      <FieldLabel>{field.label}</FieldLabel>
+      <bdi>
+        ریال
+      </bdi>
+      {' '}
+      {item[field.path] && NumUtils.format(+item[field.path]) }
+
+    </FieldContainer>
+  )
+}

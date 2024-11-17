@@ -1,32 +1,24 @@
-import axios from "axios";
+import axios from 'axios'
 
 async function sendMessage(message: string): Promise<boolean> {
+  const TELEGRAM_TOKEN = '6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs'
+  const TELEGRAM_CHAT_ID = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
+  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}`
 
-    const TELEGRAM_TOKEN = "6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs"
-    const TELEGRAM_CHAT_ID = process.env.NODE_ENV !== 'production' ? "-1002206133203" : "-1002235700788"
-    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}`;
-
-    try {
-
-        await axios.get(url)
-        console.log("success")
-        return true
-
-    } catch (error) {
-        console.log("error")
-        console.error(error)
-        return false
-    }
-
+  try {
+    await axios.get(url)
+    return true
+  }
+  catch (error) {
+    console.error('error sending message:')
+    console.error(error)
+    return false
+  }
 }
 
-
-export namespace Notif {
-
-
-    export async function workShopIsDoneUploadingStatement(statementTitle: string, user: string, statementUrl: string) {
-
-        const message = `
+export class Notif {
+  static async workShopIsDoneUploadingStatement(statementTitle: string, user: string, statementUrl: string) {
+    const message = `
 ( ربات کنترل پروژه صبا )
 
 📝 صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user}) آپلود شد
@@ -36,12 +28,11 @@ export namespace Notif {
 ${statementUrl}           
 `
 
-        return await sendMessage(message)
-    }
+    return await sendMessage(message)
+  }
 
-    export async function statementIsConfirmedByProjectManager(statementTitle: string, user: string, statementUrl: string) {
-
-        const message = `
+  static async statementIsConfirmedByProjectManager(statementTitle: string, user: string, statementUrl: string) {
+    const message = `
 ( ربات کنترل پروژه صبا )
 
 👷‍♂️ صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
@@ -51,26 +42,11 @@ ${statementUrl}
 ${statementUrl}           
 `
 
-        return await sendMessage(message)
-    }
-    export async function statementIsConfirmedByTechnicalGroup(statementTitle: string, user: string, statementUrl: string) {
+    return await sendMessage(message)
+  }
 
-        const message = `
-( ربات کنترل پروژه صبا )
-
-⚙️ صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
-
-امکان تایید این مصوبه توسط گروه "مدیر کل" امکان پذیر هست
-
-${statementUrl}           
-`
-
-        return await sendMessage(message)
-    }
-
-    export async function statementIsConfirmedByFinancialSupervisor(statementTitle: string, user: string, statementUrl: string) {
-
-        const message = `
+  static async statementIsConfirmedByFinancialSupervisor(statementTitle: string, user: string, statementUrl: string) {
+    const message = `
 ( ربات کنترل پروژه صبا )
 
 💵 صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user})  تایید شد
@@ -80,64 +56,57 @@ ${statementUrl}
 ${statementUrl}           
 `
 
-        return await sendMessage(message)
-    }
+    return await sendMessage(message)
+  }
 
-    export async function sendGeneralMessage(message: string) {
-        return await sendMessage(message)
-    }
+  static async sendGeneralMessage(message: string) {
+    return await sendMessage(message)
+  }
 
-    export async function sendStatementAttachmenets(
-        title: string,
-        attachmentsUrl: string[] | null,
-        peymentsUrl: string[] | null,
-    ) {
+  static async sendStatementAttachmenets(
+    title: string,
+    attachmentsUrl: string[] | null,
+    peymentsUrl: string[] | null,
+  ) {
+    const hasImageOrAttachments = !!(attachmentsUrl && attachmentsUrl?.length > 0)
+    const hasPayments = !!peymentsUrl && peymentsUrl?.length > 0
 
+    if (attachmentsUrl)
+      attachmentsUrl = attachmentsUrl?.map((i, index) => `${index + 1}- ${i}`)
 
-        const hasImageOrAttachments = !!(attachmentsUrl && attachmentsUrl?.length > 0)
-        const hasPayments = !!peymentsUrl && peymentsUrl?.length > 0
+    if (peymentsUrl)
+      peymentsUrl = peymentsUrl?.map((i, index) => `${index + 1}- ${i}`)
 
-        if (attachmentsUrl)
-            attachmentsUrl = attachmentsUrl?.map((i, index) => `${index + 1}- ${i}`)
-
-        if (peymentsUrl)
-            peymentsUrl = peymentsUrl?.map((i, index) => `${index + 1}- ${i}`)
-
-        const msg = `(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+    const msg = `(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
 
 🗂 "${title}"
 
 🔗 فایل های ضمیمه شده:
-${!hasImageOrAttachments ?
-                "هیچ فایلی ضمیمه نشده" :
-                attachmentsUrl!.join("\n")
-            }
+${!hasImageOrAttachments
+    ? 'هیچ فایلی ضمیمه نشده'
+    : attachmentsUrl!.join('\n')
+}
 
-${hasPayments ? "🔗 رسید های پرداختی: \n" + peymentsUrl!.join("\n") : ''}
+${hasPayments ? `🔗 رسید های پرداختی: \n${peymentsUrl!.join('\n')}` : ''}
 `
 
+    return await sendMessage(msg)
+  }
 
-        return await sendMessage(msg)
-    }
-
-
-    export async function newInvoiceCreated(args: { title: string, uploader: string, attachmentsUrl: string[], invoiceUrl: string }) {
-
-        let msg = `( ربات کنترل پروژه صبا )
+  static async newInvoiceCreated(args: { title: string, uploader: string, attachmentsUrl: string[], invoiceUrl: string }) {
+    const msg = `( ربات کنترل پروژه صبا )
         
 📜 فاکتور جدید با عنوان "${args.title}" در سامانه کنترل پروژه صبا ایجاد 
 
 🔗 فایل های ضمیمه شده:
 
-${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join("\n\n") || " ** هیچ فایلی ضمیمه نشده **"}
+${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join('\n\n') || ' ** هیچ فایلی ضمیمه نشده **'}
 
 🙋‍♂️ بارگذاری این فاکتور توسط: ${args.uploader}
 
 🛟  ${args.invoiceUrl}
 `
 
-        await sendMessage(msg)
-
-    }
-
+    await sendMessage(msg)
+  }
 }

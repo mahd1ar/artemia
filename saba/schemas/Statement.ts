@@ -1,6 +1,6 @@
 import type { Lists } from '.keystone/types'
 import type { PrismaClient } from '@prisma/client'
-import type { LogMessage, Session } from '../data/types'
+import type { Session } from '../data/types'
 import type { ExcludesFalse } from '../data/utils'
 import { graphql, list } from '@keystone-6/core'
 import {
@@ -73,7 +73,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
 
       if (args.operation === 'update') {
         if (role > Roles.operator && args.item.confirmedByTheUploader) {
-          // @ts-ignore
           if (!alc.find(i => args.inputData![i.gqlkey] === true && role === i.for)) {
             args.addValidationError('این صورت وضعیت قبلا تایید شده است و فقط اپراتور میتواند این صورت وضعیت را ویرایش کند')
           }
@@ -133,25 +132,25 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       if (args.operation === 'update') {
         let conformationHappend = false
 
-        alc.forEach(async ({ gqlkey: key, for: forr }) => {
+        alc.forEach(async ({ gqlkey: key, for: _ }) => {
           if (typeof args.inputData![key] === 'boolean') {
             conformationHappend = true
-            const confirmed = !!args.inputData![key]
+            // const confirmed = !!args.inputData![key]
 
-            const logMessage: LogMessage.Statement = {
-              confirmed,
-              id: args.item.id,
-              user: session!.itemId,
-            }
+            // const logMessage: LogMessage.Statement = {
+            //   confirmed,
+            //   id: args.item.id,
+            //   user: session!.itemId,
+            // }
 
-            await prisma.log.create({
-              data: {
-                action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : 'STATEMENT_CONFIRMED',
-                type: 'info',
-                message: JSON.stringify(logMessage),
-              },
-              select: { id: true },
-            })
+            // await prisma.log.create({
+            //   data: {
+            //     action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : 'STATEMENT_CONFIRMED',
+            //     type: 'info',
+            //     message: JSON.stringify(logMessage),
+            //   },
+            //   select: { id: true },
+            // })
           }
         })
 
@@ -218,9 +217,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
               else if (args.inputData.confirmedByFinancialSupervisor) {
                 await Notif.statementIsConfirmedByFinancialSupervisor(notif_statementTile, notif_username, notif_url)
               }
-              else if (args.inputData.confirmedByTechnicalSupervisor) {
-                await Notif.statementIsConfirmedByTechnicalGroup(notif_statementTile, notif_username, notif_url)
-              }
             }
           }
         }
@@ -261,10 +257,10 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         async resolve(item, args, context) {
           return {
             ok: !!item.id,
-            userRole: context.session?.data.role,
+            userRole: context.session!.data.role,
             data: alc.map(i => ({
               key: i.gqlkey,
-              value: item.id ? item[i.gqlkey] as boolean : null,
+              value: item.id ? item[i.gqlkey] : null,
               isCurrent: context.session?.data.role === i.for,
             })),
           }
@@ -314,24 +310,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
           fieldMode(args) {
             return setPermitions(args, [
               { role: Roles.projectControl, fieldMode: 'edit' },
-              { role: Roles.admin, fieldMode: 'edit' },
-              { role: Roles.operator, fieldMode: 'edit' },
-              // { role: Roles.supervisor, fieldMode: 'edit' },
-            ], 'hidden')
-          },
-        },
-        createView: { fieldMode: 'hidden' },
-        views: './src/custome-fields-view/confirm-statement-by.tsx',
-      },
-    }),
-    confirmedByTechnicalSupervisor: checkbox({
-      label: 'تایید توسط ناظر فنی پروژه',
-
-      ui: {
-        itemView: {
-          fieldMode(args) {
-            return setPermitions(args, [
-              { role: Roles.technical, fieldMode: 'edit' },
               { role: Roles.admin, fieldMode: 'edit' },
               { role: Roles.operator, fieldMode: 'edit' },
               // { role: Roles.supervisor, fieldMode: 'edit' },
