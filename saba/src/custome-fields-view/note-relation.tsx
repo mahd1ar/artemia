@@ -1,9 +1,10 @@
 import type { controller } from '@keystone-6/core/fields/types/relationship/views'
 import type { FieldProps } from '@keystone-6/core/types'
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { useKeystone } from '@keystone-6/core/admin-ui/context'
 import { Button } from '@keystone-ui/button'
-import { FieldContainer, FieldLabel, TextArea } from '@keystone-ui/fields'
+import { Stack } from '@keystone-ui/core'
+import { FieldContainer, FieldLabel, MultiSelect, TextArea } from '@keystone-ui/fields'
 import { EditIcon, TrashIcon } from '@keystone-ui/icons'
 import { AlertDialog } from '@keystone-ui/modals'
 import { useToasts } from '@keystone-ui/toast'
@@ -13,7 +14,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { Match } from '../../data/match'
 import { Roles } from '../../data/types'
-import { theme } from '../../data/utils'
+import { saveCurrentTab, theme } from '../../data/utils'
 
 interface Option {
   id: string
@@ -23,6 +24,7 @@ interface Option {
   userRole: Roles
   date: string
   avatar: string | null
+  mentions: string[]
 }
 
 export function Field({
@@ -37,6 +39,8 @@ export function Field({
   const toast = useToasts()
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState<string | undefined>(undefined)
+  const [mentions, setMentions] = useState<{ label: string, value: string }[]>([])
+
   const [mode, setMode] = useState<'create' | 'update'>('create')
   const [data, setData] = useState<Option[]>([])
   const [candidateNoteId, setCandidateNoteId] = useState<string | undefined>(undefined)
@@ -53,12 +57,22 @@ export function Field({
     }
   }
 
+  const ALLUSERS = gql`
+  query ALLUSERS {
+  users {
+    name
+    id
+   
+  }  
+}` as import('../../__generated__/ts-gql/ALLUSERS').type
+
   const NOTES = gql`
   query NOTES($where: NoteWhereInput!) {
   notes(where: $where) {
     message
     createdAt
     id
+    mentions
     createdBy {
       fullname
       id
@@ -81,6 +95,7 @@ export function Field({
       id
       message
       createdAt
+      mentions
       createdBy {
         id
         fullname
@@ -99,6 +114,7 @@ export function Field({
       id
       message
       createdAt
+      mentions
       createdBy {
         id
         fullname
@@ -128,26 +144,45 @@ export function Field({
 
   const [updateNote, { loading: loadingUpdate }] = useMutation(NOTE_UPDATE)
 
+  const { data: allUsers } = useQuery(ALLUSERS)
+
   useEffect(() => {
     load().then((res) => {
-      setData(res.data?.notes?.map(i => ({
-        id: i.id,
-        message: i.message || '',
-        userName: i.createdBy?.fullname || '',
-        userId: i.createdBy?.id || '',
-        userRole: i.createdBy?.role || Roles.guest,
-        date: i.createdAt,
-        avatar: i.createdBy?.avatar?.url || null,
-      })) || [])
+      setData(res.data?.notes?.map((i) => {
+        return {
+          id: i.id,
+          message: i.message || '',
+          userName: i.createdBy?.fullname || '',
+          userId: i.createdBy?.id || '',
+          userRole: i.createdBy?.role || Roles.guest,
+          date: i.createdAt,
+          avatar: i.createdBy?.avatar?.url || null,
+          mentions: parseMentions(i.mentions) || [],
+        }
+      }) || [])
     })
   }, [])
 
   async function tryCreate() {
     try {
+      if (!message) {
+        return toast.addToast({
+          title: 'پیام خالی است',
+          message: 'لطفا پیام را وارد کنید',
+          tone: 'negative',
+        })
+      }
+
+      // eslint-disable-next-line no-alert
+      if (!window.confirm('آیا مطمئن هستید؟')) {
+        return false
+      }
+
       const res = await createNote({
         variables: {
           data: {
             message,
+            mentions: JSON.stringify(mentions.map(i => i.value)),
           },
         },
       })
@@ -184,8 +219,11 @@ export function Field({
             date: createdNote.createdAt,
             userRole: createdNote.createdBy?.role || Roles.guest,
             avatar: createdNote.createdBy?.avatar?.url || null,
+            mentions: createdNote.mentions || [],
           },
         ])
+
+        await saveCurrentTab()
       }
     }
     catch (error) {
@@ -200,6 +238,15 @@ export function Field({
   }
 
   async function tryUpdate() {
+    if (!message?.trim()) {
+      toast.addToast({
+        title: 'پیام خالی است',
+        message: 'لطفا پیام را وارد کنید',
+        tone: 'negative',
+      })
+      return false
+    }
+
     try {
       const res = await updateNote({
         variables: {
@@ -208,6 +255,7 @@ export function Field({
           },
           data: {
             message,
+            mentions: mentions.map(i => i.value),
           },
         },
       })
@@ -224,7 +272,18 @@ export function Field({
         return
 
       setData([
-        ...data.map(i => i.id === candidateNoteId ? { id: i.id, message: message || '', userName: i.userName, userId: i.userId, userRole: i.userRole, date: i.date, avatar: i.avatar } : i),
+        ...data.map(i => i.id === candidateNoteId
+          ? {
+              id: i.id,
+              message: message || '',
+              userName: i.userName,
+              userId: i.userId,
+              userRole: i.userRole,
+              date: i.date,
+              avatar: i.avatar,
+              mentions: parseMentions(i.mentions),
+            }
+          : i),
       ])
     }
     catch (error) {
@@ -237,6 +296,18 @@ export function Field({
     }
 
     setIsOpen(false)
+  }
+
+  function parseMentions(x?: string | string[]) {
+    try {
+      if (Array.isArray(x))
+        return x
+      else
+        return JSON.parse(x || '[]') as string[]
+    }
+    catch {
+      return []
+    }
   }
 
   return (
@@ -267,11 +338,34 @@ export function Field({
             action() {
               setIsOpen(false)
               setMessage(undefined)
+              setMentions([])
             },
           },
         }}
       >
-        <TextArea dir="rtl" onChange={e => setMessage(e.target.value)} value={message} />
+        <Stack gap="small">
+
+          <FieldLabel dir="rtl">
+            یادداشت
+          </FieldLabel>
+          <TextArea dir="rtl" onChange={e => setMessage(e.target.value)} value={message} />
+          <FieldLabel dir="rtl">
+            رونوشت
+          </FieldLabel>
+          <MultiSelect
+            value={mentions}
+            onChange={(e) => {
+              setMentions(e.map(ei => ({
+                label: ei.label,
+                value: ei.value,
+              })))
+            }}
+            options={allUsers?.users?.map(i => ({
+              label: i.name || '#',
+              value: i.id,
+            })) || []}
+          />
+        </Stack>
       </AlertDialog>
 
       <ThemeProvider theme={theme}>
@@ -308,6 +402,9 @@ export function Field({
                         setMode('update')
                         setIsOpen(true)
                         setCandidateNoteId(note.id)
+                        setMentions(
+                          parseMentions(note?.mentions).map(i => ({ label: allUsers?.users?.find(j => j.id === i)?.name || '', value: i })),
+                        )
                       }}
                     >
                       <EditIcon size={18} />
@@ -332,11 +429,24 @@ export function Field({
                 <Typography dir="rtl" marginLeft="auto" variant="caption" color="text.secondary" align="right">
 
                   {note.date && Intl.DateTimeFormat('fa-IR', { dateStyle: 'medium' }).format(new Date(note.date))}
+
                   <span style={{ marginLeft: '6px', marginRight: '6px' }}>
                     •
                   </span>
+
                   {note.date && Intl.DateTimeFormat('fa-IR', { timeStyle: 'short' }).format(new Date(note.date))}
 
+                  <span style={{ marginLeft: '6px', marginRight: '6px' }}>
+                    •
+                  </span>
+                  {
+                    parseMentions(note?.mentions).length > 0 && 'رونوشت: '
+                  }
+                  {
+                    parseMentions(note?.mentions).map(i => (
+                      allUsers?.users?.find(u => u.id === i)?.name
+                    )).filter(Boolean).join(', ')
+                  }
                 </Typography>
               </CardActions>
 
@@ -352,6 +462,7 @@ export function Field({
           setIsOpen(true)
           setMode('create')
           setMessage('')
+          setMentions([])
         }}
       >
         {' '}

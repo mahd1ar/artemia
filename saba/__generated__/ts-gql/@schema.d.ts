@@ -1,8 +1,8 @@
-// ts-gql-integrity:3070b8cca36d7898c15d379797b4b11c
+// ts-gql-integrity:3f2a94fbd02e5b9de592a926d721ac6a
 /*
 ts-gql-meta-begin
 {
-  "hash": "9fc6f26333fa7b2492d165950e78248d"
+  "hash": "8ab8503c6e736ef556813165ab6aa7a4"
 }
 ts-gql-meta-end
 */
@@ -225,6 +225,7 @@ export type Description = {
   readonly subject: string | null;
   readonly title: string | null;
   readonly code: string | null;
+  readonly contracts: Contract | null;
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statementsCount: number | null;
   readonly invoices: ReadonlyArray<Invoice> | null;
@@ -232,6 +233,7 @@ export type Description = {
   readonly approvals: Approval | null;
   readonly totalStatementsPayable: BigInt | null;
   readonly totalInvoicesPayed: BigInt | null;
+  readonly totalPayed: JSON | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
@@ -271,6 +273,7 @@ export type DescriptionWhereInput = {
   readonly id?: IDFilter | null;
   readonly title?: StringFilter | null;
   readonly code?: StringFilter | null;
+  readonly contracts?: ContractWhereInput | null;
   readonly statements?: StatementManyRelationFilter | null;
   readonly invoices?: InvoiceManyRelationFilter | null;
   readonly approvals?: ApprovalWhereInput | null;
@@ -300,11 +303,18 @@ export type DescriptionOrderByInput = {
 export type DescriptionUpdateInput = {
   readonly title?: string | null;
   readonly code?: string | null;
+  readonly contracts?: ContractRelateToOneForUpdateInput | null;
   readonly statements?: StatementRelateToManyForUpdateInput | null;
   readonly invoices?: InvoiceRelateToManyForUpdateInput | null;
   readonly approvals?: ApprovalRelateToOneForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
+};
+
+export type ContractRelateToOneForUpdateInput = {
+  readonly create?: ContractCreateInput | null;
+  readonly connect?: ContractWhereUniqueInput | null;
+  readonly disconnect?: boolean | null;
 };
 
 export type StatementRelateToManyForUpdateInput = {
@@ -335,11 +345,17 @@ export type DescriptionUpdateArgs = {
 export type DescriptionCreateInput = {
   readonly title?: string | null;
   readonly code?: string | null;
+  readonly contracts?: ContractRelateToOneForCreateInput | null;
   readonly statements?: StatementRelateToManyForCreateInput | null;
   readonly invoices?: InvoiceRelateToManyForCreateInput | null;
   readonly approvals?: ApprovalRelateToOneForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
+};
+
+export type ContractRelateToOneForCreateInput = {
+  readonly create?: ContractCreateInput | null;
+  readonly connect?: ContractWhereUniqueInput | null;
 };
 
 export type StatementRelateToManyForCreateInput = {
@@ -671,12 +687,6 @@ export type StatementRelateToOneForUpdateInput = {
   readonly disconnect?: boolean | null;
 };
 
-export type ContractRelateToOneForUpdateInput = {
-  readonly create?: ContractCreateInput | null;
-  readonly connect?: ContractWhereUniqueInput | null;
-  readonly disconnect?: boolean | null;
-};
-
 export type RowUpdateArgs = {
   readonly where: RowWhereUniqueInput;
   readonly data: RowUpdateInput;
@@ -710,9 +720,163 @@ export type StatementRelateToOneForCreateInput = {
   readonly connect?: StatementWhereUniqueInput | null;
 };
 
-export type ContractRelateToOneForCreateInput = {
-  readonly create?: ContractCreateInput | null;
-  readonly connect?: ContractWhereUniqueInput | null;
+export type Contract = {
+  readonly __typename: "Contract";
+  readonly id: string;
+  readonly summery: string | null;
+  readonly isApproved: boolean | null;
+  readonly approvedBy: User | null;
+  readonly title: string | null;
+  readonly description: string | null;
+  readonly startFrom: number | null;
+  readonly end: number | null;
+  readonly rows: ReadonlyArray<Row> | null;
+  readonly rowsCount: number | null;
+  readonly cost: BigInt | null;
+  readonly statementDescription: Description | null;
+  readonly attachments: ReadonlyArray<FileStore> | null;
+  readonly attachmentsCount: number | null;
+  readonly contractor: Constractor | null;
+  readonly statements: ReadonlyArray<Statement> | null;
+  readonly statementsCount: number | null;
+  readonly attachment: FileFieldOutput | null;
+  readonly createdAt: DateTime | null;
+  readonly createdBy: User | null;
+  readonly contractSample: JSON | null;
+  readonly changeLog: JSON | null;
+};
+
+export type ContractrowsArgs = {
+  readonly where?: RowWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<RowOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: RowWhereUniqueInput | null;
+};
+
+export type ContractrowsCountArgs = {
+  readonly where?: RowWhereInput;
+};
+
+export type ContractattachmentsArgs = {
+  readonly where?: FileStoreWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<FileStoreOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: FileStoreWhereUniqueInput | null;
+};
+
+export type ContractattachmentsCountArgs = {
+  readonly where?: FileStoreWhereInput;
+};
+
+export type ContractstatementsArgs = {
+  readonly where?: StatementWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<StatementOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: StatementWhereUniqueInput | null;
+};
+
+export type ContractstatementsCountArgs = {
+  readonly where?: StatementWhereInput;
+};
+
+export type FileFieldOutput = {
+  readonly __typename: "FileFieldOutput";
+  readonly filename: string;
+  readonly filesize: number;
+  readonly url: string;
+};
+
+export type ContractWhereUniqueInput = {
+  readonly id?: string | null;
+};
+
+export type ContractWhereInput = {
+  readonly AND?: TSGQLMaybeArray<ContractWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<ContractWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<ContractWhereInput> | null;
+  readonly id?: IDFilter | null;
+  readonly isApproved?: BooleanFilter | null;
+  readonly approvedBy?: UserWhereInput | null;
+  readonly title?: StringFilter | null;
+  readonly description?: StringFilter | null;
+  readonly startFrom?: PairFilter | null;
+  readonly end?: PairFilter | null;
+  readonly rows?: RowManyRelationFilter | null;
+  readonly cost?: BigIntNullableFilter | null;
+  readonly statementDescription?: DescriptionWhereInput | null;
+  readonly attachments?: FileStoreManyRelationFilter | null;
+  readonly contractor?: ConstractorWhereInput | null;
+  readonly statements?: StatementManyRelationFilter | null;
+  readonly createdAt?: DateTimeNullableFilter | null;
+  readonly createdBy?: UserWhereInput | null;
+};
+
+export type BooleanFilter = {
+  readonly equals?: boolean | null;
+  readonly not?: BooleanFilter | null;
+};
+
+export type ContractOrderByInput = {
+  readonly id?: OrderDirection | null;
+  readonly isApproved?: OrderDirection | null;
+  readonly title?: OrderDirection | null;
+  readonly description?: OrderDirection | null;
+  readonly startFrom?: OrderDirection | null;
+  readonly end?: OrderDirection | null;
+  readonly cost?: OrderDirection | null;
+  readonly createdAt?: OrderDirection | null;
+};
+
+export type ContractUpdateInput = {
+  readonly isApproved?: boolean | null;
+  readonly approvedBy?: UserRelateToOneForUpdateInput | null;
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly startFrom?: number | null;
+  readonly end?: number | null;
+  readonly rows?: RowRelateToManyForUpdateInput | null;
+  readonly cost?: BigInt | null;
+  readonly statementDescription?: DescriptionRelateToOneForUpdateInput | null;
+  readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
+  readonly contractor?: ConstractorRelateToOneForUpdateInput | null;
+  readonly statements?: StatementRelateToManyForUpdateInput | null;
+  readonly attachment?: FileFieldInput | null;
+  readonly createdAt?: DateTime | null;
+  readonly createdBy?: UserRelateToOneForUpdateInput | null;
+  readonly changeLog?: JSON | null;
+};
+
+export type FileFieldInput = {
+  readonly upload: Upload;
+};
+
+export type Upload = any;
+
+export type ContractUpdateArgs = {
+  readonly where: ContractWhereUniqueInput;
+  readonly data: ContractUpdateInput;
+};
+
+export type ContractCreateInput = {
+  readonly isApproved?: boolean | null;
+  readonly approvedBy?: UserRelateToOneForCreateInput | null;
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly startFrom?: number | null;
+  readonly end?: number | null;
+  readonly rows?: RowRelateToManyForCreateInput | null;
+  readonly cost?: BigInt | null;
+  readonly statementDescription?: DescriptionRelateToOneForCreateInput | null;
+  readonly attachments?: FileStoreRelateToManyForCreateInput | null;
+  readonly contractor?: ConstractorRelateToOneForCreateInput | null;
+  readonly statements?: StatementRelateToManyForCreateInput | null;
+  readonly attachment?: FileFieldInput | null;
+  readonly createdAt?: DateTime | null;
+  readonly createdBy?: UserRelateToOneForCreateInput | null;
+  readonly changeLog?: JSON | null;
 };
 
 export type Statement = {
@@ -722,7 +886,6 @@ export type Statement = {
   readonly confirmedByTheUploader: boolean | null;
   readonly confirmedByFinancialSupervisor: boolean | null;
   readonly confirmedByProjectControlSupervisor: boolean | null;
-  readonly confirmedByTechnicalSupervisor: boolean | null;
   readonly confirmedBySupervisor: boolean | null;
   readonly type: string | null;
   readonly title: string | null;
@@ -738,7 +901,6 @@ export type Statement = {
   readonly rowsCount: number | null;
   readonly grossTotal: BigInt | null;
   readonly deductionOnAccountOfAdvancePayment: BigInt | null;
-  readonly tax: BigInt | null;
   readonly workGuarantee: BigInt | null;
   readonly totalPayable: BigInt | null;
   readonly notes: ReadonlyArray<Note> | null;
@@ -808,7 +970,6 @@ export type StatementWhereInput = {
   readonly confirmedByTheUploader?: BooleanFilter | null;
   readonly confirmedByFinancialSupervisor?: BooleanFilter | null;
   readonly confirmedByProjectControlSupervisor?: BooleanFilter | null;
-  readonly confirmedByTechnicalSupervisor?: BooleanFilter | null;
   readonly confirmedBySupervisor?: BooleanFilter | null;
   readonly type?: StringNullableFilter | null;
   readonly title?: StringFilter | null;
@@ -820,16 +981,10 @@ export type StatementWhereInput = {
   readonly peyments?: PaymentManyRelationFilter | null;
   readonly rows?: RowManyRelationFilter | null;
   readonly deductionOnAccountOfAdvancePayment?: BigIntNullableFilter | null;
-  readonly tax?: BigIntFilter | null;
   readonly workGuarantee?: BigIntNullableFilter | null;
   readonly notes?: NoteManyRelationFilter | null;
   readonly status?: StringNullableFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
-};
-
-export type BooleanFilter = {
-  readonly equals?: boolean | null;
-  readonly not?: BooleanFilter | null;
 };
 
 export type PaymentManyRelationFilter = {
@@ -838,30 +993,17 @@ export type PaymentManyRelationFilter = {
   readonly none?: PaymentWhereInput | null;
 };
 
-export type BigIntFilter = {
-  readonly equals?: BigInt | null;
-  readonly in?: TSGQLMaybeArray<BigInt> | null;
-  readonly notIn?: TSGQLMaybeArray<BigInt> | null;
-  readonly lt?: BigInt | null;
-  readonly lte?: BigInt | null;
-  readonly gt?: BigInt | null;
-  readonly gte?: BigInt | null;
-  readonly not?: BigIntFilter | null;
-};
-
 export type StatementOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly confirmedByTheUploader?: OrderDirection | null;
   readonly confirmedByFinancialSupervisor?: OrderDirection | null;
   readonly confirmedByProjectControlSupervisor?: OrderDirection | null;
-  readonly confirmedByTechnicalSupervisor?: OrderDirection | null;
   readonly confirmedBySupervisor?: OrderDirection | null;
   readonly type?: OrderDirection | null;
   readonly title?: OrderDirection | null;
   readonly statementNumber?: OrderDirection | null;
   readonly sateOfStatement?: OrderDirection | null;
   readonly deductionOnAccountOfAdvancePayment?: OrderDirection | null;
-  readonly tax?: OrderDirection | null;
   readonly workGuarantee?: OrderDirection | null;
   readonly status?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
@@ -871,7 +1013,6 @@ export type StatementUpdateInput = {
   readonly confirmedByTheUploader?: boolean | null;
   readonly confirmedByFinancialSupervisor?: boolean | null;
   readonly confirmedByProjectControlSupervisor?: boolean | null;
-  readonly confirmedByTechnicalSupervisor?: boolean | null;
   readonly confirmedBySupervisor?: boolean | null;
   readonly type?: string | null;
   readonly title?: string | null;
@@ -883,7 +1024,6 @@ export type StatementUpdateInput = {
   readonly peyments?: PaymentRelateToManyForUpdateInput | null;
   readonly rows?: RowRelateToManyForUpdateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
-  readonly tax?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
   readonly notes?: NoteRelateToManyForUpdateInput | null;
   readonly status?: string | null;
@@ -907,7 +1047,6 @@ export type StatementCreateInput = {
   readonly confirmedByTheUploader?: boolean | null;
   readonly confirmedByFinancialSupervisor?: boolean | null;
   readonly confirmedByProjectControlSupervisor?: boolean | null;
-  readonly confirmedByTechnicalSupervisor?: boolean | null;
   readonly confirmedBySupervisor?: boolean | null;
   readonly type?: string | null;
   readonly title?: string | null;
@@ -919,7 +1058,6 @@ export type StatementCreateInput = {
   readonly peyments?: PaymentRelateToManyForCreateInput | null;
   readonly rows?: RowRelateToManyForCreateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
-  readonly tax?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
   readonly notes?: NoteRelateToManyForCreateInput | null;
   readonly status?: string | null;
@@ -1052,8 +1190,6 @@ export type PaymentUpdateInput = {
 export type ImageFieldInput = {
   readonly upload: Upload;
 };
-
-export type Upload = any;
 
 export type PaymentUpdateArgs = {
   readonly where: PaymentWhereUniqueInput;
@@ -1220,13 +1356,6 @@ export type FileStore = {
   readonly createdBy: User | null;
 };
 
-export type FileFieldOutput = {
-  readonly __typename: "FileFieldOutput";
-  readonly filename: string;
-  readonly filesize: number;
-  readonly url: string;
-};
-
 export type FileStoreWhereUniqueInput = {
   readonly id?: string | null;
 };
@@ -1263,10 +1392,6 @@ export type FileStoreUpdateInput = {
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
 
-export type FileFieldInput = {
-  readonly upload: Upload;
-};
-
 export type FileStoreUpdateArgs = {
   readonly where: FileStoreWhereUniqueInput;
   readonly data: FileStoreUpdateInput;
@@ -1279,139 +1404,6 @@ export type FileStoreCreateInput = {
   readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
   readonly contract?: ContractRelateToOneForCreateInput | null;
-  readonly createdAt?: DateTime | null;
-  readonly createdBy?: UserRelateToOneForCreateInput | null;
-};
-
-export type Contract = {
-  readonly __typename: "Contract";
-  readonly id: string;
-  readonly summery: string | null;
-  readonly isApproved: boolean | null;
-  readonly approvedBy: User | null;
-  readonly title: string | null;
-  readonly description: string | null;
-  readonly rows: ReadonlyArray<Row> | null;
-  readonly rowsCount: number | null;
-  readonly startFrom: number | null;
-  readonly end: number | null;
-  readonly cost: BigInt | null;
-  readonly attachments: ReadonlyArray<FileStore> | null;
-  readonly attachmentsCount: number | null;
-  readonly contractor: Constractor | null;
-  readonly statements: ReadonlyArray<Statement> | null;
-  readonly statementsCount: number | null;
-  readonly attachment: FileFieldOutput | null;
-  readonly createdAt: DateTime | null;
-  readonly createdBy: User | null;
-};
-
-export type ContractrowsArgs = {
-  readonly where?: RowWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<RowOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: RowWhereUniqueInput | null;
-};
-
-export type ContractrowsCountArgs = {
-  readonly where?: RowWhereInput;
-};
-
-export type ContractattachmentsArgs = {
-  readonly where?: FileStoreWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<FileStoreOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: FileStoreWhereUniqueInput | null;
-};
-
-export type ContractattachmentsCountArgs = {
-  readonly where?: FileStoreWhereInput;
-};
-
-export type ContractstatementsArgs = {
-  readonly where?: StatementWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<StatementOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: StatementWhereUniqueInput | null;
-};
-
-export type ContractstatementsCountArgs = {
-  readonly where?: StatementWhereInput;
-};
-
-export type ContractWhereUniqueInput = {
-  readonly id?: string | null;
-};
-
-export type ContractWhereInput = {
-  readonly AND?: TSGQLMaybeArray<ContractWhereInput> | null;
-  readonly OR?: TSGQLMaybeArray<ContractWhereInput> | null;
-  readonly NOT?: TSGQLMaybeArray<ContractWhereInput> | null;
-  readonly id?: IDFilter | null;
-  readonly isApproved?: BooleanFilter | null;
-  readonly approvedBy?: UserWhereInput | null;
-  readonly title?: StringFilter | null;
-  readonly description?: StringFilter | null;
-  readonly rows?: RowManyRelationFilter | null;
-  readonly startFrom?: PairFilter | null;
-  readonly end?: PairFilter | null;
-  readonly cost?: BigIntNullableFilter | null;
-  readonly attachments?: FileStoreManyRelationFilter | null;
-  readonly contractor?: ConstractorWhereInput | null;
-  readonly statements?: StatementManyRelationFilter | null;
-  readonly createdAt?: DateTimeNullableFilter | null;
-  readonly createdBy?: UserWhereInput | null;
-};
-
-export type ContractOrderByInput = {
-  readonly id?: OrderDirection | null;
-  readonly isApproved?: OrderDirection | null;
-  readonly title?: OrderDirection | null;
-  readonly description?: OrderDirection | null;
-  readonly startFrom?: OrderDirection | null;
-  readonly end?: OrderDirection | null;
-  readonly cost?: OrderDirection | null;
-  readonly createdAt?: OrderDirection | null;
-};
-
-export type ContractUpdateInput = {
-  readonly isApproved?: boolean | null;
-  readonly approvedBy?: UserRelateToOneForUpdateInput | null;
-  readonly title?: string | null;
-  readonly description?: string | null;
-  readonly rows?: RowRelateToManyForUpdateInput | null;
-  readonly startFrom?: number | null;
-  readonly end?: number | null;
-  readonly cost?: BigInt | null;
-  readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
-  readonly contractor?: ConstractorRelateToOneForUpdateInput | null;
-  readonly statements?: StatementRelateToManyForUpdateInput | null;
-  readonly attachment?: FileFieldInput | null;
-  readonly createdAt?: DateTime | null;
-  readonly createdBy?: UserRelateToOneForUpdateInput | null;
-};
-
-export type ContractUpdateArgs = {
-  readonly where: ContractWhereUniqueInput;
-  readonly data: ContractUpdateInput;
-};
-
-export type ContractCreateInput = {
-  readonly isApproved?: boolean | null;
-  readonly approvedBy?: UserRelateToOneForCreateInput | null;
-  readonly title?: string | null;
-  readonly description?: string | null;
-  readonly rows?: RowRelateToManyForCreateInput | null;
-  readonly startFrom?: number | null;
-  readonly end?: number | null;
-  readonly cost?: BigInt | null;
-  readonly attachments?: FileStoreRelateToManyForCreateInput | null;
-  readonly contractor?: ConstractorRelateToOneForCreateInput | null;
-  readonly statements?: StatementRelateToManyForCreateInput | null;
-  readonly attachment?: FileFieldInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
 };
@@ -2033,6 +2025,20 @@ export type Setting = {
   readonly sendMessageToTelegram: boolean | null;
   readonly parentCategoryOfDesign: string | null;
   readonly rootCategoryOfGoodsAndServices: string | null;
+  readonly contractSample: ReadonlyArray<FileStore> | null;
+  readonly contractSampleCount: number | null;
+};
+
+export type SettingcontractSampleArgs = {
+  readonly where?: FileStoreWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<FileStoreOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: FileStoreWhereUniqueInput | null;
+};
+
+export type SettingcontractSampleCountArgs = {
+  readonly where?: FileStoreWhereInput;
 };
 
 export type SettingWhereUniqueInput = {
@@ -2047,6 +2053,7 @@ export type SettingWhereInput = {
   readonly sendMessageToTelegram?: BooleanFilter | null;
   readonly parentCategoryOfDesign?: StringFilter | null;
   readonly rootCategoryOfGoodsAndServices?: StringFilter | null;
+  readonly contractSample?: FileStoreManyRelationFilter | null;
 };
 
 export type SettingOrderByInput = {
@@ -2060,6 +2067,7 @@ export type SettingUpdateInput = {
   readonly sendMessageToTelegram?: boolean | null;
   readonly parentCategoryOfDesign?: string | null;
   readonly rootCategoryOfGoodsAndServices?: string | null;
+  readonly contractSample?: FileStoreRelateToManyForUpdateInput | null;
 };
 
 export type SettingUpdateArgs = {
@@ -2071,12 +2079,14 @@ export type SettingCreateInput = {
   readonly sendMessageToTelegram?: boolean | null;
   readonly parentCategoryOfDesign?: string | null;
   readonly rootCategoryOfGoodsAndServices?: string | null;
+  readonly contractSample?: FileStoreRelateToManyForCreateInput | null;
 };
 
 export type Note = {
   readonly __typename: "Note";
   readonly id: string;
   readonly message: string | null;
+  readonly mentions: JSON | null;
   readonly invoice: Invoice | null;
   readonly statement: Statement | null;
   readonly createdAt: DateTime | null;
@@ -2110,6 +2120,7 @@ export type NoteOrderByInput = {
 
 export type NoteUpdateInput = {
   readonly message?: string | null;
+  readonly mentions?: JSON | null;
   readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
   readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly createdAt?: DateTime | null;
@@ -2124,6 +2135,7 @@ export type NoteUpdateArgs = {
 
 export type NoteCreateInput = {
   readonly message?: string | null;
+  readonly mentions?: JSON | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
   readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly createdAt?: DateTime | null;
@@ -2159,6 +2171,12 @@ export type Mutation = {
   readonly updateRows: ReadonlyArray<Row | null> | null;
   readonly deleteRow: Row | null;
   readonly deleteRows: ReadonlyArray<Row | null> | null;
+  readonly createContract: Contract | null;
+  readonly createContracts: ReadonlyArray<Contract | null> | null;
+  readonly updateContract: Contract | null;
+  readonly updateContracts: ReadonlyArray<Contract | null> | null;
+  readonly deleteContract: Contract | null;
+  readonly deleteContracts: ReadonlyArray<Contract | null> | null;
   readonly createStatement: Statement | null;
   readonly createStatements: ReadonlyArray<Statement | null> | null;
   readonly updateStatement: Statement | null;
@@ -2195,12 +2213,6 @@ export type Mutation = {
   readonly updateFileStores: ReadonlyArray<FileStore | null> | null;
   readonly deleteFileStore: FileStore | null;
   readonly deleteFileStores: ReadonlyArray<FileStore | null> | null;
-  readonly createContract: Contract | null;
-  readonly createContracts: ReadonlyArray<Contract | null> | null;
-  readonly updateContract: Contract | null;
-  readonly updateContracts: ReadonlyArray<Contract | null> | null;
-  readonly deleteContract: Contract | null;
-  readonly deleteContracts: ReadonlyArray<Contract | null> | null;
   readonly createDesign: Design | null;
   readonly createDesigns: ReadonlyArray<Design | null> | null;
   readonly updateDesign: Design | null;
@@ -2360,6 +2372,31 @@ export type MutationdeleteRowsArgs = {
   readonly where: TSGQLMaybeArray<RowWhereUniqueInput>;
 };
 
+export type MutationcreateContractArgs = {
+  readonly data: ContractCreateInput;
+};
+
+export type MutationcreateContractsArgs = {
+  readonly data: TSGQLMaybeArray<ContractCreateInput>;
+};
+
+export type MutationupdateContractArgs = {
+  readonly where: ContractWhereUniqueInput;
+  readonly data: ContractUpdateInput;
+};
+
+export type MutationupdateContractsArgs = {
+  readonly data: TSGQLMaybeArray<ContractUpdateArgs>;
+};
+
+export type MutationdeleteContractArgs = {
+  readonly where: ContractWhereUniqueInput;
+};
+
+export type MutationdeleteContractsArgs = {
+  readonly where: TSGQLMaybeArray<ContractWhereUniqueInput>;
+};
+
 export type MutationcreateStatementArgs = {
   readonly data: StatementCreateInput;
 };
@@ -2508,31 +2545,6 @@ export type MutationdeleteFileStoreArgs = {
 
 export type MutationdeleteFileStoresArgs = {
   readonly where: TSGQLMaybeArray<FileStoreWhereUniqueInput>;
-};
-
-export type MutationcreateContractArgs = {
-  readonly data: ContractCreateInput;
-};
-
-export type MutationcreateContractsArgs = {
-  readonly data: TSGQLMaybeArray<ContractCreateInput>;
-};
-
-export type MutationupdateContractArgs = {
-  readonly where: ContractWhereUniqueInput;
-  readonly data: ContractUpdateInput;
-};
-
-export type MutationupdateContractsArgs = {
-  readonly data: TSGQLMaybeArray<ContractUpdateArgs>;
-};
-
-export type MutationdeleteContractArgs = {
-  readonly where: ContractWhereUniqueInput;
-};
-
-export type MutationdeleteContractsArgs = {
-  readonly where: TSGQLMaybeArray<ContractWhereUniqueInput>;
 };
 
 export type MutationcreateDesignArgs = {
@@ -2803,6 +2815,9 @@ export type Query = {
   readonly rows: ReadonlyArray<Row> | null;
   readonly row: Row | null;
   readonly rowsCount: number | null;
+  readonly contracts: ReadonlyArray<Contract> | null;
+  readonly contract: Contract | null;
+  readonly contractsCount: number | null;
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statement: Statement | null;
   readonly statementsCount: number | null;
@@ -2821,9 +2836,6 @@ export type Query = {
   readonly fileStores: ReadonlyArray<FileStore> | null;
   readonly fileStore: FileStore | null;
   readonly fileStoresCount: number | null;
-  readonly contracts: ReadonlyArray<Contract> | null;
-  readonly contract: Contract | null;
-  readonly contractsCount: number | null;
   readonly designs: ReadonlyArray<Design> | null;
   readonly design: Design | null;
   readonly designsCount: number | null;
@@ -2917,6 +2929,22 @@ export type QueryrowArgs = {
 
 export type QueryrowsCountArgs = {
   readonly where?: RowWhereInput;
+};
+
+export type QuerycontractsArgs = {
+  readonly where?: ContractWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<ContractOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: ContractWhereUniqueInput | null;
+};
+
+export type QuerycontractArgs = {
+  readonly where: ContractWhereUniqueInput;
+};
+
+export type QuerycontractsCountArgs = {
+  readonly where?: ContractWhereInput;
 };
 
 export type QuerystatementsArgs = {
@@ -3013,22 +3041,6 @@ export type QueryfileStoreArgs = {
 
 export type QueryfileStoresCountArgs = {
   readonly where?: FileStoreWhereInput;
-};
-
-export type QuerycontractsArgs = {
-  readonly where?: ContractWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<ContractOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: ContractWhereUniqueInput | null;
-};
-
-export type QuerycontractArgs = {
-  readonly where: ContractWhereUniqueInput;
-};
-
-export type QuerycontractsCountArgs = {
-  readonly where?: ContractWhereInput;
 };
 
 export type QuerydesignsArgs = {

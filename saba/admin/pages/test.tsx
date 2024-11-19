@@ -37,7 +37,6 @@ function StatementReviewCard(props: { role: Roles }) {
             createdAt
             
             confirmedBySupervisor 
-            confirmedByTechnicalSupervisor 
             confirmedByFinancialSupervisor 
             confirmedByProjectControlSupervisor 
             confirmedByTheUploader
@@ -47,7 +46,7 @@ function StatementReviewCard(props: { role: Roles }) {
   const confirmedByMy = props.role === Roles.supervisor
     ? 'confirmedBySupervisor'
     : props.role === Roles.technical
-      ? 'confirmedByTechnicalSupervisor'
+      ? 'confirmedByTechnicalSupervisor' // delete this
       : props.role === Roles.financial
         ? 'confirmedByFinancialSupervisor'
         : props.role === Roles.projectControl

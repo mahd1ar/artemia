@@ -1,12 +1,16 @@
-import { list, graphql, group } from "@keystone-6/core";
-import { allowAll, allOperations } from "@keystone-6/core/access";
-import { image, password, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
-import { Roles, Session, getRoleFromArgs } from "../data/types";
-import type { Lists } from ".keystone/types";
-import { isMemberOfAdminGroup } from "../data/access";
+import type { Lists } from '.keystone/types'
+import type { Session } from '../data/types'
+import { graphql, group, list } from '@keystone-6/core'
+import { allOperations, allowAll } from '@keystone-6/core/access'
+import { image, password, relationship, select, text, timestamp, virtual } from '@keystone-6/core/fields'
+import { isMemberOfAdminGroup } from '../data/access'
+import { getRoleFromArgs, Roles } from '../data/types'
 
-
-const ui = { itemView: { fieldMode(args: any) { return getRoleFromArgs(args) > Roles.operator ? 'hidden' : 'edit' } } }
+const ui = { itemView: {
+  fieldMode(args: any) {
+    return getRoleFromArgs(args) > Roles.operator ? 'hidden' : 'edit'
+  },
+} }
 
 export const User = list<Lists.User.TypeInfo<any>>({
   access: {
@@ -17,27 +21,26 @@ export const User = list<Lists.User.TypeInfo<any>>({
       create: args => getRoleFromArgs(args) <= Roles.operator,
       delete: args => getRoleFromArgs(args) <= Roles.operator,
       query: () => true,
-      update: () => true
+      update: () => true,
     },
     filter: {
-      query: args => {
-
+      query: (args) => {
         if (isMemberOfAdminGroup(args))
           return true
 
         const resource = new URL((args.context.res?.req.headers.referer as string)).pathname.split('/').filter(Boolean).at(0)
 
-        if (resource === 'users')
+        if (resource === 'users') {
           return {
             id: {
-              equals: (args.session as Session)?.itemId
-            }
+              equals: (args.session as Session)?.itemId,
+            },
           }
+        }
 
         return true
-
       },
-    }
+    },
   },
 
   ui: {
@@ -46,7 +49,7 @@ export const User = list<Lists.User.TypeInfo<any>>({
     //   return getRoleFromArgs(args) > Roles.operator
     // },
     listView: {
-      initialColumns: ['name', 'role']
+      initialColumns: ['name', 'role'],
     },
 
     hideCreate(args) {
@@ -65,10 +68,11 @@ export const User = list<Lists.User.TypeInfo<any>>({
     name: text({ validation: { isRequired: true } }),
     email: text({
       validation: { isRequired: true },
-      isIndexed: "unique",
+      isIndexed: 'unique',
     }),
+    phone: text({ }),
     avatar: image({
-      storage: "image",
+      storage: 'image',
     }),
     role: select({
       ui: {
@@ -76,62 +80,62 @@ export const User = list<Lists.User.TypeInfo<any>>({
           fieldMode(args) {
             return process.env.NODE_ENV !== 'production' ? 'edit' : getRoleFromArgs(args) > Roles.operator ? 'read' : 'edit'
           },
-        }
+        },
       },
       options: [
         {
-          label: " مدیر کل",
+          label: ' مدیر کل',
           value: Roles.admin,
         },
         {
-          label: "مدیر",
+          label: 'مدیر',
           value: Roles.supervisor,
         },
         {
           value: Roles.operator,
-          label: 'اپراتور'
+          label: 'اپراتور',
         },
-        {
+        { // TODO remove this
           value: Roles.technical,
-          label: 'فنی'
+          label: 'فنی',
         },
         {
           value: Roles.financial,
-          label: 'مالی'
+          label: 'مالی',
         },
         {
           value: Roles.projectControl,
-          label: 'کنترل پروژه'
+          label: 'کنترل پروژه',
         },
         {
           value: Roles.workshop,
-          label: 'کارگاه'
-        }
+          label: 'کارگاه',
+        },
       ],
-      type: "integer",
+      type: 'integer',
       defaultValue: Roles.guest,
     }),
     password: password({ validation: { isRequired: true } }),
     ...group({
       label: 'data',
       fields: {
-        approvals: relationship({ ui, ref: "Approval.createdBy", many: true }),
-        descriptions: relationship({ ui, ref: "Description.createdBy", many: true }),
-        approvedContracts: relationship({ ui, ref: "Contract.approvedBy", many: true }),
-        contracts: relationship({ ui, ref: "Contract.createdBy", many: true }),
-        Designs: relationship({ ui, ref: "Design.createdBy", many: true }),
-        dailyReports: relationship({ ui, ref: "DailyReport.createdBy", many: true }),
-      }
+        approvals: relationship({ ui, ref: 'Approval.createdBy', many: true }),
+        descriptions: relationship({ ui, ref: 'Description.createdBy', many: true }),
+        approvedContracts: relationship({ ui, ref: 'Contract.approvedBy', many: true }),
+        contracts: relationship({ ui, ref: 'Contract.createdBy', many: true }),
+        Designs: relationship({ ui, ref: 'Design.createdBy', many: true }),
+        dailyReports: relationship({ ui, ref: 'DailyReport.createdBy', many: true }),
+      },
     }),
 
     createdAt: timestamp({
       ui: {
         itemView: {
           fieldPosition: 'sidebar',
-          fieldMode: 'read'
-        }
+          fieldMode: 'read',
+        },
       },
-      defaultValue: { kind: "now" },
+      defaultValue: { kind: 'now' },
     }),
   },
 })

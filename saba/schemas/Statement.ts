@@ -86,6 +86,18 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
           }
         }
       }
+
+      if (args.operation !== 'delete') {
+        const currentValue = args.inputData.physicalProgress || args.resolvedData.physicalProgress || args.item?.physicalProgress
+
+        if (!currentValue) {
+          return args.addValidationError('درصد پیشرفت فیزیکی نمیتواند خالی باشد')
+        }
+
+        if (+currentValue < 0 || +currentValue > 100) {
+          args.addValidationError('درصد پیشرفت فیزیکی باید بین 0 و 100 باشد')
+        }
+      }
     },
 
     async afterOperation(args) {
@@ -573,7 +585,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx',
       },
-      label: 'جمع  کل قابل پرداخت',
+      label: 'جمع  کل کارکرد',
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {
@@ -608,6 +620,10 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
           }
         },
       }),
+    }),
+
+    physicalProgress: integer({
+      label: 'درصد پیشرفت فیزیکی',
     }),
 
     notes: relationship({

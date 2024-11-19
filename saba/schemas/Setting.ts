@@ -15,6 +15,7 @@ export const Setting = list<Lists.Setting.TypeInfo<Session>>({
   },
   isSingleton: true,
   ui: {
+    label: 'تنظیمات',
     isHidden(args) {
       return getRoleFromArgs(args) > Roles.operator
     },

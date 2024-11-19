@@ -15,6 +15,7 @@ import {
 } from '@keystone-6/core/fields'
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn, isMemberOfAdminGroup } from '../data/access'
+import { Notif } from '../data/message'
 import { getRoleFromArgs, Roles, type Session } from '../data/types'
 import { setPermitions } from '../data/utils'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
@@ -88,6 +89,16 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       }
 
       return args.resolvedData
+    },
+    afterOperation(args) {
+      if (args.operation === 'create') {
+        if (typeof args.inputData.isApproved !== 'boolean') {
+          Notif.newContractCreated({
+            title: args.inputData.title || args.resolvedData.title || args.item.title,
+            url: `${args.context.req?.headers.origin ?? 'saba.netdom.ir'}/contracts/${args.item.id}`,
+          })
+        }
+      }
     },
     validate(args) {
       const isFromAdminGroup = isMemberOfAdminGroup(args.context)

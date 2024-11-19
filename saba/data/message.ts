@@ -109,4 +109,17 @@ ${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join('\n\n') || ' 
 
     await sendMessage(msg)
   }
+
+  static async newContractCreated(args: { title: string, url: string }) {
+    const msg = `( ربات کنترل پروژه صبا )
+        
+📜 قرارداد جدیدی با عنوان "${args.title}" در سامانه کنترل پروژه صبا ایجاد 
+
+🕒 این قرارداد منتظر تایید مدیریت میباشد
+
+🛟  ${args.url}
+`
+
+    await sendMessage(msg)
+  }
 }

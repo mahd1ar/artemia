@@ -88,7 +88,6 @@ export function Field({
             id
             title
             confirmedByTheUploader
-            confirmedByTechnicalSupervisor
             confirmedBySupervisor
             confirmedByProjectControlSupervisor
             confirmedByFinancialSupervisor

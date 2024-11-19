@@ -156,3 +156,24 @@ export function useDebouncedValue<T>(inputValue: T, delay: number) {
 
   return debouncedValue
 }
+
+export function timeout(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, ms)
+  })
+}
+
+export async function saveCurrentTab(ms: number = 500) {
+  await timeout(ms)
+
+  document.querySelectorAll('button').forEach((i) => {
+    if (i.textContent === 'Save changes') {
+      if (getComputedStyle(i).cursor === 'pointer')
+        i.click()
+    }
+  })
+
+  return true
+}
