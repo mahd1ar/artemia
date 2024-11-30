@@ -13,6 +13,7 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
+import axios from 'axios'
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn, isMemberOfAdminGroup } from '../data/access'
 import { Notif } from '../data/message'
@@ -90,12 +91,51 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
 
       return args.resolvedData
     },
-    afterOperation(args) {
+    async afterOperation(args) {
       if (args.operation === 'create') {
         if (typeof args.inputData.isApproved !== 'boolean') {
           Notif.newContractCreated({
             title: args.inputData.title || args.resolvedData.title || args.item.title,
             url: `${args.context.req?.headers.origin ?? 'saba.netdom.ir'}/contracts/${args.item.id}`,
+          })
+
+          args.context.prisma.user.findMany({
+            where: {
+              role: { equals: Roles.supervisor },
+            },
+            select: {
+              phone: true,
+              name: true,
+            },
+          }).then((users) => {
+            users.forEach(async (user) => {
+              if (!user.phone)
+                return
+
+              try {
+                const response = await axios.post('http://ippanel.com/api/select', {
+                  op: 'pattern',
+                  user: 'omid30',
+                  pass: 'oh3383717',
+                  fromNum: '3000505',
+                  toNum: user.phone,
+                  patternCode: 'ffvygfwi5ky8u1v',
+                  inputData: [
+                    { name: user.name },
+                    { URL: args.item.id },
+                  ],
+                })
+                // console.log(response)
+                if (Boolean(Number(response.data)) === false) {
+                  // error
+                  throw new Error(String(response.data))
+                }
+              }
+              catch (error) {
+                console.error('!! error sending sms')
+                console.error(error)
+              }
+            })
           })
         }
       }
