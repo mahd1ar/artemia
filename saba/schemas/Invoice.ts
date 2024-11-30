@@ -1,4 +1,3 @@
-/* eslint-disable node/prefer-global/process */
 import type { Lists } from '.keystone/types'
 import type { Session } from '../data/types'
 import type { ExcludesFalse } from '../data/utils'
@@ -89,7 +88,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
     listView: {
       initialColumns: ['title', 'totalPayable'],
       initialSort: {
-        field: 'dateOfStatement',
+        field: 'createdAt',
         direction: 'DESC',
       },
     },
@@ -242,9 +241,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldPosition: 'sidebar',
-          fieldMode(_args) {
-            return 'read'
-          },
+          fieldMode: 'read',
         },
       },
     }),
