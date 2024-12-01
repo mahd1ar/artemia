@@ -120,7 +120,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       }
       else {
         if (args.inputData.peyments) {
-          if (args.item!.id) {
+          if (args.item.id) {
             await prisma.payment.updateMany({
               where: {
                 statement: {
@@ -133,7 +133,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
                 // TODO check this on create item (operation===create)
                 title:
                   `${args.inputData.title
-                  || args.originalItem!.title
+                  || args.item.title
                   || args.resolvedData.title} رسید `,
               },
             })
@@ -383,9 +383,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         // },
       },
       ui: {
-        createView: {
-          fieldMode: 'hidden',
-        },
+
       },
     }),
 

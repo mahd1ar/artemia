@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Match } from '../../data/match'
 import { alc } from '../../data/types'
-import { theme } from '../../data/utils'
+import { saveCurrentTab, theme } from '../../data/utils'
 
 function ShowStatus({ item, role }: {
   item?: NonNullable<import('../../__generated__/ts-gql/STMNTS_AUTH').type['___type']['result']['statements']>[number]
@@ -103,7 +103,7 @@ export function Field({
         }
       ` as import('../../__generated__/ts-gql/STMNTS_AUTH').type
 
-  const { data } = useQuery(STMNTS_AUTH, { variables: { id: value.id }, fetchPolicy: 'no-cache' })
+  const { data, refetch } = useQuery(STMNTS_AUTH, { variables: { id: value.id }, fetchPolicy: 'no-cache' })
 
   return (
 
@@ -146,7 +146,7 @@ export function Field({
             aria-labelledby="nested-list-subheader"
           >
             {
-              data?.statements?.map(i => (
+              value.value?.map(i => (
 
                 <ListItemButton
                   onClick={() => router.push(`/statements/${i.id}`)}
@@ -156,11 +156,14 @@ export function Field({
                   <ListItemIcon>
                     <ContentPaste color="info" fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText primary={i.title} />
+                  <ListItemText primary={i.label} />
 
                   <ListItemSecondaryAction>
 
-                    <ShowStatus item={i} role={data.authenticatedItem?.role || undefined} />
+                    {
+                      data && data?.statements?.find(j => j.id === i.id)
+                      && <ShowStatus item={data?.statements?.find(j => j.id === i.id)} role={data.authenticatedItem?.role || undefined} />
+                    }
 
                   </ListItemSecondaryAction>
                 </ListItemButton>
@@ -190,6 +193,7 @@ export function Field({
         )}
 
       </Stack>
+
       {onChange !== undefined && (
         <DrawerController isOpen={isDrawerOpen}>
           <CreateItemDrawer
@@ -205,6 +209,8 @@ export function Field({
                   ...value,
                   value: [...value.value, val],
                 })
+
+                saveCurrentTab(1000).then(() => void 0).catch(() => void 0).finally(() => refetch())
               }
             // else if (value.kind === 'one') {
             //   onChange({

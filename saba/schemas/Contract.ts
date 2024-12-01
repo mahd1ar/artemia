@@ -164,7 +164,10 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
         && args.item?.isApproved
         && !isFromAdminGroup
       ) {
-        args.addValidationError('امکان تغییر قرارداد تایید شده وجود ندارد')
+        const creaticalFieldsIsChanged = !!args.inputData?.startFrom || !!args.inputData?.end || !!args.inputData?.cost
+
+        if (creaticalFieldsIsChanged)
+          args.addValidationError('امکان تغییر قرارداد تایید شده وجود ندارد')
       }
     },
   },
@@ -330,7 +333,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       ref: 'Statement.contract',
       many: true,
       ui: {
-        labelField: 'id',
+        labelField: 'title',
         createView: {
           fieldMode: 'hidden',
         },
