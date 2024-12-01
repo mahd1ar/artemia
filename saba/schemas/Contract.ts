@@ -71,6 +71,10 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
     label: 'قرارداد',
     listView: {
       initialColumns: ['title', 'isApproved', 'contractor', 'cost'],
+      initialSort: {
+        field: 'createdAt',
+        direction: 'DESC',
+      },
     },
   },
   hooks: {
@@ -92,6 +96,13 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       return args.resolvedData
     },
     async afterOperation(args) {
+      if (args.operation === 'update' && args.inputData.isApproved) {
+        Notif.contractIsApproved({
+          title: args.inputData.title || args.resolvedData.title?.toString() || args.item.title,
+          url: `${args.context.req?.headers.origin ?? 'saba.netdom.ir'}/contracts/${args.item.id}`,
+        })
+      }
+
       if (args.operation === 'create') {
         if (typeof args.inputData.isApproved !== 'boolean') {
           Notif.newContractCreated({
@@ -121,8 +132,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
                   toNum: user.phone,
                   patternCode: 'ffvygfwi5ky8u1v',
                   inputData: [
-                    { name: user.name },
-                    { URL: args.item.id },
+                    { name: user.name, URL: args.item.id },
                   ],
                 })
                 // console.log(response)

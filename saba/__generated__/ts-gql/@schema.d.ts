@@ -1,8 +1,8 @@
-// ts-gql-integrity:3f2a94fbd02e5b9de592a926d721ac6a
+// ts-gql-integrity:f4d50590185d6f8d914d1de816985f88
 /*
 ts-gql-meta-begin
 {
-  "hash": "8ab8503c6e736ef556813165ab6aa7a4"
+  "hash": "74a24bec2fdedf4380fedeb7624f654b"
 }
 ts-gql-meta-end
 */
@@ -903,6 +903,7 @@ export type Statement = {
   readonly deductionOnAccountOfAdvancePayment: BigInt | null;
   readonly workGuarantee: BigInt | null;
   readonly totalPayable: BigInt | null;
+  readonly physicalProgress: number | null;
   readonly notes: ReadonlyArray<Note> | null;
   readonly notesCount: number | null;
   readonly status: string | null;
@@ -982,6 +983,7 @@ export type StatementWhereInput = {
   readonly rows?: RowManyRelationFilter | null;
   readonly deductionOnAccountOfAdvancePayment?: BigIntNullableFilter | null;
   readonly workGuarantee?: BigIntNullableFilter | null;
+  readonly physicalProgress?: IntNullableFilter | null;
   readonly notes?: NoteManyRelationFilter | null;
   readonly status?: StringNullableFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
@@ -1005,6 +1007,7 @@ export type StatementOrderByInput = {
   readonly sateOfStatement?: OrderDirection | null;
   readonly deductionOnAccountOfAdvancePayment?: OrderDirection | null;
   readonly workGuarantee?: OrderDirection | null;
+  readonly physicalProgress?: OrderDirection | null;
   readonly status?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
 };
@@ -1025,6 +1028,7 @@ export type StatementUpdateInput = {
   readonly rows?: RowRelateToManyForUpdateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
+  readonly physicalProgress?: number | null;
   readonly notes?: NoteRelateToManyForUpdateInput | null;
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
@@ -1059,6 +1063,7 @@ export type StatementCreateInput = {
   readonly rows?: RowRelateToManyForCreateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
+  readonly physicalProgress?: number | null;
   readonly notes?: NoteRelateToManyForCreateInput | null;
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
@@ -1599,6 +1604,7 @@ export type User = {
   readonly fullname: string | null;
   readonly name: string | null;
   readonly email: string | null;
+  readonly phone: string | null;
   readonly avatar: ImageFieldOutput | null;
   readonly role: number | null;
   readonly password: PasswordState | null;
@@ -1706,6 +1712,7 @@ export type UserWhereInput = {
   readonly id?: IDFilter | null;
   readonly name?: StringFilter | null;
   readonly email?: StringFilter | null;
+  readonly phone?: StringFilter | null;
   readonly role?: IntNullableFilter | null;
   readonly approvals?: ApprovalManyRelationFilter | null;
   readonly descriptions?: DescriptionManyRelationFilter | null;
@@ -1738,6 +1745,7 @@ export type UserOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly name?: OrderDirection | null;
   readonly email?: OrderDirection | null;
+  readonly phone?: OrderDirection | null;
   readonly role?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
 };
@@ -1745,6 +1753,7 @@ export type UserOrderByInput = {
 export type UserUpdateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
+  readonly phone?: string | null;
   readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;
@@ -1786,6 +1795,7 @@ export type UserUpdateArgs = {
 export type UserCreateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
+  readonly phone?: string | null;
   readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;

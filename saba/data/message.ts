@@ -122,4 +122,15 @@ ${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join('\n\n') || ' 
 
     await sendMessage(msg)
   }
+
+  static async contractIsApproved(args: { title: string, url: string }) {
+    const msg = `( ربات کنترل پروژه صبا )
+        
+✅ قرارداد  "${args.title}" در سامانه کنترل پروژه صبا تایید شد 
+
+🛟  ${args.url}
+`
+
+    await sendMessage(msg)
+  }
 }

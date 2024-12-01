@@ -87,12 +87,10 @@ export const Note = list<Lists.Note.TypeInfo<Session>>({
                   toNum: String(user.phone),
                   patternCode: 'disi35jl5jnf0d1',
                   inputData: [
-                    { resource },
-                    { name: user.name },
-                    { id },
+                    { name: user.name, id, resource },
                   ],
                 })
-                console.log(response)
+
                 if (Boolean(Number(response.data)) === false) {
                   // error
                   throw new Error(String(response.data))
