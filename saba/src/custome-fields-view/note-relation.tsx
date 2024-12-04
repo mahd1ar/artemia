@@ -127,6 +127,13 @@ export function Field({
   }
 ` as import('../../__generated__/ts-gql/NOTE_UPDATE').type
 
+  const DELETE_NOTE = gql`
+  mutation DELETE_NOTE($where: NoteWhereUniqueInput!) {
+    deleteNote(where: $where) {
+      id
+    }
+  }` as import('../../__generated__/ts-gql/DELETE_NOTE').type
+
   const [load, { data: persistedData }] = useLazyQuery(NOTES, {
     nextFetchPolicy: 'network-only',
     variables: {
@@ -143,6 +150,8 @@ export function Field({
   const [createNote, { loading: loadingCreate }] = useMutation(NOTES_CREATE)
 
   const [updateNote, { loading: loadingUpdate }] = useMutation(NOTE_UPDATE)
+
+  const [deleteNote, { loading: loadingDelete }] = useMutation(DELETE_NOTE)
 
   const { data: allUsers } = useQuery(ALLUSERS)
 
@@ -298,6 +307,22 @@ export function Field({
     setIsOpen(false)
   }
 
+  async function tryDelete(id: string) {
+    // eslint-disable-next-line no-alert
+    if (!window.confirm('آیا مطمئن هستید؟'))
+      return
+
+    await deleteNote({
+      variables: {
+        where: {
+          id,
+        },
+      },
+    })
+
+    setData(data.filter(i => i.id !== id))
+  }
+
   function parseMentions(x?: string | string[]) {
     try {
       if (Array.isArray(x))
@@ -331,7 +356,7 @@ export function Field({
                 tryUpdate()
               }
             },
-            loading: loadingCreate || loadingUpdate,
+            loading: loadingCreate || loadingUpdate || loadingDelete,
           },
           cancel: {
             label: 'لغو',
@@ -409,7 +434,7 @@ export function Field({
                     >
                       <EditIcon size={18} />
                     </IconButton>
-                    <IconButton disabled={persistedData?.authenticatedItem?.id !== note.userId} color="error" aria-label="delete">
+                    <IconButton onClick={() => tryDelete(note.id)} disabled={persistedData?.authenticatedItem?.id !== note.userId} color="error" aria-label="delete">
                       <TrashIcon size={18} />
                     </IconButton>
                   </>

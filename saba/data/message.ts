@@ -3,7 +3,7 @@ import axios from 'axios'
 async function sendMessage(message: string): Promise<boolean> {
   const TELEGRAM_TOKEN = '6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs'
   const TELEGRAM_CHAT_ID = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
-  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}`
+  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=markdown`
 
   try {
     await axios.get(url)
@@ -53,7 +53,7 @@ ${statementUrl}
 
 امکان تایید و پرداخت این مصوبه توسط  "مسؤل فنی" امکان پذیر هست
 
-${statementUrl}           
+[برای مشاهده کلیک کنید](${statementUrl})        
 `
 
     return await sendMessage(message)
@@ -77,7 +77,7 @@ ${statementUrl}
     if (peymentsUrl)
       peymentsUrl = peymentsUrl?.map((i, index) => `${index + 1}- ${i}`)
 
-    const msg = `(ربات کنترل پروژه صبا: نسخه ی آزمایشی)
+    const msg = `( ربات کنترل پروژه صبا )
 
 🗂 "${title}"
 
@@ -104,7 +104,7 @@ ${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join('\n\n') || ' 
 
 🙋‍♂️ بارگذاری این فاکتور توسط: ${args.uploader}
 
-🛟  ${args.invoiceUrl}
+🛟  [برای مشاهده کلیک کنید](${args.invoiceUrl})
 `
 
     await sendMessage(msg)
@@ -128,7 +128,7 @@ ${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join('\n\n') || ' 
         
 ✅ قرارداد  "${args.title}" در سامانه کنترل پروژه صبا تایید شد 
 
-🛟  ${args.url}
+🛟 [برای مشاهده کلیک کنید](${args.url})
 `
 
     await sendMessage(msg)

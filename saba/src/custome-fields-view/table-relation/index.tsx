@@ -423,7 +423,7 @@ export function Field({
           tone="active"
           actions={{
             confirm: {
-              label: modelData.id === '' ? 'اضافه کردن  ' : 'ویرایش ',
+              label: 'تایید',
               action: async () => {
                 if (modelData.id)
                   tryUpdate()
