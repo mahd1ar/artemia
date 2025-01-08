@@ -147,22 +147,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         alc.forEach(async ({ gqlkey: key, for: _ }) => {
           if (typeof args.inputData![key] === 'boolean') {
             conformationHappend = true
-            // const confirmed = !!args.inputData![key]
-
-            // const logMessage: LogMessage.Statement = {
-            //   confirmed,
-            //   id: args.item.id,
-            //   user: session!.itemId,
-            // }
-
-            // await prisma.log.create({
-            //   data: {
-            //     action: key === 'confirmedByTheUploader' ? 'STATEMENT_FINALIZED_REGISTRATION' : 'STATEMENT_CONFIRMED',
-            //     type: 'info',
-            //     message: JSON.stringify(logMessage),
-            //   },
-            //   select: { id: true },
-            // })
           }
         })
 
@@ -173,7 +157,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
             const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
             const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
 
-            if (session && session.data.role > Roles.operator) {
+            if (session /* && session.data.role > Roles.operator */) {
               const notif_username = session.data.name
 
               if (args.inputData.confirmedByTheUploader) {
@@ -196,6 +180,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
                       peyments {
                         id
                         title
+                        description
                         attachment {
                           url
                         }
@@ -215,8 +200,13 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
                   setTimeout(async () => {
                     await Notif.sendStatementAttachmenets(
                       currentStatement.statement?.title || '',
-                      currentStatement.statement?.attachments?.map(i => i.file?.url).filter(Boolean as unknown as ExcludesFalse) || [],
-                      currentStatement.statement?.peyments?.map(i => i.attachment?.url).filter(Boolean as unknown as ExcludesFalse) || [],
+                      currentStatement.statement?.attachments?.map(i => i.file && i.file.url ? ({ label: i.title || '', url: i.file.url || '' }) : null).filter(Boolean as unknown as ExcludesFalse) || [],
+                      currentStatement.statement?.peyments?.map(i => i.attachment?.url
+                        ? ({
+                            label: `${i.title || ''} | ${i.description || ''}`,
+                            url: i.attachment.url || '',
+                          })
+                        : null).filter(Boolean as unknown as ExcludesFalse) || [],
                     )
                   }, 1000)
                 }

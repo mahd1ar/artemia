@@ -1,4 +1,13 @@
+import crypto from 'node:crypto'
+import fs from 'node:fs'
+import path from 'node:path'
 import axios from 'axios'
+import TelegramBot from 'node-telegram-bot-api'
+
+const TELEGRAM_TOKEN = '6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs'
+const TELEGRAM_CHAT_ID = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
+
+const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: false })
 
 async function sendMessage(message: string): Promise<boolean> {
   const TELEGRAM_TOKEN = '6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs'
@@ -13,6 +22,23 @@ async function sendMessage(message: string): Promise<boolean> {
     console.error('error sending message:')
     console.error(error)
     return false
+  }
+}
+
+async function createReadStreamFromUrl(url: string) {
+  const filename = url.split('/').filter(Boolean).pop()
+
+  if (!filename)
+    throw new Error('filename not found')
+
+  if (fs.existsSync(path.join(process.cwd(), 'public/files', filename))) {
+    return fs.createReadStream(path.join(process.cwd(), 'public/files', filename))
+  }
+  else if (fs.existsSync(path.join(process.cwd(), 'public/images', filename))) {
+    return fs.createReadStream(path.join(process.cwd(), 'public/images', filename))
+  }
+  else {
+    throw new Error('file not found')
   }
 }
 
@@ -65,17 +91,25 @@ ${statementUrl}
 
   static async sendStatementAttachmenets(
     title: string,
-    attachmentsUrl: string[] | null,
-    peymentsUrl: string[] | null,
+    attachmentsUrl: { label: string, url: string }[] | null,
+    peymentsUrl: { label: string, url: string }[] | null,
   ) {
     const hasImageOrAttachments = !!(attachmentsUrl && attachmentsUrl?.length > 0)
     const hasPayments = !!peymentsUrl && peymentsUrl?.length > 0
 
+    let attachmentsUrl2: string = ''
+    let peymentsUrl2: string = ''
+
+    if (attachmentsUrl === null)
+      attachmentsUrl = []
+    if (peymentsUrl === null)
+      peymentsUrl = []
+
     if (attachmentsUrl)
-      attachmentsUrl = attachmentsUrl?.map((i, index) => `${index + 1}- ${i}`)
+      attachmentsUrl2 = attachmentsUrl?.map((i, index) => `${index + 1}- ${i.url}`).join('\n')
 
     if (peymentsUrl)
-      peymentsUrl = peymentsUrl?.map((i, index) => `${index + 1}- ${i}`)
+      peymentsUrl2 = peymentsUrl?.map((i, index) => `${index + 1}- ${i.url}`).join('\n')
 
     const msg = `( ربات کنترل پروژه صبا )
 
@@ -84,11 +118,31 @@ ${statementUrl}
 🔗 فایل های ضمیمه شده:
 ${!hasImageOrAttachments
     ? 'هیچ فایلی ضمیمه نشده'
-    : attachmentsUrl!.join('\n')
+    : attachmentsUrl2
 }
 
-${hasPayments ? `🔗 رسید های پرداختی: \n${peymentsUrl!.join('\n')}` : ''}
+${hasPayments ? `🔗 رسید های پرداختی: \n${peymentsUrl2}` : ''}
 `
+
+    attachmentsUrl?.concat(peymentsUrl!).forEach(async (i) => {
+      try {
+        const rs = await createReadStreamFromUrl(i.url)
+        const extension = i.url.split('.').pop() || ''
+        if (['jpg', 'jpeg', 'png'].includes(extension)) {
+          await bot.sendPhoto(TELEGRAM_CHAT_ID, rs, {
+            caption: i.label,
+          })
+        }
+        else {
+          await bot.sendDocument(TELEGRAM_CHAT_ID, rs, {
+            caption: i.label,
+          })
+        }
+      }
+      catch (error) {
+        console.error(error)
+      }
+    })
 
     return await sendMessage(msg)
   }

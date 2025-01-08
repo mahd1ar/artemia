@@ -164,6 +164,10 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         itemView: {
           fieldMode: 'hidden',
         },
+        createView: {
+          fieldMode: 'hidden',
+        },
+
       },
       label: 'جمع  کل قابل پرداخت',
       field: graphql.field({

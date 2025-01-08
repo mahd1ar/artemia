@@ -8,7 +8,7 @@ import { FieldContainer, FieldLabel, MultiSelect, TextArea } from '@keystone-ui/
 import { EditIcon, TrashIcon } from '@keystone-ui/icons'
 import { AlertDialog } from '@keystone-ui/modals'
 import { useToasts } from '@keystone-ui/toast'
-import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ThemeProvider, Typography } from '@mui/material'
+import { Alert, Avatar, Card, CardActions, CardContent, CardHeader, IconButton, ThemeProvider, Typography } from '@mui/material'
 import { gql } from '@ts-gql/tag/no-transform'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -34,9 +34,10 @@ export function Field({
 }: FieldProps<typeof controller>) {
   if (value.kind !== 'many')
     return <div>cant</div>
-
   const router = useRouter()
+
   const toast = useToasts()
+  const [isOpenWarning, setIsOpenWarning] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState<string | undefined>(undefined)
   const [mentions, setMentions] = useState<{ label: string, value: string }[]>([])
@@ -480,20 +481,40 @@ export function Field({
         }
       </ThemeProvider>
 
-      <Button
-        style={{ marginTop: '20px' }}
-        tone="positive"
-        onClick={() => {
-          setIsOpen(true)
-          setMode('create')
-          setMessage('')
-          setMentions([])
-        }}
-      >
-        {' '}
-        افزودن یادداشت
-        {' '}
-      </Button>
+      {
+        isOpenWarning
+          ? (
+
+              <Alert
+                variant="standard"
+                severity="warning"
+                sx={{ width: '100%' }}
+              >
+                لطفا قبل از اضافه کردن یادداشت، تغییرات را ذخیره کنید
+              </Alert>
+            )
+          : (
+              <Button
+                style={{ marginTop: '20px' }}
+                tone="positive"
+                onClick={() => {
+                  if (router.route.split('/').at(-1) === 'create') {
+                    setIsOpenWarning(true)
+                  }
+                  else {
+                    setIsOpen(true)
+                    setMode('create')
+                    setMessage('')
+                    setMentions([])
+                  }
+                }}
+              >
+                {' '}
+                افزودن یادداشت
+                {' '}
+              </Button>
+            )
+      }
 
     </FieldContainer>
 
