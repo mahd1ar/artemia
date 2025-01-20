@@ -94,57 +94,58 @@ ${statementUrl}
     attachmentsUrl: { label: string, url: string }[] | null,
     peymentsUrl: { label: string, url: string }[] | null,
   ) {
-    const hasImageOrAttachments = !!(attachmentsUrl && attachmentsUrl?.length > 0)
-    const hasPayments = !!peymentsUrl && peymentsUrl?.length > 0
-
-    let attachmentsUrl2: string = ''
-    let peymentsUrl2: string = ''
-
     if (attachmentsUrl === null)
       attachmentsUrl = []
     if (peymentsUrl === null)
       peymentsUrl = []
 
-    if (attachmentsUrl)
-      attachmentsUrl2 = attachmentsUrl?.map((i, index) => `${index + 1}- ${i.url}`).join('\n')
-
-    if (peymentsUrl)
-      peymentsUrl2 = peymentsUrl?.map((i, index) => `${index + 1}- ${i.url}`).join('\n')
+    title = ` صورت وضعیت ${title}`
 
     const msg = `( ربات کنترل پروژه صبا )
 
 🗂 "${title}"
-
-🔗 فایل های ضمیمه شده:
-${!hasImageOrAttachments
-    ? 'هیچ فایلی ضمیمه نشده'
-    : attachmentsUrl2
-}
-
-${hasPayments ? `🔗 رسید های پرداختی: \n${peymentsUrl2}` : ''}
 `
 
-    attachmentsUrl?.concat(peymentsUrl!).forEach(async (i) => {
-      try {
+    // 🔗 فایل های ضمیمه شده:
+    // ${!hasImageOrAttachments
+    //     ? 'هیچ فایلی ضمیمه نشده'
+    //     : attachmentsUrl2
+    // }
+
+    // ${hasPayments ? `🔗 رسید های پرداختی: \n${peymentsUrl2}` : ''}
+
+    try {
+      const message = await bot.sendMessage(TELEGRAM_CHAT_ID, msg, {
+        parse_mode: 'Markdown',
+      })
+      const allFiles = attachmentsUrl?.concat(peymentsUrl!)
+
+      for (let j = 0; j < allFiles.length; j++) {
+        const i = allFiles[j]
+        if (i.url.trim() === '')
+          continue
         const rs = await createReadStreamFromUrl(i.url)
         const extension = i.url.split('.').pop() || ''
         if (['jpg', 'jpeg', 'png'].includes(extension)) {
           await bot.sendPhoto(TELEGRAM_CHAT_ID, rs, {
             caption: i.label,
+            reply_to_message_id: message.message_id,
           })
         }
         else {
           await bot.sendDocument(TELEGRAM_CHAT_ID, rs, {
             caption: i.label,
+            reply_to_message_id: message.message_id,
           })
         }
       }
-      catch (error) {
-        console.error(error)
-      }
-    })
-
-    return await sendMessage(msg)
+      return true
+    }
+    catch (err) {
+      console.error('[]ERRX1')
+      console.error(err)
+      return false
+    }
   }
 
   static async newInvoiceCreated(args: { title: string, uploader: string, attachmentsUrl: { label: string, url: string }[], invoiceUrl: string }) {
