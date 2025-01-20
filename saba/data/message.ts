@@ -147,21 +147,50 @@ ${hasPayments ? `🔗 رسید های پرداختی: \n${peymentsUrl2}` : ''}
     return await sendMessage(msg)
   }
 
-  static async newInvoiceCreated(args: { title: string, uploader: string, attachmentsUrl: string[], invoiceUrl: string }) {
+  static async newInvoiceCreated(args: { title: string, uploader: string, attachmentsUrl: { label: string, url: string }[], invoiceUrl: string }) {
     const msg = `( ربات کنترل پروژه صبا )
         
 📜 فاکتور جدید با عنوان "${args.title}" در سامانه کنترل پروژه صبا ایجاد 
-
-🔗 فایل های ضمیمه شده:
-
-${args.attachmentsUrl.map((i, index) => `${index + 1}- ${i}`).join('\n\n') || ' ** هیچ فایلی ضمیمه نشده **'}
 
 🙋‍♂️ بارگذاری این فاکتور توسط: ${args.uploader}
 
 🛟  [برای مشاهده کلیک کنید](${args.invoiceUrl})
 `
 
-    await sendMessage(msg)
+    // 🔗 فایل های ضمیمه شده:
+
+    // ${ args.attachmentsUrl.map((i, index) => `${index + 1}- ${i.url}`).join('\n\n') || ' ** هیچ فایلی ضمیمه نشده **' }
+
+    try {
+      const message = await bot.sendMessage(TELEGRAM_CHAT_ID, msg, {
+        parse_mode: 'Markdown',
+      })
+
+      for (let j = 0; j < args.attachmentsUrl.length; j++) {
+        const i = args.attachmentsUrl[j]
+
+        const rs = await createReadStreamFromUrl(i.url)
+        const extension = i.url.split('.').pop() || ''
+
+        if (['jpg', 'jpeg', 'png'].includes(extension)) {
+          await bot.sendPhoto(TELEGRAM_CHAT_ID, rs, {
+            caption: i.label,
+            reply_to_message_id: message.message_id,
+          })
+        }
+        else {
+          await bot.sendDocument(TELEGRAM_CHAT_ID, rs, {
+            caption: i.label,
+            reply_to_message_id: message.message_id,
+          })
+        }
+      }
+      return true
+    }
+    catch (error) {
+      console.error(error)
+      return false
+    }
   }
 
   static async newContractCreated(args: { title: string, url: string }) {

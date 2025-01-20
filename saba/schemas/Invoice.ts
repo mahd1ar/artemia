@@ -52,6 +52,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
   invoice(where: {id: $id }) {
     attachments {
       id
+      title
       file {
         filename
         url
@@ -73,7 +74,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
           })
 
           Notif.newInvoiceCreated({
-            attachmentsUrl: result.invoice?.attachments?.map(i => i.file?.url).filter(Boolean as unknown as ExcludesFalse) ?? [],
+            attachmentsUrl: result.invoice?.attachments?.map(i => i.file?.url ? { label: i.title || '.', url: i.file.url } : null).filter(Boolean as unknown as ExcludesFalse) ?? [],
             invoiceUrl: `${process.env.PUBLICURL}/invoices/${args.item.id}`,
             title: args.item.title,
             uploader: result.invoice?.createdBy?.fullname || '',
