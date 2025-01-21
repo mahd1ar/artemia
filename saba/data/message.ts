@@ -5,14 +5,18 @@ import axios from 'axios'
 import TelegramBot from 'node-telegram-bot-api'
 
 const TELEGRAM_TOKEN = '6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs'
-const TELEGRAM_CHAT_ID = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
+const TELEGRAM_CHAT_ID
+  = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: false })
 
 async function sendMessage(message: string): Promise<boolean> {
   const TELEGRAM_TOKEN = '6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs'
-  const TELEGRAM_CHAT_ID = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
-  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=markdown`
+  const TELEGRAM_CHAT_ID
+    = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
+  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(
+    message,
+  )}&parse_mode=markdown`
 
   try {
     await axios.get(url)
@@ -32,10 +36,16 @@ async function createReadStreamFromUrl(url: string) {
     throw new Error('filename not found')
 
   if (fs.existsSync(path.join(process.cwd(), 'public/files', filename))) {
-    return fs.createReadStream(path.join(process.cwd(), 'public/files', filename))
+    return fs.createReadStream(
+      path.join(process.cwd(), 'public/files', filename),
+    )
   }
-  else if (fs.existsSync(path.join(process.cwd(), 'public/images', filename))) {
-    return fs.createReadStream(path.join(process.cwd(), 'public/images', filename))
+  else if (
+    fs.existsSync(path.join(process.cwd(), 'public/images', filename))
+  ) {
+    return fs.createReadStream(
+      path.join(process.cwd(), 'public/images', filename),
+    )
   }
   else {
     throw new Error('file not found')
@@ -43,7 +53,11 @@ async function createReadStreamFromUrl(url: string) {
 }
 
 export class Notif {
-  static async workShopIsDoneUploadingStatement(statementTitle: string, user: string, statementUrl: string) {
+  static async workShopIsDoneUploadingStatement(
+    statementTitle: string,
+    user: string,
+    statementUrl: string,
+  ) {
     const message = `
 ( ربات کنترل پروژه صبا )
 
@@ -57,7 +71,11 @@ ${statementUrl}
     return await sendMessage(message)
   }
 
-  static async statementIsConfirmedByProjectManager(statementTitle: string, user: string, statementUrl: string) {
+  static async statementIsConfirmedByProjectManager(
+    statementTitle: string,
+    user: string,
+    statementUrl: string,
+  ) {
     const message = `
 ( ربات کنترل پروژه صبا )
 
@@ -71,7 +89,11 @@ ${statementUrl}
     return await sendMessage(message)
   }
 
-  static async statementIsConfirmedByFinancialSupervisor(statementTitle: string, user: string, statementUrl: string) {
+  static async statementIsConfirmedByFinancialSupervisor(
+    statementTitle: string,
+    user: string,
+    statementUrl: string,
+  ) {
     const message = `
 ( ربات کنترل پروژه صبا )
 
@@ -148,7 +170,12 @@ ${statementUrl}
     }
   }
 
-  static async newInvoiceCreated(args: { title: string, uploader: string, attachmentsUrl: { label: string, url: string }[], invoiceUrl: string }) {
+  static async newInvoiceCreated(args: {
+    title: string
+    uploader: string
+    attachmentsUrl: { label: string, url: string }[]
+    invoiceUrl: string
+  }) {
     const msg = `( ربات کنترل پروژه صبا )
         
 📜 فاکتور جدید با عنوان "${args.title}" در سامانه کنترل پروژه صبا ایجاد 
@@ -174,16 +201,28 @@ ${statementUrl}
         const extension = i.url.split('.').pop() || ''
 
         if (['jpg', 'jpeg', 'png'].includes(extension)) {
-          await bot.sendPhoto(TELEGRAM_CHAT_ID, rs, {
-            caption: i.label,
-            reply_to_message_id: message.message_id,
-          })
+          bot
+            .sendPhoto(TELEGRAM_CHAT_ID, rs, {
+              caption: i.label,
+              reply_to_message_id: message.message_id,
+            })
+            .then(() => 0)
+            .catch((err) => {
+              console.error(err)
+              console.error('ERRX12')
+            })
         }
         else {
-          await bot.sendDocument(TELEGRAM_CHAT_ID, rs, {
-            caption: i.label,
-            reply_to_message_id: message.message_id,
-          })
+          bot
+            .sendDocument(TELEGRAM_CHAT_ID, rs, {
+              caption: i.label,
+              reply_to_message_id: message.message_id,
+            })
+            .then(() => 0)
+            .catch((err) => {
+              console.error(err)
+              console.error('ERRX13')
+            })
         }
       }
       return true
