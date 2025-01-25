@@ -79,12 +79,12 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
 
       const filename = args.resolvedData.file.filename?.toString()
 
-      if (filename) {
+      // TEST THIS FUNCTION
+      if (filename && ['jpg', 'jpeg', 'png', 'webp'].includes(filename?.split('.')?.pop() || 'X')) {
         const absDir = path.join(
           process.cwd(),
           `/public/files/`,
         )
-
         const res = await resizeImageIfNecessary(absDir, filename)
 
         if (typeof res === 'boolean') {
