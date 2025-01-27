@@ -34,8 +34,7 @@ function ShowStatus({ item, role }: {
 
   if (!myConfirmationStatusField)
     return null
-  // eslint-disable-next-line ts/ban-ts-comment
-  // @ts-expect-error
+
   const confirmedByMe = item[myConfirmationStatusField.gqlkey] as boolean | undefined
 
   if (typeof confirmedByMe === 'undefined')
@@ -79,6 +78,8 @@ export function Field({
   const foreignList = useList(field.refListKey)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isAlertOpen, setIsAlertOpen] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+  const [newStatementId, setNewStatementId] = useState('')
 
   const router = useRouter()
 
@@ -135,6 +136,41 @@ export function Field({
           زیرا این قرارداد توسط مدیر کل تایید نشده است
         </p>
       </AlertDialog>
+
+      <AlertDialog
+        title="توجه"
+        tone="active"
+        isOpen={isConfirmOpen}
+        actions={{
+          confirm: {
+            action() {
+              if (newStatementId) {
+                router.push(`/statements/${newStatementId}`)
+                setIsConfirmOpen(false)
+              }
+              else {
+                console.error('no statement created')
+              }
+            },
+            label: '   بله',
+          },
+          cancel: {
+            action() {
+              setNewStatementId('')
+              setIsConfirmOpen(false)
+            },
+            label: 'بستن',
+          },
+
+        }}
+      >
+        <p>
+          صورت وضعیت جدید بارگذاری شده تایید نشده است
+          <br />
+          ایا مایل به باز کردن صورت وضعیت جدید و تایید آن هستید؟
+        </p>
+      </AlertDialog>
+
       <Stack
         gap="small"
       // across
@@ -210,7 +246,10 @@ export function Field({
                   value: [...value.value, val],
                 })
 
-                saveCurrentTab(1000).then(() => void 0).catch(() => void 0).finally(() => refetch())
+                saveCurrentTab(1000).then(() => {
+                  setNewStatementId(val.id)
+                  setIsConfirmOpen(true)
+                }).catch(() => void 0).finally(() => refetch())
               }
             // else if (value.kind === 'one') {
             //   onChange({
