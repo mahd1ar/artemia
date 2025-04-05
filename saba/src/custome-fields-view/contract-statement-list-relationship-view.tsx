@@ -9,6 +9,7 @@ import { Button } from '@keystone-ui/button'
 import { Stack } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { AlertDialog, DrawerController } from '@keystone-ui/modals'
+import { Notice } from '@keystone-ui/notice'
 // import {  } from '@keystone-ui/'
 import { CheckBox, ContentPaste, QueryBuilder } from '@mui/icons-material'
 import { ListItemSecondaryAction, Tooltip } from '@mui/material'
@@ -63,9 +64,15 @@ export function Field({
   itemValue,
   onChange,
 }: FieldProps<typeof controller>) {
-  if (typeof value === 'symbol' || !value.id)
-    return null
+  if (typeof value === 'symbol' || !value.id) {
+    return (
+      <FieldContainer>
 
+        <FieldLabel>{field.label}</FieldLabel>
+        <Notice tone="active">برای اضافه کردن صورت وضعیت قرارداد جاری را ذخیره کنید</Notice>
+      </FieldContainer>
+    )
+  }
   if (value.kind !== 'many')
     return <div>relationship kind is not supported :/ </div>
 

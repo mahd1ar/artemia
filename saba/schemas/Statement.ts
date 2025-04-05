@@ -514,12 +514,8 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
 
     grossTotal: virtual({
       ui: {
-        itemView: {
-          fieldMode(_args) {
-            return 'hidden'
-            // return getRoleFromArgs(args) === Roles.admin ? 'read' : 'hidden'
-          },
-        },
+        itemView: { fieldMode: 'hidden' },
+        createView: { fieldMode: 'hidden' },
         views: './src/custome-fields-view/bigint-viewer.tsx',
       },
       label: 'جمع کل صورت وضعیت',
@@ -572,6 +568,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
     totalPayable: virtual({
       ui: {
         views: './src/custome-fields-view/bigint-viewer.tsx',
+        createView: { fieldMode: 'hidden' },
       },
       label: 'جمع  کل کارکرد',
       field: graphql.field({

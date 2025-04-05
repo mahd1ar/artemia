@@ -334,9 +334,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       many: true,
       ui: {
         labelField: 'title',
-        createView: {
-          fieldMode: 'hidden',
-        },
+
         itemView: {
           // fieldMode: 'read',
           fieldMode(args) {
