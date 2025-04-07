@@ -60,6 +60,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
           fieldMode: 'hidden',
         },
       },
+      many: true,
     }),
     statements: relationship({
       ref: 'Statement.description',
