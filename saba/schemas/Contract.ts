@@ -173,7 +173,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
   },
   fields: {
     summery: virtual({
-      label: 'عنوان',
+      label: 'خلاصه',
       field: graphql.field({
         type: graphql.String,
         async resolve(item, _, context) {
@@ -184,7 +184,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
             ? new Date(item.end * 1000).toLocaleDateString('fa-IR')
             : ''
           const dateTitle
-            = startDate && endDate ? `${endDate} ~ ${startDate} ` : ''
+            = startDate && endDate ? `${startDate} ~ ${endDate} ` : ''
 
           const contractor = await context.prisma.contract.findUnique({
             where: {
@@ -349,7 +349,42 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
         views: './src/custome-fields-view/contract-statement-list-relationship-view.tsx',
       },
     }),
+    physicalProgress: virtual({
+      label: 'پیشرفت فیزیکی',
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode: 'read',
+          fieldPosition: 'sidebar',
+        },
+      },
+      field: graphql.field({
+        type: graphql.nonNull(graphql.Int),
+        async resolve(item, args, context) {
+          const data = await context.prisma.statement.findMany({
+            where: {
+              contractId: item.id,
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          })
 
+          if (data.length === 0)
+            return 0
+
+          if (data.find(s => s.type === 'final' || s.type === 'before-final'))
+            return 100
+
+          const tempStatements = data.filter(s => s.type === 'temporarly')
+          const lastestTempStatement = tempStatements.length > 0 ? tempStatements.sort((a, b) => (b.statementNumber || 0) - (a.statementNumber || 0))[0] : null
+          if (lastestTempStatement)
+            return lastestTempStatement.physicalProgress || 0
+          return 0
+        },
+      }),
+
+    }),
     attachment: file({
       // temp hidden
       ui: {
