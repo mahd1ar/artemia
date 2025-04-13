@@ -6,7 +6,7 @@ import TelegramBot from 'node-telegram-bot-api'
 
 const TELEGRAM_TOKEN = '6462737055:AAEbsQMwvFowX-mRzLTVVArwf1hlCppnNLs'
 const TELEGRAM_CHAT_ID
-  = process.env.NODE_ENV !== 'production' ? '-1002206133203' : '-1002235700788'
+  = process.env.NODE_ENV !== 'production' ? '-1002667512684' /* old group is '-1002206133203' */: '-1002235700788'
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: false })
 
