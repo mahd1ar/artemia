@@ -122,7 +122,10 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
           let total = BigInt(0)
 
           description?.contracts?.forEach((i) => {
-            total += BigInt(i.cost)
+            try {
+              total += BigInt(i.cost || 0n)
+            }
+            catch {}
           })
 
           description?.invoices?.forEach((i) => {
