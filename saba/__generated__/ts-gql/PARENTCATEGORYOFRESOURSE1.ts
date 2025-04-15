@@ -1,8 +1,8 @@
-// ts-gql-integrity:f1d1c5ad91745df89b7b8f840880159b
+// ts-gql-integrity:12fe751675dcd64443731808bbd695e8
 /*
 ts-gql-meta-begin
 {
-  "hash": "88a391ec881e74eb609497c16fde9041"
+  "hash": "b70af5b1ea53714b25e85688eced0543"
 }
 ts-gql-meta-end
 */
@@ -13,7 +13,7 @@ import { TypedDocumentNode } from "@ts-gql/tag";
 type PARENTCATEGORYOFRESOURSE1QueryVariables = SchemaTypes.Exact<{ [key: string]: never; }>;
 
 
-type PARENTCATEGORYOFRESOURSE1Query = { readonly __typename: 'Query', readonly setting: { readonly __typename: 'Setting', readonly parentCategoryOfDesign: string | null } | null };
+type PARENTCATEGORYOFRESOURSE1Query = { readonly __typename: 'Query', readonly usersCount: number | null, readonly setting: { readonly __typename: 'Setting', readonly parentCategoryOfDesign: string | null } | null };
 
 
 
@@ -31,4 +31,4 @@ declare module "./@schema" {
   }
 }
 
-export const document = JSON.parse("{\"kind\":\"Document\",\"definitions\":[{\"kind\":\"OperationDefinition\",\"operation\":\"query\",\"name\":{\"kind\":\"Name\",\"value\":\"PARENTCATEGORYOFRESOURSE1\"},\"variableDefinitions\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"setting\"},\"arguments\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"parentCategoryOfDesign\"},\"arguments\":[],\"directives\":[]}]}}]}}]}")
+export const document = JSON.parse("{\"kind\":\"Document\",\"definitions\":[{\"kind\":\"OperationDefinition\",\"operation\":\"query\",\"name\":{\"kind\":\"Name\",\"value\":\"PARENTCATEGORYOFRESOURSE1\"},\"variableDefinitions\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"setting\"},\"arguments\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"parentCategoryOfDesign\"},\"arguments\":[],\"directives\":[]}]}},{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"usersCount\"},\"arguments\":[],\"directives\":[]}]}}]}")

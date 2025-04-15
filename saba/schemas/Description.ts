@@ -62,17 +62,6 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
       },
       many: true,
     }),
-    statements: relationship({
-      ref: 'Statement.description',
-      many: true,
-      label: 'صورت وضعیت',
-      ui: {
-        description: 'این ایتم به زودی حذف خواهد شد',
-        createView: {
-          fieldMode: 'hidden',
-        },
-      },
-    }),
     invoices: relationship({
       ref: 'Invoice.description',
       many: true,
@@ -109,22 +98,22 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
         async resolve(item, args, context) {
           const { id } = item
 
-          const CURRENT_DESCRIPTION = gql`
-          query CURRENT_DESCRIPTION($id: ID!) {
+          const PROJECTBUDGET = gql`
+          query PROJECTBUDGET($id: ID!) {
             description( where: { id:  $id}) {
             id
             invoices {
               totalPayable
             }
-            statements (where: {confirmedByTheUploader: {equals: true}}) {
-            totalPayable
+            contracts {
+              cost
             }
         }
-}` as import('../__generated__/ts-gql/CURRENT_DESCRIPTION').type
+}` as import('../__generated__/ts-gql/PROJECTBUDGET').type
 
           const sudo = context.sudo()
           const { description } = await sudo.graphql.run({
-            query: CURRENT_DESCRIPTION,
+            query: PROJECTBUDGET,
             variables: {
               id,
             },
@@ -132,8 +121,8 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
 
           let total = BigInt(0)
 
-          description?.statements?.forEach((i) => {
-            total += BigInt(i.totalPayable)
+          description?.contracts?.forEach((i) => {
+            total += BigInt(i.cost)
           })
 
           description?.invoices?.forEach((i) => {

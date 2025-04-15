@@ -44,6 +44,7 @@ export function GanttChart() {
         view_mode: 'Month',
         readonly: true,
         scroll_to: new Date().toISOString().split('T')[0],
+        container_height: 500,
       })
     }
   }, [data.data?.contracts])
@@ -64,9 +65,6 @@ export function GanttChart() {
 
   return (
     <>
-      {/* <pre>
-        {JSON.stringify(data.data.approvals, null, 2)}
-      </pre> */}
       <div style={{ width: '100%' }}>
 
         <div id="gantt"></div>
