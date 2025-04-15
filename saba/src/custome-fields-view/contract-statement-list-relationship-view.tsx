@@ -12,11 +12,14 @@ import { AlertDialog, DrawerController } from '@keystone-ui/modals'
 import { Notice } from '@keystone-ui/notice'
 // import {  } from '@keystone-ui/'
 import { CheckBox, ContentPaste, QueryBuilder } from '@mui/icons-material'
-import { ListItemSecondaryAction, Tooltip } from '@mui/material'
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
+import { ListItemSecondaryAction, Tooltip, Typography } from '@mui/material'
+import MuiButton from '@mui/material/Button'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import MuiStack from '@mui/material/Stack'
 import { gql } from '@ts-gql/tag/no-transform'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
@@ -117,7 +120,16 @@ export function Field({
 
     <FieldContainer>
 
-      <FieldLabel>{field.label}</FieldLabel>
+      <ThemeProvider theme={theme}>
+        <MuiStack spacing={2} direction="row" alignContent="center" justifyContent="space-between">
+          <MuiButton onClick={() => router.push(`/statements?!contract_matches="${value.id}"`)} variant="text" startIcon={<ArrowBackOutlinedIcon />}>
+            همه
+          </MuiButton>
+          <Typography variant="body1">
+            {field.label}
+          </Typography>
+        </MuiStack>
+      </ThemeProvider>
 
       <AlertDialog
         title="هشدار"
@@ -197,7 +209,7 @@ export function Field({
 
                 >
                   <ListItemIcon>
-                    <ContentPaste color="info" fontSize="small" />
+                    <ContentPaste fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary={i.label} />
 
