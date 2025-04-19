@@ -19,7 +19,7 @@ import QuestionMarkOutlinedIcon from '@mui/icons-material/QuestionMarkOutlined'
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined'
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined'
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'
-import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ThemeProvider, Toolbar } from '@mui/material'
+import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, ThemeProvider, Toolbar } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { gql } from '@ts-gql/tag/no-transform'
 import { useRouter } from 'next/router'
@@ -40,6 +40,12 @@ function Drawer(props: { listMeta: ListMeta[] }) {
 
   const router = useRouter()
   const ks = useKeystone()
+
+  const [contextMenu, setContextMenu] = React.useState<{
+    mouseX: number
+    mouseY: number
+    selectedResource: string
+  } | null>(null)
 
   const menuItems = React.useMemo(() => {
     return [
@@ -90,6 +96,7 @@ function Drawer(props: { listMeta: ListMeta[] }) {
         {
           resource: 'User',
           icon: <AccountCircleOutlinedIcon />,
+          // @ts-expect-error authenticatedItem have invalid type.d.ts
           href: data?.usersCount === 1 ? `/users/${ks.authenticatedItem.id}` : '',
         },
         {
@@ -111,6 +118,7 @@ function Drawer(props: { listMeta: ListMeta[] }) {
     ].map(i => i.map((j) => {
       const schema = props.listMeta.find(lm => lm.key === j.resource)
       const result = {
+        resource: j.resource,
         label: j.label || '',
         isSelected: false,
         icon: j.icon,
@@ -131,9 +139,33 @@ function Drawer(props: { listMeta: ListMeta[] }) {
     }).filter(j => !!j.label))
   }, [data])
 
-  // useEffect(() => {
-  //   console.log(ks)
-  // })
+  const handleContextMenu = (event: React.MouseEvent, resource: string) => {
+    event.preventDefault()
+    setContextMenu(
+      contextMenu === null
+        ? {
+            mouseX: event.clientX + 2,
+            mouseY: event.clientY - 6,
+            selectedResource: resource,
+          }
+        : null,
+    )
+
+    // Prevent text selection lost after opening the context menu on Safari and Firefox
+    const selection = document.getSelection()
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0)
+
+      setTimeout(() => {
+        selection.addRange(range)
+      })
+    }
+  }
+
+  const handleClose = () => {
+    setContextMenu(null)
+  }
+
   return (
     <div>
 
@@ -143,7 +175,13 @@ function Drawer(props: { listMeta: ListMeta[] }) {
             <List>
               {
                 i.map((j, inx) => (
-                  <ListItem key={inx} disablePadding>
+                  <ListItem
+                    key={inx}
+                    disablePadding
+                    onContextMenu={(event) => {
+                      handleContextMenu(event, j.resource || '#')
+                    }}
+                  >
                     <ListItemButton
                       onClick={() => {
                         router.push(j.href || '#')
@@ -168,6 +206,36 @@ function Drawer(props: { listMeta: ListMeta[] }) {
               }
             </List>
             <Divider />
+
+            <Menu
+              open={contextMenu !== null}
+              onClose={handleClose}
+              anchorReference="anchorPosition"
+              anchorPosition={
+                contextMenu !== null
+                  ? { top: contextMenu.mouseY + 10, left: contextMenu.mouseX }
+                  : undefined
+              }
+            >
+              <MenuItem onClick={() => {
+                const href = menuItems.flat().find(i => i.resource === contextMenu?.selectedResource)?.href
+                if (href)
+                  window.open(href, '_blank')
+                handleClose()
+              }}
+              >
+                open in new tab
+              </MenuItem>
+              <MenuItem onClick={() => {
+                const href = menuItems.flat().find(i => i.resource === contextMenu?.selectedResource)?.href
+                if (href)
+                  window.open(href, '_blank', `width=${screen.width},height=${screen.height},top=100,left=100,menubar=no,toolbar=no,status=no`)
+                handleClose()
+              }}
+              >
+                open in new window
+              </MenuItem>
+            </Menu>
           </>
         ))
       }
