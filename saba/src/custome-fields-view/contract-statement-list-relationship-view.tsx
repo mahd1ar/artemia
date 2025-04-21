@@ -10,9 +10,9 @@ import { Stack } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { AlertDialog, DrawerController } from '@keystone-ui/modals'
 import { Notice } from '@keystone-ui/notice'
-// import {  } from '@keystone-ui/'
 import { CheckBox, ContentPaste, QueryBuilder } from '@mui/icons-material'
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
 import { ListItemSecondaryAction, Tooltip, Typography } from '@mui/material'
 import MuiButton from '@mui/material/Button'
 import List from '@mui/material/List'
@@ -21,6 +21,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import MuiStack from '@mui/material/Stack'
 import { gql } from '@ts-gql/tag/no-transform'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Match } from '../../data/match'
@@ -122,9 +123,14 @@ export function Field({
 
       <ThemeProvider theme={theme}>
         <MuiStack spacing={2} direction="row" alignContent="center" justifyContent="space-between">
-          <MuiButton onClick={() => router.push(`/statements?!contract_matches="${value.id}"`)} variant="text" startIcon={<ArrowBackOutlinedIcon />}>
-            همه
-          </MuiButton>
+          <Link href={`/statements?!contract_matches="${value.id}"&fields=title,statementNumber,type&sortBy=-statementNumber`}>
+            <MuiButton
+              variant="text"
+              startIcon={<FormatListNumberedIcon />}
+            >
+              جزئیات
+            </MuiButton>
+          </Link>
           <Typography variant="body1">
             {field.label}
           </Typography>
@@ -209,7 +215,7 @@ export function Field({
 
                 >
                   <ListItemIcon>
-                    <ContentPaste fontSize="small" />
+                    <DescriptionOutlinedIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary={i.label} />
 

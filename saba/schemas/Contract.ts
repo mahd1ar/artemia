@@ -13,6 +13,7 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
+import { gql } from '@ts-gql/tag/no-transform'
 import axios from 'axios'
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn, isMemberOfAdminGroup } from '../data/access'
@@ -376,7 +377,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
           if (data.find(s => s.type === 'final' || s.type === 'before-final'))
             return 100
 
-          const tempStatements = data.filter(s => s.type === 'temporarly')
+          const tempStatements = data.filter(s => s.type !== 'temporarly')
           const lastestTempStatement = tempStatements.length > 0 ? tempStatements.sort((a, b) => (b.statementNumber || 0) - (a.statementNumber || 0))[0] : null
           if (lastestTempStatement)
             return lastestTempStatement.physicalProgress || 0
@@ -384,6 +385,62 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
         },
       }),
 
+    }),
+    totalPaid: virtual({
+      label: 'جمع کل کارکرد',
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode: 'read',
+          fieldPosition: 'sidebar',
+        },
+        views: './src/custome-fields-view/bigint-viewer.tsx',
+      },
+      field: graphql.field({
+        type: graphql.nonNull(graphql.BigInt),
+        async resolve(item, args, context) {
+          const CORESPONDING_STATEMENTS = gql`
+              query CORESPONDING_STATEMENTS($contractId: ID!) {
+                  statements(where: { contract: { id: { equals: $contractId }} }) {
+                      id
+                      totalPayable
+                      type
+                      statementNumber
+                  }
+              }
+          ` as import('../__generated__/ts-gql/CORESPONDING_STATEMENTS').type
+
+          const { statements } = await context.graphql.run({
+            query: CORESPONDING_STATEMENTS,
+            variables: {
+              contractId: item.id,
+            },
+          })
+
+          if (!statements)
+            return 0n
+
+          if (statements.length === 0)
+            return 0n
+
+          const finalStatement = statements.find(s => s.type === 'final')
+          const beforeFinalStatement = statements.find(s => s.type === 'before-final')
+
+          if (finalStatement)
+            return finalStatement.totalPayable ? BigInt(finalStatement.totalPayable) : 0n
+
+          if (beforeFinalStatement)
+            return beforeFinalStatement.totalPayable ? BigInt(beforeFinalStatement.totalPayable) : 0n
+
+          const tempStatements = statements.filter(s => s.type !== 'temporarly')
+
+          const lastestTempStatement = tempStatements.length > 0 ? tempStatements.sort((a, b) => (b.statementNumber || 0) - (a.statementNumber || 0))[0] : null
+
+          if (lastestTempStatement)
+            return lastestTempStatement.totalPayable ? BigInt(lastestTempStatement.totalPayable) : 0n
+          return 0n
+        },
+      }),
     }),
     attachment: file({
       // temp hidden

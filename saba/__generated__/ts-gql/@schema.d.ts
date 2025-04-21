@@ -1,8 +1,8 @@
-// ts-gql-integrity:7069ff932a047916bed3b6c14cca5681
+// ts-gql-integrity:6da1cbf5896434b808c80cdc948a70f3
 /*
 ts-gql-meta-begin
 {
-  "hash": "1fbd694c1fceaa44aa4241bca89ba7b0"
+  "hash": "797d93b41ea56ba0e316e6839bef7dce"
 }
 ts-gql-meta-end
 */
@@ -736,6 +736,7 @@ export type Contract = {
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statementsCount: number | null;
   readonly physicalProgress: number;
+  readonly totalPaid: BigInt;
   readonly attachment: FileFieldOutput | null;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
