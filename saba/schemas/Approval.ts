@@ -43,13 +43,13 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
     }),
 
     totalStatementsPayable: virtual({
+      label: 'مجموع پرداخت شده',
       ui: {
         itemView: {
           fieldPosition: 'sidebar',
         },
         views: './src/custome-fields-view/virtual-total-payable.tsx',
       },
-      label: 'مجموع پرداخت شده',
       field: graphql.field({
         type: graphql.BigInt,
         async resolve(item, args, context) {

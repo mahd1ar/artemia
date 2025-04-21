@@ -1,16 +1,17 @@
 import type { controller } from '@keystone-6/core/fields/types/virtual/views'
-import type { FieldProps } from '@keystone-6/core/types'
+import type { CellComponent, FieldProps } from '@keystone-6/core/types'
 import { ThemeContext } from '@emotion/react'
+import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
 import { green, teal } from '@mui/material/colors'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
 
+import React from 'react'
 // @ts-expect-error: can not find types
 import moneyPic from '../../admin/money.jpg'
-import { theme } from '../../data/utils'
+import { NumUtils, theme } from '../../data/utils'
 
 export function Field({
   field,
@@ -56,6 +57,20 @@ export function Field({
     </>
   )
 }
+
+export const Cell: CellComponent = ({ item, field, linkTo }) => {
+  const value = `${item[field.path]}`
+  return linkTo
+    ? <CellLink {...linkTo}>{value}</CellLink>
+    : (
+        <CellContainer>
+          {
+            value !== 'null' ? NumUtils.format(+(value)) : '0'
+          }
+        </CellContainer>
+      )
+}
+Cell.supportsLinkTo = true
 // const onSubmitNewRelatedLink = () => {
 //     if (onChange) {
 //         const relatedLinksCopy = [...relatedLinks, { label: labelValue, href: hrefValue }]

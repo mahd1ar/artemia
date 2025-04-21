@@ -62,11 +62,11 @@ function FolderList(srt: { values?: string }) {
   return (
     <ThemeProvider theme={theme}>
 
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <List dir="rtl" sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         {
           val.map(i => (
 
-            <ListItem key={i.at}>
+            <ListItem dir="rtl" key={i.at}>
               <ListItemAvatar>
                 <Avatar>
                   <img src={users?.users?.find(u => u.id === i.by)?.avatar?.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -74,6 +74,8 @@ function FolderList(srt: { values?: string }) {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
+                dir="rtl"
+                style={{ textAlign: 'right' }}
                 primary={users?.users?.find(u => u.id === i.by)?.name}
                 secondary={(
                   <React.Fragment>

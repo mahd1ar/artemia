@@ -403,7 +403,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
               query CORESPONDING_STATEMENTS($contractId: ID!) {
                   statements(where: { contract: { id: { equals: $contractId }} }) {
                       id
-                      totalPayable
+                      grossTotal
                       type
                       statementNumber
                   }
@@ -427,17 +427,17 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
           const beforeFinalStatement = statements.find(s => s.type === 'before-final')
 
           if (finalStatement)
-            return finalStatement.totalPayable ? BigInt(finalStatement.totalPayable) : 0n
+            return finalStatement.grossTotal ? BigInt(finalStatement.grossTotal) : 0n
 
           if (beforeFinalStatement)
-            return beforeFinalStatement.totalPayable ? BigInt(beforeFinalStatement.totalPayable) : 0n
+            return beforeFinalStatement.grossTotal ? BigInt(beforeFinalStatement.grossTotal) : 0n
 
           const tempStatements = statements.filter(s => s.type !== 'temporarly')
 
           const lastestTempStatement = tempStatements.length > 0 ? tempStatements.sort((a, b) => (b.statementNumber || 0) - (a.statementNumber || 0))[0] : null
 
           if (lastestTempStatement)
-            return lastestTempStatement.totalPayable ? BigInt(lastestTempStatement.totalPayable) : 0n
+            return lastestTempStatement.grossTotal ? BigInt(lastestTempStatement.grossTotal) : 0n
           return 0n
         },
       }),

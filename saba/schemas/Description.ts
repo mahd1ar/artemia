@@ -106,7 +106,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
               totalPayable
             }
             contracts {
-              cost
+              totalPaid
             }
         }
 }` as import('../__generated__/ts-gql/PROJECTBUDGET').type
@@ -123,7 +123,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
 
           description?.contracts?.forEach((i) => {
             try {
-              total += BigInt(i.cost || 0n)
+              total += BigInt(i.totalPaid || 0n)
             }
             catch {}
           })
