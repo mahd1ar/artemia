@@ -36,7 +36,6 @@ export function Field({
 
   const foreignList = useList(field.refListKey)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  console.log(field)
   return (
     <FieldContainer>
 
@@ -47,9 +46,14 @@ export function Field({
         <ThemeProvider theme={theme}>
 
           <MuiStack spacing={2} direction="row" alignContent="center" justifyContent="space-between">
-            <Link color="inherit" href={`/${foreignList.path}?!${field.refFieldKey}_matches="${value.id}"`}>
+            <Link
+              href={`/${foreignList.path}?!${field.refFieldKey}_matches="${value.id}"`}
+            >
               <MuiButton
                 variant="text"
+                sx={{
+                  color: '#333',
+                }}
                 startIcon={<FormatListNumberedIcon />}
               >
                 جزئیات

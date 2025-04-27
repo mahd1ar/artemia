@@ -86,6 +86,10 @@ function Drawer(props: { listMeta: ListMeta[] }) {
               ],
         },
         {
+          resource: 'Approval',
+          icon: <FolderSpecialIcon />,
+        },
+        {
           resource: 'Contract',
           icon: <HistoryEduOutlinedIcon />,
         },
