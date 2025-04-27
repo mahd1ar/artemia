@@ -75,7 +75,7 @@ export function Field({
     return <div>cant</div>
 
   const RowList = useList('Row')
-  // @ts-ignore
+  // @ts-expect-error RowList.fields.unit.controller.options is not typed
   const unitOptions = RowList.fields.unit.controller.options as { label: string, value: string }[]
 
   const ROWS_ITEM = gql`
@@ -140,7 +140,7 @@ export function Field({
     }
   }` as import('../../../__generated__/ts-gql/ROW_UPDATE').type
 
-  const [load, { data: persistedData, loading: loadingData, refetch }] = useLazyQuery(ROWS_ITEM, {
+  const [load, { data: persistedData, loading: loadingData }] = useLazyQuery(ROWS_ITEM, {
     nextFetchPolicy: 'network-only',
     variables: {
       where: {
@@ -248,7 +248,7 @@ export function Field({
 
   useEffect(() => {
     load().then((res) => {
-      // @ts-ignore
+      // @ts-expect-error any
       setDateFromApi(res.data?.rows ?? [])
     })
   }, [])
@@ -303,7 +303,7 @@ export function Field({
               : null,
             description: modelData.description,
             unit: modelData.unit,
-            unitPrice: Number.parseInt(modelData.unitPrice),
+            unitPrice: String(modelData.unitPrice),
             quantity: Number.parseFloat(modelData.quantity),
             percentageOfWorkDone: Number.parseInt(modelData.percentageOfWorkDone),
             tax: String(modelData.tax || '0'),
@@ -359,7 +359,7 @@ export function Field({
                 : null,
             },
             percentageOfWorkDone: Number.parseInt(modelData.percentageOfWorkDone),
-            unitPrice: Number.parseInt(modelData.unitPrice),
+            unitPrice: String(modelData.unitPrice),
             quantity: Number.parseFloat(modelData.quantity),
             unit: modelData.unit,
             description: modelData.description,
