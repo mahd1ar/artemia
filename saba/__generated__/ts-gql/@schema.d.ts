@@ -1,8 +1,8 @@
-// ts-gql-integrity:6da1cbf5896434b808c80cdc948a70f3
+// ts-gql-integrity:b8ac8e9a6f162bbb9e656019ddcf4f12
 /*
 ts-gql-meta-begin
 {
-  "hash": "797d93b41ea56ba0e316e6839bef7dce"
+  "hash": "1a0dd58f769b2e303c3b2feba226ff40"
 }
 ts-gql-meta-end
 */
@@ -30,54 +30,39 @@ export type Scalars = {
   JSON: JSON;
 };
 
-export type Approval = {
-  readonly __typename: "Approval";
+export type Project = {
+  readonly __typename: "Project";
   readonly id: string;
-  readonly code: string | null;
   readonly title: string | null;
-  readonly estimatedBudget: BigInt | null;
-  readonly totalStatementsPayable: BigInt | null;
-  readonly startDate: number | null;
-  readonly estimatedEndDate: number | null;
-  readonly description: ReadonlyArray<Description> | null;
-  readonly descriptionCount: number | null;
-  readonly createdAt: DateTime | null;
-  readonly createdBy: User | null;
+  readonly description: string | null;
+  readonly approvals: ReadonlyArray<Approval> | null;
+  readonly approvalsCount: number | null;
 };
 
-export type ApprovaldescriptionArgs = {
-  readonly where?: DescriptionWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<DescriptionOrderByInput>;
+export type ProjectapprovalsArgs = {
+  readonly where?: ApprovalWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<ApprovalOrderByInput>;
   readonly take?: number | null;
   readonly skip?: number;
-  readonly cursor?: DescriptionWhereUniqueInput | null;
+  readonly cursor?: ApprovalWhereUniqueInput | null;
 };
 
-export type ApprovaldescriptionCountArgs = {
-  readonly where?: DescriptionWhereInput;
+export type ProjectapprovalsCountArgs = {
+  readonly where?: ApprovalWhereInput;
 };
 
-export type BigInt = any;
-
-export type DateTime = any;
-
-export type ApprovalWhereUniqueInput = {
+export type ProjectWhereUniqueInput = {
   readonly id?: string | null;
 };
 
-export type ApprovalWhereInput = {
-  readonly AND?: TSGQLMaybeArray<ApprovalWhereInput> | null;
-  readonly OR?: TSGQLMaybeArray<ApprovalWhereInput> | null;
-  readonly NOT?: TSGQLMaybeArray<ApprovalWhereInput> | null;
+export type ProjectWhereInput = {
+  readonly AND?: TSGQLMaybeArray<ProjectWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<ProjectWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<ProjectWhereInput> | null;
   readonly id?: IDFilter | null;
-  readonly code?: StringFilter | null;
   readonly title?: StringFilter | null;
-  readonly estimatedBudget?: BigIntNullableFilter | null;
-  readonly startDate?: PairFilter | null;
-  readonly estimatedEndDate?: PairFilter | null;
-  readonly description?: DescriptionManyRelationFilter | null;
-  readonly createdAt?: DateTimeNullableFilter | null;
-  readonly createdBy?: UserWhereInput | null;
+  readonly description?: StringFilter | null;
+  readonly approvals?: ApprovalManyRelationFilter | null;
 };
 
 export type IDFilter = {
@@ -117,6 +102,103 @@ export type NestedStringFilter = {
   readonly startsWith?: string | null;
   readonly endsWith?: string | null;
   readonly not?: NestedStringFilter | null;
+};
+
+export type ApprovalManyRelationFilter = {
+  readonly every?: ApprovalWhereInput | null;
+  readonly some?: ApprovalWhereInput | null;
+  readonly none?: ApprovalWhereInput | null;
+};
+
+export type ProjectOrderByInput = {
+  readonly id?: OrderDirection | null;
+  readonly title?: OrderDirection | null;
+  readonly description?: OrderDirection | null;
+};
+
+export type OrderDirection =
+  | "asc"
+  | "desc";
+
+export type ProjectUpdateInput = {
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly approvals?: ApprovalRelateToManyForUpdateInput | null;
+};
+
+export type ApprovalRelateToManyForUpdateInput = {
+  readonly disconnect?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
+  readonly set?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
+  readonly create?: TSGQLMaybeArray<ApprovalCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
+};
+
+export type ProjectUpdateArgs = {
+  readonly where: ProjectWhereUniqueInput;
+  readonly data: ProjectUpdateInput;
+};
+
+export type ProjectCreateInput = {
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly approvals?: ApprovalRelateToManyForCreateInput | null;
+};
+
+export type ApprovalRelateToManyForCreateInput = {
+  readonly create?: TSGQLMaybeArray<ApprovalCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
+};
+
+export type Approval = {
+  readonly __typename: "Approval";
+  readonly id: string;
+  readonly code: string | null;
+  readonly title: string | null;
+  readonly project: Project | null;
+  readonly estimatedBudget: BigInt | null;
+  readonly totalStatementsPayable: BigInt | null;
+  readonly startDate: number | null;
+  readonly estimatedEndDate: number | null;
+  readonly description: ReadonlyArray<Description> | null;
+  readonly descriptionCount: number | null;
+  readonly createdAt: DateTime | null;
+  readonly createdBy: User | null;
+};
+
+export type ApprovaldescriptionArgs = {
+  readonly where?: DescriptionWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<DescriptionOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: DescriptionWhereUniqueInput | null;
+};
+
+export type ApprovaldescriptionCountArgs = {
+  readonly where?: DescriptionWhereInput;
+};
+
+export type BigInt = any;
+
+export type DateTime = any;
+
+export type ApprovalWhereUniqueInput = {
+  readonly id?: string | null;
+};
+
+export type ApprovalWhereInput = {
+  readonly AND?: TSGQLMaybeArray<ApprovalWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<ApprovalWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<ApprovalWhereInput> | null;
+  readonly id?: IDFilter | null;
+  readonly code?: StringFilter | null;
+  readonly title?: StringFilter | null;
+  readonly project?: ProjectWhereInput | null;
+  readonly estimatedBudget?: BigIntNullableFilter | null;
+  readonly startDate?: PairFilter | null;
+  readonly estimatedEndDate?: PairFilter | null;
+  readonly description?: DescriptionManyRelationFilter | null;
+  readonly createdAt?: DateTimeNullableFilter | null;
+  readonly createdBy?: UserWhereInput | null;
 };
 
 export type BigIntNullableFilter = {
@@ -165,19 +247,22 @@ export type ApprovalOrderByInput = {
   readonly createdAt?: OrderDirection | null;
 };
 
-export type OrderDirection =
-  | "asc"
-  | "desc";
-
 export type ApprovalUpdateInput = {
   readonly code?: string | null;
   readonly title?: string | null;
+  readonly project?: ProjectRelateToOneForUpdateInput | null;
   readonly estimatedBudget?: BigInt | null;
   readonly startDate?: number | null;
   readonly estimatedEndDate?: number | null;
   readonly description?: DescriptionRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
+};
+
+export type ProjectRelateToOneForUpdateInput = {
+  readonly create?: ProjectCreateInput | null;
+  readonly connect?: ProjectWhereUniqueInput | null;
+  readonly disconnect?: boolean | null;
 };
 
 export type DescriptionRelateToManyForUpdateInput = {
@@ -201,12 +286,18 @@ export type ApprovalUpdateArgs = {
 export type ApprovalCreateInput = {
   readonly code?: string | null;
   readonly title?: string | null;
+  readonly project?: ProjectRelateToOneForCreateInput | null;
   readonly estimatedBudget?: BigInt | null;
   readonly startDate?: number | null;
   readonly estimatedEndDate?: number | null;
   readonly description?: DescriptionRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
+};
+
+export type ProjectRelateToOneForCreateInput = {
+  readonly create?: ProjectCreateInput | null;
+  readonly connect?: ProjectWhereUniqueInput | null;
 };
 
 export type DescriptionRelateToManyForCreateInput = {
@@ -553,7 +644,7 @@ export type Row = {
   readonly commodity: Category | null;
   readonly description: string | null;
   readonly unit: string | null;
-  readonly unitPrice: number | null;
+  readonly unitPrice: BigInt | null;
   readonly quantity: number | null;
   readonly percentageOfWorkDone: number | null;
   readonly tax: BigInt | null;
@@ -575,7 +666,7 @@ export type RowWhereInput = {
   readonly commodity?: CategoryWhereInput | null;
   readonly description?: StringFilter | null;
   readonly unit?: StringNullableFilter | null;
-  readonly unitPrice?: IntFilter | null;
+  readonly unitPrice?: BigIntFilter | null;
   readonly quantity?: FloatFilter | null;
   readonly percentageOfWorkDone?: IntNullableFilter | null;
   readonly tax?: BigIntNullableFilter | null;
@@ -598,15 +689,15 @@ export type StringNullableFilter = {
   readonly not?: StringNullableFilter | null;
 };
 
-export type IntFilter = {
-  readonly equals?: number | null;
-  readonly in?: TSGQLMaybeArray<number> | null;
-  readonly notIn?: TSGQLMaybeArray<number> | null;
-  readonly lt?: number | null;
-  readonly lte?: number | null;
-  readonly gt?: number | null;
-  readonly gte?: number | null;
-  readonly not?: IntFilter | null;
+export type BigIntFilter = {
+  readonly equals?: BigInt | null;
+  readonly in?: TSGQLMaybeArray<BigInt> | null;
+  readonly notIn?: TSGQLMaybeArray<BigInt> | null;
+  readonly lt?: BigInt | null;
+  readonly lte?: BigInt | null;
+  readonly gt?: BigInt | null;
+  readonly gte?: BigInt | null;
+  readonly not?: BigIntFilter | null;
 };
 
 export type FloatFilter = {
@@ -645,7 +736,7 @@ export type RowUpdateInput = {
   readonly commodity?: CategoryRelateToOneForUpdateInput | null;
   readonly description?: string | null;
   readonly unit?: string | null;
-  readonly unitPrice?: number | null;
+  readonly unitPrice?: BigInt | null;
   readonly quantity?: number | null;
   readonly percentageOfWorkDone?: number | null;
   readonly tax?: BigInt | null;
@@ -687,7 +778,7 @@ export type RowCreateInput = {
   readonly commodity?: CategoryRelateToOneForCreateInput | null;
   readonly description?: string | null;
   readonly unit?: string | null;
-  readonly unitPrice?: number | null;
+  readonly unitPrice?: BigInt | null;
   readonly quantity?: number | null;
   readonly percentageOfWorkDone?: number | null;
   readonly tax?: BigInt | null;
@@ -1085,63 +1176,6 @@ export type StatementCreateInput = {
 export type PaymentRelateToManyForCreateInput = {
   readonly create?: TSGQLMaybeArray<PaymentCreateInput> | null;
   readonly connect?: TSGQLMaybeArray<PaymentWhereUniqueInput> | null;
-};
-
-export type StatementItem = {
-  readonly __typename: "StatementItem";
-  readonly id: string;
-  readonly description: string | null;
-  readonly unit: string | null;
-  readonly unitPrice: number | null;
-  readonly quantity: number | null;
-  readonly percentageOfWorkDone: number | null;
-  readonly total: BigInt | null;
-};
-
-export type StatementItemWhereUniqueInput = {
-  readonly id?: string | null;
-};
-
-export type StatementItemWhereInput = {
-  readonly AND?: TSGQLMaybeArray<StatementItemWhereInput> | null;
-  readonly OR?: TSGQLMaybeArray<StatementItemWhereInput> | null;
-  readonly NOT?: TSGQLMaybeArray<StatementItemWhereInput> | null;
-  readonly id?: IDFilter | null;
-  readonly description?: StringFilter | null;
-  readonly unit?: StringNullableFilter | null;
-  readonly unitPrice?: IntFilter | null;
-  readonly quantity?: FloatFilter | null;
-  readonly percentageOfWorkDone?: IntNullableFilter | null;
-};
-
-export type StatementItemOrderByInput = {
-  readonly id?: OrderDirection | null;
-  readonly description?: OrderDirection | null;
-  readonly unit?: OrderDirection | null;
-  readonly unitPrice?: OrderDirection | null;
-  readonly quantity?: OrderDirection | null;
-  readonly percentageOfWorkDone?: OrderDirection | null;
-};
-
-export type StatementItemUpdateInput = {
-  readonly description?: string | null;
-  readonly unit?: string | null;
-  readonly unitPrice?: number | null;
-  readonly quantity?: number | null;
-  readonly percentageOfWorkDone?: number | null;
-};
-
-export type StatementItemUpdateArgs = {
-  readonly where: StatementItemWhereUniqueInput;
-  readonly data: StatementItemUpdateInput;
-};
-
-export type StatementItemCreateInput = {
-  readonly description?: string | null;
-  readonly unit?: string | null;
-  readonly unitPrice?: number | null;
-  readonly quantity?: number | null;
-  readonly percentageOfWorkDone?: number | null;
 };
 
 export type Payment = {
@@ -1599,6 +1633,7 @@ export type User = {
   readonly name: string | null;
   readonly email: string | null;
   readonly phone: string | null;
+  readonly telegramId: string | null;
   readonly avatar: ImageFieldOutput | null;
   readonly role: number | null;
   readonly password: PasswordState | null;
@@ -1707,6 +1742,7 @@ export type UserWhereInput = {
   readonly name?: StringFilter | null;
   readonly email?: StringFilter | null;
   readonly phone?: StringFilter | null;
+  readonly telegramId?: StringFilter | null;
   readonly role?: IntNullableFilter | null;
   readonly approvals?: ApprovalManyRelationFilter | null;
   readonly descriptions?: DescriptionManyRelationFilter | null;
@@ -1715,12 +1751,6 @@ export type UserWhereInput = {
   readonly Designs?: DesignManyRelationFilter | null;
   readonly dailyReports?: DailyReportManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
-};
-
-export type ApprovalManyRelationFilter = {
-  readonly every?: ApprovalWhereInput | null;
-  readonly some?: ApprovalWhereInput | null;
-  readonly none?: ApprovalWhereInput | null;
 };
 
 export type DesignManyRelationFilter = {
@@ -1740,6 +1770,7 @@ export type UserOrderByInput = {
   readonly name?: OrderDirection | null;
   readonly email?: OrderDirection | null;
   readonly phone?: OrderDirection | null;
+  readonly telegramId?: OrderDirection | null;
   readonly role?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
 };
@@ -1748,6 +1779,7 @@ export type UserUpdateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
   readonly phone?: string | null;
+  readonly telegramId?: string | null;
   readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;
@@ -1758,13 +1790,6 @@ export type UserUpdateInput = {
   readonly Designs?: DesignRelateToManyForUpdateInput | null;
   readonly dailyReports?: DailyReportRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
-};
-
-export type ApprovalRelateToManyForUpdateInput = {
-  readonly disconnect?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
-  readonly set?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
-  readonly create?: TSGQLMaybeArray<ApprovalCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
 };
 
 export type DesignRelateToManyForUpdateInput = {
@@ -1790,6 +1815,7 @@ export type UserCreateInput = {
   readonly name?: string | null;
   readonly email?: string | null;
   readonly phone?: string | null;
+  readonly telegramId?: string | null;
   readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;
@@ -1800,11 +1826,6 @@ export type UserCreateInput = {
   readonly Designs?: DesignRelateToManyForCreateInput | null;
   readonly dailyReports?: DailyReportRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
-};
-
-export type ApprovalRelateToManyForCreateInput = {
-  readonly create?: TSGQLMaybeArray<ApprovalCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<ApprovalWhereUniqueInput> | null;
 };
 
 export type DesignRelateToManyForCreateInput = {
@@ -2151,6 +2172,12 @@ export type JSON = any;
 
 export type Mutation = {
   readonly __typename: "Mutation";
+  readonly createProject: Project | null;
+  readonly createProjects: ReadonlyArray<Project | null> | null;
+  readonly updateProject: Project | null;
+  readonly updateProjects: ReadonlyArray<Project | null> | null;
+  readonly deleteProject: Project | null;
+  readonly deleteProjects: ReadonlyArray<Project | null> | null;
   readonly createApproval: Approval | null;
   readonly createApprovals: ReadonlyArray<Approval | null> | null;
   readonly updateApproval: Approval | null;
@@ -2187,12 +2214,6 @@ export type Mutation = {
   readonly updateStatements: ReadonlyArray<Statement | null> | null;
   readonly deleteStatement: Statement | null;
   readonly deleteStatements: ReadonlyArray<Statement | null> | null;
-  readonly createStatementItem: StatementItem | null;
-  readonly createStatementItems: ReadonlyArray<StatementItem | null> | null;
-  readonly updateStatementItem: StatementItem | null;
-  readonly updateStatementItems: ReadonlyArray<StatementItem | null> | null;
-  readonly deleteStatementItem: StatementItem | null;
-  readonly deleteStatementItems: ReadonlyArray<StatementItem | null> | null;
   readonly createPayment: Payment | null;
   readonly createPayments: ReadonlyArray<Payment | null> | null;
   readonly updatePayment: Payment | null;
@@ -2274,6 +2295,31 @@ export type Mutation = {
   readonly endSession: boolean;
   readonly authenticateUserWithPassword: UserAuthenticationWithPasswordResult | null;
   readonly createInitialUser: UserAuthenticationWithPasswordSuccess;
+};
+
+export type MutationcreateProjectArgs = {
+  readonly data: ProjectCreateInput;
+};
+
+export type MutationcreateProjectsArgs = {
+  readonly data: TSGQLMaybeArray<ProjectCreateInput>;
+};
+
+export type MutationupdateProjectArgs = {
+  readonly where: ProjectWhereUniqueInput;
+  readonly data: ProjectUpdateInput;
+};
+
+export type MutationupdateProjectsArgs = {
+  readonly data: TSGQLMaybeArray<ProjectUpdateArgs>;
+};
+
+export type MutationdeleteProjectArgs = {
+  readonly where: ProjectWhereUniqueInput;
+};
+
+export type MutationdeleteProjectsArgs = {
+  readonly where: TSGQLMaybeArray<ProjectWhereUniqueInput>;
 };
 
 export type MutationcreateApprovalArgs = {
@@ -2424,31 +2470,6 @@ export type MutationdeleteStatementArgs = {
 
 export type MutationdeleteStatementsArgs = {
   readonly where: TSGQLMaybeArray<StatementWhereUniqueInput>;
-};
-
-export type MutationcreateStatementItemArgs = {
-  readonly data: StatementItemCreateInput;
-};
-
-export type MutationcreateStatementItemsArgs = {
-  readonly data: TSGQLMaybeArray<StatementItemCreateInput>;
-};
-
-export type MutationupdateStatementItemArgs = {
-  readonly where: StatementItemWhereUniqueInput;
-  readonly data: StatementItemUpdateInput;
-};
-
-export type MutationupdateStatementItemsArgs = {
-  readonly data: TSGQLMaybeArray<StatementItemUpdateArgs>;
-};
-
-export type MutationdeleteStatementItemArgs = {
-  readonly where: StatementItemWhereUniqueInput;
-};
-
-export type MutationdeleteStatementItemsArgs = {
-  readonly where: TSGQLMaybeArray<StatementItemWhereUniqueInput>;
 };
 
 export type MutationcreatePaymentArgs = {
@@ -2807,6 +2828,9 @@ export type CreateInitialUserInput = {
 
 export type Query = {
   readonly __typename: "Query";
+  readonly projects: ReadonlyArray<Project> | null;
+  readonly project: Project | null;
+  readonly projectsCount: number | null;
   readonly approvals: ReadonlyArray<Approval> | null;
   readonly approval: Approval | null;
   readonly approvalsCount: number | null;
@@ -2825,9 +2849,6 @@ export type Query = {
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statement: Statement | null;
   readonly statementsCount: number | null;
-  readonly statementItems: ReadonlyArray<StatementItem> | null;
-  readonly statementItem: StatementItem | null;
-  readonly statementItemsCount: number | null;
   readonly payments: ReadonlyArray<Payment> | null;
   readonly payment: Payment | null;
   readonly paymentsCount: number | null;
@@ -2869,6 +2890,22 @@ export type Query = {
   readonly notesCount: number | null;
   readonly keystone: KeystoneMeta;
   readonly authenticatedItem: AuthenticatedItem | null;
+};
+
+export type QueryprojectsArgs = {
+  readonly where?: ProjectWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<ProjectOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: ProjectWhereUniqueInput | null;
+};
+
+export type QueryprojectArgs = {
+  readonly where: ProjectWhereUniqueInput;
+};
+
+export type QueryprojectsCountArgs = {
+  readonly where?: ProjectWhereInput;
 };
 
 export type QueryapprovalsArgs = {
@@ -2965,22 +3002,6 @@ export type QuerystatementArgs = {
 
 export type QuerystatementsCountArgs = {
   readonly where?: StatementWhereInput;
-};
-
-export type QuerystatementItemsArgs = {
-  readonly where?: StatementItemWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<StatementItemOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: StatementItemWhereUniqueInput | null;
-};
-
-export type QuerystatementItemArgs = {
-  readonly where: StatementItemWhereUniqueInput;
-};
-
-export type QuerystatementItemsCountArgs = {
-  readonly where?: StatementItemWhereInput;
 };
 
 export type QuerypaymentsArgs = {

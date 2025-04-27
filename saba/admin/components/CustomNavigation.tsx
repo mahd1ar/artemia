@@ -5,9 +5,13 @@ import { ListNavItems, NavigationContainer, NavItem } from '@keystone-6/core/adm
 import { useKeystone } from '@keystone-6/core/admin-ui/context'
 import { json } from '@keystone-6/core/fields'
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
+import AddIcon from '@mui/icons-material/Add'
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined'
 import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import DesignServicesOutlinedIcon from '@mui/icons-material/DesignServicesOutlined'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
 import FolderSpecialIcon from '@mui/icons-material/FolderSpecial'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import MailIcon from '@mui/icons-material/Mail'
@@ -19,7 +23,7 @@ import QuestionMarkOutlinedIcon from '@mui/icons-material/QuestionMarkOutlined'
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined'
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined'
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'
-import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, ThemeProvider, Toolbar } from '@mui/material'
+import { Collapse, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, ThemeProvider, Toolbar } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { gql } from '@ts-gql/tag/no-transform'
 import { useRouter } from 'next/router'
@@ -27,12 +31,18 @@ import React, { useEffect } from 'react'
 import { customtheme } from '../theme'
 
 function Drawer(props: { listMeta: ListMeta[] }) {
+  interface subItemsType { label: string, href: string, isSelected: boolean, icon: React.ReactNode }
+
   const PARENTCATEGORYOFRESOURSE1 = gql`
   query PARENTCATEGORYOFRESOURSE1 {
       setting {
         parentCategoryOfDesign
       }
       usersCount
+      projects {
+        title
+        id
+      }
     }
 ` as import('../../__generated__/ts-gql/PARENTCATEGORYOFRESOURSE1').type
 
@@ -40,7 +50,7 @@ function Drawer(props: { listMeta: ListMeta[] }) {
 
   const router = useRouter()
   const ks = useKeystone()
-
+  const [openSub, setOpenSub] = React.useState(false)
   const [contextMenu, setContextMenu] = React.useState<{
     mouseX: number
     mouseY: number
@@ -48,7 +58,7 @@ function Drawer(props: { listMeta: ListMeta[] }) {
   } | null>(null)
 
   const menuItems = React.useMemo(() => {
-    return [
+    const items: { resource: string, icon: React.ReactNode, label?: string, href?: string, subItems?: subItemsType[] }[][] = [
       [{
         resource: 'Dashboard',
         icon: <SpaceDashboardOutlinedIcon />,
@@ -57,8 +67,23 @@ function Drawer(props: { listMeta: ListMeta[] }) {
       }],
       [
         {
-          resource: 'Approval',
-          icon: <FolderSpecialIcon />,
+          resource: 'Project',
+          icon: <DesignServicesOutlinedIcon />,
+          subItems: (data?.projects?.length || 0) > 0
+            ? data!.projects!.map(i => ({
+              label: i?.title || 'بدون عنوان',
+              href: `/projects/${i.id}`,
+              isSelected: router.pathname.search(`/projects/${i.id}`) > -1,
+              icon: <DesignServicesOutlinedIcon />,
+            }))
+            : [
+                {
+                  label: ' ایجاد پروژه جدید',
+                  href: '/projects/create',
+                  isSelected: false,
+                  icon: <AddIcon />,
+                },
+              ],
         },
         {
           resource: 'Contract',
@@ -115,7 +140,9 @@ function Drawer(props: { listMeta: ListMeta[] }) {
           icon: <QuestionMarkOutlinedIcon />,
         },
       ],
-    ].map(i => i.map((j) => {
+    ]
+
+    return items.map(i => i.map((j) => {
       const schema = props.listMeta.find(lm => lm.key === j.resource)
       const result = {
         resource: j.resource,
@@ -123,6 +150,7 @@ function Drawer(props: { listMeta: ListMeta[] }) {
         isSelected: false,
         icon: j.icon,
         href: j.href || '#',
+        subItems: j.subItems || [],
       }
 
       if (!schema)
@@ -173,35 +201,80 @@ function Drawer(props: { listMeta: ListMeta[] }) {
         menuItems.map(i => (
           <>
             <List>
+
               {
                 i.map((j, inx) => (
-                  <ListItem
-                    key={inx}
-                    disablePadding
-                    onContextMenu={(event) => {
-                      handleContextMenu(event, j.resource || '#')
-                    }}
-                  >
-                    <ListItemButton
-                      onClick={() => {
-                        router.push(j.href || '#')
-                      }}
-                      selected={j.isSelected}
-                    >
-                      <ListItemIcon>
-                        {j.icon}
-                      </ListItemIcon>
-                      <ListItemText
+                  j.subItems && j.subItems.length > 0
+                    ? (
+                        <>
+                          <ListItemButton
+                            onDoubleClick={() => {
+                              router.push(j.href || '#')
+                            }}
+                            onClick={() => {
+                              setOpenSub(!openSub)
+                            }}
+                            onContextMenu={(event) => {
+                              handleContextMenu(event, j.resource || '#')
+                            }}
+                          >
+                            <ListItemIcon>
+                              {j.icon || <InboxIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={j.label} />
+                            {openSub ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={openSub} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              {
+                                j.subItems.map(k => (
+                                  <ListItemButton
+                                    sx={{ pl: 4 }}
+                                    onClick={() => {
+                                      router.push(k.href || '#')
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      {k.icon || <InboxIcon />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={k.label} />
+                                  </ListItemButton>
+                                ))
+                              }
+                            </List>
+                          </Collapse>
+                        </>
+                      )
+                    : (
+                        <ListItem
+                          key={inx}
+                          disablePadding
+                          onContextMenu={(event) => {
+                            handleContextMenu(event, j.resource || '#')
+                          }}
+                        >
+                          <ListItemButton
+                            onClick={() => {
+                              router.push(j.href || '#')
+                            }}
+                            selected={j.isSelected}
+                          >
+                            <ListItemIcon>
+                              {j.icon}
+                            </ListItemIcon>
+                            <ListItemText
 
-                        primaryTypographyProps={{
-                          color: '#666',
-                          fontWeight: 'medium',
-                          letterSpacing: 0,
-                        }}
-                        primary={j.label}
-                      />
-                    </ListItemButton>
-                  </ListItem>
+                              primaryTypographyProps={{
+                                color: '#666',
+                                fontWeight: 'medium',
+                                letterSpacing: 0,
+                              }}
+                              primary={j.label}
+                            />
+
+                          </ListItemButton>
+                        </ListItem>
+                      )
                 ))
               }
             </List>

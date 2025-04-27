@@ -26,12 +26,6 @@ import { lists } from './schema'
 import { storage } from './storage'
 import * as PrismaModule from '.prisma/client'
 
-interface Response {
-  message: string
-  ok?: boolean
-  payload?: any
-}
-
 const configWithAuth = withAuth(
   config({
     db: {

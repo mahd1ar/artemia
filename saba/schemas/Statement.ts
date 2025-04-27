@@ -51,19 +51,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
             equals: true,
           },
         }
-
-        // fucking // FIXME get rid of this
-        // const zz = {} as Record<(typeof alc)[number]['gqlkey'], any>
-        // alc.some((i) => {
-        //   if (i.for !== role) {
-        //     zz[i.gqlkey] = { equals: true }
-        //     return false
-        //   }
-
-        //   return true
-        // })
-
-        // return zz
       },
     },
   },
@@ -117,6 +104,16 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         })
 
         // TODO DELETE PAYMENT
+
+        await prisma.payment.deleteMany({
+          where: {
+            statement: {
+              id: {
+                equals: args.originalItem.id.toString(),
+              },
+            },
+          },
+        })
       }
       else {
         if (args.inputData.peyments) {
@@ -221,6 +218,30 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
               }
             }
           }
+        }
+      }
+
+      if (args.operation === 'create') {
+        const settings = await prisma.setting.findFirst()
+
+        if (settings?.sendMessageToTelegram) {
+          if (!session)
+            return
+          const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
+          const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
+          const notif_username = session.data.name
+          const workshopUsers = await prisma.user.findMany({
+            where: {
+              role: { equals: Roles.workshop },
+            },
+            select: {
+              id: true,
+              name: true,
+              telegramId: true,
+            },
+          })
+
+          await Notif.statementCreated(notif_statementTile, notif_url, notif_username, workshopUsers.map(i => i.telegramId).filter(Boolean as unknown as ExcludesFalse))
         }
       }
     },
@@ -653,17 +674,3 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
 
   },
 })
-
-//
-//   field: graphql.field({
-//     type: graphql.Float,
-//     resolve(item) {
-//       const { unitPrice = 0, quantity = 0 } = item as unknown as {
-//         unitPrice: number
-//         quantity: number
-//       }
-
-//       return 2
-//     },
-//   }),
-// },

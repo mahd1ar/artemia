@@ -43,7 +43,7 @@ export function GanttChart() {
       gantt.current = new Gantt('#gantt', tasks, {
         view_mode: 'Month',
         readonly: true,
-        scroll_to: new Date().toISOString().split('T')[0],
+        scroll_to: new Date(new Date().getTime() - 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         container_height: 500,
       })
     }

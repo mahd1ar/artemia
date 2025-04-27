@@ -50,6 +50,27 @@ async function createReadStreamFromUrl(url: string) {
 }
 
 export class Notif {
+  static async statementCreated(
+    statementTitle: string,
+    user: string,
+    statementUrl: string,
+    ps: string[],
+  ) {
+    const message = `
+( ربات کنترل پروژه صبا )
+
+📝 صورت وضعبت  "${statementTitle}" در سامانه کنترل پروژه صبا توسط (${user}) آپلود شد
+
+این صورت وضعبت در انتظار تایید "کارگاه" میباشد
+
+${ps.map(i => `- ${i}`).join('\n')} 
+
+${statementUrl}           
+`
+
+    return await sendMessage(message)
+  }
+
   static async workShopIsDoneUploadingStatement(
     statementTitle: string,
     user: string,

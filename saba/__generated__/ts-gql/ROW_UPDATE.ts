@@ -1,8 +1,8 @@
-// ts-gql-integrity:3ab0f9670d1a1493002fd5bd1fa6b0c4
+// ts-gql-integrity:712b3c4c57289cd0d5153ef794b0363a
 /*
 ts-gql-meta-begin
 {
-  "hash": "36bbdb25da827c01f962c5a66032aaab"
+  "hash": "da968d66dc03f17d313be42c40817ce9"
 }
 ts-gql-meta-end
 */
@@ -16,7 +16,7 @@ type ROW_UPDATEMutationVariables = SchemaTypes.Exact<{
 }>;
 
 
-type ROW_UPDATEMutation = { readonly __typename: 'Mutation', readonly updateRow: { readonly __typename: 'Row', readonly id: string, readonly unit: string | null, readonly unitPrice: number | null, readonly total: any | null, readonly tax: any | null, readonly description: string | null, readonly quantity: number | null, readonly percentageOfWorkDone: number | null, readonly commodity: { readonly __typename: 'Category', readonly code: string | null, readonly id: string, readonly title: string | null } | null } | null };
+type ROW_UPDATEMutation = { readonly __typename: 'Mutation', readonly updateRow: { readonly __typename: 'Row', readonly id: string, readonly unit: string | null, readonly unitPrice: any | null, readonly total: any | null, readonly tax: any | null, readonly description: string | null, readonly quantity: number | null, readonly percentageOfWorkDone: number | null, readonly commodity: { readonly __typename: 'Category', readonly code: string | null, readonly id: string, readonly title: string | null } | null } | null };
 
 
 

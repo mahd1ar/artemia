@@ -1,8 +1,8 @@
-// ts-gql-integrity:98d5d6c8a46c0a80de641a7399ab53d6
+// ts-gql-integrity:569e82b771ff8076e194b7c41455da06
 /*
 ts-gql-meta-begin
 {
-  "hash": "fe1dc32fc85a8e02e8d1dc5afb70030c"
+  "hash": "8fc37244fff3f423636fe4813882c264"
 }
 ts-gql-meta-end
 */
@@ -15,7 +15,7 @@ type ROW_CREATEMutationVariables = SchemaTypes.Exact<{
 }>;
 
 
-type ROW_CREATEMutation = { readonly __typename: 'Mutation', readonly createRow: { readonly __typename: 'Row', readonly id: string, readonly unit: string | null, readonly unitPrice: number | null, readonly total: any | null, readonly tax: any | null, readonly description: string | null, readonly quantity: number | null, readonly percentageOfWorkDone: number | null, readonly commodity: { readonly __typename: 'Category', readonly code: string | null, readonly id: string, readonly title: string | null } | null } | null };
+type ROW_CREATEMutation = { readonly __typename: 'Mutation', readonly createRow: { readonly __typename: 'Row', readonly id: string, readonly unit: string | null, readonly unitPrice: any | null, readonly total: any | null, readonly tax: any | null, readonly description: string | null, readonly quantity: number | null, readonly percentageOfWorkDone: number | null, readonly commodity: { readonly __typename: 'Category', readonly code: string | null, readonly id: string, readonly title: string | null } | null } | null };
 
 
 

@@ -35,6 +35,18 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
     title: text({
       label: 'عنوان',
     }),
+    project: relationship({
+      ref: 'Project.approvals',
+      many: false,
+      label: 'پروژه',
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode(args) { return editIfAdmin(args) },
+          fieldPosition: 'sidebar',
+        },
+      },
+    }),
     estimatedBudget: bigInt({
       label: 'بودجه تخمینی',
       ui: {

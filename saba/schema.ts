@@ -1,40 +1,57 @@
-import { group, list } from "@keystone-6/core";
-import { allOperations, allowAll } from "@keystone-6/core/access";
+import type { Lists } from '.keystone/types'
+import { group, list } from '@keystone-6/core'
+import { allOperations, allowAll } from '@keystone-6/core/access'
+
 import {
   checkbox,
   text,
-} from "@keystone-6/core/fields";
-
-import type { Lists } from ".keystone/types";
+} from '@keystone-6/core/fields'
+import { getRoleFromArgs, Roles } from './data/types'
 import {
-  ImageStore, Description, Approval, Payment, Constractor,
-  FileStore, User, Category, Log, Note,
-  Statement, StatementItem, Contract, Design,
-  DailyReport, SafetyReport, Invoice, Row, Setting
-} from "./schemas";
-import { Roles, getRoleFromArgs } from "./data/types";
+  Approval,
+  Category,
+  Constractor,
+  Contract,
+  DailyReport,
+  Description,
+  Design,
+  FileStore,
+  ImageStore,
+  Invoice,
+  Log,
+  Note,
+  Payment,
+  Project,
+  Row,
+  SafetyReport,
+  Setting,
+  Statement,
+  User,
+} from './schemas'
 
 export const lists: Lists = {
-  Approval, Description, Invoice, Row,
+  Project,
+  Approval,
+  Description,
+  Invoice,
+  Row,
   Contract,
   Statement,
-  StatementItem,
   Payment,
   ImageStore,
-
 
   Constractor,
 
   FileStore,
-
-
 
   Design,
   DailyReport,
   SafetyReport,
 
   // @ts-ignore
-  User, Category, Log,
+  User,
+  Category,
+  Log,
   Tag: list({
     access: allowAll,
     ui: {
@@ -45,6 +62,6 @@ export const lists: Lists = {
     },
   }),
   Setting,
-  Note
+  Note,
 
-};
+}

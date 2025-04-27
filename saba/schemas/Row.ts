@@ -104,16 +104,16 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
 
       ],
     }),
-    unitPrice: integer({ label: 'قیمت واحد', validation: { isRequired: true } }),
+    unitPrice: bigInt({ label: 'قیمت واحد', validation: { isRequired: true } }),
     quantity: float({
       label: 'مقدار',
       validation: { isRequired: true },
     }),
-    // pi: float({
-    //   label: 'maghdar',
-    //   defaultValue: 3.14,
-    //   validation: { isRequired: true }
-    // }),
+    /**
+     * deprecated: delete this field in future
+     * This field is deprecated and should not be used in new code.
+     * @deprecated
+     */
     percentageOfWorkDone: integer({
       label: 'درصد انجام کار',
       defaultValue: 100,
@@ -127,9 +127,9 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
       field: graphql.field({
         type: graphql.BigInt,
         resolve(item) {
-          const { unitPrice, quantity, percentageOfWorkDone, tax } = item
+          const { unitPrice, quantity, tax } = item
 
-          return BigInt(Math.round((unitPrice ?? 0) * (quantity ?? 0) * (percentageOfWorkDone ?? 100) / 100)) + BigInt(tax ?? 0)
+          return (unitPrice ?? 0n) * BigInt(Math.round(quantity ?? 0)) + (tax ?? 0n)
         },
       }),
       ui: {

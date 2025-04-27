@@ -71,6 +71,18 @@ export const User = list<Lists.User.TypeInfo<any>>({
       isIndexed: 'unique',
     }),
     phone: text({ }),
+    telegramId: text({
+      // hooks: {
+      //   validate({ operation, inputData, addValidationError, item }) {
+      //     const telegramId = inputData?.telegramId || item?.telegramId
+      //     if (operation !== 'delete') {
+      //       if (telegramId) {
+      //         telegramId.at(0) !== '@' && addValidationError('شماره تلگرام باید با @ شروع شود')
+      //       }
+      //     }
+      //   },
+      // },
+    }),
     avatar: image({
       storage: 'image',
     }),

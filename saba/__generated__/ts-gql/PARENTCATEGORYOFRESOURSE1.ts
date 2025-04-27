@@ -1,8 +1,8 @@
-// ts-gql-integrity:7cef74d52165a32af5d43c89caf417b1
+// ts-gql-integrity:fd62c718a0f6edf7654e7217cdacd045
 /*
 ts-gql-meta-begin
 {
-  "hash": "410dab3f385837cadfa77d8f49582b77"
+  "hash": "a74e0843fce7f9209fdf20c9b4769580"
 }
 ts-gql-meta-end
 */
@@ -13,7 +13,7 @@ import { TypedDocumentNode } from "@ts-gql/tag";
 type PARENTCATEGORYOFRESOURSE1QueryVariables = SchemaTypes.Exact<{ [key: string]: never; }>;
 
 
-type PARENTCATEGORYOFRESOURSE1Query = { readonly __typename: 'Query', readonly usersCount: number | null, readonly setting: { readonly __typename: 'Setting', readonly parentCategoryOfDesign: string | null } | null };
+type PARENTCATEGORYOFRESOURSE1Query = { readonly __typename: 'Query', readonly usersCount: number | null, readonly setting: { readonly __typename: 'Setting', readonly parentCategoryOfDesign: string | null } | null, readonly projects: ReadonlyArray<{ readonly __typename: 'Project', readonly title: string | null, readonly id: string }> | null };
 
 
 
@@ -31,4 +31,4 @@ declare module "./@schema" {
   }
 }
 
-export const document = JSON.parse("{\"kind\":\"Document\",\"definitions\":[{\"kind\":\"OperationDefinition\",\"operation\":\"query\",\"name\":{\"kind\":\"Name\",\"value\":\"PARENTCATEGORYOFRESOURSE1\"},\"variableDefinitions\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"setting\"},\"arguments\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"parentCategoryOfDesign\"},\"arguments\":[],\"directives\":[]}]}},{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"usersCount\"},\"arguments\":[],\"directives\":[]}]}}]}")
+export const document = JSON.parse("{\"kind\":\"Document\",\"definitions\":[{\"kind\":\"OperationDefinition\",\"operation\":\"query\",\"name\":{\"kind\":\"Name\",\"value\":\"PARENTCATEGORYOFRESOURSE1\"},\"variableDefinitions\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"setting\"},\"arguments\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"parentCategoryOfDesign\"},\"arguments\":[],\"directives\":[]}]}},{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"usersCount\"},\"arguments\":[],\"directives\":[]},{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"projects\"},\"arguments\":[],\"directives\":[],\"selectionSet\":{\"kind\":\"SelectionSet\",\"selections\":[{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"title\"},\"arguments\":[],\"directives\":[]},{\"kind\":\"Field\",\"name\":{\"kind\":\"Name\",\"value\":\"id\"},\"arguments\":[],\"directives\":[]}]}}]}}]}")

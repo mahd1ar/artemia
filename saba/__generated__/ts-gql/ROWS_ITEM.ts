@@ -1,8 +1,8 @@
-// ts-gql-integrity:31fbd6eb8f3ee9df537b4a290bf70ae7
+// ts-gql-integrity:9df69d2c83fba49a0050c3500cdca12e
 /*
 ts-gql-meta-begin
 {
-  "hash": "74e6a9f5fb184d4adca3f5c48fc938d1"
+  "hash": "b45a4b4b9e465fd70d66e44cb182347c"
 }
 ts-gql-meta-end
 */
@@ -15,7 +15,7 @@ type ROWS_ITEMQueryVariables = SchemaTypes.Exact<{
 }>;
 
 
-type ROWS_ITEMQuery = { readonly __typename: 'Query', readonly rows: ReadonlyArray<{ readonly __typename: 'Row', readonly id: string, readonly unit: string | null, readonly unitPrice: number | null, readonly total: any | null, readonly description: string | null, readonly tax: any | null, readonly quantity: number | null, readonly percentageOfWorkDone: number | null, readonly commodity: { readonly __typename: 'Category', readonly code: string | null, readonly id: string, readonly title: string | null } | null }> | null, readonly setting: { readonly __typename: 'Setting', readonly rootCategoryOfGoodsAndServices: string | null } | null };
+type ROWS_ITEMQuery = { readonly __typename: 'Query', readonly rows: ReadonlyArray<{ readonly __typename: 'Row', readonly id: string, readonly unit: string | null, readonly unitPrice: any | null, readonly total: any | null, readonly description: string | null, readonly tax: any | null, readonly quantity: number | null, readonly percentageOfWorkDone: number | null, readonly commodity: { readonly __typename: 'Category', readonly code: string | null, readonly id: string, readonly title: string | null } | null }> | null, readonly setting: { readonly __typename: 'Setting', readonly rootCategoryOfGoodsAndServices: string | null } | null };
 
 
 
