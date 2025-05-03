@@ -1,8 +1,9 @@
 import type { Lists } from '.keystone/types'
 import { list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
-import { bigInt, calendarDay, image, relationship, text, timestamp } from '@keystone-6/core/fields'
+import { bigInt, calendarDay, image, json, relationship, text, timestamp } from '@keystone-6/core/fields'
 import { Roles, type Session } from '../data/types'
+import { editIfAdmin } from '../data/utils'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
 
 export const Payment = list<Lists.Payment.TypeInfo<Session>>({
@@ -62,6 +63,56 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
     attachment: image({
       storage: 'image',
       label: 'فایل پیوست',
+    }),
+    changeLog: json({
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldPosition: 'sidebar',
+          fieldMode(args) {
+            if (args.session?.data.role === Roles.admin)
+              return 'read'
+            else
+              return 'hidden'
+          },
+        },
+        views: './src/custome-fields-view/changelog-view.tsx',
+      },
+      hooks: {
+        resolveInput(args) {
+          const state = (args.item?.changeLog) ? JSON.parse(args.item.changeLog || '[]') : []
+          const info = {
+            ops: args.operation,
+            items: Object.keys(args.inputData),
+            by: args.context.session?.itemId,
+            at: new Date(),
+          }
+
+          state.push(info)
+
+          return JSON.stringify(state)
+        },
+      },
+    }),
+    createdBy: relationship({
+      ref: 'User',
+      many: false,
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode(args) { return editIfAdmin(args) },
+          fieldPosition: 'sidebar',
+        },
+      },
+      hooks: {
+        resolveInput(args) {
+          if (args.operation === 'create') {
+            const session = args.context.session
+            args.resolvedData.createdBy = { connect: { id: session?.itemId } }
+          }
+          return args.resolvedData.createdBy
+        },
+      },
     }),
 
   },
