@@ -531,12 +531,13 @@ export function Field({
               <FieldLabel>مالیات</FieldLabel>
               <TextInput value={modelData.tax} onChange={e => setModelData({ ...modelData, tax: e.target.value })} />
 
-              <FieldLabel>
+              <FieldLabel style={{ display: 'none' }}>
                 درصد انجام کار
 
                 (این مقدار از ساختار ردیف ها حذف خواهد شد)
               </FieldLabel>
               <TextInput
+                style={{ display: 'none' }}
                 value={modelData.percentageOfWorkDone}
                 onChange={e => setModelData({ ...modelData, percentageOfWorkDone: e.target.value })}
               />
