@@ -227,7 +227,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         if (settings?.sendMessageToTelegram) {
           if (!session)
             return
-          const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || args.originalItem?.title || '#'}`
+          const notif_statementTile = `${args.inputData?.title || args.resolvedData?.title || args.item?.title || '#'}`
           const notif_url = `saba.netdom.ir/statements/${args.item?.id}`
           const notif_username = session.data.name
           const workshopUsers = await prisma.user.findMany({
@@ -474,14 +474,14 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
             return 'sidebar'
           },
         },
-        cardFields: ['attachment', 'price', 'dateOfPayment', 'description'],
+        cardFields: ['attachment', 'price', 'dateOfPayment', 'description', 'constractor'],
         displayMode: 'cards',
         inlineConnect: false,
         inlineCreate: {
-          fields: ['attachment', 'price', 'dateOfPayment', 'description'],
+          fields: ['attachment', 'price', 'dateOfPayment', 'description', 'constractor'],
         },
         inlineEdit: {
-          fields: ['attachment', 'price', 'dateOfPayment', 'description'],
+          fields: ['attachment', 'price', 'dateOfPayment', 'description', 'constractor'],
         },
       },
     }),
