@@ -19,6 +19,7 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import MiscellaneousServicesOutlinedIcon from '@mui/icons-material/MiscellaneousServicesOutlined'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import OutlinedFlagOutlinedIcon from '@mui/icons-material/OutlinedFlagOutlined'
+import PaymentIcon from '@mui/icons-material/Payment'
 import QuestionMarkOutlinedIcon from '@mui/icons-material/QuestionMarkOutlined'
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined'
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined'
@@ -93,6 +94,9 @@ function Drawer(props: { listMeta: ListMeta[] }) {
           resource: 'Contract',
           icon: <HistoryEduOutlinedIcon />,
         },
+
+      ],
+      [
         {
           resource: 'Invoice',
           icon: <ReceiptOutlinedIcon />,
@@ -101,7 +105,10 @@ function Drawer(props: { listMeta: ListMeta[] }) {
           resource: 'Statement',
           icon: <DescriptionOutlinedIcon />,
         },
-
+        {
+          resource: 'Payment',
+          icon: <PaymentIcon />,
+        },
       ],
       [
         {

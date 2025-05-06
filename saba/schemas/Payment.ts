@@ -60,6 +60,12 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
         views: './src/custome-fields-view/bigint-with-farsi-letters.tsx',
       },
     }),
+    constractor: relationship({
+      ref: 'Constractor',
+      many: false,
+      label: 'پیمانکار',
+
+    }),
     attachment: image({
       storage: 'image',
       label: 'فایل پیوست',

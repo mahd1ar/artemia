@@ -128,8 +128,10 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
         type: graphql.BigInt,
         resolve(item) {
           const { unitPrice, quantity, tax } = item
+          const numUnitPrice = Number(unitPrice ?? 0n)
+          const numTax = Number(tax ?? 0n)
 
-          return (unitPrice ?? 0n) * BigInt(Math.round(quantity ?? 0)) + (tax ?? 0n)
+          return BigInt(Math.round((numUnitPrice * (quantity ?? 0) + numTax)))
         },
       }),
       ui: {

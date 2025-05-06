@@ -1,8 +1,8 @@
-// ts-gql-integrity:b8ac8e9a6f162bbb9e656019ddcf4f12
+// ts-gql-integrity:f5b5c9f3c41cf7de18d6ddf13ee57a32
 /*
 ts-gql-meta-begin
 {
-  "hash": "1a0dd58f769b2e303c3b2feba226ff40"
+  "hash": "299254ef3d37e271afa886fa5024ffbd"
 }
 ts-gql-meta-end
 */
@@ -1187,6 +1187,8 @@ export type Payment = {
   readonly description: string | null;
   readonly price: BigInt | null;
   readonly attachment: ImageFieldOutput | null;
+  readonly changeLog: JSON | null;
+  readonly createdBy: User | null;
 };
 
 export type ImageFieldOutput = {
@@ -1219,6 +1221,7 @@ export type PaymentWhereInput = {
   readonly statement?: StatementWhereInput | null;
   readonly description?: StringFilter | null;
   readonly price?: BigIntNullableFilter | null;
+  readonly createdBy?: UserWhereInput | null;
 };
 
 export type PaymentOrderByInput = {
@@ -1236,6 +1239,8 @@ export type PaymentUpdateInput = {
   readonly description?: string | null;
   readonly price?: BigInt | null;
   readonly attachment?: ImageFieldInput | null;
+  readonly changeLog?: JSON | null;
+  readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
 
 export type ImageFieldInput = {
@@ -1254,6 +1259,8 @@ export type PaymentCreateInput = {
   readonly description?: string | null;
   readonly price?: BigInt | null;
   readonly attachment?: ImageFieldInput | null;
+  readonly changeLog?: JSON | null;
+  readonly createdBy?: UserRelateToOneForCreateInput | null;
 };
 
 export type ImageStore = {
