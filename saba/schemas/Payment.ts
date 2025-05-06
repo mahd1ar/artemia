@@ -11,6 +11,12 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
   ui: {
     label: 'پرداخت ها',
     labelField: 'title',
+    listView: {
+      initialSort: {
+        direction: 'DESC',
+        field: 'dateOfPayment',
+      },
+    },
   },
   fields: {
     title: text({
