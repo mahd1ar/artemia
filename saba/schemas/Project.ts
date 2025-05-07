@@ -67,5 +67,9 @@ export const Project = list<Lists.Project.TypeInfo<Session>>({
       ref: 'Approval.project',
       many: true,
     }),
+    // outsideOfApprovals: relationship({
+    //   ref: 'Approval',
+    //   many: true,
+    // }),
   },
 })

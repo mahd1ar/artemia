@@ -47,6 +47,12 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
         },
       },
     }),
+    explanation: text({
+      label: 'شرح مصوبات',
+      ui: {
+        displayMode: 'textarea',
+      },
+    }),
     estimatedBudget: bigInt({
       label: 'بودجه تخمینی',
       ui: {
@@ -95,7 +101,7 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
     description: relationship({
       ref: 'Description.approvals',
       many: true,
-      label: 'شرح مصوبات',
+      label: 'ساختار شکست ( اجرا شده ) ',
       ui: {
         createView: {
           fieldMode: 'hidden',
