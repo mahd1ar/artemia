@@ -10,7 +10,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
   access: allowAll, // FIXME
 
   ui: {
-    label: 'شرح مصوبه',
+    label: 'شرح مصوبات',
     plural: 'شرح مصوبات',
     listView: {
       initialColumns: ['subject', 'totalStatementsPayed', 'totalInvoicesPayable'],
@@ -52,6 +52,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
     }),
     title: text(),
     code: text(),
+
     contracts: relationship({
       label: 'قرارداد ها',
       ref: 'Contract.statementDescription',

@@ -98,6 +98,22 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
       label: 'تاریخ تخمینی پایان پروژه',
     }),
 
+    rows: relationship({
+      label: 'ساختار شکست (  پیش‌بینی شده ) ',
+      ref: 'Row.approval',
+      many: true,
+      ui: {
+
+        displayMode: 'cards',
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
+        inlineCreate: {
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
+        },
+
+        views: './src/custome-fields-view/table-relation',
+      },
+    }),
+
     description: relationship({
       ref: 'Description.approvals',
       many: true,

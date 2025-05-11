@@ -3,7 +3,7 @@ import { list } from '@keystone-6/core'
 import { allOperations } from '@keystone-6/core/access'
 import { relationship, text } from '@keystone-6/core/fields'
 import { isLoggedIn } from '../data/access'
-import { Roles, type Session } from '../data/types'
+import { getRoleFromArgs, Roles, type Session } from '../data/types'
 import { setPermitions } from '../data/utils'
 
 export const Project = list<Lists.Project.TypeInfo<Session>>({
@@ -67,9 +67,11 @@ export const Project = list<Lists.Project.TypeInfo<Session>>({
       ref: 'Approval.project',
       many: true,
     }),
-    // outsideOfApprovals: relationship({
-    //   ref: 'Approval',
-    //   many: true,
-    // }),
+    outside: relationship({
+      ref: 'Description',
+    }),
+    onGoing: relationship({
+      ref: 'Description',
+    }),
   },
 })
