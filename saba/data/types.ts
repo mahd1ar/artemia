@@ -41,6 +41,11 @@ export const alc = [
   },
 ] as const
 
+export interface tableRelationConfig {
+  type: 'Implemented' | 'Predicted'
+}
+
+// TODO move it outside of types.ts file
 export function getRoleFromArgs(args: Record<string, any> & { session?: Session }, defaultValue = Roles.guest) {
   if (!args.session && !defaultValue) {
     throw new Error('Session required')

@@ -66,12 +66,15 @@ export const Project = list<Lists.Project.TypeInfo<Session>>({
     approvals: relationship({
       ref: 'Approval.project',
       many: true,
+      label: '  مصوبات',
     }),
     outside: relationship({
       ref: 'Description',
+      label: 'خارج از مصوبات',
     }),
     onGoing: relationship({
       ref: 'Description',
+      label: 'جاری',
     }),
   },
 })

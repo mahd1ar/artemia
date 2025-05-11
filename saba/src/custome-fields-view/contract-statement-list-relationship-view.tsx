@@ -123,14 +123,18 @@ export function Field({
 
       <ThemeProvider theme={theme}>
         <MuiStack spacing={2} direction="row" alignContent="center" justifyContent="space-between">
-          <Link href={`/statements?!contract_matches="${value.id}"&fields=title,statementNumber,type&sortBy=-statementNumber`}>
-            <MuiButton
-              variant="text"
-              startIcon={<FormatListNumberedIcon />}
-            >
-              جزئیات
-            </MuiButton>
-          </Link>
+          { value.value.length
+            ? (
+                <Link href={`/statements?!contract_matches="${value.id}"&fields=title,statementNumber,type&sortBy=-statementNumber`}>
+                  <MuiButton
+                    variant="text"
+                    startIcon={<FormatListNumberedIcon />}
+                  >
+                    جزئیات
+                  </MuiButton>
+                </Link>
+              )
+            : '.'}
           <Typography variant="body1">
             {field.label}
           </Typography>
@@ -198,7 +202,6 @@ export function Field({
 
       <Stack
         gap="small"
-      // across
       >
         <ThemeProvider theme={theme}>
           <List
@@ -237,6 +240,7 @@ export function Field({
         {onChange !== undefined
         && (
           <Button
+
             onClick={() => {
               if (typeof contractIsApproved === 'undefined' || contractIsApproved)
                 setIsDrawerOpen(true)
@@ -251,6 +255,7 @@ export function Field({
             جدید
 
           </Button>
+
         )}
 
       </Stack>

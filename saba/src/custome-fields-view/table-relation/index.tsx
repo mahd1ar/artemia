@@ -8,11 +8,12 @@ import { Stack } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, Select, TextArea, TextInput } from '@keystone-ui/fields'
 import { AlertDialog } from '@keystone-ui/modals'
 import { Box, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, ThemeProvider } from '@mui/material'
-import { green } from '@mui/material/colors'
+import { blue, green } from '@mui/material/colors'
 import { gql } from '@ts-gql/tag/no-transform'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
+import { parseTableRelationConfig } from '../../../data/functions'
 import { theme } from '../../../data/utils'
 import AutoCompeleteCategory from './AutoCompeleteCategory'
 import TreeCategories from './TreeCategories'
@@ -23,12 +24,13 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   borderColor: theme.palette.divider,
 }))
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)<{ mode?: ReturnType<typeof parseTableRelationConfig>['type'] }>(({ theme, mode }) => ({
   [`&.${tableCellClasses.head}`]: {
-    // backgroundColor: theme.palette.primary.main,
-    backgroundColor: green.A700,
+    backgroundColor: mode ? mode === 'Predicted' ? blue.A700 : green.A700 : theme.palette.primary.main,
     color: theme.palette.common.white,
     fontWeight: 600,
+    fontSize: 13,
+    padding: '8px 16px',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -69,7 +71,9 @@ export function Field({
     ? 'invoice'
     : param === 'statements'
       ? 'statement'
-      : param === 'contracts' ? 'contract' : null
+      : param === 'contracts'
+        ? 'contract'
+        : param === 'approvals' ? 'approval' : null
 
   if (!resource)
     return <div>cant</div>
@@ -157,7 +161,7 @@ export function Field({
   const [updateRowData, { loading: loadingUpdate }] = useMutation(updateRow)
 
   type Data = Omit<NonNullable<NonNullable<typeof persistedData>['rows']>, '__typename'>[0]
-
+  const tableRelationConfig = parseTableRelationConfig(field.description || '{}')
   const initalDataModel = {
     id: '',
     commodityId: '',
@@ -393,27 +397,29 @@ export function Field({
 
     <FieldContainer>
 
-      <FieldLabel>
-        {field.label}
+      <Stack across align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
+        <Button
+          style={{ marginTop: '10px', marginBottom: '10px' }}
+          tone={tableRelationConfig.type === 'Implemented' ? 'positive' : 'active'}
+          onClick={() => { setModelDataFromRow(undefined) }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
 
-      </FieldLabel>
-      <Button
-        style={{ marginTop: '10px', marginBottom: '10px' }}
-        tone="positive"
-        onClick={() => { setModelDataFromRow(undefined) }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+            اضافه کردن ایتم جدید
+            {/* plus icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+              <g fill="none" stroke="currentColor" strokeDasharray={16} strokeDashoffset={16} strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
+                <path d="M5 12h14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="16;0"></animate></path>
+                <path d="M12 5v14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.4s" values="16;0"></animate></path>
+              </g>
+            </svg>
+          </div>
+        </Button>
 
-          اضافه کردن ایتم جدید
-          {/* plus icon */}
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <g fill="none" stroke="currentColor" strokeDasharray={16} strokeDashoffset={16} strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
-              <path d="M5 12h14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="16;0"></animate></path>
-              <path d="M12 5v14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.4s" values="16;0"></animate></path>
-            </g>
-          </svg>
-        </div>
-      </Button>
+        <FieldLabel>
+          {field.label}
+        </FieldLabel>
+      </Stack>
 
       <ThemeProvider theme={theme}>
 
@@ -554,10 +560,10 @@ export function Field({
         </AlertDialog>
         <TableContainer component={StyledPaper}>
           <Table aria-label="simple table">
-            <TableHead sx={{ color: 'red !important' }}>
+            <TableHead sx={{ bgcolor: theme.palette.primary.main }}>
               <TableRow>
                 {
-                  headers.map((i, index) => <StyledTableCell key={index} align={index === 0 ? 'left' : 'right'}>{i.label}</StyledTableCell>)
+                  headers.map((i, index) => <StyledTableCell mode={tableRelationConfig.type} key={index} align={index === 0 ? 'left' : 'right'}>{i.label}</StyledTableCell>)
                 }
 
               </TableRow>

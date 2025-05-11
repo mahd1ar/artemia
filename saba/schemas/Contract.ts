@@ -1,14 +1,13 @@
 import type { Lists } from '.keystone/types'
+import type { Session, tableRelationConfig } from '../data/types'
 import { graphql, group, list } from '@keystone-6/core'
 import { allOperations } from '@keystone-6/core/access'
 import {
   bigInt,
   checkbox,
   file,
-  integer,
   json,
   relationship,
-  select,
   text,
   timestamp,
   virtual,
@@ -18,7 +17,8 @@ import axios from 'axios'
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn, isMemberOfAdminGroup } from '../data/access'
 import { Notif } from '../data/message'
-import { getRoleFromArgs, Roles, type Session } from '../data/types'
+import { getRoleFromArgs, Roles } from '../data/types'
+
 import { setPermitions } from '../data/utils'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
 
@@ -244,27 +244,6 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       },
     }),
 
-    rows: relationship({
-      label: 'آیتم ها',
-      ref: 'Row.contract',
-      many: true,
-      ui: {
-        itemView: {
-          fieldMode(args) {
-            const rule = getRoleFromArgs(args)
-            return rule <= Roles.operator || args.item.createdById === args.session?.itemId ? 'edit' : 'read'
-          },
-        },
-        displayMode: 'cards',
-        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
-        inlineCreate: {
-          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
-        },
-
-        views: './src/custome-fields-view/table-relation',
-      },
-    }),
-
     cost: bigInt({
       label: 'پیشبینی مبلغ قرارداد',
       ui: {
@@ -329,6 +308,29 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       label: 'پیمانکار',
       ref: 'Constractor.contracts',
     }),
+
+    rows: relationship({
+      label: 'آیتم ها (پیشبینی شده) ',
+      ref: 'Row.contract',
+      many: true,
+      ui: {
+        description: JSON.stringify({ type: 'Predicted' } as tableRelationConfig),
+        itemView: {
+          fieldMode(args) {
+            const rule = getRoleFromArgs(args)
+            return rule <= Roles.operator || args.item.createdById === args.session?.itemId ? 'edit' : 'read'
+          },
+        },
+        displayMode: 'cards',
+        cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
+        inlineCreate: {
+          fields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
+        },
+
+        views: './src/custome-fields-view/table-relation',
+      },
+    }),
+
     statements: relationship({
       label: ' صورت وضعیت ها ',
       ref: 'Statement.contract',

@@ -1,5 +1,5 @@
 import type { Lists } from '.keystone/types'
-import type { Session } from '../data/types'
+import type { Session, tableRelationConfig } from '../data/types'
 import { graphql, list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
 import {
@@ -101,9 +101,10 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
     rows: relationship({
       label: 'ساختار شکست (  پیش‌بینی شده ) ',
       ref: 'Row.approval',
+
       many: true,
       ui: {
-
+        description: JSON.stringify({ type: 'Predicted' } as tableRelationConfig),
         displayMode: 'cards',
         cardFields: ['commodity', 'description', 'unit', 'unitPrice', 'quantity', 'tax', 'total'],
         inlineCreate: {
