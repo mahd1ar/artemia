@@ -5,7 +5,7 @@ import { Stack } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, Select } from '@keystone-ui/fields'
 import { useToasts } from '@keystone-ui/toast'
 import { gql } from '@ts-gql/tag/no-transform'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 // import { useRouter } from "@keystone-6/core/dist/declarations/src/admin-ui/router";
 import { useRouter } from 'next/router'
@@ -43,24 +43,26 @@ export function Field({
       projects {
         id
         title
+        onGoing {
+          id
+          title
+        }
+        outside {
+          id
+          title
+        }
       }
     }
   ` as import('../../__generated__/ts-gql/PROJECTS_Q').type
 
   const APPROVALS_OF_PROJECT_Q = gql`
         query APPROVALS_OF_PROJECT_Q($projectId: ID!) {
-  approvals (where:  {
-     project:  {
-        id:  {
-           equals: $projectId
-        }
-     }
-  }) {
-    id
-    code
-    title
-  }
-}` as import('../../__generated__/ts-gql/APPROVALS_OF_PROJECT_Q').type
+          approvals (where:  { project:  { id:  { equals: $projectId } } }) {
+            id
+            code
+            title
+          }
+        }` as import('../../__generated__/ts-gql/APPROVALS_OF_PROJECT_Q').type
 
   const DESCRIPTION_OF_APPROVAL_Q = gql`
 query DESCRIPTION_OF_APPROVAL_Q($approvalId: ID!) {
@@ -82,6 +84,14 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
   description(where: {id: $descriptionId}) {
     id
     title
+    fromOutsideProject {
+      id
+      title
+    }
+    fromOnGoingProject {
+      id
+      title
+    }
     approvals {
       id
       code
@@ -89,6 +99,14 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
       project {
         id
         title
+        onGoing {
+          id
+          title
+        }
+        outside {
+          id
+          title
+        }
       }
     }
   }
@@ -118,8 +136,12 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
           const approvalId = res.data.description.approvals?.id || '!-'
           const approvalTitle = res.data.description.approvals?.title || '-'
 
-          const projectId = res.data.description.approvals?.project?.id || '!-'
-          const projectTitle = res.data.description.approvals?.project?.title || '-'
+          const projectId = res.data.description.approvals?.project?.id
+            || res.data.description.fromOnGoingProject?.id
+            || res.data.description.fromOutsideProject?.id || '!-'
+          const projectTitle = res.data.description.approvals?.project?.title
+            || res.data.description.fromOnGoingProject?.title
+            || res.data.description.fromOutsideProject?.title || '-'
 
           setSelectedDescriptoins({
             label: descriptionTitle,
@@ -143,6 +165,7 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
     (async () => {
       if (selectedProject && selectedProject.value) {
         await loadApproval({ variables: { projectId: selectedProject.value } })
+        // await loadDescription({ variables: { approvalId: 'mock' } })
       }
     })()
   }, [selectedProject])
@@ -154,6 +177,40 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
       }
     })()
   }, [selectedApproval])
+
+  const memoDescriptionOptions = useMemo(() => {
+    const options: Option[] = []
+
+    if (approvalsOptions?.approvals?.length) {
+      if (descriptionOptions?.descriptions?.length) {
+        descriptionOptions.descriptions.forEach((i) => {
+          options.push({
+            label: i.title || '-',
+            value: i.id,
+          })
+        },
+        )
+      }
+    }
+
+    const project = projectsOptions?.projects?.find(i => i.id === selectedProject.value)
+
+    if (project?.onGoing) {
+      options.push({
+        label: project.onGoing.title || '-',
+        value: project.onGoing.id,
+      })
+    }
+
+    if (project?.outside) {
+      options.push({
+        label: project.outside.title || '-',
+        value: project.outside.id,
+      })
+    }
+
+    return options
+  }, [projectsOptions, selectedProject, descriptionOptions, approvalsOptions])
 
   async function onChangeApproval(option: Option) {
     setSelectedApproval(option)
@@ -201,12 +258,12 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
               />
             )}
 
-            {descriptionOptions?.descriptions?.length && (
+            {memoDescriptionOptions.length && (
               <Select
                 isDisabled={!onChange}
                 onChange={onChangeDescription}
-                value={selectedDescriptoins}
-                options={descriptionOptions.descriptions?.map(i => ({ label: i.title || '-', value: i.id })) || []}
+                value={memoDescriptionOptions.find(i => i.value === selectedDescriptoins.value) ? selectedDescriptoins : { label: 'انتخاب کنید', value: '' }}
+                options={memoDescriptionOptions}
               />
             )}
           </Stack>

@@ -3,7 +3,7 @@ import { list } from '@keystone-6/core'
 import { allOperations } from '@keystone-6/core/access'
 import { relationship, text } from '@keystone-6/core/fields'
 import { isLoggedIn } from '../data/access'
-import { getRoleFromArgs, Roles, type Session } from '../data/types'
+import { Roles, type Session } from '../data/types'
 import { setPermitions } from '../data/utils'
 
 export const Project = list<Lists.Project.TypeInfo<Session>>({
@@ -37,6 +37,41 @@ export const Project = list<Lists.Project.TypeInfo<Session>>({
         })
       }
     },
+
+    afterOperation: async (args) => {
+      if (args.operation === 'create') {
+        const prisma = args.context.prisma
+        const itemid = args.item.id
+        const itemTitle = args.item.title
+
+        await prisma.project.update({
+          where: { id: itemid },
+          data: {
+            onGoing: {
+              create: {
+                title: `جاری ${itemTitle}`,
+              },
+            },
+            outside: {
+              create: {
+                title: `خارج از مصوبات ${itemTitle}`,
+              },
+            },
+          },
+        })
+      }
+    },
+
+    validate(args) {
+      if (args.operation === 'create') {
+        const { title } = args.inputData
+
+        if (!title) {
+          args.addValidationError('عنوان پروژه را وارد کنید')
+        }
+      }
+    },
+
   },
   ui: {
     label: 'پروژه‌ها',
@@ -69,12 +104,31 @@ export const Project = list<Lists.Project.TypeInfo<Session>>({
       label: '  مصوبات',
     }),
     outside: relationship({
-      ref: 'Description',
+      ui: {
+        itemView: {
+          fieldMode: 'read',
+        },
+        createView: {
+          fieldMode: 'hidden',
+        },
+        views: './src/custome-fields-view/list-relationship.tsx',
+      },
+      ref: 'Description.fromOutsideProject',
       label: 'خارج از مصوبات',
     }),
     onGoing: relationship({
-      ref: 'Description',
+      ui: {
+        itemView: {
+          fieldMode: 'read',
+        },
+        createView: {
+          fieldMode: 'hidden',
+        },
+        views: './src/custome-fields-view/list-relationship.tsx',
+      },
+      ref: 'Description.fromOnGoingProject',
       label: 'جاری',
     }),
   },
+
 })

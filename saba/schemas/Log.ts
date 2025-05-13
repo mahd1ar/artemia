@@ -11,7 +11,7 @@ export const Log = list({
   },
   ui: {
     listView: {
-      initialColumns: ['type', 'action', 'message', 'date'],
+      initialColumns: ['message', 'type', 'message', 'date'],
       initialSort: {
         direction: 'DESC',
         field: 'date',
@@ -19,6 +19,9 @@ export const Log = list({
     },
     isHidden(args) {
       return (args.session as Session)?.data.role !== Roles.admin
+    },
+    itemView: {
+      defaultFieldMode: 'read',
     },
   },
   fields: {

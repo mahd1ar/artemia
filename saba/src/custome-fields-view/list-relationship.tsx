@@ -1,5 +1,5 @@
 import type { controller } from '@keystone-6/core/fields/types/relationship/views'
-import type { FieldProps } from '@keystone-6/core/types'
+import type { FieldProps, ListMeta } from '@keystone-6/core/types'
 import { ThemeProvider } from '@emotion/react'
 import { CreateItemDrawer } from '@keystone-6/core/admin-ui/components'
 import { useList } from '@keystone-6/core/admin-ui/context'
@@ -19,19 +19,20 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { theme } from '../../data/utils'
 
-export function Field({
-  field,
-  value,
-  onChange,
-}: FieldProps<typeof controller>) {
-  if (typeof value === 'symbol')
-    return null
+function CustomRelationshipView(props: {
+  title: string
+  detailsLink?: string
+  listItems: { id: string, label: string, path: string }[]
+  foreignList: ListMeta
+  onCreateItem?: (_val: {
+    id: string
+    label: string
+  }) => void
+  isMany?: boolean
 
-  if (value.kind !== 'many')
-    return <div>relationship kind is not supported :/ </div>
-
-  const foreignList = useList(field.refListKey)
+}) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
   return (
     <FieldContainer>
 
@@ -42,21 +43,23 @@ export function Field({
         <ThemeProvider theme={theme}>
 
           <MuiStack spacing={2} direction="row" alignContent="center" justifyContent="space-between">
-            <Link
-              href={`/${foreignList.path}?!${field.refFieldKey}_matches="${value.id}"`}
-            >
-              <MuiButton
-                variant="text"
-                sx={{
-                  color: '#333',
-                }}
-                startIcon={<FormatListNumberedIcon />}
+            { props.detailsLink && (
+              <Link
+                href={props.detailsLink}
               >
-                جزئیات
-              </MuiButton>
-            </Link>
+                <MuiButton
+                  variant="text"
+                  sx={{
+                    color: '#333',
+                  }}
+                  startIcon={<FormatListNumberedIcon />}
+                >
+                  جزئیات
+                </MuiButton>
+              </Link>
+            )}
             <Typography variant="body1" sx={{ fontWeight: 600 }}>
-              {field.label}
+              {props.title}
             </Typography>
           </MuiStack>
 
@@ -67,18 +70,18 @@ export function Field({
             dense
           >
             {
-              value?.value?.map(i => (
+              props.listItems.map(i => (
                 <Link
                   key={i.id}
-                  href={`/${foreignList.path}/${i.id}`}
+                  href={i.path}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <ListItemButton
                     key={i.id}
                   >
                     {/* <ListItemIcon>
-                      <FolderOpenIcon />
-                    </ListItemIcon> */}
+                    <FolderOpenIcon />
+                  </ListItemIcon> */}
                     <ListItemText primary={i.label} />
                     <ListItemSecondaryAction>
                       <ChevronRight fontSize="small" />
@@ -90,40 +93,88 @@ export function Field({
 
           </List>
         </ThemeProvider>
-        <Button
-          onClick={() => setIsDrawerOpen(true)}
-        >
-          { `اضافه کردن ${foreignList.label} جدید` }
-        </Button>
+        { props.isMany && (
+          <Button
+            onClick={() => setIsDrawerOpen(true)}
+          >
+            {`اضافه کردن ${props.foreignList.label} جدید`}
+          </Button>
+        )}
       </Stack>
-      {onChange !== undefined && (
+      {props.onCreateItem && (
         <DrawerController isOpen={isDrawerOpen}>
           <CreateItemDrawer
 
-            listKey={foreignList.key}
+            listKey={props.foreignList.key}
             onClose={() => {
               setIsDrawerOpen(false)
             }}
             onCreate={(val) => {
               setIsDrawerOpen(false)
-              if (value.kind === 'many') {
-                onChange({
-                  ...value,
-                  value: [...value.value, val],
-                })
-              }
-            // else if (value.kind === 'one') {
-            //   onChange({
-            //     ...value,
-            //     value: val,
-            //   })
-            // }
+              props.onCreateItem?.(val)
+              // else if (value.kind === 'one') {
+              //   onChange({
+              //     ...value,
+              //     value: val,
+              //   })
+              // }
             }}
-
           />
         </DrawerController>
       )}
     </FieldContainer>
-
   )
+}
+
+export function Field({
+  field,
+  value,
+  onChange,
+}: FieldProps<typeof controller>) {
+  if (typeof value === 'symbol')
+    return null
+
+  const foreignList = useList(field.refListKey)
+
+  if (value.kind === 'one') {
+    return (
+      <CustomRelationshipView
+        foreignList={foreignList}
+        title={field.label}
+        listItems={value.value
+          ? [{
+              id: value.value.id,
+              label: value.value?.label,
+              path: `/${foreignList.path}/${value.value?.id}`,
+            }]
+          : []}
+      />
+    )
+  }
+
+  if (value.kind === 'many') {
+    return (
+      <CustomRelationshipView
+        foreignList={foreignList}
+        title={field.label}
+        listItems={value.value.map(i => ({
+          id: i.id,
+          label: i.label,
+          path: `/${foreignList.path}/${i.id}`,
+        }))}
+        detailsLink={`/${foreignList.path}?!${field.refFieldKey}_matches="${value.id}"`}
+        onCreateItem={onChange
+          ? (val) => {
+              onChange({
+                ...value,
+                value: [...value.value, { id: val.id, label: val.label }],
+              })
+            }
+          : undefined}
+        isMany
+      />
+    )
+  }
+
+  return null
 }

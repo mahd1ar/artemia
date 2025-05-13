@@ -85,6 +85,30 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
         },
       },
     }),
+    fromOnGoingProject: relationship({
+      ref: 'Project.onGoing',
+      many: false,
+      ui: {
+        itemView: {
+          fieldMode: 'hidden',
+        },
+        createView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
+    fromOutsideProject: relationship({
+      ref: 'Project.outside',
+      many: false,
+      ui: {
+        itemView: {
+          fieldMode: 'hidden',
+        },
+        createView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
     totalStatementsPayable: virtual({
       label: 'مجموع قابل پرداخت',
       ui: {

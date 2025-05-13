@@ -1,8 +1,8 @@
-// ts-gql-integrity:475283eee29ac63375e636de8211d144
+// ts-gql-integrity:ac89f186c4e60d2fe74e8d4c863439e6
 /*
 ts-gql-meta-begin
 {
-  "hash": "580bf1977ea132b9fe97d16e7ce70106"
+  "hash": "0724e1866ccd4035ae5578cacf4033e8"
 }
 ts-gql-meta-end
 */
@@ -380,6 +380,8 @@ export type Description = {
   readonly invoices: ReadonlyArray<Invoice> | null;
   readonly invoicesCount: number | null;
   readonly approvals: Approval | null;
+  readonly fromOnGoingProject: Project | null;
+  readonly fromOutsideProject: Project | null;
   readonly totalStatementsPayable: BigInt | null;
   readonly totalInvoicesPayed: BigInt | null;
   readonly totalPayed: JSON | null;
@@ -425,6 +427,8 @@ export type DescriptionWhereInput = {
   readonly contracts?: ContractManyRelationFilter | null;
   readonly invoices?: InvoiceManyRelationFilter | null;
   readonly approvals?: ApprovalWhereInput | null;
+  readonly fromOnGoingProject?: ProjectWhereInput | null;
+  readonly fromOutsideProject?: ProjectWhereInput | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
 };
@@ -454,6 +458,8 @@ export type DescriptionUpdateInput = {
   readonly contracts?: ContractRelateToManyForUpdateInput | null;
   readonly invoices?: InvoiceRelateToManyForUpdateInput | null;
   readonly approvals?: ApprovalRelateToOneForUpdateInput | null;
+  readonly fromOnGoingProject?: ProjectRelateToOneForUpdateInput | null;
+  readonly fromOutsideProject?: ProjectRelateToOneForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
 };
@@ -489,6 +495,8 @@ export type DescriptionCreateInput = {
   readonly contracts?: ContractRelateToManyForCreateInput | null;
   readonly invoices?: InvoiceRelateToManyForCreateInput | null;
   readonly approvals?: ApprovalRelateToOneForCreateInput | null;
+  readonly fromOnGoingProject?: ProjectRelateToOneForCreateInput | null;
+  readonly fromOutsideProject?: ProjectRelateToOneForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
 };
