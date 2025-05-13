@@ -1,11 +1,11 @@
 import type { controller } from '@keystone-6/core/fields/types/relationship/views'
 import type { FieldProps } from '@keystone-6/core/types'
 import { useLazyQuery, useQuery } from '@apollo/client'
+import { Stack } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, Select } from '@keystone-ui/fields'
-import { CheckIcon } from '@keystone-ui/icons'
 import { useToasts } from '@keystone-ui/toast'
 import { gql } from '@ts-gql/tag/no-transform'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // import { useRouter } from "@keystone-6/core/dist/declarations/src/admin-ui/router";
 import { useRouter } from 'next/router'
@@ -20,6 +20,10 @@ export function Field({
   value,
   onChange,
 }: FieldProps<typeof controller>) {
+  if (value.kind !== 'one') {
+    throw new Error('Field must be of kind "one"')
+  }
+
   const firstOption: Option = {
     value: '',
     label: 'انتخاب کنید',
@@ -30,73 +34,134 @@ export function Field({
   const router = useRouter()
   const [isHidden] = useState(router.pathname.split('/').filter(Boolean).at(0) === 'descriptions')
 
+  const [selectedProject, setSelectedProject] = useState<Option>(firstOption)
   const [selectedApproval, setSelectedApproval] = useState<Option>(firstOption)
-
   const [selectedDescriptoins, setSelectedDescriptoins] = useState<Option>(firstOption)
 
-  const DESCRIPTIONS_OF_APPROVAL_QUERY = gql`
-      query DESCRIPTIONS_OF_APPROVAL_QUERY($id: ID!) { 
-      descriptions(where: {approvals:{id: {equals: $id}}}) {
+  const PROJECTS_Q = gql`
+    query PROJECTS_Q {
+      projects {
         id
         title
       }
     }
-` as import('../../__generated__/ts-gql/DESCRIPTIONS_OF_APPROVAL_QUERY').type
+  ` as import('../../__generated__/ts-gql/PROJECTS_Q').type
 
-  const APPROVALS_Q = gql`
-        query APPROVALS_Q {
-          approvals {
-            id
-            title
-          } 
-      }` as import('../../__generated__/ts-gql/APPROVALS_Q').type
+  const APPROVALS_OF_PROJECT_Q = gql`
+        query APPROVALS_OF_PROJECT_Q($projectId: ID!) {
+  approvals (where:  {
+     project:  {
+        id:  {
+           equals: $projectId
+        }
+     }
+  }) {
+    id
+    code
+    title
+  }
+}` as import('../../__generated__/ts-gql/APPROVALS_OF_PROJECT_Q').type
 
-  const DESCRIPTION_APPROVAL_Q = gql`
-        query DESCRIPTION_APPROVAL_Q($id: ID!) {
-          description(where: {id: $id}) {
-            id
-            title
-            approvals {
-              id
-              title
-            }
-          } 
-      }` as import('../../__generated__/ts-gql/DESCRIPTION_APPROVAL_Q').type
+  const DESCRIPTION_OF_APPROVAL_Q = gql`
+query DESCRIPTION_OF_APPROVAL_Q($approvalId: ID!) {
+  descriptions (where:  {
+     approvals:  {
+        id:  {
+           equals: $approvalId
+        }
+     }
+  }) {
+    id
+    code
+    title
+  }
+      }` as import('../../__generated__/ts-gql/DESCRIPTION_OF_APPROVAL_Q').type
 
-  const { data } = useQuery(APPROVALS_Q)
-  const [load, { data: dataApprovalDescriptions }] = useLazyQuery(DESCRIPTION_APPROVAL_Q)
-  const [loadCoresponsiveDescriptions, { data: dataDescriptions }] = useLazyQuery(DESCRIPTIONS_OF_APPROVAL_QUERY)
+  const CORESPONDIG_TREE = gql`
+query CORESPONDIG_TREE($descriptionId: ID!) {
+  description(where: {id: $descriptionId}) {
+    id
+    title
+    approvals {
+      id
+      code
+      title
+      project {
+        id
+        title
+      }
+    }
+  }
+}
+` as import('../../__generated__/ts-gql/CORESPONDIG_TREE').type
+
+  const { data: projectsOptions } = useQuery(PROJECTS_Q)
+  const [loadApproval, { data: approvalsOptions }] = useLazyQuery(APPROVALS_OF_PROJECT_Q)
+  const [loadDescription, { data: descriptionOptions }] = useLazyQuery(DESCRIPTION_OF_APPROVAL_Q)
+
+  const [loadCoresponsiveTree] = useLazyQuery(CORESPONDIG_TREE)
 
   useEffect(() => {
     if (value && value.initialValue) {
-      load({ variables: value.initialValue })
+      loadCoresponsiveTree({ variables: { descriptionId: value.initialValue.id } })
         .then((res) => {
-          const id = res.data?.description?.approvals?.id
-          const title = res.data?.description?.approvals?.title
-
-          if (id && title) {
-            setSelectedApproval({ label: title || '', value: id })
-            loadCoresponsiveDescriptions({ variables: { id } })
-            setSelectedDescriptoins({ label: res.data?.description?.title || '', value: res.data?.description?.id || '' })
+          if (!res.data?.description) {
+            return toast.addToast({
+              title: 'ERROR - no coresponsive tree',
+              tone: 'negative',
+            })
           }
+
+          const descriptionId = res.data.description.id
+          const descriptionTitle = res.data.description.title || '-'
+
+          const approvalId = res.data.description.approvals?.id || '!-'
+          const approvalTitle = res.data.description.approvals?.title || '-'
+
+          const projectId = res.data.description.approvals?.project?.id || '!-'
+          const projectTitle = res.data.description.approvals?.project?.title || '-'
+
+          setSelectedDescriptoins({
+            label: descriptionTitle,
+            value: descriptionId,
+          })
+
+          setSelectedApproval({
+            label: approvalTitle,
+            value: approvalId,
+          })
+
+          setSelectedProject({
+            label: projectTitle,
+            value: projectId,
+          })
         })
     }
-  }, [data])
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+      if (selectedProject && selectedProject.value) {
+        await loadApproval({ variables: { projectId: selectedProject.value } })
+      }
+    })()
+  }, [selectedProject])
+
+  useEffect(() => {
+    (async () => {
+      if (selectedApproval && selectedApproval.value) {
+        await loadDescription({ variables: { approvalId: selectedApproval.value } })
+      }
+    })()
+  }, [selectedApproval])
 
   async function onChangeApproval(option: Option) {
     setSelectedApproval(option)
-    const res = await loadCoresponsiveDescriptions({ variables: { id: option.value } })
-    if (res.data?.descriptions) {
-      setSelectedDescriptoins(
-        firstOption,
-      )
-    }
-    else {
-      toast.addToast({
-        title: 'ERROR - no coresponsive descriptions',
-        tone: 'negative',
-      })
-    }
+  }
+
+  async function onChangeProject(option: Option) {
+    setSelectedProject(option)
+    const res = await loadApproval({ variables: { id: option.value } })
   }
 
   async function onChangeDescription(option: Option) {
@@ -119,25 +184,32 @@ export function Field({
       && (
         <FieldContainer>
           <FieldLabel>{field.label}</FieldLabel>
-
-          <Select
-            onChange={onChangeApproval}
-            value={selectedApproval}
-            options={data?.approvals?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
-            isDisabled={!onChange}
-          />
-
-          {dataDescriptions
-          && (
+          <Stack gap="large">
             <Select
+              onChange={onChangeProject}
+              value={selectedProject}
+              options={projectsOptions?.projects?.map(i => ({ label: i.title || '-', value: i.id })) || []}
               isDisabled={!onChange}
-              css={{ marginTop: '0.5rem' }}
-              onChange={onChangeDescription}
-              value={selectedDescriptoins}
-              options={dataDescriptions?.descriptions?.map((i: any) => ({ label: i.title || '-', value: i.id })) || []}
             />
-          )}
 
+            {approvalsOptions?.approvals?.length && (
+              <Select
+                isDisabled={!onChange}
+                onChange={onChangeApproval}
+                value={selectedApproval}
+                options={approvalsOptions.approvals?.map(i => ({ label: i.title || '-', value: i.id })) || []}
+              />
+            )}
+
+            {descriptionOptions?.descriptions?.length && (
+              <Select
+                isDisabled={!onChange}
+                onChange={onChangeDescription}
+                value={selectedDescriptoins}
+                options={descriptionOptions.descriptions?.map(i => ({ label: i.title || '-', value: i.id })) || []}
+              />
+            )}
+          </Stack>
         </FieldContainer>
       )}
 

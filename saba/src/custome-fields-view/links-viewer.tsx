@@ -1,14 +1,8 @@
 import type { controller } from '@keystone-6/core/fields/types/virtual/views'
 import type { FieldProps } from '@keystone-6/core/types'
-import { css } from '@emotion/css'
-import { Button } from '@keystone-ui/button'
-import { Checkbox, FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
-import { CheckIcon } from '@keystone-ui/icons'
-import { AlertDialog } from '@keystone-ui/modals'
-import { useToasts } from '@keystone-ui/toast'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import React, { Fragment, useState } from 'react'
+import React from 'react'
 
 export function Field({
   field,

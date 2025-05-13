@@ -1,13 +1,8 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
 import type { controller } from '@keystone-6/core/fields/types/bigInt/views'
 import type { CardValueComponent, CellComponent, FieldProps } from '@keystone-6/core/types'
 import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
-
-import { jsx } from '@keystone-ui/core'
 import { FieldContainer, FieldDescription, FieldLabel, TextInput } from '@keystone-ui/fields'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { NumUtils } from '../../data/utils'
 import Num2persian from './utils/num2persian'
 import { useFormattedInput } from './utils/utils'
@@ -24,7 +19,7 @@ function BigIntInput({
   id: string
   autoFocus?: boolean
   value: bigint | string | null
-  onChange: (value: bigint | string | null) => void
+  onChange: (_value: bigint | string | null) => void
   forceValidation?: boolean
   validationMessage?: string
   placeholder?: string

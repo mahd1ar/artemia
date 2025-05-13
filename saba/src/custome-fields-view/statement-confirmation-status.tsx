@@ -15,10 +15,6 @@ type Value = {
 export function Field({
   field,
   value,
-  onChange,
-  autoFocus,
-  itemValue,
-  forceValidation,
 }: FieldProps<typeof controller>) {
   const dataItems = value.data ? (value as Value)!.data.map(i => ({
     dataDesc: Match.AclRole(i.key),

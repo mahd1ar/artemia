@@ -1,24 +1,23 @@
-import React, { useState, ChangeEvent } from 'react'
-import DatePicker, { DateObject } from 'react-multi-date-picker'
+import type { DateObject } from 'react-multi-date-picker'
+import { Button } from '@keystone-ui/button'
+import { DeleteIcon } from '@keystone-ui/icons'
+import React from 'react'
 import persian from 'react-date-object/calendars/persian'
 import persian_fa from 'react-date-object/locales/persian_fa'
-import TimePicker from 'react-multi-date-picker/plugins/time_picker'
-import { jsx, Inline, Stack, Text } from '@keystone-ui/core'
-import { Button } from '@keystone-ui/button'
-import { DeleteIcon } from "@keystone-ui/icons"
+import DatePicker from 'react-multi-date-picker'
 
-type JCalendarInputProps = {
+interface JCalendarInputProps {
   value: number | null
   onChange?: (value: number | null) => void
 }
 
 export function JCalendarInput(props: JCalendarInputProps) {
   const changeTime = (event: DateObject | DateObject[] | null) => {
-    if (Array.isArray(event) === false)
+    if (Array.isArray(event) === false) {
       if (event)
-        // @ts-ignore
         props.onChange?.(event?.unix)
       else props.onChange?.(null)
+    }
   }
 
   return (
@@ -26,7 +25,7 @@ export function JCalendarInput(props: JCalendarInputProps) {
       <div>
         {/* {props.value} */}
 
-        <div style={{ display: "flex", gap: '4px' }} >
+        <div style={{ display: 'flex', gap: '4px' }}>
           <DatePicker
             style={{
               appearance: 'none',
@@ -48,16 +47,16 @@ export function JCalendarInput(props: JCalendarInputProps) {
               resize: 'vertical',
               transition:
                 'background-color 130ms,box-shadow 130ms,border-color 130ms',
-              width: '100%'
+              width: '100%',
             }}
             value={props.value ? new Date(props.value * 1000) : null}
-            format='YYYY / MM / DD'
+            format="YYYY / MM / DD"
             calendar={persian}
             locale={persian_fa}
             onChange={changeTime}
           />
           {/* plugins={[<TimePicker position='bottom' />]} */}
-          <Button onClick={() => changeTime(null)} >
+          <Button onClick={() => changeTime(null)}>
             <DeleteIcon />
           </Button>
         </div>

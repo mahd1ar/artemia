@@ -1,35 +1,29 @@
-import React from "react";
-import Link from "next/link";
-import { type FieldProps } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
-import { type controller } from "@keystone-6/core/fields/types/virtual/views";
+import type { controller } from '@keystone-6/core/fields/types/virtual/views'
+import type { FieldProps } from '@keystone-6/core/types'
+import { useList } from '@keystone-6/core/admin-ui/context'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import React from 'react'
 // import { type controller } from "@keystone-6/core/fields/types/relationship/views";
 import SimpleTable from './simple-table'
-import { useList } from "@keystone-6/core/admin-ui/context";
 
-export const Field = ({
+export function Field({
   field,
   value,
-  onChange,
-  autoFocus,
-  itemValue,
-  forceValidation
-}: FieldProps<typeof controller>) => {
-
-
-
+}: FieldProps<typeof controller>) {
   const StatementItemList = useList('StatementItem')
 
-  if (!value || value.length === 0 || typeof value === 'symbol') return <div>null</div>
+  if (!value || value.length === 0 || typeof value === 'symbol')
+    return <div>null</div>
 
   const h = Object.keys(value[0])
 
-  const headers = h.map(i => {
+  const headers = h.map((i) => {
     return i in StatementItemList.fields ? { label: StatementItemList.fields[i].label, value: i } : { label: i, value: i }
   })
 
-  if (!value) value = []
-  // 
+  if (!value)
+    value = []
+  //
   const units = StatementItemList.fields.unit.fieldMeta!.options as { value: string, label: string }[]
 
   value = value.map((i: Record<string, string>) => {
@@ -47,8 +41,8 @@ export const Field = ({
       </FieldContainer>
 
     </>
-  );
-};
+  )
+}
 // const onSubmitNewRelatedLink = () => {
 //     if (onChange) {
 //         const relatedLinksCopy = [...relatedLinks, { label: labelValue, href: hrefValue }]

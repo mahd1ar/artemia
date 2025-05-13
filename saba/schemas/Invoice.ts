@@ -13,6 +13,7 @@ import {
 import { gql } from '@ts-gql/tag/no-transform'
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn } from '../data/access'
+import { changeLog } from '../data/functions'
 import { Notif } from '../data/message'
 import { getRoleFromArgs, Roles } from '../data/types'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
@@ -271,36 +272,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         },
       },
     }),
-    changeLog: json({
-      ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: {
-          fieldPosition: 'sidebar',
-          fieldMode(args) {
-            if (args.session?.data.role === Roles.admin)
-              return 'read'
-            else
-              return 'hidden'
-          },
-        },
-        views: './src/custome-fields-view/changelog-view.tsx',
-      },
-      hooks: {
-        resolveInput(args) {
-          const state = (args.item?.changeLog) ? JSON.parse(args.item.changeLog || '[]') : []
-          const info = {
-            ops: args.operation,
-            items: Object.keys(args.inputData),
-            by: args.context.session?.itemId,
-            at: new Date(),
-          }
-
-          state.push(info)
-
-          return JSON.stringify(state)
-        },
-      },
-    }),
+    changeLog: changeLog('title'),
 
   },
 })

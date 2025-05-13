@@ -1,15 +1,17 @@
-import { getRoleFromArgs, Roles, Session } from "./types";
+import type { Session } from './types'
+import { getRoleFromArgs, Roles } from './types'
 
 export function isLoggedIn(args: { session?: Session } & Record<string, any>) {
-  const { session }: Partial<{ session: Session }> = args;
+  const { session }: Partial<{ session: Session }> = args
 
-  if (!!session === false) return false;
+  if (!!session === false)
+    return false
 
-  return !!session;
+  return !!session
 }
 
 export function isAdmin(args: { session?: Session } & Record<string, any>) {
-  return isLoggedIn(args) && args.context.session!.data.role === Roles.admin;
+  return isLoggedIn(args) && args.context.session!.data.role === Roles.admin
 }
 
 export function isMobayen(args: { session?: Session } & Record<string, any>) {
@@ -18,6 +20,5 @@ export function isMobayen(args: { session?: Session } & Record<string, any>) {
 }
 
 export function isMemberOfAdminGroup(args: Record<string, any> & { session?: Session }) {
-
   return (getRoleFromArgs(args, Roles.guest) <= Roles.operator)
 }

@@ -1,37 +1,20 @@
-import React from "react";
-import Link from "next/link";
-import { type FieldProps } from "@keystone-6/core/types";
-import { css } from "@emotion/css";
-import { Button } from "@keystone-ui/button";
-import { AlertDialog } from "@keystone-ui/modals";
-import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
-import { CheckIcon } from "@keystone-ui/icons";
-import { type controller } from "@keystone-6/core/fields/types/virtual/views";
-import { Fragment, useState } from "react";
-import { Checkbox } from "@keystone-ui/fields";
-import { useRouter, usePathname } from "next/navigation";
-import { useToasts } from "@keystone-ui/toast"
+import type { controller } from '@keystone-6/core/fields/types/virtual/views'
+import type { FieldProps } from '@keystone-6/core/types'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import Link from 'next/link'
+import React from 'react'
 // import { useChangedFieldsAndDataForUpdate } from "@keystone-6/core/admin-ui/utils"
-import { gql, useMutation } from '@apollo/client'
-import axios from "axios";
 
-
-
-export const Field = ({
+export function Field({
   field,
   value,
-  onChange,
-  autoFocus,
-  itemValue,
-  forceValidation
-}: FieldProps<typeof controller>) => {
-
+}: FieldProps<typeof controller>) {
   let len = '-'
 
   try {
-
     len = String(value.length || 0)
-  } catch (error) {
+  }
+  catch {
 
   }
 
@@ -39,8 +22,7 @@ export const Field = ({
     <>
       <FieldContainer>
         <FieldLabel>{field.label}</FieldLabel>
-        <div dir="rtl" >
-
+        <div dir="rtl">
 
           <span>
             نقشه های بارگذاری شده:
@@ -55,21 +37,27 @@ export const Field = ({
         </div>
 
         {value && Array.isArray(value) && value.map((i: any, index: number) => {
-
-          return <div>
-            {index + 1}. <Link
-              download={i.name}
-              href={i.url} target="_blank" rel="noreferrer" >
-              {i.name}
-            </Link>
-          </div>
+          return (
+            <div>
+              {index + 1}
+              .
+              <Link
+                download={i.name}
+                href={i.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {i.name}
+              </Link>
+            </div>
+          )
         })}
 
       </FieldContainer>
 
     </>
-  );
-};
+  )
+}
 // const onSubmitNewRelatedLink = () => {
 //     if (onChange) {
 //         const relatedLinksCopy = [...relatedLinks, { label: labelValue, href: hrefValue }]

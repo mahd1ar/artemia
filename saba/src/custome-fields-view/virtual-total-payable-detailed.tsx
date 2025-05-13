@@ -1,15 +1,11 @@
 import type { controller } from '@keystone-6/core/fields/types/virtual/views'
 import type { FieldProps } from '@keystone-6/core/types'
 import { ThemeContext } from '@emotion/react'
-import { useKeystone } from '@keystone-6/core/admin-ui/context'
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
-import { Button, Card, CardActions, CardContent, CardMedia, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { FieldContainer } from '@keystone-ui/fields'
+import { Card, CardContent, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material'
 import { green, teal } from '@mui/material/colors'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-
 import React from 'react'
-// @ts-expect-error: can not find types
 import { theme } from '../../data/utils'
 // import moneyPic from '../../admin/money.jpg'
 
@@ -30,15 +26,12 @@ function valueIsItem(value: any): value is Item[] {
 }
 
 export function Field({
-  field,
   value,
   itemValue,
 }: FieldProps<typeof controller>) {
   if (!valueIsItem(value)) {
     return <div>err</div>
   }
-
-  const router = useRouter()
 
   let totalPrice = 0n
 

@@ -677,7 +677,6 @@ export default function GroupsPage() {
                       index={inx}
                       parentId={i === 'index' ? null : i}
                       onClick={(i) => {
-                        console.log(i)
                         router.push(`/groups/${params.slice(0, inx + 1).join('/')}/${i}`)
                       }}
                       collapsed={inx < params.length - 3}

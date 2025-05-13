@@ -1,23 +1,23 @@
-import React, { ReactNode } from "react";
-import Link from "next/link";
-import { CellComponent, CardValueComponent, type FieldProps } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
+import type { CardValueComponent } from '@keystone-6/core/types'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import React from 'react'
 
 export const CardValue: CardValueComponent = ({ item, field }) => {
-
-  if(!item.title) {
+  if (!item.title) {
     return <span></span>
-    return  <FieldContainer>
-     <div style={{color: 'gray'}} ></div>
-    </FieldContainer>
+    return (
+      <FieldContainer>
+        <div style={{ color: 'gray' }}></div>
+      </FieldContainer>
+    )
   }
- 
+
   return (
     <FieldContainer>
       <FieldLabel>
         { field.label}
       </FieldLabel>
-     {item.title}
+      {item.title}
 
     </FieldContainer>
   )

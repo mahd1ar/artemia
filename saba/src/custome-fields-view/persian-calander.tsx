@@ -1,17 +1,13 @@
-import React from "react";
-import { CellComponent } from "@keystone-6/core/types";
-import { CellContainer, CellLink } from "@keystone-6/core/admin-ui/components";
-import Link from "next/link";
-import { type FieldProps } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
-import { type controller } from "@keystone-6/core/fields/types/timestamp/views";
-import DatePicker, { DateObject } from 'react-multi-date-picker'
+import type { controller } from '@keystone-6/core/fields/types/timestamp/views'
+import type { CellComponent, FieldProps } from '@keystone-6/core/types'
+import type { DateObject } from 'react-multi-date-picker'
+import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import { format, formatISO } from 'date-fns'
+import React from 'react'
 import persian from 'react-date-object/calendars/persian'
 import persian_fa from 'react-date-object/locales/persian_fa'
-import TimePicker from 'react-multi-date-picker/plugins/time_picker'
-import { jsx, Inline, Stack, Text } from '@keystone-ui/core'
-
-import { parse, isValid, formatISO, format } from 'date-fns'
+import DatePicker from 'react-multi-date-picker'
 
 const FULL_TIME_PATTERN = 'HH:mm:ss.SSS'
 
@@ -19,69 +15,33 @@ function formatFullTime(date: Date) {
   return format(date, FULL_TIME_PATTERN)
 }
 
-function formatTime(time: string) {
-  const date = parse(time, FULL_TIME_PATTERN, new Date())
-  if (date.getMilliseconds() !== 0) {
-    return format(date, FULL_TIME_PATTERN)
-  }
-  if (date.getSeconds() !== 0) {
-    return format(date, 'HH:mm:ss')
-  }
-  return format(date, 'HH:mm')
-}
-
-function parseTime(time: string) {
-  for (const pattern of ['H:m:s.SSS', 'H:m:s', 'H:m', 'H']) {
-    const parsed = parse(time, pattern, new Date())
-    if (isValid(parsed)) {
-      return format(parsed, FULL_TIME_PATTERN)
-    }
-  }
-  return undefined
-}
-
-
-export const Field = ({
+export function Field({
   field,
   value,
   onChange,
-  autoFocus,
-  itemValue,
-  forceValidation
-}: FieldProps<typeof controller>) => {
+}: FieldProps<typeof controller>) {
+  const [date] = React.useState(
 
-  console.log(value)
-
-  const [date, setDate] = React.useState(
-    //@ts-ignore
-    value?.initial ? new Date(value.initial) : null
+    value?.initial ? new Date(value.initial) : null,
   )
 
   function changeTime(event: DateObject | DateObject[] | null) {
-
     // console.log(field.fieldMeta)
     let unix: Date | null = null
     if (Array.isArray(event) === false && event && event?.unix) {
-
-
       unix = new Date(event.unix * 1000)
-
-
     }
     if (unix && value.kind === 'update') {
-      console.log({ onChange })
-      console.log(value)
-      console.log("value")
       onChange?.({
         kind: 'update',
         value: {
           dateValue: formatISO(new Date(unix), { representation: 'date' }), // '2024-07-08' ,
           timeValue: {
             kind: 'parsed',
-            value: formatFullTime(unix)
-          }
+            value: formatFullTime(unix),
+          },
         },
-        initial: unix.toJSON()
+        initial: unix.toJSON(),
       })
     }
 
@@ -100,9 +60,9 @@ export const Field = ({
             <div
               style={{
                 display: 'flex',
-                justifyItems: 'center'
+                justifyItems: 'center',
               }}
-              className='styled'
+              className="styled"
             >
               <DatePicker
                 style={{
@@ -125,10 +85,10 @@ export const Field = ({
                   resize: 'vertical',
                   transition:
                     'background-color 130ms,box-shadow 130ms,border-color 130ms',
-                  width: '100%'
+                  width: '100%',
                 }}
                 value={date ? date.getTime() : null}
-                format='DD/MM/YYYY HH:mm:ss'
+                format="DD/MM/YYYY HH:mm:ss"
                 calendar={persian}
                 locale={persian_fa}
                 onChange={e => changeTime(e)}
@@ -159,15 +119,15 @@ export const Field = ({
                   display: 'inline-flex',
                   alignItems: 'center',
                   color: 'rgb(107, 114, 128)',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 onClick={() => changeTime(null)}
               >
                 {/* clear */}
-                <svg width='24' height='24' viewBox='0 0 24 24'>
+                <svg width="24" height="24" viewBox="0 0 24 24">
                   <path
-                    fill='currentColor'
-                    d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'
+                    fill="currentColor"
+                    d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
                   />
                 </svg>
               </button>
@@ -178,14 +138,15 @@ export const Field = ({
       </FieldContainer>
 
     </>
-  );
-};
+  )
+}
 
 export const Cell: CellComponent = ({ item, field, linkTo }) => {
   let value = item[field.path]
-  if (value)
-    value =
-      new Date(value).toLocaleDateString("fa-IR", { dateStyle: 'full' })
+  if (value) {
+    value
+      = new Date(value).toLocaleDateString('fa-IR', { dateStyle: 'full' })
+  }
 
   return linkTo ? <CellLink {...linkTo}>{value}</CellLink> : <CellContainer>{value}</CellContainer>
 }

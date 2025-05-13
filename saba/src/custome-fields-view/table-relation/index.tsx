@@ -2,7 +2,7 @@
 import type { controller } from '@keystone-6/core/fields/types/relationship/views'
 import type { FieldProps } from '@keystone-6/core/types'
 import { useLazyQuery, useMutation } from '@apollo/client'
-import { useKeystone, useList } from '@keystone-6/core/admin-ui/context'
+import { useList } from '@keystone-6/core/admin-ui/context'
 import { Button } from '@keystone-ui/button'
 import { Stack } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, Select, TextArea, TextInput } from '@keystone-ui/fields'

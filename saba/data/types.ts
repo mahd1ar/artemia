@@ -1,5 +1,3 @@
-import type { Lists } from '.keystone/types'
-
 export type Session = {
   listKey: string
   itemId: string

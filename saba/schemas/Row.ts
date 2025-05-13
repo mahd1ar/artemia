@@ -1,10 +1,9 @@
 import type { Lists } from '.keystone/types'
 import type { Session } from '../data/types'
-import { graphql, group, list } from '@keystone-6/core'
+import { graphql, list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
 import { bigInt, float, integer, relationship, select, text, virtual } from '@keystone-6/core/fields'
 import { Roles } from '../data/types'
-import { NumUtils } from '../data/utils'
 
 export const Row = list<Lists.Row.TypeInfo<Session>>({
   access: allowAll,

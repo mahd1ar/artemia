@@ -2,7 +2,7 @@ import type { controller } from '@keystone-6/core/fields/types/virtual/views'
 import type { CardValueComponent, CellComponent, FieldProps } from '@keystone-6/core/types'
 import { css } from '@emotion/css'
 import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import React from 'react'
 import { NumUtils } from '../../data/utils'
 

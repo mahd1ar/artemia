@@ -1,11 +1,10 @@
 import type { Session } from './types'
-import { BaseItem, BaseKeystoneTypeInfo, BaseListTypeInfo, KeystoneContext, MaybeItemFunction, MaybeSessionFunction } from '@keystone-6/core/types'
 import { createTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Roles } from './types'
 
-export namespace NumUtils {
-  export function format(number: number | bigint) {
+export class NumUtils {
+  static format(number: number | bigint) {
     if (typeof number === 'number') {
       return Intl.NumberFormat('en-US').format(number)
     }
@@ -15,7 +14,7 @@ export namespace NumUtils {
       }
   }
 
-  export function deformat(number: string) {
+  static deformat(number: string) {
     return BigInt(number.replace(/,/g, ''))
   }
 }

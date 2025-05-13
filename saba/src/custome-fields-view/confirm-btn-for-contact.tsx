@@ -2,8 +2,7 @@
 import type { controller } from '@keystone-6/core/fields/types/checkbox/views'
 import type { FieldProps } from '@keystone-6/core/types'
 import { Button } from '@keystone-ui/button'
-import { Stack } from '@keystone-ui/core'
-import { FieldContainer, FieldLabel, TextArea, TextInput } from '@keystone-ui/fields'
+import { FieldContainer } from '@keystone-ui/fields'
 import React from 'react'
 
 export function Field({

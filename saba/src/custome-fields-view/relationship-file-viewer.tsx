@@ -1,10 +1,11 @@
-import { css } from "@emotion/css";
-import { CardValueComponent } from "@keystone-6/core/types";
-import { FieldContainer, FieldLabel } from "@keystone-ui/fields";
-import { ArrowDownIcon } from "@keystone-ui/icons";
-import React, { ReactNode } from "react";
+import type { CardValueComponent } from '@keystone-6/core/types'
+import type { ReactNode } from 'react'
+import { css } from '@emotion/css'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import { ArrowDownIcon } from '@keystone-ui/icons'
+import React from 'react'
 
-const ImageWrapper = ({ children, url }: { children: ReactNode, url?: string }) => {
+function ImageWrapper({ children, url }: { children: ReactNode, url?: string }) {
   if (url) {
     return (
       <a
@@ -48,8 +49,6 @@ const ImageWrapper = ({ children, url }: { children: ReactNode, url?: string }) 
   )
 }
 
-
-
 const styls = {
 
   flexcenter: css`
@@ -59,22 +58,19 @@ const styls = {
     flex-wrap: nowrap;
     justify-content: flex-center;
     align-items: center;
-    `
+    `,
 }
 
 export const CardValue: CardValueComponent = ({ item, field }) => {
-
-  let url: string = ""
-  let ext: string = ""
+  let url: string = ''
+  let ext: string = ''
   const imgextensions = ['jpg', 'png', 'jpeg', 'tiff', 'jfif']
 
   try {
-
     url = item.file.url
-    ext = item?.file?.filename?.split(".")?.at(-1) || ''
-
-
-  } catch (error) {
+    ext = item?.file?.filename?.split('.')?.at(-1) || ''
+  }
+  catch (error) {
     console.error(error)
   }
   return (
@@ -83,21 +79,25 @@ export const CardValue: CardValueComponent = ({ item, field }) => {
         {url && ext ? imgextensions.includes(ext) ? 'عکس' : 'فایل' : field.label}
       </FieldLabel>
       {
-        url && ext && imgextensions.includes(ext) ?
-          <ImageWrapper url={url} >
-            <img src={url} width='100%' alt="" />
-          </ImageWrapper>
+        url && ext && imgextensions.includes(ext)
+          ? (
+              <ImageWrapper url={url}>
+                <img src={url} width="100%" alt="" />
+              </ImageWrapper>
+            )
 
           : (
-            <a href={url} target="_blank"
-
-              className={styls.flexcenter}
-            >
-              Download File {/* TODO its best have a corespondig file icon  */}
-              <ArrowDownIcon />
-            </a>
-          )
-
+              <a
+                href={url}
+                target="_blank"
+                className={styls.flexcenter}
+              >
+                Download File
+                {' '}
+                {/* TODO its best have a corespondig file icon  */}
+                <ArrowDownIcon />
+              </a>
+            )
 
       }
 

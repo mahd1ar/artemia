@@ -4,11 +4,7 @@
 import type { controller } from '@keystone-6/core/fields/types/integer/views'
 import type { CardValueComponent, CellComponent, FieldProps } from '@keystone-6/core/types'
 import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
-import {
-  FieldController,
-  FieldControllerConfig,
-} from '@keystone-6/core/types'
-import { jsx } from '@keystone-ui/core'
+
 import { FieldContainer, FieldDescription, FieldLabel, TextInput } from '@keystone-ui/fields'
 import React, { useState } from 'react'
 import { useFormattedInput } from './utils/utils'
