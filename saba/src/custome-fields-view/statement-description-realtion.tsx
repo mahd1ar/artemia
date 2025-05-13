@@ -21,7 +21,11 @@ export function Field({
   onChange,
 }: FieldProps<typeof controller>) {
   if (value.kind !== 'one') {
-    throw new Error('Field must be of kind "one"')
+    return (
+      <div>
+        <p>value.kind is not one</p>
+      </div>
+    )
   }
 
   const firstOption: Option = {
@@ -218,7 +222,7 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
 
   async function onChangeProject(option: Option) {
     setSelectedProject(option)
-    const res = await loadApproval({ variables: { id: option.value } })
+    // const res = await loadApproval({ variables: { id: option.value } })
   }
 
   async function onChangeDescription(option: Option) {
@@ -230,6 +234,7 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
       },
       kind: 'one',
       id: value.id,
+
       initialValue: value.initialValue,
     })
   }

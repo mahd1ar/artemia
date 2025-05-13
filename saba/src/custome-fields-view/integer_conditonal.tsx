@@ -1,6 +1,3 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
 import type { controller } from '@keystone-6/core/fields/types/integer/views'
 import type { CardValueComponent, CellComponent, FieldProps } from '@keystone-6/core/types'
 import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
@@ -21,7 +18,7 @@ function IntegerInput({
   id: string
   autoFocus?: boolean
   value: number | string | null
-  onChange: (value: number | string | null) => void
+  onChange: (_value: number | string | null) => void
   forceValidation?: boolean
   validationMessage?: string
   placeholder?: string

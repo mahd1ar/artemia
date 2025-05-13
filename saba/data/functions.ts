@@ -1,5 +1,5 @@
 import type { BaseListTypeInfo, FieldTypeFunc } from '@keystone-6/core/types'
-import { json } from '@keystone-6/core/fields'
+import { json, relationship } from '@keystone-6/core/fields'
 import { Roles, type tableRelationConfig } from './types'
 
 export function parseTableRelationConfig(
@@ -68,6 +68,44 @@ export function changeLog<T extends BaseListTypeInfo>(itemTitle: keyof T['item']
         state.push(info)
 
         return JSON.stringify(state)
+      },
+    },
+  })
+}
+
+export function createdBy<T extends BaseListTypeInfo>(): FieldTypeFunc<T> {
+  return relationship({
+    ref: 'User',
+    many: false,
+    ui: {
+      createView: { fieldMode: 'hidden' },
+      itemView: {
+        fieldMode(args) {
+          const referer = args.context.req?.headers.referer
+          if (referer) {
+            const reff = new URL(referer)
+            const dbg = reff.searchParams.get('dbg')
+
+            if (dbg !== null && args.session?.data.role === Roles.admin) {
+              return 'edit'
+            }
+          }
+
+          return 'read'
+        },
+        fieldPosition: 'sidebar',
+      },
+    },
+    hooks: {
+      resolveInput(args) {
+        if (args.operation === 'create') {
+          const session = args.context.session
+          args.resolvedData = {
+            ...args.resolvedData,
+            createdBy: { connect: { id: session?.itemId } },
+          }
+        }
+        return args.resolvedData.createdBy
       },
     },
   })
