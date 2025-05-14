@@ -209,9 +209,9 @@ function Drawer(props: { listMeta: ListMeta[] }) {
     <div>
 
       {
-        menuItems.map(i => (
+        menuItems.map((i, ixi) => (
           <>
-            <List>
+            <List key={ixi}>
 
               {
                 i.map((j, inx) => (
@@ -238,12 +238,13 @@ function Drawer(props: { listMeta: ListMeta[] }) {
                           <Collapse in={openSub} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
                               {
-                                j.subItems.map(k => (
+                                j.subItems.map((k, ixk) => (
                                   <ListItemButton
                                     sx={{ pl: 4 }}
                                     onClick={() => {
                                       router.push(k.href || '#')
                                     }}
+                                    key={ixk}
                                   >
                                     <ListItemIcon>
                                       {k.icon || <InboxIcon />}

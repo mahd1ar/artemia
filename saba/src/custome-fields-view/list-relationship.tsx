@@ -1,8 +1,8 @@
 import type { controller } from '@keystone-6/core/fields/types/relationship/views'
 import type { FieldProps, ListMeta } from '@keystone-6/core/types'
 import { ThemeProvider } from '@emotion/react'
-import { CreateItemDrawer } from '@keystone-6/core/admin-ui/components'
-import { useList } from '@keystone-6/core/admin-ui/context'
+import { CreateItemDrawer, GraphQLErrorNotice } from '@keystone-6/core/admin-ui/components'
+import { useKeystone, useList } from '@keystone-6/core/admin-ui/context'
 import { Button } from '@keystone-ui/button'
 import { Stack } from '@keystone-ui/core'
 import { FieldContainer } from '@keystone-ui/fields'
@@ -135,20 +135,39 @@ export function Field({
     return null
 
   const foreignList = useList(field.refListKey)
+  const { createViewFieldModes } = useKeystone()
 
   if (value.kind === 'one') {
     return (
-      <CustomRelationshipView
-        foreignList={foreignList}
-        title={field.label}
-        listItems={value.value
-          ? [{
-              id: value.value.id,
-              label: value.value?.label,
-              path: `/${foreignList.path}/${value.value?.id}`,
-            }]
-          : []}
-      />
+      <>
+        <CustomRelationshipView
+          foreignList={foreignList}
+          title={field.label}
+          listItems={value.value
+            ? [{
+                id: value.value.id,
+                label: value.value?.label,
+                path: `/${foreignList.path}/${value.value?.id}`,
+              }]
+            : []}
+        />
+
+        <div>
+
+          {createViewFieldModes.state === 'error' && (
+            <GraphQLErrorNotice
+              networkError={
+                createViewFieldModes.error instanceof Error ? createViewFieldModes.error : undefined
+              }
+              errors={
+                createViewFieldModes.error instanceof Error ? undefined : createViewFieldModes.error
+              }
+            />
+          )}
+
+        </div>
+
+      </>
     )
   }
 
