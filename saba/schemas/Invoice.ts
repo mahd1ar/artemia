@@ -13,7 +13,7 @@ import {
 import { gql } from '@ts-gql/tag/no-transform'
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn } from '../data/access'
-import { changeLog } from '../data/functions'
+import { changeLog, createdBy } from '../data/functions'
 import { Notif } from '../data/message'
 import { getRoleFromArgs, Roles } from '../data/types'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
@@ -229,6 +229,14 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       },
     }),
 
+    payment: relationship({
+      label: 'واریزی ها',
+      ref: 'Payment',
+      ui: {
+        views: './src/custome-fields-view/createItem.tsx',
+      },
+    }),
+
     notes: relationship({
       ref: 'Note.invoice',
       many: true,
@@ -251,27 +259,8 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         },
       },
     }),
-    createdBy: relationship({
-      ref: 'User',
-      many: false,
-      hooks: {
-        resolveInput(args) {
-          if (args.operation === 'create')
-            return { connect: { id: args.context.session?.itemId } }
 
-          return args.resolvedData.createdBy
-        },
-      },
-      ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: {
-          fieldPosition: 'sidebar',
-          fieldMode(_args) {
-            return 'read'
-          },
-        },
-      },
-    }),
+    createdBy: createdBy(),
     changeLog: changeLog('title'),
 
   },
