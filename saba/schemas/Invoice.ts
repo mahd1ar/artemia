@@ -4,7 +4,6 @@ import type { ExcludesFalse } from '../data/utils'
 import { graphql, list } from '@keystone-6/core'
 import { allOperations } from '@keystone-6/core/access'
 import {
-  json,
   relationship,
   text,
   timestamp,
@@ -111,7 +110,7 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       },
     }),
     description: relationship({
-      label: ' شرح مصوبه',
+      label: ' ساختار شکست',
       ref: 'Description.invoices',
       many: false,
       ui: {
@@ -230,8 +229,8 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
     }),
 
     payment: relationship({
-      label: 'واریزی ها',
-      ref: 'Payment',
+      label: 'پرداخت ها',
+      ref: 'Payment.invoice',
       ui: {
         views: './src/custome-fields-view/createItem.tsx',
       },

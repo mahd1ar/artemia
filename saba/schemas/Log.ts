@@ -1,3 +1,4 @@
+import type { Lists } from '.keystone/types'
 import type { Session } from '../data/types'
 import { list } from '@keystone-6/core'
 import { allOperations } from '@keystone-6/core/access'
@@ -5,7 +6,7 @@ import { relationship, select, text, timestamp } from '@keystone-6/core/fields'
 import { isAdmin } from '../data/access'
 import { Roles } from '../data/types'
 
-export const Log = list({
+export const Log = list<Lists.PaymentItem.TypeInfo<Session>>({
   access: {
     operation: allOperations(isAdmin),
   },

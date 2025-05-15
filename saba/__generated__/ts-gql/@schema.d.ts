@@ -1,8 +1,8 @@
-// ts-gql-integrity:ac89f186c4e60d2fe74e8d4c863439e6
+// ts-gql-integrity:353aedb79aa06018c79453626854d732
 /*
 ts-gql-meta-begin
 {
-  "hash": "0724e1866ccd4035ae5578cacf4033e8"
+  "hash": "789d6493587dca79263c151f2222c7cb"
 }
 ts-gql-meta-end
 */
@@ -528,6 +528,7 @@ export type Invoice = {
   readonly totalPayable: BigInt | null;
   readonly attachments: ReadonlyArray<FileStore> | null;
   readonly attachmentsCount: number | null;
+  readonly payment: Payment | null;
   readonly notes: ReadonlyArray<Note> | null;
   readonly notesCount: number | null;
   readonly createdAt: DateTime | null;
@@ -586,6 +587,7 @@ export type InvoiceWhereInput = {
   readonly dateOfStatement?: PairFilter | null;
   readonly rows?: RowManyRelationFilter | null;
   readonly attachments?: FileStoreManyRelationFilter | null;
+  readonly payment?: PaymentWhereInput | null;
   readonly notes?: NoteManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
   readonly createdBy?: UserWhereInput | null;
@@ -617,6 +619,7 @@ export type InvoiceUpdateInput = {
   readonly dateOfStatement?: number | null;
   readonly rows?: RowRelateToManyForUpdateInput | null;
   readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
+  readonly payment?: PaymentRelateToOneForUpdateInput | null;
   readonly notes?: NoteRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
@@ -634,6 +637,12 @@ export type FileStoreRelateToManyForUpdateInput = {
   readonly set?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
   readonly create?: TSGQLMaybeArray<FileStoreCreateInput> | null;
   readonly connect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
+};
+
+export type PaymentRelateToOneForUpdateInput = {
+  readonly create?: PaymentCreateInput | null;
+  readonly connect?: PaymentWhereUniqueInput | null;
+  readonly disconnect?: boolean | null;
 };
 
 export type NoteRelateToManyForUpdateInput = {
@@ -655,6 +664,7 @@ export type InvoiceCreateInput = {
   readonly dateOfStatement?: number | null;
   readonly rows?: RowRelateToManyForCreateInput | null;
   readonly attachments?: FileStoreRelateToManyForCreateInput | null;
+  readonly payment?: PaymentRelateToOneForCreateInput | null;
   readonly notes?: NoteRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
@@ -669,6 +679,11 @@ export type ConstractorRelateToOneForCreateInput = {
 export type FileStoreRelateToManyForCreateInput = {
   readonly create?: TSGQLMaybeArray<FileStoreCreateInput> | null;
   readonly connect?: TSGQLMaybeArray<FileStoreWhereUniqueInput> | null;
+};
+
+export type PaymentRelateToOneForCreateInput = {
+  readonly create?: PaymentCreateInput | null;
+  readonly connect?: PaymentWhereUniqueInput | null;
 };
 
 export type NoteRelateToManyForCreateInput = {
@@ -1225,13 +1240,28 @@ export type Payment = {
   readonly id: string;
   readonly title: string | null;
   readonly dateOfPayment: number | null;
-  readonly statement: Statement | null;
   readonly description: string | null;
+  readonly paymentItems: ReadonlyArray<PaymentItem> | null;
+  readonly paymentItemsCount: number | null;
   readonly price: BigInt | null;
   readonly constractor: Constractor | null;
   readonly attachment: ImageFieldOutput | null;
-  readonly changeLog: JSON | null;
+  readonly statement: Statement | null;
+  readonly invoice: Invoice | null;
   readonly createdBy: User | null;
+  readonly changeLog: JSON | null;
+};
+
+export type PaymentpaymentItemsArgs = {
+  readonly where?: PaymentItemWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<PaymentItemOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: PaymentItemWhereUniqueInput | null;
+};
+
+export type PaymentpaymentItemsCountArgs = {
+  readonly where?: PaymentItemWhereInput;
 };
 
 export type ImageFieldOutput = {
@@ -1261,11 +1291,19 @@ export type PaymentWhereInput = {
   readonly id?: IDFilter | null;
   readonly title?: StringFilter | null;
   readonly dateOfPayment?: PairFilter | null;
-  readonly statement?: StatementWhereInput | null;
   readonly description?: StringFilter | null;
+  readonly paymentItems?: PaymentItemManyRelationFilter | null;
   readonly price?: BigIntNullableFilter | null;
   readonly constractor?: ConstractorWhereInput | null;
+  readonly statement?: StatementWhereInput | null;
+  readonly invoice?: InvoiceWhereInput | null;
   readonly createdBy?: UserWhereInput | null;
+};
+
+export type PaymentItemManyRelationFilter = {
+  readonly every?: PaymentItemWhereInput | null;
+  readonly some?: PaymentItemWhereInput | null;
+  readonly none?: PaymentItemWhereInput | null;
 };
 
 export type PaymentOrderByInput = {
@@ -1279,13 +1317,22 @@ export type PaymentOrderByInput = {
 export type PaymentUpdateInput = {
   readonly title?: string | null;
   readonly dateOfPayment?: number | null;
-  readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly description?: string | null;
+  readonly paymentItems?: PaymentItemRelateToManyForUpdateInput | null;
   readonly price?: BigInt | null;
   readonly constractor?: ConstractorRelateToOneForUpdateInput | null;
   readonly attachment?: ImageFieldInput | null;
-  readonly changeLog?: JSON | null;
+  readonly statement?: StatementRelateToOneForUpdateInput | null;
+  readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
+  readonly changeLog?: JSON | null;
+};
+
+export type PaymentItemRelateToManyForUpdateInput = {
+  readonly disconnect?: TSGQLMaybeArray<PaymentItemWhereUniqueInput> | null;
+  readonly set?: TSGQLMaybeArray<PaymentItemWhereUniqueInput> | null;
+  readonly create?: TSGQLMaybeArray<PaymentItemCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<PaymentItemWhereUniqueInput> | null;
 };
 
 export type ImageFieldInput = {
@@ -1300,13 +1347,80 @@ export type PaymentUpdateArgs = {
 export type PaymentCreateInput = {
   readonly title?: string | null;
   readonly dateOfPayment?: number | null;
-  readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly description?: string | null;
+  readonly paymentItems?: PaymentItemRelateToManyForCreateInput | null;
   readonly price?: BigInt | null;
   readonly constractor?: ConstractorRelateToOneForCreateInput | null;
   readonly attachment?: ImageFieldInput | null;
-  readonly changeLog?: JSON | null;
+  readonly statement?: StatementRelateToOneForCreateInput | null;
+  readonly invoice?: InvoiceRelateToOneForCreateInput | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
+  readonly changeLog?: JSON | null;
+};
+
+export type PaymentItemRelateToManyForCreateInput = {
+  readonly create?: TSGQLMaybeArray<PaymentItemCreateInput> | null;
+  readonly connect?: TSGQLMaybeArray<PaymentItemWhereUniqueInput> | null;
+};
+
+export type PaymentItem = {
+  readonly __typename: "PaymentItem";
+  readonly id: string;
+  readonly title: string | null;
+  readonly dateOfPayment: number | null;
+  readonly price: BigInt | null;
+  readonly attachment: ImageFieldOutput | null;
+  readonly payment: Payment | null;
+  readonly createdBy: User | null;
+  readonly changeLog: JSON | null;
+};
+
+export type PaymentItemWhereUniqueInput = {
+  readonly id?: string | null;
+};
+
+export type PaymentItemWhereInput = {
+  readonly AND?: TSGQLMaybeArray<PaymentItemWhereInput> | null;
+  readonly OR?: TSGQLMaybeArray<PaymentItemWhereInput> | null;
+  readonly NOT?: TSGQLMaybeArray<PaymentItemWhereInput> | null;
+  readonly id?: IDFilter | null;
+  readonly title?: StringFilter | null;
+  readonly dateOfPayment?: PairFilter | null;
+  readonly price?: BigIntNullableFilter | null;
+  readonly payment?: PaymentWhereInput | null;
+  readonly createdBy?: UserWhereInput | null;
+};
+
+export type PaymentItemOrderByInput = {
+  readonly id?: OrderDirection | null;
+  readonly title?: OrderDirection | null;
+  readonly dateOfPayment?: OrderDirection | null;
+  readonly price?: OrderDirection | null;
+};
+
+export type PaymentItemUpdateInput = {
+  readonly title?: string | null;
+  readonly dateOfPayment?: number | null;
+  readonly price?: BigInt | null;
+  readonly attachment?: ImageFieldInput | null;
+  readonly payment?: PaymentRelateToOneForUpdateInput | null;
+  readonly createdBy?: UserRelateToOneForUpdateInput | null;
+  readonly changeLog?: JSON | null;
+};
+
+export type PaymentItemUpdateArgs = {
+  readonly where: PaymentItemWhereUniqueInput;
+  readonly data: PaymentItemUpdateInput;
+};
+
+export type PaymentItemCreateInput = {
+  readonly title?: string | null;
+  readonly dateOfPayment?: number | null;
+  readonly price?: BigInt | null;
+  readonly attachment?: ImageFieldInput | null;
+  readonly payment?: PaymentRelateToOneForCreateInput | null;
+  readonly createdBy?: UserRelateToOneForCreateInput | null;
+  readonly changeLog?: JSON | null;
 };
 
 export type ImageStore = {
@@ -2278,6 +2392,12 @@ export type Mutation = {
   readonly updatePayments: ReadonlyArray<Payment | null> | null;
   readonly deletePayment: Payment | null;
   readonly deletePayments: ReadonlyArray<Payment | null> | null;
+  readonly createPaymentItem: PaymentItem | null;
+  readonly createPaymentItems: ReadonlyArray<PaymentItem | null> | null;
+  readonly updatePaymentItem: PaymentItem | null;
+  readonly updatePaymentItems: ReadonlyArray<PaymentItem | null> | null;
+  readonly deletePaymentItem: PaymentItem | null;
+  readonly deletePaymentItems: ReadonlyArray<PaymentItem | null> | null;
   readonly createImageStore: ImageStore | null;
   readonly createImageStores: ReadonlyArray<ImageStore | null> | null;
   readonly updateImageStore: ImageStore | null;
@@ -2553,6 +2673,31 @@ export type MutationdeletePaymentArgs = {
 
 export type MutationdeletePaymentsArgs = {
   readonly where: TSGQLMaybeArray<PaymentWhereUniqueInput>;
+};
+
+export type MutationcreatePaymentItemArgs = {
+  readonly data: PaymentItemCreateInput;
+};
+
+export type MutationcreatePaymentItemsArgs = {
+  readonly data: TSGQLMaybeArray<PaymentItemCreateInput>;
+};
+
+export type MutationupdatePaymentItemArgs = {
+  readonly where: PaymentItemWhereUniqueInput;
+  readonly data: PaymentItemUpdateInput;
+};
+
+export type MutationupdatePaymentItemsArgs = {
+  readonly data: TSGQLMaybeArray<PaymentItemUpdateArgs>;
+};
+
+export type MutationdeletePaymentItemArgs = {
+  readonly where: PaymentItemWhereUniqueInput;
+};
+
+export type MutationdeletePaymentItemsArgs = {
+  readonly where: TSGQLMaybeArray<PaymentItemWhereUniqueInput>;
 };
 
 export type MutationcreateImageStoreArgs = {
@@ -2910,6 +3055,9 @@ export type Query = {
   readonly payments: ReadonlyArray<Payment> | null;
   readonly payment: Payment | null;
   readonly paymentsCount: number | null;
+  readonly paymentItems: ReadonlyArray<PaymentItem> | null;
+  readonly paymentItem: PaymentItem | null;
+  readonly paymentItemsCount: number | null;
   readonly imageStores: ReadonlyArray<ImageStore> | null;
   readonly imageStore: ImageStore | null;
   readonly imageStoresCount: number | null;
@@ -3076,6 +3224,22 @@ export type QuerypaymentArgs = {
 
 export type QuerypaymentsCountArgs = {
   readonly where?: PaymentWhereInput;
+};
+
+export type QuerypaymentItemsArgs = {
+  readonly where?: PaymentItemWhereInput;
+  readonly orderBy?: TSGQLMaybeArray<PaymentItemOrderByInput>;
+  readonly take?: number | null;
+  readonly skip?: number;
+  readonly cursor?: PaymentItemWhereUniqueInput | null;
+};
+
+export type QuerypaymentItemArgs = {
+  readonly where: PaymentItemWhereUniqueInput;
+};
+
+export type QuerypaymentItemsCountArgs = {
+  readonly where?: PaymentItemWhereInput;
 };
 
 export type QueryimageStoresArgs = {

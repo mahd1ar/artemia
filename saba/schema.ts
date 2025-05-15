@@ -21,6 +21,7 @@ import {
   Log,
   Note,
   Payment,
+  PaymentItem,
   Project,
   Row,
   SafetyReport,
@@ -38,6 +39,7 @@ export const lists: Lists = {
   Contract,
   Statement,
   Payment,
+  PaymentItem,
   ImageStore,
 
   Constractor,

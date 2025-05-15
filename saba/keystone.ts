@@ -51,9 +51,7 @@ const configWithAuth = withAuth(
             try {
               ls.sort((a, b) => (new Date(b.slice(0, -3)).getTime()) - (new Date(a.slice(0, -3)).getTime()))
             }
-            catch (_) {
-
-            }
+            catch { }
 
             const x = await Promise.all(ls.map(async (li) => {
               return `## [ changelog ${li.replace('.md', '')} ] \n ${(await fs.readFile(path.resolve(process.cwd(), 'changelog', li))).toString()}`
@@ -115,39 +113,45 @@ const configWithAuth = withAuth(
         })
 
         app.get('/fixdb', async (req, res) => {
-          return res.json({ ok: 1, payload: null })
+          // this is for convertig every payment to payment item
           try {
             const session: Session = (await context.withRequest(req)).session
 
             if (session?.data.role !== Roles.admin)
               return res.status(401).json({ ok: false, message: 'unauthorized' })
+            // if query parameter "key" was note "master" return 401
+            if (req.query.key !== 'master')
+              return res.status(401).json({ ok: false, message: 'unauthorized' })
 
             const prisma = context.prisma as PrismaClient
 
             const result = await prisma.payment.findMany({
-              where: {
-                dateOfPayment: {
-                  not: null,
-                },
-              },
               select: {
                 id: true,
                 dateOfPayment: true,
+                title: true,
+                price: true,
+                attachment_id: true,
+                attachment_extension: true,
+                attachment_filesize: true,
+                attachment_height: true,
+                attachment_width: true,
               },
             })
 
-            const updatedValues = await Promise.resolve(result.map(async (i) => {
-              const updatedres = await prisma.payment.update({
-                where: {
-                  id: i.id,
-                },
-                data: {
-                  PaymentDate: new Date(i.dateOfPayment! * 1000).toISOString(),
-                },
-                select: { id: true },
-              })
-              return Promise.resolve(updatedres)
-            }))
+            const updatedValues = await prisma.paymentItem.createMany({
+              data: result.map(i => ({
+                title: i.title,
+                dateOfPayment: i.dateOfPayment!,
+                paymentId: i.id,
+                price: i.price,
+                attachment_id: i.attachment_id,
+                attachment_extension: i.attachment_extension,
+                attachment_filesize: i.attachment_filesize,
+                attachment_height: i.attachment_height,
+                attachment_width: i.attachment_width,
+              })),
+            })
 
             res.json({ ok: 1, payload: updatedValues })
           }
@@ -167,50 +171,53 @@ const configWithAuth = withAuth(
   }),
 )
 
-new CronJob(
-  '0 1 * * *', // cronTime
-  async () => {
-    const keystoneContext: Context
-      = (globalThis as any).keystoneContext || getContext(configWithAuth, PrismaModule)
+function startCronJob() {
+  const job = new CronJob(
+    '0 1 * * *', // cronTime
+    async () => {
+      const keystoneContext: Context
+        = (globalThis as any).keystoneContext || getContext(configWithAuth, PrismaModule)
 
-    // create an empty daily report
-    const today = new Date()
-    await keystoneContext.prisma.dailyReport.create({
-      data: {
-        date: today,
-      },
-    })
-
-    // find statement items without statement
-    // FIXME fucking fix this : all rows that are part of invoces are deleting aswell
-    // const statementItemsBatchPayload = await keystoneContext.prisma.row.deleteMany({
-    //   where: {
-    //     statement: null,
-
-    //   },
-    // })
-
-    // console.info(statementItemsBatchPayload.count + ' items are deleted')
-
-    // create safety report in first day of each mounth
-    const isFirstDayOfMounth = Intl.DateTimeFormat('us', { calendar: 'persian', day: 'numeric' }).format(today) === '3'
-    if (isFirstDayOfMounth) {
-      console.log('it a new date')
-      const data = await keystoneContext.prisma.safetyReport.create({
+      // create an empty daily report
+      const today = new Date()
+      await keystoneContext.prisma.dailyReport.create({
         data: {
           date: today,
         },
-        select: {
-          id: true,
-        },
       })
 
-      console.log(data)
-    }
-  }, // onTick
-  null, // onComplete
-  true, // start
-  'Asia/Tehran', // timeZone
-)
+      // find statement items without statement
+      // FIXME fucking fix this : all rows that are part of invoces are deleting aswell
+      // const statementItemsBatchPayload = await keystoneContext.prisma.row.deleteMany({
+      //   where: {
+      //     statement: null,
+
+      //   },
+      // })
+
+      // create safety report in first day of each mounth
+      const isFirstDayOfMounth = Intl.DateTimeFormat('us', { calendar: 'persian', day: 'numeric' }).format(today) === '3'
+      if (isFirstDayOfMounth) {
+        // Removed console.log('it a new date')
+        await keystoneContext.prisma.safetyReport.create({
+          data: {
+            date: today,
+          },
+          select: {
+            id: true,
+          },
+        })
+
+        // Removed console.log(data)
+      }
+    }, // onTick
+    null, // onComplete
+    true, // start
+    'Asia/Tehran', // timeZone
+  )
+  return job
+}
+
+startCronJob()
 
 export default configWithAuth

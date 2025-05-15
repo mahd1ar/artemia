@@ -252,7 +252,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
     }),
 
     statementDescription: relationship({
-      label: ' شرح مصوبه',
+      label: ' ساختار شکست',
       ref: 'Description.contracts',
       many: false,
       ui: {
