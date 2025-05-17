@@ -459,10 +459,9 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       },
     }),
 
-    peyments: relationship({
+    peyment: relationship({
       label: 'رسید پرداختی',
       ref: 'Payment.statement',
-      many: true,
       ui: {
         itemView: {
           fieldPosition(args) {

@@ -174,8 +174,6 @@ query GET_ROWS($where: RowWhereInput!) {
             dateOfPayment,
             constractorId,
           }
-
-          console.log('fromItemValue.current', fromItemValue.current)
         }
         catch (error) {
           addToast({ title: String(error), tone: 'negative' })
@@ -234,6 +232,7 @@ query GET_ROWS($where: RowWhereInput!) {
     setCheck(false)
     setIsOpen(false)
     setMode('auto')
+    setDisableAutoMode(false)
   }
 
   async function confirmCreate() {
@@ -380,6 +379,7 @@ query GET_ROWS($where: RowWhereInput!) {
               <Accordion
                 dir="rtl"
                 defaultExpanded
+                disabled={disableAutoMode}
                 expanded={mode === 'auto'}
                 onChange={() => setMode('auto')}
               >
@@ -393,53 +393,44 @@ query GET_ROWS($where: RowWhereInput!) {
                     اضافه کردن
                     اطلاعات
                     پرداخت
-                    از روی فاکتور
+                    از  فاکتور
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  {
-                    disableAutoMode
-                      ? '...'
-                      : (
-                          <Box paddingY="xlarge">
-                            <Stack gap="medium">
-                              <FieldLabel>
-                                عنوان
-                              </FieldLabel>
-                              <TextInput
-                                value={newItemTitle}
-                                onChange={(event) => {
-                                  setNewItemTitle(event.target.value)
-                                }}
-                              />
 
-                              <FieldLabel>
-                                فیش واریز
-                              </FieldLabel>
-                              <input
-                                type="file"
-                                onChange={({ target: { validity, files } }) => {
-                                  if (validity.valid)
-                                    setFileList(files)
-                                }}
-                              />
-                            </Stack>
-                          </Box>
-                        )
-                  }
+                  <Box paddingY="xlarge">
+                    <Stack gap="medium">
+                      <FieldLabel>
+                        عنوان
+                      </FieldLabel>
+                      <TextInput
+                        value={newItemTitle}
+                        onChange={(event) => {
+                          setNewItemTitle(event.target.value)
+                        }}
+                      />
+
+                      <FieldLabel>
+                        فیش واریز
+                      </FieldLabel>
+                      <input
+                        type="file"
+                        onChange={({ target: { validity, files } }) => {
+                          if (validity.valid)
+                            setFileList(files)
+                        }}
+                      />
+                    </Stack>
+                  </Box>
 
                 </AccordionDetails>
 
-                {
+                <AccordionActions>
+                  <Button onClick={confirmCreate} color="success" variant="contained" disableElevation>
+                    اضافه کردن سند پرداخت
+                  </Button>
+                </AccordionActions>
 
-                  !disableAutoMode && (
-                    <AccordionActions>
-                      <Button onClick={confirmCreate} color="success" variant="contained" disableElevation>
-                        اضافه کردن سند پرداخت
-                      </Button>
-                    </AccordionActions>
-                  )
-                }
               </Accordion>
 
               <Accordion

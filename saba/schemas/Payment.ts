@@ -98,7 +98,7 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
       },
     }),
     statement: relationship({
-      ref: 'Statement.peyments',
+      ref: 'Statement.peyment',
       many: false,
       ui: {
         createView: { fieldMode: 'hidden' },

@@ -123,37 +123,9 @@ const configWithAuth = withAuth(
             if (req.query.key !== 'master')
               return res.status(401).json({ ok: false, message: 'unauthorized' })
 
-            const prisma = context.prisma as PrismaClient
+            // const prisma = context.prisma as PrismaClient
 
-            const result = await prisma.payment.findMany({
-              select: {
-                id: true,
-                dateOfPayment: true,
-                title: true,
-                price: true,
-                attachment_id: true,
-                attachment_extension: true,
-                attachment_filesize: true,
-                attachment_height: true,
-                attachment_width: true,
-              },
-            })
-
-            const updatedValues = await prisma.paymentItem.createMany({
-              data: result.map(i => ({
-                title: i.title,
-                dateOfPayment: i.dateOfPayment!,
-                paymentId: i.id,
-                price: i.price,
-                attachment_id: i.attachment_id,
-                attachment_extension: i.attachment_extension,
-                attachment_filesize: i.attachment_filesize,
-                attachment_height: i.attachment_height,
-                attachment_width: i.attachment_width,
-              })),
-            })
-
-            res.json({ ok: 1, payload: updatedValues })
+            res.json({ ok: 1, payload: null })
           }
           catch (err) {
             // eslint-disable-next-line no-console
