@@ -136,9 +136,11 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
         // displayMode: 'select'
       },
     }),
+    // TODO delete this later and replace it with "Date" and remember to change itemValue of of createitem file
     dateOfStatement: persianCalendar({
       label: 'تاریخ فاکتور',
     }),
+
     rows: relationship({
       label: 'آیتم ها',
       ref: 'Row.invoice',

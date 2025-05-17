@@ -25,6 +25,10 @@ const GETUSER = gql`
   }
 ` as import('../../__generated__/ts-gql/GETUSER').type
 
+function capitalizeFirstLetter(string: string) {
+  return string.split('-').map(i => i.charAt(0).toUpperCase() + i.slice(1)).join('')
+}
+
 function FolderList(srt: { values?: string }) {
   const router = useRouter()
   const param = router.asPath.split('/').filter(Boolean).at(0)
@@ -32,7 +36,7 @@ function FolderList(srt: { values?: string }) {
     ? 'Invoice'
     : param === 'statements'
       ? 'Statement'
-      : param === 'contracts' ? 'Contract' : param?.slice(0, -1).split('').map((i, inx) => inx === 0 ? i.toUpperCase() : i).join('')
+      : param === 'contracts' ? 'Contract' : capitalizeFirstLetter(param?.slice(0, -1) || '')
 
   if (!srt.values)
     return null
