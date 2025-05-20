@@ -112,9 +112,6 @@ query GET_ROWS($where: RowWhereInput!) {
     constractorId: '',
   })
 
-  useEffect(() => {
-  }, [])
-
   React.useEffect(() => {
     console.log(itemValue)
     if (isOpen) {
@@ -214,15 +211,24 @@ query GET_ROWS($where: RowWhereInput!) {
 
   useEffect(() => {
     if (mode === 'manual') {
-      if (createItemState?.props?.value?.title && !createItemState.props.value.title?.value?.inner?.value) {
-        createItemState.props.value.title = {
-          kind: 'value',
-          value: {
-            inner: {
-              kind: 'value',
-              value: newItemTitle,
+      console.log(createItemState)
+      console.log(itemValue)
+
+      if (refFieldKey === 'invoice') {
+        if (createItemState?.props?.value?.title && !createItemState.props.value.title?.value?.inner?.value) {
+          createItemState.props.value.title = {
+            kind: 'value',
+            value: {
+              inner: {
+                kind: 'value',
+                value: newItemTitle,
+              },
             },
-          },
+          }
+        }
+
+        if (createItemState.props.value.constractor.kind === 'value') {
+          createItemState.props.value.constractor.value = { ...itemValue.contractor.value }
         }
       }
     }

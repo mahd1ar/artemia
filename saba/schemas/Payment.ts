@@ -1,9 +1,10 @@
 import type { Lists } from '.keystone/types'
-import { list } from '@keystone-6/core'
+import type { Session } from '../data/types'
+import { graphql, list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
-import { bigInt, image, relationship, text } from '@keystone-6/core/fields'
+import { image, relationship, text, timestamp, virtual } from '@keystone-6/core/fields'
+import { gql } from '@ts-gql/tag/no-transform'
 import { changeLog, createdBy } from '../data/functions'
-import { Roles, type Session } from '../data/types'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
 
 export const Payment = list<Lists.Payment.TypeInfo<Session>>({
@@ -69,17 +70,39 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
         linkToItem: false,
       },
     }),
-    // TODO deprecated delete this after fixing the db
-    // TODO this field can be replaced with sum of paymentItems's price
-    price: bigInt({
-      label: 'مبلغ',
-      validation: {
-        min: BigInt(0),
-      },
+
+    totalGross: virtual({
+      label: 'جمع کل',
+      field: graphql.field({
+        type: graphql.BigInt,
+        async resolve(item, _, context) {
+          const ITEMSPAYMENTITEMS = gql`
+            query ITEMSPAYMENTITEMS($id: ID!) {
+            payment(where: {id: $id}) {
+              id
+              paymentItems {
+                price
+              }
+            }
+          }
+          ` as import('../__generated__/ts-gql/ITEMSPAYMENTITEMS').type
+
+          const res = await context.graphql.run({
+            query: ITEMSPAYMENTITEMS,
+            variables: {
+              id: item.id,
+            },
+          })
+
+          return res.payment?.paymentItems?.reduce((acc, curr) => acc + BigInt(curr.price), 0n) || 0n
+        },
+      }),
       ui: {
-        views: './src/custome-fields-view/bigint-with-farsi-letters.tsx',
         createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        views: './src/custome-fields-view/bigint-viewer.tsx',
       },
     }),
     constractor: relationship({
@@ -100,18 +123,17 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
     statement: relationship({
       ref: 'Statement.peyment',
       many: false,
+      label: 'صورت وضعیت',
       ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: {
+        createView: {
           fieldMode(args) {
-            const role = args.session?.data.role
-
-            if (role === Roles.admin || role === Roles.operator) {
-              return 'edit'
+            const url = args.context.req?.headers.referer
+            if (url) {
+              const reff = new URL(url)
+              const referer = (reff.pathname.split('/').filter(Boolean).at(0))
+              return referer !== 'payments' ? 'hidden' : 'edit'
             }
-            else {
-              return 'read'
-            }
+            return 'edit'
           },
         },
       },
@@ -121,10 +143,37 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
       many: false,
       label: 'فاکتور',
       ui: {
-        createView: { fieldMode: 'hidden' },
+        createView: {
+          fieldMode(args) {
+            const url = args.context.req?.headers.referer
+            if (url) {
+              const reff = new URL(url)
+              const referer = (reff.pathname.split('/').filter(Boolean).at(0))
+              return referer !== 'payments' ? 'hidden' : 'edit'
+            }
+            return 'edit'
+          },
+        },
       },
     }),
     createdBy: createdBy(),
+    createdAt: timestamp({
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode: 'read',
+          fieldPosition: 'sidebar',
+        },
+      },
+      hooks: {
+        resolveInput: ({ resolvedData, operation }) => {
+          if (operation === 'create') {
+            resolvedData.createdAt = new Date()
+          }
+          return resolvedData.createdAt
+        },
+      },
+    }),
     changeLog: changeLog('title'),
 
   },

@@ -1,8 +1,8 @@
-// ts-gql-integrity:75143ae085f7f5754917855586699b86
+// ts-gql-integrity:7d4c27c23badfeb4bc87feb532c61435
 /*
 ts-gql-meta-begin
 {
-  "hash": "daca1bec4799f3ba45ff4fbd43da53e7"
+  "hash": "5812cd2c3096ccee28932e2a9ec7afa8"
 }
 ts-gql-meta-end
 */

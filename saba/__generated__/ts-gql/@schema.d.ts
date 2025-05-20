@@ -1,8 +1,8 @@
-// ts-gql-integrity:353aedb79aa06018c79453626854d732
+// ts-gql-integrity:8dbaa93f043f820bff0a15c491675422
 /*
 ts-gql-meta-begin
 {
-  "hash": "789d6493587dca79263c151f2222c7cb"
+  "hash": "2e7d27ac56c050ca506380bd54b73a0f"
 }
 ts-gql-meta-end
 */
@@ -1058,8 +1058,7 @@ export type Statement = {
   readonly sateOfStatement: number | null;
   readonly attachments: ReadonlyArray<FileStore> | null;
   readonly attachmentsCount: number | null;
-  readonly peyments: ReadonlyArray<Payment> | null;
-  readonly peymentsCount: number | null;
+  readonly peyment: Payment | null;
   readonly rows: ReadonlyArray<Row> | null;
   readonly rowsCount: number | null;
   readonly grossTotal: BigInt | null;
@@ -1084,18 +1083,6 @@ export type StatementattachmentsArgs = {
 
 export type StatementattachmentsCountArgs = {
   readonly where?: FileStoreWhereInput;
-};
-
-export type StatementpeymentsArgs = {
-  readonly where?: PaymentWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<PaymentOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: PaymentWhereUniqueInput | null;
-};
-
-export type StatementpeymentsCountArgs = {
-  readonly where?: PaymentWhereInput;
 };
 
 export type StatementrowsArgs = {
@@ -1141,7 +1128,7 @@ export type StatementWhereInput = {
   readonly contract?: ContractWhereInput | null;
   readonly sateOfStatement?: PairFilter | null;
   readonly attachments?: FileStoreManyRelationFilter | null;
-  readonly peyments?: PaymentManyRelationFilter | null;
+  readonly peyment?: PaymentWhereInput | null;
   readonly rows?: RowManyRelationFilter | null;
   readonly deductionOnAccountOfAdvancePayment?: BigIntNullableFilter | null;
   readonly workGuarantee?: BigIntNullableFilter | null;
@@ -1149,12 +1136,6 @@ export type StatementWhereInput = {
   readonly notes?: NoteManyRelationFilter | null;
   readonly status?: StringNullableFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
-};
-
-export type PaymentManyRelationFilter = {
-  readonly every?: PaymentWhereInput | null;
-  readonly some?: PaymentWhereInput | null;
-  readonly none?: PaymentWhereInput | null;
 };
 
 export type StatementOrderByInput = {
@@ -1185,7 +1166,7 @@ export type StatementUpdateInput = {
   readonly contract?: ContractRelateToOneForUpdateInput | null;
   readonly sateOfStatement?: number | null;
   readonly attachments?: FileStoreRelateToManyForUpdateInput | null;
-  readonly peyments?: PaymentRelateToManyForUpdateInput | null;
+  readonly peyment?: PaymentRelateToOneForUpdateInput | null;
   readonly rows?: RowRelateToManyForUpdateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
@@ -1194,13 +1175,6 @@ export type StatementUpdateInput = {
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
-};
-
-export type PaymentRelateToManyForUpdateInput = {
-  readonly disconnect?: TSGQLMaybeArray<PaymentWhereUniqueInput> | null;
-  readonly set?: TSGQLMaybeArray<PaymentWhereUniqueInput> | null;
-  readonly create?: TSGQLMaybeArray<PaymentCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<PaymentWhereUniqueInput> | null;
 };
 
 export type StatementUpdateArgs = {
@@ -1219,7 +1193,7 @@ export type StatementCreateInput = {
   readonly contract?: ContractRelateToOneForCreateInput | null;
   readonly sateOfStatement?: number | null;
   readonly attachments?: FileStoreRelateToManyForCreateInput | null;
-  readonly peyments?: PaymentRelateToManyForCreateInput | null;
+  readonly peyment?: PaymentRelateToOneForCreateInput | null;
   readonly rows?: RowRelateToManyForCreateInput | null;
   readonly deductionOnAccountOfAdvancePayment?: BigInt | null;
   readonly workGuarantee?: BigInt | null;
@@ -1228,11 +1202,6 @@ export type StatementCreateInput = {
   readonly status?: string | null;
   readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
-};
-
-export type PaymentRelateToManyForCreateInput = {
-  readonly create?: TSGQLMaybeArray<PaymentCreateInput> | null;
-  readonly connect?: TSGQLMaybeArray<PaymentWhereUniqueInput> | null;
 };
 
 export type Payment = {

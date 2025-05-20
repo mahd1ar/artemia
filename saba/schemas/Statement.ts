@@ -174,14 +174,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
                           url
                         }
                       }
-                      peyments {
-                        id
-                        title
-                        description
-                        attachment {
-                          url
-                        }
-                      }
                     }
                   }
                 ` as import('../__generated__/ts-gql/CURRENT_STATEMENT').type
@@ -198,12 +190,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
                     await Notif.sendStatementAttachmenets(
                       currentStatement.statement?.title || '',
                       currentStatement.statement?.attachments?.map(i => i.file && i.file.url ? ({ label: i.title || '', url: i.file.url || '' }) : null).filter(Boolean as unknown as ExcludesFalse) || [],
-                      currentStatement.statement?.peyments?.map(i => i.attachment?.url
-                        ? ({
-                            label: `${i.title || ''} | ${i.description || ''}`,
-                            url: i.attachment.url || '',
-                          })
-                        : null).filter(Boolean as unknown as ExcludesFalse) || [],
+                      null,
                     )
                   }, 1000)
                 }
@@ -473,15 +460,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
             return 'sidebar'
           },
         },
-        cardFields: ['attachment', 'price', 'dateOfPayment', 'description', 'constractor'],
-        displayMode: 'cards',
-        inlineConnect: false,
-        inlineCreate: {
-          fields: ['attachment', 'price', 'dateOfPayment', 'description', 'constractor'],
-        },
-        inlineEdit: {
-          fields: ['attachment', 'price', 'dateOfPayment', 'description', 'constractor'],
-        },
+        views: './src/custome-fields-view/createItem.tsx',
       },
     }),
 
