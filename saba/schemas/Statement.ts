@@ -115,28 +115,6 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
           },
         })
       }
-      else {
-        if (args.inputData.peyments) {
-          if (args.item.id) {
-            await prisma.payment.updateMany({
-              where: {
-                statement: {
-                  id: {
-                    equals: String(args.item!.id),
-                  },
-                },
-              },
-              data: {
-                // TODO check this on create item (operation===create)
-                title:
-                  `${args.inputData.title
-                  || args.item.title
-                  || args.resolvedData.title} رسید `,
-              },
-            })
-          }
-        }
-      }
 
       if (args.operation === 'update') {
         let conformationHappend = false
