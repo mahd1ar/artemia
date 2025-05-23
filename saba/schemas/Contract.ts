@@ -388,8 +388,8 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
       }),
 
     }),
-    totalPaid: virtual({
-      label: 'جمع کل کارکرد',
+    totalPayable: virtual({
+      label: 'جمع کل قابل پرداخت',
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
@@ -441,6 +441,47 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
           if (lastestTempStatement)
             return lastestTempStatement.grossTotal ? BigInt(lastestTempStatement.grossTotal) : 0n
           return 0n
+        },
+      }),
+    }),
+    totalPaid: virtual({
+      label: 'جمع پرداخت شده',
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode: 'read',
+          fieldPosition: 'sidebar',
+        },
+        views: './src/custome-fields-view/bigint-viewer.tsx',
+      },
+      field: graphql.field({
+        type: graphql.nonNull(graphql.BigInt),
+        async resolve(item, args, context) {
+          const CORESPONDING_STATEMENTS_WITH_PAYMENT = gql`
+              query CORESPONDING_STATEMENTS_WITH_PAYMENT($contractId: ID!) {
+                  statements(where: { contract: { id: { equals: $contractId }} }) {
+                      id
+                      peyment {
+                        grossTotal
+                      }
+                  }
+              }
+          ` as import('../__generated__/ts-gql/CORESPONDING_STATEMENTS_WITH_PAYMENT').type
+
+          const { statements } = await context.graphql.run({
+            query: CORESPONDING_STATEMENTS_WITH_PAYMENT,
+            variables: {
+              contractId: item.id,
+            },
+          })
+
+          if (!statements)
+            return 0n
+
+          if (statements.length === 0)
+            return 0n
+
+          return statements.reduce((sum, { peyment }) => sum + (peyment?.grossTotal ? BigInt(peyment?.grossTotal) : 0n), 0n)
         },
       }),
     }),

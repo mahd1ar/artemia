@@ -106,7 +106,7 @@ export const Project = list<Lists.Project.TypeInfo<Session>>({
     outside: relationship({
       ui: {
         itemView: {
-          fieldMode: 'read',
+          fieldMode: 'edit',
         },
         createView: {
           fieldMode: 'hidden',
@@ -119,11 +119,12 @@ export const Project = list<Lists.Project.TypeInfo<Session>>({
     onGoing: relationship({
       ui: {
         itemView: {
-          fieldMode: 'read',
+          fieldMode: 'edit',
         },
         createView: {
           fieldMode: 'hidden',
         },
+
         views: './src/custome-fields-view/list-relationship.tsx',
       },
       ref: 'Description.fromOnGoingProject',

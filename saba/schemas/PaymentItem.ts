@@ -19,7 +19,9 @@ export const PaymentItem = list<Lists.PaymentItem.TypeInfo<Session>>({
     },
   },
   fields: {
-    title: text(),
+    title: text({
+      label: 'عنوان / شرح',
+    }),
     dateOfPayment: persianCalendar({
       label: 'تاریخ پرداخت',
     }),

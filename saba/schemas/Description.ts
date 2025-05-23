@@ -10,10 +10,10 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
   access: allowAll, // FIXME
 
   ui: {
-    label: 'شرح مصوبات',
-    plural: 'شرح مصوبات',
+    label: 'ساختار شکست',
+    plural: 'ساخنار های شکست',
     listView: {
-      initialColumns: ['subject', 'totalStatementsPayed', 'totalInvoicesPayable'],
+      initialColumns: ['subject', 'totalStatementsPayed', 'totalInvoicesPayed'],
       initialSort: {
         field: 'title',
         direction: 'ASC',
@@ -25,6 +25,11 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
       ui: {
         createView: {
           fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode(args) {
+            return args.item.approvalsId ? 'read' : 'hidden'
+          },
         },
       },
       field: graphql.field({
@@ -74,11 +79,13 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
       },
     }),
     approvals: relationship({
+      label: 'مصوبه متناظر',
       ref: 'Approval.description',
       many: false,
       ui: {
         itemView: {
-          fieldMode: 'hidden',
+          fieldMode: 'read',
+          fieldPosition: 'sidebar',
         },
         createView: {
           fieldMode: 'hidden',
@@ -208,32 +215,120 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
         },
       }),
     }),
-    totalPayed: virtual({
-      label: 'مجموع پرداختی  ها',
+
+    status: virtual({
       ui: {
-        views: './src/custome-fields-view/virtual-total-payable-detailed.tsx',
-        createView: {
-          fieldMode: 'hidden',
-        },
-        itemView: {
-          fieldPosition() {
-            return 'sidebar'
-          },
-        },
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' },
+        listView: { fieldMode: 'hidden' },
       },
       field: graphql.field({
-        type: graphql.JSON,
-        async resolve() {
-          return [
-            {
-              id: 'totalInvoicesPayed',
-              label: 'مجموع  فاکتور ها',
+        type: graphql.nonNull(
+          graphql.object<{
+            percentageOfPhysicalProgress: number
+            totalStatementsPayed: bigint
+            totalInvoicesPayed: bigint
+            totalPayed: bigint
+          }>()({
+            name: 'DescriptionStatus',
+            fields: {
+              percentageOfPhysicalProgress: graphql.field({ type: graphql.nonNull(graphql.Int) }),
+              totalStatementsPayed: graphql.field({ type: graphql.nonNull(graphql.BigInt) }),
+              totalInvoicesPayed: graphql.field({ type: graphql.nonNull(graphql.BigInt) }),
+              totalPayed: graphql.field({ type: graphql.nonNull(graphql.BigInt) }),
             },
-            {
-              id: 'totalStatementsPayable',
-              label: 'مجموع صورت وضعیت ها',
+          }),
+        ),
+        async resolve(item, args, context) {
+          // Always return a value of the expected type
+          if (!item.id) {
+            return {
+              percentageOfPhysicalProgress: 0,
+              totalStatementsPayed: 0n,
+              totalInvoicesPayed: 0n,
+              totalPayed: 0n,
+            }
+          }
+
+          const EXTRACT_STATUS = gql`
+          query EXTRACT_STATUS($where: DescriptionWhereUniqueInput!) {
+            description(where: $where) {
+              invoices {
+                payment {
+                  grossTotal
+                }
+              }
+              contracts {
+                id
+                physicalProgress
+                totalPaid
+              }
+            }
+          }` as import('../__generated__/ts-gql/EXTRACT_STATUS').type
+
+          const sudo = context.sudo()
+          const { description } = await sudo.graphql.run({
+            query: EXTRACT_STATUS,
+            variables: {
+              where: {
+                id: item.id,
+              },
             },
-          ]
+          })
+
+          if (!description) {
+            return {
+              percentageOfPhysicalProgress: 0,
+              totalStatementsPayed: 0n,
+              totalInvoicesPayed: 0n,
+              totalPayed: 0n,
+            }
+          }
+
+          const percentageOfPhysicalProgress = (description.contracts?.map(i => i.physicalProgress) || []).reduce((a, b) => a + b, 0) / (description.contracts?.length || 1)
+          const totalStatementsPayed = (description.contracts?.map(i => BigInt(i.totalPaid)) || []).reduce((a, b) => a + b, 0n)
+          const totalInvoicesPayed = (description.invoices?.map(i => i.payment?.grossTotal ? BigInt(i.payment.grossTotal) : 0n) || []).reduce((a, b) => a + b, 0n) as bigint
+
+          return {
+            percentageOfPhysicalProgress,
+            totalStatementsPayed,
+            totalInvoicesPayed,
+            totalPayed: totalStatementsPayed + totalInvoicesPayed,
+          }
+        },
+      }),
+    }),
+    statusView: virtual({
+      ui: {
+        views: './src/custome-fields-view/description-status-card.tsx',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldPosition() { return 'sidebar' } },
+      },
+      field: graphql.field({
+        type: graphql.nonNull(
+          graphql.JSON,
+        ),
+        async resolve(item, args, context) {
+          // Always return a value of the expected type
+          if (!item.id) {
+            return {
+              percentageOfPhysicalProgress: 0,
+              totalStatementsPayed: '0',
+              totalInvoicesPayed: '0',
+              totalPayed: '0',
+            }
+          }
+
+          const d = await context.query.Description.findOne({
+            where: { id: item.id },
+            query: 'status { percentageOfPhysicalProgress, totalStatementsPayed, totalInvoicesPayed, totalPayed } ',
+          })
+          return {
+            percentageOfPhysicalProgress: d?.status?.percentageOfPhysicalProgress || 0,
+            totalStatementsPayed: d?.status?.totalStatementsPayed !== undefined ? String(d.status.totalStatementsPayed) : '0',
+            totalInvoicesPayed: d?.status?.totalInvoicesPayed !== undefined ? String(d.status.totalInvoicesPayed) : '0',
+            totalPayed: d?.status?.totalPayed !== undefined ? String(d.status.totalPayed) : '0',
+          }
         },
       }),
     }),

@@ -485,12 +485,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
               query: 'total',
             })
 
-            let total = 0n
-
-            for (const i of x)
-              total += BigInt(i.total)
-
-            return total
+            return x.reduce((sum, { total }) => sum + BigInt(total), 0n)
           }
           else {
             return 0n
@@ -583,10 +578,13 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       defaultValue: 'pending',
       ui: {
         displayMode: 'segmented-control',
+        // TODO remove this field completely, we don't need it
         createView: { fieldMode: 'hidden' },
+        itemView: {
+          fieldMode: 'hidden',
+        },
       },
     }),
-
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
       ui: {

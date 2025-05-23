@@ -93,7 +93,7 @@ function CustomRelationshipView(props: {
 
           </List>
         </ThemeProvider>
-        { props.isMany && (
+        { (props.isMany || props.listItems.length === 0) && (
           <Button
             onClick={() => setIsDrawerOpen(true)}
           >
@@ -150,6 +150,14 @@ export function Field({
                 path: `/${foreignList.path}/${value.value?.id}`,
               }]
             : []}
+          onCreateItem={onChange
+            ? (val) => {
+                onChange({
+                  ...value,
+                  value: { id: val.id, label: val.label },
+                })
+              }
+            : undefined}
         />
 
         <div>

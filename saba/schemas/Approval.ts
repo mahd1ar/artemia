@@ -48,13 +48,13 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
       },
     }),
     explanation: text({
-      label: 'شرح مصوبات',
+      label: 'شرح مصوبه',
       ui: {
         displayMode: 'textarea',
       },
     }),
     estimatedBudget: bigInt({
-      label: 'بودجه تخمینی',
+      label: 'بودجه پیشبینی شده (تخمینی)',
       ui: {
         views: './src/custome-fields-view/bigint-with-farsi-letters.tsx',
       },

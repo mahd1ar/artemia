@@ -1,6 +1,20 @@
-import type { BaseListTypeInfo, FieldTypeFunc } from '@keystone-6/core/types'
+import type { BaseListTypeInfo, FieldTypeFunc, KeystoneContext } from '@keystone-6/core/types'
 import { json, relationship } from '@keystone-6/core/fields'
 import { Roles, type tableRelationConfig } from './types'
+
+export function isInDebugMode(ctx: KeystoneContext<any>) {
+  const referer = ctx.req?.headers.referer
+  if (referer) {
+    const reff = new URL(referer)
+    const dbg = reff.searchParams.get('dbg')
+
+    if (dbg !== null) {
+      return true
+    }
+  }
+
+  return false
+}
 
 export function parseTableRelationConfig(
   config: string,

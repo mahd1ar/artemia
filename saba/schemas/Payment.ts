@@ -71,7 +71,7 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
       },
     }),
 
-    totalGross: virtual({
+    grossTotal: virtual({
       label: 'جمع کل',
       field: graphql.field({
         type: graphql.BigInt,

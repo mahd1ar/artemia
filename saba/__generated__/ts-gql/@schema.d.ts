@@ -1,8 +1,8 @@
-// ts-gql-integrity:8dbaa93f043f820bff0a15c491675422
+// ts-gql-integrity:7dbe18d28fb2b735e485af47093efa2e
 /*
 ts-gql-meta-begin
 {
-  "hash": "2e7d27ac56c050ca506380bd54b73a0f"
+  "hash": "ea72b1cef210a8afc515413d2f012f0e"
 }
 ts-gql-meta-end
 */
@@ -385,6 +385,7 @@ export type Description = {
   readonly totalStatementsPayable: BigInt | null;
   readonly totalInvoicesPayed: BigInt | null;
   readonly totalPayed: JSON | null;
+  readonly status: DescriptionStatus;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
@@ -411,6 +412,14 @@ export type DescriptioninvoicesArgs = {
 
 export type DescriptioninvoicesCountArgs = {
   readonly where?: InvoiceWhereInput;
+};
+
+export type DescriptionStatus = {
+  readonly __typename: "DescriptionStatus";
+  readonly percentageOfPhysicalProgress: string;
+  readonly totalStatementsPayed: BigInt;
+  readonly totalInvoicesPayable: BigInt;
+  readonly totalPayed: BigInt;
 };
 
 export type DescriptionWhereUniqueInput = {
@@ -884,6 +893,7 @@ export type Contract = {
   readonly statements: ReadonlyArray<Statement> | null;
   readonly statementsCount: number | null;
   readonly physicalProgress: number;
+  readonly totalPayable: BigInt;
   readonly totalPaid: BigInt;
   readonly attachment: FileFieldOutput | null;
   readonly createdAt: DateTime | null;
@@ -1212,12 +1222,13 @@ export type Payment = {
   readonly description: string | null;
   readonly paymentItems: ReadonlyArray<PaymentItem> | null;
   readonly paymentItemsCount: number | null;
-  readonly price: BigInt | null;
+  readonly grossTotal: BigInt | null;
   readonly constractor: Constractor | null;
   readonly attachment: ImageFieldOutput | null;
   readonly statement: Statement | null;
   readonly invoice: Invoice | null;
   readonly createdBy: User | null;
+  readonly createdAt: DateTime | null;
   readonly changeLog: JSON | null;
 };
 
@@ -1262,11 +1273,11 @@ export type PaymentWhereInput = {
   readonly dateOfPayment?: PairFilter | null;
   readonly description?: StringFilter | null;
   readonly paymentItems?: PaymentItemManyRelationFilter | null;
-  readonly price?: BigIntNullableFilter | null;
   readonly constractor?: ConstractorWhereInput | null;
   readonly statement?: StatementWhereInput | null;
   readonly invoice?: InvoiceWhereInput | null;
   readonly createdBy?: UserWhereInput | null;
+  readonly createdAt?: DateTimeNullableFilter | null;
 };
 
 export type PaymentItemManyRelationFilter = {
@@ -1280,7 +1291,7 @@ export type PaymentOrderByInput = {
   readonly title?: OrderDirection | null;
   readonly dateOfPayment?: OrderDirection | null;
   readonly description?: OrderDirection | null;
-  readonly price?: OrderDirection | null;
+  readonly createdAt?: OrderDirection | null;
 };
 
 export type PaymentUpdateInput = {
@@ -1288,12 +1299,12 @@ export type PaymentUpdateInput = {
   readonly dateOfPayment?: number | null;
   readonly description?: string | null;
   readonly paymentItems?: PaymentItemRelateToManyForUpdateInput | null;
-  readonly price?: BigInt | null;
   readonly constractor?: ConstractorRelateToOneForUpdateInput | null;
   readonly attachment?: ImageFieldInput | null;
   readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
+  readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
 };
 
@@ -1318,12 +1329,12 @@ export type PaymentCreateInput = {
   readonly dateOfPayment?: number | null;
   readonly description?: string | null;
   readonly paymentItems?: PaymentItemRelateToManyForCreateInput | null;
-  readonly price?: BigInt | null;
   readonly constractor?: ConstractorRelateToOneForCreateInput | null;
   readonly attachment?: ImageFieldInput | null;
   readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
+  readonly createdAt?: DateTime | null;
   readonly changeLog?: JSON | null;
 };
 
