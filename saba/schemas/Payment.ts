@@ -74,7 +74,7 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
     grossTotal: virtual({
       label: 'جمع کل',
       field: graphql.field({
-        type: graphql.BigInt,
+        type: graphql.nonNull(graphql.BigInt),
         async resolve(item, _, context) {
           const ITEMSPAYMENTITEMS = gql`
             query ITEMSPAYMENTITEMS($id: ID!) {
@@ -94,7 +94,7 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
             },
           })
 
-          return res.payment?.paymentItems?.reduce((acc, curr) => acc + BigInt(curr.price), 0n) || 0n
+          return res.payment?.paymentItems?.reduce((acc, curr) => acc + BigInt(curr.price || 0), 0n) || 0n
         },
       }),
       ui: {

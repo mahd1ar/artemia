@@ -286,9 +286,8 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
           }
 
           const percentageOfPhysicalProgress = (description.contracts?.map(i => i.physicalProgress) || []).reduce((a, b) => a + b, 0) / (description.contracts?.length || 1)
-          const totalStatementsPayed = (description.contracts?.map(i => BigInt(i.totalPaid)) || []).reduce((a, b) => a + b, 0n)
+          const totalStatementsPayed = (description.contracts?.map(i => BigInt(i.totalPaid || 0n)) || []).reduce((a, b) => a + b, 0n)
           const totalInvoicesPayed = (description.invoices?.map(i => i.payment?.grossTotal ? BigInt(i.payment.grossTotal) : 0n) || []).reduce((a, b) => a + b, 0n) as bigint
-
           return {
             percentageOfPhysicalProgress,
             totalStatementsPayed,

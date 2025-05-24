@@ -481,7 +481,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
           if (statements.length === 0)
             return 0n
 
-          return statements.reduce((sum, { peyment }) => sum + (peyment?.grossTotal ? BigInt(peyment?.grossTotal) : 0n), 0n)
+          return statements.reduce((sum, item) => sum + (BigInt(item?.peyment?.grossTotal || 0)), 0n)
         },
       }),
     }),
