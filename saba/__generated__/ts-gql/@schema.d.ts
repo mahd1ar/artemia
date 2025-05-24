@@ -1,8 +1,8 @@
-// ts-gql-integrity:7dbe18d28fb2b735e485af47093efa2e
+// ts-gql-integrity:b0f0ab5b1d0c74c5e654245bbd2aebc2
 /*
 ts-gql-meta-begin
 {
-  "hash": "ea72b1cef210a8afc515413d2f012f0e"
+  "hash": "da198de8c79985ea8c902d45c96ad5b5"
 }
 ts-gql-meta-end
 */
@@ -176,7 +176,7 @@ export type Approval = {
   readonly project: Project | null;
   readonly explanation: string | null;
   readonly estimatedBudget: BigInt | null;
-  readonly totalStatementsPayable: BigInt | null;
+  readonly totalPayed: BigInt | null;
   readonly startDate: number | null;
   readonly estimatedEndDate: number | null;
   readonly rows: ReadonlyArray<Row> | null;
@@ -382,10 +382,8 @@ export type Description = {
   readonly approvals: Approval | null;
   readonly fromOnGoingProject: Project | null;
   readonly fromOutsideProject: Project | null;
-  readonly totalStatementsPayable: BigInt | null;
-  readonly totalInvoicesPayed: BigInt | null;
-  readonly totalPayed: JSON | null;
   readonly status: DescriptionStatus;
+  readonly statusView: JSON;
   readonly createdAt: DateTime | null;
   readonly createdBy: User | null;
 };
@@ -416,9 +414,9 @@ export type DescriptioninvoicesCountArgs = {
 
 export type DescriptionStatus = {
   readonly __typename: "DescriptionStatus";
-  readonly percentageOfPhysicalProgress: string;
+  readonly percentageOfPhysicalProgress: number;
   readonly totalStatementsPayed: BigInt;
-  readonly totalInvoicesPayable: BigInt;
+  readonly totalInvoicesPayed: BigInt;
   readonly totalPayed: BigInt;
 };
 
@@ -1222,7 +1220,7 @@ export type Payment = {
   readonly description: string | null;
   readonly paymentItems: ReadonlyArray<PaymentItem> | null;
   readonly paymentItemsCount: number | null;
-  readonly grossTotal: BigInt | null;
+  readonly grossTotal: BigInt;
   readonly constractor: Constractor | null;
   readonly attachment: ImageFieldOutput | null;
   readonly statement: Statement | null;
@@ -1784,8 +1782,6 @@ export type User = {
   readonly avatar: ImageFieldOutput | null;
   readonly role: number | null;
   readonly password: PasswordState | null;
-  readonly approvals: ReadonlyArray<Approval> | null;
-  readonly approvalsCount: number | null;
   readonly descriptions: ReadonlyArray<Description> | null;
   readonly descriptionsCount: number | null;
   readonly approvedContracts: ReadonlyArray<Contract> | null;
@@ -1797,18 +1793,6 @@ export type User = {
   readonly dailyReports: ReadonlyArray<DailyReport> | null;
   readonly dailyReportsCount: number | null;
   readonly createdAt: DateTime | null;
-};
-
-export type UserapprovalsArgs = {
-  readonly where?: ApprovalWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<ApprovalOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: ApprovalWhereUniqueInput | null;
-};
-
-export type UserapprovalsCountArgs = {
-  readonly where?: ApprovalWhereInput;
 };
 
 export type UserdescriptionsArgs = {
@@ -1891,7 +1875,6 @@ export type UserWhereInput = {
   readonly phone?: StringFilter | null;
   readonly telegramId?: StringFilter | null;
   readonly role?: IntNullableFilter | null;
-  readonly approvals?: ApprovalManyRelationFilter | null;
   readonly descriptions?: DescriptionManyRelationFilter | null;
   readonly approvedContracts?: ContractManyRelationFilter | null;
   readonly contracts?: ContractManyRelationFilter | null;
@@ -1930,7 +1913,6 @@ export type UserUpdateInput = {
   readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;
-  readonly approvals?: ApprovalRelateToManyForUpdateInput | null;
   readonly descriptions?: DescriptionRelateToManyForUpdateInput | null;
   readonly approvedContracts?: ContractRelateToManyForUpdateInput | null;
   readonly contracts?: ContractRelateToManyForUpdateInput | null;
@@ -1966,7 +1948,6 @@ export type UserCreateInput = {
   readonly avatar?: ImageFieldInput | null;
   readonly role?: number | null;
   readonly password?: string | null;
-  readonly approvals?: ApprovalRelateToManyForCreateInput | null;
   readonly descriptions?: DescriptionRelateToManyForCreateInput | null;
   readonly approvedContracts?: ContractRelateToManyForCreateInput | null;
   readonly contracts?: ContractRelateToManyForCreateInput | null;

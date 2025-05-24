@@ -1,8 +1,8 @@
-// ts-gql-integrity:4b7bbb80344580a831416ca27c3896cb
+// ts-gql-integrity:9e2fdda3aae119564eb6d723bc53683e
 /*
 ts-gql-meta-begin
 {
-  "hash": "0006eb062ef2dd4433bc926e3e955fdd"
+  "hash": "17602f07dd4fc0a37349a3e0e014d439"
 }
 ts-gql-meta-end
 */
@@ -15,7 +15,7 @@ type CORESPONDING_STATEMENTS_WITH_PAYMENTQueryVariables = SchemaTypes.Exact<{
 }>;
 
 
-type CORESPONDING_STATEMENTS_WITH_PAYMENTQuery = { readonly __typename: 'Query', readonly statements: ReadonlyArray<{ readonly __typename: 'Statement', readonly id: string, readonly peyment: { readonly __typename: 'Payment', readonly grossTotal: any | null } | null }> | null };
+type CORESPONDING_STATEMENTS_WITH_PAYMENTQuery = { readonly __typename: 'Query', readonly statements: ReadonlyArray<{ readonly __typename: 'Statement', readonly id: string, readonly peyment: { readonly __typename: 'Payment', readonly grossTotal: any } | null }> | null };
 
 
 

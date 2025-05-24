@@ -1,7 +1,6 @@
 import type { Lists } from '.keystone/types'
 import type { Session } from '../data/types'
 import { graphql, group, list } from '@keystone-6/core'
-import { allOperations, allowAll } from '@keystone-6/core/access'
 import { image, password, relationship, select, text, timestamp, virtual } from '@keystone-6/core/fields'
 import { isMemberOfAdminGroup } from '../data/access'
 import { getRoleFromArgs, Roles } from '../data/types'
@@ -131,7 +130,6 @@ export const User = list<Lists.User.TypeInfo<any>>({
     ...group({
       label: 'data',
       fields: {
-        approvals: relationship({ ui, ref: 'Approval.createdBy', many: true }),
         descriptions: relationship({ ui, ref: 'Description.createdBy', many: true }),
         approvedContracts: relationship({ ui, ref: 'Contract.approvedBy', many: true }),
         contracts: relationship({ ui, ref: 'Contract.createdBy', many: true }),

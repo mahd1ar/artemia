@@ -1,8 +1,8 @@
-// ts-gql-integrity:68e8923ba6335e4812fbcbe7270ae13d
+// ts-gql-integrity:9c2d7c2002988c5391c3bc96c9d12326
 /*
 ts-gql-meta-begin
 {
-  "hash": "5b97cb893ec7d62af99eb46b7caf0396"
+  "hash": "189a7710e4e2ed2c46fb01de1f29708c"
 }
 ts-gql-meta-end
 */
@@ -15,7 +15,7 @@ type EXTRACT_STATUSQueryVariables = SchemaTypes.Exact<{
 }>;
 
 
-type EXTRACT_STATUSQuery = { readonly __typename: 'Query', readonly description: { readonly __typename: 'Description', readonly invoices: ReadonlyArray<{ readonly __typename: 'Invoice', readonly payment: { readonly __typename: 'Payment', readonly grossTotal: any | null } | null }> | null, readonly contracts: ReadonlyArray<{ readonly __typename: 'Contract', readonly id: string, readonly physicalProgress: number, readonly totalPaid: any }> | null } | null };
+type EXTRACT_STATUSQuery = { readonly __typename: 'Query', readonly description: { readonly __typename: 'Description', readonly invoices: ReadonlyArray<{ readonly __typename: 'Invoice', readonly payment: { readonly __typename: 'Payment', readonly grossTotal: any } | null }> | null, readonly contracts: ReadonlyArray<{ readonly __typename: 'Contract', readonly id: string, readonly physicalProgress: number, readonly totalPaid: any }> | null } | null };
 
 
 

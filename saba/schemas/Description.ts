@@ -13,7 +13,7 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
     label: 'ساختار شکست',
     plural: 'ساخنار های شکست',
     listView: {
-      initialColumns: ['subject', 'totalStatementsPayed', 'totalInvoicesPayed'],
+      initialColumns: ['subject'],
       initialSort: {
         field: 'title',
         direction: 'ASC',
@@ -115,105 +115,6 @@ export const Description = list<Lists.Description.TypeInfo<Session>>({
           fieldMode: 'hidden',
         },
       },
-    }),
-    totalStatementsPayable: virtual({
-      label: 'مجموع قابل پرداخت',
-      ui: {
-        views: './src/custome-fields-view/hidden.tsx',
-        createView: {
-          fieldMode: 'hidden',
-        },
-
-      },
-      field: graphql.field({
-        type: graphql.BigInt,
-        async resolve(item, args, context) {
-          const { id } = item
-
-          const PROJECTBUDGET = gql`
-          query PROJECTBUDGET($id: ID!) {
-            description( where: { id:  $id}) {
-            id
-            invoices {
-              totalPayable
-            }
-            contracts {
-              totalPaid
-            }
-        }
-}` as import('../__generated__/ts-gql/PROJECTBUDGET').type
-
-          const sudo = context.sudo()
-          const { description } = await sudo.graphql.run({
-            query: PROJECTBUDGET,
-            variables: {
-              id,
-            },
-          })
-
-          let total = BigInt(0)
-
-          description?.contracts?.forEach((i) => {
-            try {
-              total += BigInt(i.totalPaid || 0n)
-            }
-            catch {}
-          })
-
-          description?.invoices?.forEach((i) => {
-            total += BigInt(i.totalPayable)
-          })
-
-          return total
-        },
-      }),
-    }),
-    totalInvoicesPayed: virtual({
-      label: 'مجموع پرداختی فاکتور ها',
-      ui: {
-        views: './src/custome-fields-view/hidden.tsx',
-        createView: {
-          fieldMode: 'hidden',
-        },
-
-      },
-      field: graphql.field({
-        type: graphql.BigInt,
-        async resolve(item, _, context) {
-          const { id } = item
-
-          const CURRENT_DESCRIPTION_INVOCES = gql`
-          query CURRENT_DESCRIPTION_INVOCES($where: DescriptionWhereUniqueInput!) {
-            description(where: $where) {
-              invoices {
-                totalPayable
-              }
-            }
-          }` as import('../__generated__/ts-gql/CURRENT_DESCRIPTION_INVOCES').type
-
-          const sudo = context.sudo()
-          const { description } = await sudo.graphql.run({
-            query: CURRENT_DESCRIPTION_INVOCES,
-            variables: {
-              where: {
-                id,
-              },
-            },
-          })
-
-          if (description) {
-            let total = BigInt(0)
-
-            description.invoices?.forEach((i) => {
-              total += BigInt(i.totalPayable)
-            })
-
-            return total
-          }
-
-          return BigInt(0)
-        },
-      }),
     }),
 
     status: virtual({

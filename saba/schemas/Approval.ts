@@ -9,6 +9,7 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
+import { createdBy } from '../data/functions'
 import { getRoleFromArgs, Roles } from '../data/types'
 import { editIfAdmin } from '../data/utils'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
@@ -18,7 +19,7 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
   ui: {
     label: 'مصوبات',
     listView: {
-      initialColumns: ['code', 'title', 'estimatedBudget', 'totalStatementsPayable'],
+      initialColumns: ['code', 'title', 'estimatedBudget', 'totalPayed'],
     },
     isHidden(args) {
       return (args.session)?.data.role === Roles.workshop
@@ -60,7 +61,7 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
       },
     }),
 
-    totalStatementsPayable: virtual({
+    totalPayed: virtual({
       label: 'مجموع پرداخت شده',
       ui: {
         itemView: {
@@ -77,10 +78,13 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
           let cost = 0n
           const data = await context.query.Approval.findOne({
             where: { id: item.id.toString() },
-            query: 'description { id totalStatementsPayable } ',
+            query: 'description { id status {totalStatementsPayed totalInvoicesPayed} } ',
           })
+
           data.description.forEach((i: any) => {
-            cost = cost + BigInt(i.totalStatementsPayable)
+            cost = cost
+            + BigInt(i.status.totalStatementsPayed)
+            + BigInt(i.status.totalInvoicesPayed)
           })
 
           return cost
@@ -135,25 +139,6 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
         },
       },
     }),
-    createdBy: relationship({
-      ref: 'User.approvals',
-      many: false,
-      ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: {
-          fieldMode(args) { return editIfAdmin(args) },
-          fieldPosition: 'sidebar',
-        },
-      },
-      hooks: {
-        resolveInput(args) {
-          if (args.operation === 'create') {
-            const session = args.context.session
-            args.resolvedData.createdBy = { connect: { id: session?.itemId } }
-          }
-          return args.resolvedData.createdBy
-        },
-      },
-    }),
+    createdBy: createdBy(),
   },
 })
