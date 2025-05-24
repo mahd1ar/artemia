@@ -11,7 +11,7 @@ import {
 } from '@keystone-6/core/fields'
 import { createdBy } from '../data/functions'
 import { getRoleFromArgs, Roles } from '../data/types'
-import { editIfAdmin } from '../data/utils'
+import { editIfInDebugMode } from '../data/utils'
 import { persianCalendar } from '../src/custom-fields/persian-calander'
 
 export const Approval = list<Lists.Approval.TypeInfo<Session>>({
@@ -43,7 +43,7 @@ export const Approval = list<Lists.Approval.TypeInfo<Session>>({
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
-          fieldMode(args) { return editIfAdmin(args) },
+          fieldMode({ context }) { return editIfInDebugMode(context) },
           fieldPosition: 'sidebar',
         },
       },

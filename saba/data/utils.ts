@@ -1,6 +1,8 @@
+import type { KeystoneContext } from '@keystone-6/core/types'
 import type { Session } from './types'
 import { createTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { isInDebugMode } from './functions'
 import { Roles } from './types'
 
 export class NumUtils {
@@ -44,6 +46,10 @@ export function editIfAdmin(args: object & {
   session?: Session
 }, defaultValue?: 'read' | 'edit' | 'hidden') {
   return setPermitions(args, [{ role: Roles.admin, fieldMode: 'edit' }], defaultValue || 'read')
+}
+
+export function editIfInDebugMode(ctx: KeystoneContext<any>) {
+  return isInDebugMode(ctx) ? 'edit' : 'hidden'
 }
 
 export type ExcludesFalse = <T>(x: T | false | undefined | null) => x is T
