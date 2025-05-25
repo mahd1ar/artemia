@@ -15,7 +15,7 @@ import { gql } from '@ts-gql/tag/no-transform'
 import axios from 'axios'
 import DeviceDetector from 'node-device-detector'
 import { isLoggedIn, isMemberOfAdminGroup } from '../data/access'
-import { changeLog } from '../data/functions'
+import { changeLog, createdBy } from '../data/functions'
 import { Notif } from '../data/message'
 
 import { getRoleFromArgs, Roles } from '../data/types'
@@ -71,7 +71,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
   ui: {
     label: 'قرارداد',
     listView: {
-      initialColumns: ['title', 'isApproved', 'contractor', 'cost'],
+      initialColumns: ['title', 'isApproved', 'contractor', 'cost', 'totalPaid'],
       initialSort: {
         field: 'createdAt',
         direction: 'DESC',
@@ -452,7 +452,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
           fieldMode: 'read',
           fieldPosition: 'sidebar',
         },
-        views: './src/custome-fields-view/bigint-viewer.tsx',
+        views: './src/custome-fields-view/payed-bigint-viewer.tsx',
       },
       field: graphql.field({
         type: graphql.nonNull(graphql.BigInt),
@@ -505,28 +505,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
         },
       },
     }),
-    createdBy: relationship({
-      ref: 'User.contracts',
-      many: false,
-      ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: {
-          // fieldMode: 'read',
-          fieldPosition: 'sidebar',
-        },
-      },
-      hooks: {
-        resolveInput(args) {
-          if (args.operation === 'create') {
-            return {
-              connect: { id: args.context.session!.itemId },
-            }
-          }
-
-          return args.resolvedData.createdBy
-        },
-      },
-    }),
+    createdBy: createdBy(),
     contractSample: virtual({
       label: 'نمونه قرارداد',
       field: graphql.field({

@@ -1,8 +1,8 @@
-// ts-gql-integrity:b0f0ab5b1d0c74c5e654245bbd2aebc2
+// ts-gql-integrity:3769bb0ed6d42449954a5159fdc3b3a3
 /*
 ts-gql-meta-begin
 {
-  "hash": "da198de8c79985ea8c902d45c96ad5b5"
+  "hash": "94dc06436e2feaeeb0d637bffe55502d"
 }
 ts-gql-meta-end
 */
@@ -1786,8 +1786,6 @@ export type User = {
   readonly descriptionsCount: number | null;
   readonly approvedContracts: ReadonlyArray<Contract> | null;
   readonly approvedContractsCount: number | null;
-  readonly contracts: ReadonlyArray<Contract> | null;
-  readonly contractsCount: number | null;
   readonly Designs: ReadonlyArray<Design> | null;
   readonly DesignsCount: number | null;
   readonly dailyReports: ReadonlyArray<DailyReport> | null;
@@ -1816,18 +1814,6 @@ export type UserapprovedContractsArgs = {
 };
 
 export type UserapprovedContractsCountArgs = {
-  readonly where?: ContractWhereInput;
-};
-
-export type UsercontractsArgs = {
-  readonly where?: ContractWhereInput;
-  readonly orderBy?: TSGQLMaybeArray<ContractOrderByInput>;
-  readonly take?: number | null;
-  readonly skip?: number;
-  readonly cursor?: ContractWhereUniqueInput | null;
-};
-
-export type UsercontractsCountArgs = {
   readonly where?: ContractWhereInput;
 };
 
@@ -1877,7 +1863,6 @@ export type UserWhereInput = {
   readonly role?: IntNullableFilter | null;
   readonly descriptions?: DescriptionManyRelationFilter | null;
   readonly approvedContracts?: ContractManyRelationFilter | null;
-  readonly contracts?: ContractManyRelationFilter | null;
   readonly Designs?: DesignManyRelationFilter | null;
   readonly dailyReports?: DailyReportManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
@@ -1915,7 +1900,6 @@ export type UserUpdateInput = {
   readonly password?: string | null;
   readonly descriptions?: DescriptionRelateToManyForUpdateInput | null;
   readonly approvedContracts?: ContractRelateToManyForUpdateInput | null;
-  readonly contracts?: ContractRelateToManyForUpdateInput | null;
   readonly Designs?: DesignRelateToManyForUpdateInput | null;
   readonly dailyReports?: DailyReportRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
@@ -1950,7 +1934,6 @@ export type UserCreateInput = {
   readonly password?: string | null;
   readonly descriptions?: DescriptionRelateToManyForCreateInput | null;
   readonly approvedContracts?: ContractRelateToManyForCreateInput | null;
-  readonly contracts?: ContractRelateToManyForCreateInput | null;
   readonly Designs?: DesignRelateToManyForCreateInput | null;
   readonly dailyReports?: DailyReportRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;

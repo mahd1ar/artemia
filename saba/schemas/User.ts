@@ -132,7 +132,6 @@ export const User = list<Lists.User.TypeInfo<any>>({
       fields: {
         descriptions: relationship({ ui, ref: 'Description.createdBy', many: true }),
         approvedContracts: relationship({ ui, ref: 'Contract.approvedBy', many: true }),
-        contracts: relationship({ ui, ref: 'Contract.createdBy', many: true }),
         Designs: relationship({ ui, ref: 'Design.createdBy', many: true }),
         dailyReports: relationship({ ui, ref: 'DailyReport.createdBy', many: true }),
       },
