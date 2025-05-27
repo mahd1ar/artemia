@@ -46,9 +46,26 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
       //   }
       // }
       // TODO implement this later
-      // if(args.operation === 'update'){
-      //   const haveStatement = !!args.inputData.statement?.connect?.id || !args.inputData.statement?.disconnect
-      // }
+      if (args.operation === 'update') {
+        let haveStatement = !!args.inputData.statement?.connect?.id || !!args.inputData.statement?.create || !!args.item.statementId
+        let haveInvoice = !!args.inputData.invoice?.connect?.id || !!args.inputData.invoice?.create || !!args.item.invoiceId
+
+        if (args.inputData.statement?.disconnect) {
+          haveStatement = false
+        }
+
+        if (args.inputData.invoice?.disconnect) {
+          haveInvoice = false
+        }
+
+        if (haveInvoice && haveStatement) {
+          return args.addValidationError('باید فقط یک صورت وضعیت یا فاکتور برای پرداخت انتخاب شود')
+        }
+
+        if (!haveInvoice && !haveStatement) {
+          return args.addValidationError('باید حداقل یک صورت وضعیت یا فاکتور برای پرداخت انتخاب شود')
+        }
+      }
     },
 
   },

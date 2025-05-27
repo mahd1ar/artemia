@@ -398,25 +398,28 @@ export function Field({
     <FieldContainer>
 
       <Stack across align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
-        <Button
-          style={{ marginTop: '10px', marginBottom: '10px' }}
-          tone={tableRelationConfig.type === 'Implemented' ? 'positive' : 'active'}
-          onClick={() => { setModelDataFromRow(undefined) }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+        { onChange ? (
+          <Button
+            style={{ marginTop: '10px', marginBottom: '10px' }}
+            tone={tableRelationConfig.type === 'Implemented' ? 'positive' : 'active'}
+            onClick={() => { setModelDataFromRow(undefined) }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
 
-            اضافه کردن ایتم جدید
-            {/* plus icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-              <g fill="none" stroke="currentColor" strokeDasharray={16} strokeDashoffset={16} strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
-                <path d="M5 12h14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="16;0"></animate></path>
-                <path d="M12 5v14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.4s" values="16;0"></animate></path>
-              </g>
-            </svg>
-          </div>
-        </Button>
+              اضافه کردن ایتم جدید
+              {/* plus icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" strokeDasharray={16} strokeDashoffset={16} strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
+                  <path d="M5 12h14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="16;0"></animate></path>
+                  <path d="M12 5v14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.4s" values="16;0"></animate></path>
+                </g>
+              </svg>
+            </div>
+          </Button>
+        )
+          : <div></div>}
 
-        <FieldLabel>
+        <FieldLabel css={{ textAlign: 'right', marginBottom: '10px', display: 'inline-block' }}>
           {field.label}
         </FieldLabel>
       </Stack>
