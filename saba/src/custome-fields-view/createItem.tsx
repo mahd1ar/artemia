@@ -1,32 +1,22 @@
 import type { controller } from '@keystone-6/core/fields/types/relationship/views'
-import type { FieldProps } from '@keystone-6/core/types'
+import type { CellComponent, FieldProps } from '@keystone-6/core/types'
 import type { DialogProps } from '@mui/material'
 import type { ReactNode } from 'react'
 import { useLazyQuery, useMutation } from '@keystone-6/core/admin-ui/apollo'
-import { GraphQLErrorNotice } from '@keystone-6/core/admin-ui/components'
+import { CellContainer, CellLink, GraphQLErrorNotice } from '@keystone-6/core/admin-ui/components'
 import { useKeystone, useList } from '@keystone-6/core/admin-ui/context'
 import { Fields } from '@keystone-6/core/admin-ui/utils'
 import { Button as KsBtn } from '@keystone-ui/button'
-import { Box, Stack } from '@keystone-ui/core'
+import { Box, Link, Stack, Text } from '@keystone-ui/core'
 import { Checkbox, FieldContainer, FieldDescription, FieldLabel, FieldLegend, TextInput } from '@keystone-ui/fields'
 import { LoadingDots } from '@keystone-ui/loading'
 import { useToasts } from '@keystone-ui/toast'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ThemeProvider, Typography } from '@mui/material'
 import { gql } from '@ts-gql/tag/no-transform'
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { theme } from '../../data/utils'
 import { useCreateItem } from './useCreateItem'
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein }
-}
 
 function Condition(props: { iff: boolean, children: ReactNode }) {
   return props.iff ? props.children : null
@@ -113,7 +103,6 @@ query GET_ROWS($where: RowWhereInput!) {
   })
 
   React.useEffect(() => {
-    console.log(itemValue)
     if (isOpen) {
       const { current: descriptionElement } = descriptionElementRef
       if (descriptionElement !== null) {
@@ -211,9 +200,6 @@ query GET_ROWS($where: RowWhereInput!) {
 
   useEffect(() => {
     if (mode === 'manual') {
-      console.log(createItemState)
-      console.log(itemValue)
-
       if (refFieldKey === 'invoice') {
         if (createItemState?.props?.value?.title && !createItemState.props.value.title?.value?.inner?.value) {
           createItemState.props.value.title = {
@@ -502,5 +488,28 @@ query GET_ROWS($where: RowWhereInput!) {
 
     </FieldContainer>
 
+  )
+}
+
+export const Cell: CellComponent<typeof controller> = ({ field, item }) => {
+  const list = useList(field.refListKey)
+  const data = item[field.path]
+  const items = (Array.isArray(data) ? data : [data]).filter(Boolean)
+  const displayItems = items.length < 3 ? items : items.slice(0, 2)
+  const overflow = items.length < 3 ? 0 : items.length - 2
+
+  return (
+    <Text>
+      {displayItems.map((item, index) => (
+        <Fragment key={item.id}>
+          {index ? ', ' : ''}
+          <Link href={`/${list.path}/${item.id}`}>
+            {/* {item.label || item.id} */}
+            پرداخت شده ✅
+          </Link>
+        </Fragment>
+      ))}
+      {overflow ? `, and ${overflow} more` : null}
+    </Text>
   )
 }

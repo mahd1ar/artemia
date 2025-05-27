@@ -58,13 +58,13 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
     async validate(args) {
       const role = getRoleFromArgs(args.context)
 
-      if (args.operation === 'update') {
-        if (role > Roles.operator && args.item.confirmedByTheUploader) {
-          if (!alc.find(i => args.inputData![i.gqlkey] === true && role === i.for)) {
-            args.addValidationError('این صورت وضعیت قبلا تایید شده است و فقط اپراتور میتواند این صورت وضعیت را ویرایش کند')
-          }
-        }
-      }
+      // if (args.operation === 'update') {
+      //   if (role > Roles.operator && args.item.confirmedByTheUploader) {
+      //     if (!alc.find(i => args.inputData![i.gqlkey] === true && role === i.for)) {
+      //       args.addValidationError('این صورت وضعیت قبلا تایید شده است و فقط اپراتور میتواند این صورت وضعیت را ویرایش کند')
+      //     }
+      //   }
+      // }
 
       if (args.operation === 'delete') {
         if (role !== Roles.admin && role !== Roles.operator && role !== Roles.supervisor) {
@@ -428,7 +428,12 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       label: 'رسید پرداختی',
       ref: 'Payment.statement',
       ui: {
+
         itemView: {
+          fieldMode: (args) => {
+            const role = getRoleFromArgs(args)
+            return role === Roles.workshop || role <= Roles.operator || role === Roles.financial ? 'edit' : 'read'
+          },
           fieldPosition(args) {
             const userAgent = (args.context.req?.headers['user-agent'])
 

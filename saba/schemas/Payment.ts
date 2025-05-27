@@ -32,6 +32,25 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
         })
       }
     },
+
+    validate(args) {
+      // if (args.operation === 'create') {
+      //   const haveStatement = !!args.inputData.statement?.create || !!args.inputData.statement?.connect?.id
+      //   const haveInvoice = !!args.inputData.invoice?.create || !!args.inputData.invoice?.connect?.id
+
+      //   if (!haveStatement && !haveInvoice) {
+      //     return args.addValidationError('باید حداقل یک صورت وضعیت یا فاکتور برای پرداخت انتخاب شود')
+      //   }
+      //   else if (haveStatement && haveInvoice) {
+      //     return args.addValidationError('باید فقط یک صورت وضعیت یا فاکتور برای پرداخت انتخاب شود')
+      //   }
+      // }
+      // TODO implement this later
+      // if(args.operation === 'update'){
+      //   const haveStatement = !!args.inputData.statement?.connect?.id || !args.inputData.statement?.disconnect
+      // }
+    },
+
   },
   fields: {
     title: text(),
@@ -128,12 +147,13 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
         createView: {
           fieldMode(args) {
             const url = args.context.req?.headers.referer
+
             if (url) {
               const reff = new URL(url)
               const referer = (reff.pathname.split('/').filter(Boolean).at(0))
               return referer !== 'payments' ? 'hidden' : 'edit'
             }
-            return 'edit'
+            return 'hidden'
           },
         },
       },

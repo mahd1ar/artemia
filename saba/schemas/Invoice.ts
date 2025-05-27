@@ -32,7 +32,6 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
       ...allOperations(isLoggedIn),
     },
     item: {
-      update: args => getRoleFromArgs(args) <= Roles.operator || args.item.createdById === args.context.session?.itemId,
       delete: args => getRoleFromArgs(args) <= Roles.operator || args.item.createdById === args.context.session?.itemId,
     },
 
