@@ -389,7 +389,7 @@ export const Contract = list<Lists.Contract.TypeInfo<Session>>({
 
     }),
     totalPayable: virtual({
-      label: 'جمع کل قابل پرداخت',
+      label: '  قابل پرداخت آخرین ص.و',
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {

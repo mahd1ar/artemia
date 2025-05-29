@@ -1,20 +1,15 @@
-import { graphql, list } from "@keystone-6/core";
-import { allOperations, allowAll } from "@keystone-6/core/access";
+import type { Lists } from '.keystone/types'
+import type { Session } from '../data/types'
+import { list } from '@keystone-6/core'
+import { allOperations } from '@keystone-6/core/access'
 import {
-  bigInt,
-  file,
-  integer,
   relationship,
-  select,
   text,
   timestamp,
-  virtual,
-} from "@keystone-6/core/fields";
-import { getRoleFromArgs, Roles, Session } from "../data/types";
-import { editIfAdmin, setPermitions } from "../data/utils";
-import { isAdmin, isLoggedIn, isMobayen } from "../data/access";
-import { gql } from "@ts-gql/tag/no-transform";
-import { Lists } from ".keystone/types";
+} from '@keystone-6/core/fields'
+import { isLoggedIn } from '../data/access'
+import { getRoleFromArgs, Roles } from '../data/types'
+import { editIfAdmin } from '../data/utils'
 
 export const Design = list<Lists.Design.TypeInfo<Session>>({
   access: {
@@ -23,13 +18,13 @@ export const Design = list<Lists.Design.TypeInfo<Session>>({
       query: () => true,
     },
     item: {
-      update: args => {
+      update: (args) => {
         return getRoleFromArgs(args) <= Roles.operator || args.item.createdById === args.context.session?.itemId
       },
-      delete: args => {
+      delete: (args) => {
         return getRoleFromArgs(args) <= Roles.operator || args.item.createdById === args.context.session?.itemId
-      }
-    }
+      },
+    },
   },
   ui: {
     label: 'نقشه',
@@ -61,7 +56,7 @@ export const Design = list<Lists.Design.TypeInfo<Session>>({
         inlineCreate: { fields: ['file'] },
         inlineEdit: { fields: ['file'] },
         cardFields: ['title', 'file'],
-      }
+      },
     }),
 
     // download: virtual({
@@ -97,12 +92,16 @@ export const Design = list<Lists.Design.TypeInfo<Session>>({
     //     },
     //   }),
     // }),
+
+    updateDate: text({
+      label: 'تاریخ اخرین به روز رسانی',
+    }),
     category: relationship({
       label: ' ها دسته بندی',
       ref: 'Category.designs',
       ui: {
-        views: "./src/custome-fields-view/folder-struct-relation.tsx",
-      }
+        views: './src/custome-fields-view/folder-struct-relation.tsx',
+      },
     }),
     tags: relationship({
       ref: 'Tag',
@@ -119,35 +118,34 @@ export const Design = list<Lists.Design.TypeInfo<Session>>({
       },
     }),
     createdAt: timestamp({
-      defaultValue: { kind: "now" },
+      defaultValue: { kind: 'now' },
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) { return editIfAdmin(args) },
-          fieldPosition: 'sidebar'
-        }
-      }
+          fieldPosition: 'sidebar',
+        },
+      },
     }),
     createdBy: relationship({
-      ref: "User.Designs",
+      ref: 'User.Designs',
       many: false,
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: {
           fieldMode(args) { return editIfAdmin(args) },
-          fieldPosition: 'sidebar'
-        }
+          fieldPosition: 'sidebar',
+        },
       },
       hooks: {
         resolveInput(args) {
-
           if (args.operation === 'create') {
             return { connect: { id: args.context.session?.itemId } }
           }
 
           return args.resolvedData.createdBy
         },
-      }
+      },
     }),
   },
-});
+})
