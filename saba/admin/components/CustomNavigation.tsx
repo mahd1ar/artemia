@@ -13,6 +13,7 @@ import DesignServicesOutlinedIcon from '@mui/icons-material/DesignServicesOutlin
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import FolderSpecialIcon from '@mui/icons-material/FolderSpecial'
+import FolderSpecialIconOutlined from '@mui/icons-material/FolderSpecialOutlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import MailIcon from '@mui/icons-material/Mail'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
@@ -44,6 +45,11 @@ function Drawer(props: { listMeta: ListMeta[] }) {
         title
         id
       }
+      approvals {
+        code
+        title
+        id
+      }
     }
 ` as import('../../__generated__/ts-gql/PARENTCATEGORYOFRESOURSE1').type
 
@@ -51,7 +57,7 @@ function Drawer(props: { listMeta: ListMeta[] }) {
 
   const router = useRouter()
   const ks = useKeystone()
-  const [openSub, setOpenSub] = React.useState(false)
+  const [openSubs, setOpenSubs] = React.useState<string[]>([])
   const [contextMenu, setContextMenu] = React.useState<{
     mouseX: number
     mouseY: number
@@ -89,6 +95,16 @@ function Drawer(props: { listMeta: ListMeta[] }) {
         {
           resource: 'Approval',
           icon: <FolderSpecialIcon />,
+          subItems: (data?.approvals?.length || 0) > 0
+            ? data?.approvals?.map((i) => {
+              return {
+                label: i.code === i.title ? (i.code || 'بدون عنوان') : `${i.title} (${i.code})`,
+                href: `/approvals/${i.id}`,
+                isSelected: router.pathname.search(`/approvals/${i.id}`) > -1,
+                icon: <FolderSpecialIconOutlined />,
+              }
+            })
+            : [],
         },
         {
           resource: 'Contract',
@@ -223,7 +239,12 @@ function Drawer(props: { listMeta: ListMeta[] }) {
                               router.push(j.href || '#')
                             }}
                             onClick={() => {
-                              setOpenSub(!openSub)
+                              if (openSubs.includes(j.resource)) {
+                                setOpenSubs(openSubs.filter(s => s !== j.resource))
+                              }
+                              else {
+                                setOpenSubs([...openSubs, j.resource])
+                              }
                             }}
                             onContextMenu={(event) => {
                               handleContextMenu(event, j.resource || '#')
@@ -233,9 +254,9 @@ function Drawer(props: { listMeta: ListMeta[] }) {
                               {j.icon || <InboxIcon />}
                             </ListItemIcon>
                             <ListItemText primary={j.label} />
-                            {openSub ? <ExpandLess /> : <ExpandMore />}
+                            {openSubs.includes(j.resource) ? <ExpandLess /> : <ExpandMore />}
                           </ListItemButton>
-                          <Collapse in={openSub} timeout="auto" unmountOnExit>
+                          <Collapse in={openSubs.includes(j.resource)} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
                               {
                                 j.subItems.map((k, ixk) => (

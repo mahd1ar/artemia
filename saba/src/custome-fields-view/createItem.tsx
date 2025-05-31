@@ -10,6 +10,7 @@ import { Button as KsBtn } from '@keystone-ui/button'
 import { Box, Link, Stack, Text } from '@keystone-ui/core'
 import { Checkbox, FieldContainer, FieldDescription, FieldLabel, FieldLegend, TextInput } from '@keystone-ui/fields'
 import { LoadingDots } from '@keystone-ui/loading'
+import { AlertDialog } from '@keystone-ui/modals'
 import { useToasts } from '@keystone-ui/toast'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ThemeProvider, Typography } from '@mui/material'
@@ -164,8 +165,9 @@ query GET_ROWS($where: RowWhereInput!) {
         catch (error) {
           addToast({ title: String(error), tone: 'negative' })
           console.error(error)
+          setIsOpen(false)
           setDisableAutoMode(true)
-          setMode('manual')
+          // setMode('manual')
         }
         setLoading(false)
       })()

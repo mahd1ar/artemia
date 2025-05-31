@@ -86,13 +86,6 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
     //   // },
     // }),
 
-    description: text({
-      label: 'توضیحات',
-      ui: {
-        displayMode: 'textarea',
-      },
-    }),
-
     paymentItems: relationship({
       ref: 'PaymentItem.payment',
       many: true,
@@ -154,6 +147,12 @@ export const Payment = list<Lists.Payment.TypeInfo<Session>>({
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'hidden' },
+      },
+    }),
+    description: text({
+      label: 'توضیحات',
+      ui: {
+        displayMode: 'textarea',
       },
     }),
     statement: relationship({

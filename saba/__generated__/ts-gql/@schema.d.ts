@@ -1,8 +1,8 @@
-// ts-gql-integrity:3769bb0ed6d42449954a5159fdc3b3a3
+// ts-gql-integrity:264d7cadba9150ee66936ef31546d403
 /*
 ts-gql-meta-begin
 {
-  "hash": "94dc06436e2feaeeb0d637bffe55502d"
+  "hash": "39784e93ccddb7e7767095568b09a9eb"
 }
 ts-gql-meta-end
 */
@@ -1217,12 +1217,12 @@ export type Payment = {
   readonly id: string;
   readonly title: string | null;
   readonly dateOfPayment: number | null;
-  readonly description: string | null;
   readonly paymentItems: ReadonlyArray<PaymentItem> | null;
   readonly paymentItemsCount: number | null;
   readonly grossTotal: BigInt;
   readonly constractor: Constractor | null;
   readonly attachment: ImageFieldOutput | null;
+  readonly description: string | null;
   readonly statement: Statement | null;
   readonly invoice: Invoice | null;
   readonly createdBy: User | null;
@@ -1269,9 +1269,9 @@ export type PaymentWhereInput = {
   readonly id?: IDFilter | null;
   readonly title?: StringFilter | null;
   readonly dateOfPayment?: PairFilter | null;
-  readonly description?: StringFilter | null;
   readonly paymentItems?: PaymentItemManyRelationFilter | null;
   readonly constractor?: ConstractorWhereInput | null;
+  readonly description?: StringFilter | null;
   readonly statement?: StatementWhereInput | null;
   readonly invoice?: InvoiceWhereInput | null;
   readonly createdBy?: UserWhereInput | null;
@@ -1295,10 +1295,10 @@ export type PaymentOrderByInput = {
 export type PaymentUpdateInput = {
   readonly title?: string | null;
   readonly dateOfPayment?: number | null;
-  readonly description?: string | null;
   readonly paymentItems?: PaymentItemRelateToManyForUpdateInput | null;
   readonly constractor?: ConstractorRelateToOneForUpdateInput | null;
   readonly attachment?: ImageFieldInput | null;
+  readonly description?: string | null;
   readonly statement?: StatementRelateToOneForUpdateInput | null;
   readonly invoice?: InvoiceRelateToOneForUpdateInput | null;
   readonly createdBy?: UserRelateToOneForUpdateInput | null;
@@ -1325,10 +1325,10 @@ export type PaymentUpdateArgs = {
 export type PaymentCreateInput = {
   readonly title?: string | null;
   readonly dateOfPayment?: number | null;
-  readonly description?: string | null;
   readonly paymentItems?: PaymentItemRelateToManyForCreateInput | null;
   readonly constractor?: ConstractorRelateToOneForCreateInput | null;
   readonly attachment?: ImageFieldInput | null;
+  readonly description?: string | null;
   readonly statement?: StatementRelateToOneForCreateInput | null;
   readonly invoice?: InvoiceRelateToOneForCreateInput | null;
   readonly createdBy?: UserRelateToOneForCreateInput | null;
@@ -1591,6 +1591,7 @@ export type Design = {
   readonly id: string;
   readonly title: string | null;
   readonly design: FileStore | null;
+  readonly updateDate: string | null;
   readonly category: Category | null;
   readonly tags: ReadonlyArray<Tag> | null;
   readonly tagsCount: number | null;
@@ -1621,6 +1622,7 @@ export type DesignWhereInput = {
   readonly id?: IDFilter | null;
   readonly title?: StringFilter | null;
   readonly design?: FileStoreWhereInput | null;
+  readonly updateDate?: StringFilter | null;
   readonly category?: CategoryWhereInput | null;
   readonly tags?: TagManyRelationFilter | null;
   readonly createdAt?: DateTimeNullableFilter | null;
@@ -1636,12 +1638,14 @@ export type TagManyRelationFilter = {
 export type DesignOrderByInput = {
   readonly id?: OrderDirection | null;
   readonly title?: OrderDirection | null;
+  readonly updateDate?: OrderDirection | null;
   readonly createdAt?: OrderDirection | null;
 };
 
 export type DesignUpdateInput = {
   readonly title?: string | null;
   readonly design?: FileStoreRelateToOneForUpdateInput | null;
+  readonly updateDate?: string | null;
   readonly category?: CategoryRelateToOneForUpdateInput | null;
   readonly tags?: TagRelateToManyForUpdateInput | null;
   readonly createdAt?: DateTime | null;
@@ -1669,6 +1673,7 @@ export type DesignUpdateArgs = {
 export type DesignCreateInput = {
   readonly title?: string | null;
   readonly design?: FileStoreRelateToOneForCreateInput | null;
+  readonly updateDate?: string | null;
   readonly category?: CategoryRelateToOneForCreateInput | null;
   readonly tags?: TagRelateToManyForCreateInput | null;
   readonly createdAt?: DateTime | null;
