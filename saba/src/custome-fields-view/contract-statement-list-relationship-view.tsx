@@ -103,6 +103,11 @@ export function Field({
             confirmedBySupervisor
             confirmedByProjectControlSupervisor
             confirmedByFinancialSupervisor
+            statementNumber
+            type
+            rows {
+              id
+            }
           }
           authenticatedItem {
               ... on User {
@@ -115,7 +120,29 @@ export function Field({
         }
       ` as import('../../__generated__/ts-gql/STMNTS_AUTH').type
 
-  const { data, refetch } = useQuery(STMNTS_AUTH, { variables: { id: value.id }, fetchPolicy: 'no-cache' })
+  const { data, refetch } = useQuery(STMNTS_AUTH, { variables: { id: value.id }, fetchPolicy: 'no-cache', onCompleted(d) {
+    const lastStatementRows: string[] = []
+
+    if (!d.statements)
+      return
+
+    if (d.statements.length === 0)
+      return 0
+
+    if (d.statements.find(s => s.type === 'final' || s.type === 'before-final')) {
+      d.statements.find(s => s.type === 'final' || s.type === 'before-final')?.rows?.forEach(r => lastStatementRows.push(r.id))
+    }
+    else {
+      const tempStatements = d.statements.filter(s => s.type !== 'temporarly')
+      const lastestTempStatement = tempStatements.length > 0 ? tempStatements.sort((a, b) => (b.statementNumber || 0) - (a.statementNumber || 0))[0] : null
+      if (lastestTempStatement)
+        lastestTempStatement.rows?.forEach(r => lastStatementRows.push(r.id))
+    }
+
+    if (lastStatementRows.length > 0) {
+      router.push(`${location.pathname}?rows_matches=${lastStatementRows.join(',')}`, undefined, { shallow: true })
+    }
+  } })
 
   return (
 
@@ -215,7 +242,9 @@ export function Field({
                 <ListItemButton
                   onClick={() => router.push(`/statements/${i.id}`)}
                   key={i.id}
-
+                  onContextMenu={() => {
+                    window.open(`/statements/${i.id}`, '_blank')
+                  }}
                 >
                   <ListItemIcon>
                     <DescriptionOutlinedIcon fontSize="small" />

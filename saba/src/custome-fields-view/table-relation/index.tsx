@@ -1,12 +1,14 @@
 /* eslint-disable no-alert */
 import type { controller } from '@keystone-6/core/fields/types/relationship/views'
 import type { FieldProps } from '@keystone-6/core/types'
+import type { RowCreateInput } from '../../../__generated__/ts-gql/@schema'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { useList } from '@keystone-6/core/admin-ui/context'
 import { Button } from '@keystone-ui/button'
 import { Stack } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, Select, TextArea, TextInput } from '@keystone-ui/fields'
 import { AlertDialog } from '@keystone-ui/modals'
+import { useToasts } from '@keystone-ui/toast'
 import { Box, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, ThemeProvider } from '@mui/material'
 import { blue, green } from '@mui/material/colors'
 import { gql } from '@ts-gql/tag/no-transform'
@@ -14,7 +16,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 import { parseTableRelationConfig } from '../../../data/functions'
-import { theme } from '../../../data/utils'
+import { theme, timeout } from '../../../data/utils'
 import AutoCompeleteCategory from './AutoCompeleteCategory'
 import TreeCategories from './TreeCategories'
 
@@ -65,7 +67,7 @@ export function Field({
   }
 
   const router = useRouter()
-
+  const { addToast } = useToasts()
   const param = router.asPath.split('/').filter(Boolean).at(0)
   const resource = param === 'invoices'
     ? 'invoice'
@@ -144,6 +146,23 @@ export function Field({
     }
   }` as import('../../../__generated__/ts-gql/ROW_UPDATE').type
 
+  const GETROWES = gql`
+query GETROWES($where: RowWhereInput!) {
+  rows( where: $where) {
+    id
+    unit
+    unitPrice
+    tax
+    description
+    quantity
+    total
+    commodity {
+      id
+      title
+    }  
+  }
+}` as import('../../../__generated__/ts-gql/GETROWES').type
+
   const [load, { data: persistedData, loading: loadingData }] = useLazyQuery(ROWS_ITEM, {
     nextFetchPolicy: 'network-only',
     variables: {
@@ -159,6 +178,9 @@ export function Field({
 
   const [createRow, { loading: loadingCreate }] = useMutation(ROW_CREATE)
   const [updateRowData, { loading: loadingUpdate }] = useMutation(updateRow)
+  const [getRows] = useLazyQuery(GETROWES, {
+    nextFetchPolicy: 'network-only',
+  })
 
   type Data = Omit<NonNullable<NonNullable<typeof persistedData>['rows']>, '__typename'>[0]
   const tableRelationConfig = parseTableRelationConfig(field.description || '{}')
@@ -251,10 +273,90 @@ export function Field({
   }
 
   useEffect(() => {
-    load().then((res) => {
-      // @ts-expect-error any
-      setDateFromApi(res.data?.rows ?? [])
-    })
+    (async () => {
+      const res = await load()
+
+      if (res.data?.rows?.length) {
+        // @ts-expect-error any
+        setDateFromApi(res.data?.rows ?? [])
+        return
+      }
+
+      // technicaly, router.pathname should === "/contracts/[id]" statement is not necessary
+      if (field.refFieldKey === 'statement' && onChange && router.pathname === '/contracts/[id]') {
+        const rows_matches = (router.query?.rows_matches as string || '').split(',').filter(Boolean).map(i => i.trim())
+        if (rows_matches.length > 0) {
+          const previousRowsResult = await getRows({
+            variables: {
+              where: {
+                id: {
+                  in: rows_matches,
+                },
+              },
+            },
+          })
+
+          if (!previousRowsResult.data?.rows?.length)
+            return
+
+          const createdRows: Parameters<typeof setDateFromApi>['0'] = []
+          const setModelDataFromPreviousRows = async (index: number) => {
+            const d = previousRowsResult.data?.rows?.at(index)
+
+            if (!d)
+              return
+
+            const res = await createRow({
+              variables: {
+                data: {
+                  commodity: d.commodity?.id ? { connect: { id: d.commodity.id } } : null,
+                  description: d.description,
+                  unit: d.unit,
+                  unitPrice: String(d.unitPrice),
+                  quantity: (d.quantity),
+                  percentageOfWorkDone: 100,
+                  tax: String(d.tax || '0'),
+                },
+              },
+            })
+
+            if (res.errors?.length)
+              throw new Error(res.errors[0].message)
+
+            if (!res.data?.createRow)
+              throw new Error('no row created')
+
+            createdRows.push(res.data.createRow)
+
+            if (res) {
+              await timeout(200)
+              await setModelDataFromPreviousRows(index + 1)
+            }
+          }
+          try {
+            await setModelDataFromPreviousRows(0)
+            setDateFromApi(createdRows)
+            addToast({
+              title: `تعداد ${createdRows.length} ردیف جدید بر اساس اطلاعات قبل ایجاد شد`,
+              tone: 'positive',
+            })
+            onChange({
+              ...value,
+              currentIds: field.many
+                ? new Set(createdRows.map(i => i.id))
+                : new Set([createdRows.map(i => i.id)[0]]),
+            })
+          }
+          catch (error) {
+            addToast({
+              title: 'خطایی رخ داده است',
+              tone: 'negative',
+              message: String(error),
+            })
+          }
+        }
+      }
+    })()
   }, [])
 
   const headers = useMemo(() => {
@@ -290,29 +392,33 @@ export function Field({
     }
   }
 
-  async function tryCreate() {
-    if (!validateModelData())
-      return alert('مقادیر وارد شده صحیح نیست!. لطفا ورودی ها را بررسی کنید')
+  async function tryCreate(data?: RowCreateInput) {
+    if (!data) {
+      if (!validateModelData()) {
+        alert('مقادیر وارد شده صحیح نیست!. لطفا ورودی ها را بررسی کنید')
+        return false
+      }
+    }
+
+    const rowCreateInput: RowCreateInput = {
+      commodity: modelData.commodityId
+        ? {
+            connect: {
+              id: modelData.commodityId,
+            },
+          }
+        : null,
+      description: modelData.description,
+      unit: modelData.unit,
+      unitPrice: String(modelData.unitPrice),
+      quantity: Number.parseFloat(modelData.quantity),
+      percentageOfWorkDone: Number.parseInt(modelData.percentageOfWorkDone),
+      tax: String(modelData.tax || '0'),
+    }
 
     try {
       const res = await createRow({
-        variables: {
-          data: {
-            commodity: modelData.commodityId
-              ? {
-                  connect: {
-                    id: modelData.commodityId,
-                  },
-                }
-              : null,
-            description: modelData.description,
-            unit: modelData.unit,
-            unitPrice: String(modelData.unitPrice),
-            quantity: Number.parseFloat(modelData.quantity),
-            percentageOfWorkDone: Number.parseInt(modelData.percentageOfWorkDone),
-            tax: String(modelData.tax || '0'),
-          },
-        },
+        variables: { data: data || rowCreateInput },
       })
 
       if (res.errors?.length)
@@ -324,7 +430,7 @@ export function Field({
         throw new Error('no note created')
 
       if (value.kind !== 'cards-view')
-        return
+        return false
 
       if (onChange) {
         onChange({
@@ -335,13 +441,17 @@ export function Field({
 
         setDateFromApi(createdRow)
       }
+
+      setIsOpen(false)
+      return true
     }
     catch (error) {
       console.error(error)
       alert(`error! ${String(error)}`)
-    }
 
-    setIsOpen(false)
+      setIsOpen(false)
+      return false
+    }
   }
 
   async function tryUpdate() {

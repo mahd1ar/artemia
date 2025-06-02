@@ -221,6 +221,40 @@ function Drawer(props: { listMeta: ListMeta[] }) {
     setContextMenu(null)
   }
 
+  useEffect(() => {
+    return
+    const targetElement = document.querySelector('main')
+
+    if (!targetElement) {
+      console.warn('Target element not found for MutationObserver')
+      return
+    }
+
+    const observer = new MutationObserver((mutationsList, _observer) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList' || mutation.type === 'characterData') {
+          if ((targetElement.querySelector('div div')?.className.indexOf('ColumnLayout') || -1) === -1) {
+            console.warn('[2] Target element not found for MutationObserver')
+            return
+          }
+          const firstCol = targetElement.querySelector('div div div div > div') as HTMLDivElement | null
+          if (
+            firstCol
+          ) {
+            firstCol.style.direction = 'rtl'
+          }
+        }
+      }
+    })
+
+    // Start observing with specific configurations
+    observer.observe(targetElement, {
+      childList: true, // Watch for added/removed child nodes
+      characterData: true, // Watch for changes to text content
+      subtree: true, // Optional: extend observation to all descendants
+    })
+  }, [])
+
   return (
     <div>
 

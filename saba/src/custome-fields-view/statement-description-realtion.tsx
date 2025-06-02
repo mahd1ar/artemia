@@ -293,13 +293,13 @@ query CORESPONDIG_TREE($descriptionId: ID!) {
               {selectedProject.label}
             </span>
             <span style={{ display: 'inline-block' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="m5.293 8l3.854 3.854l.707-.707L6.707 8l3.147-3.146l-.707-.708z" clip-rule="evenodd" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fillRule="evenodd" d="m5.293 8l3.854 3.854l.707-.707L6.707 8l3.147-3.146l-.707-.708z" clipRule="evenodd" /></svg>
             </span>
             <span style={{ display: 'inline-block' }}>
               {selectedApproval.label}
             </span>
             <span style={{ display: 'inline-block' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="m5.293 8l3.854 3.854l.707-.707L6.707 8l3.147-3.146l-.707-.708z" clip-rule="evenodd" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fillRule="evenodd" d="m5.293 8l3.854 3.854l.707-.707L6.707 8l3.147-3.146l-.707-.708z" clipRule="evenodd" /></svg>
             </span>
             <span style={{ display: 'inline-block' }}>
               {memoDescriptionOptions.find(i => i.value === selectedDescriptoins.value)?.label}
