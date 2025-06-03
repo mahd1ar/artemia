@@ -52,6 +52,14 @@ export const Log = list<Lists.PaymentItem.TypeInfo<Session>>({
           label: 'delete resource',
           value: 'DELETE_RESOURCE',
         },
+        {
+          label: 'remove unreferenced rows',
+          value: 'REMOVE_UNREFERENCED_ROWS',
+        },
+        {
+          label: 'عمومی',
+          value: 'GENERAL',
+        },
       ],
       type: 'enum',
     }),

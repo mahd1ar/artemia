@@ -334,6 +334,10 @@ query GETROWES($where: RowWhereInput!) {
             }
           }
           try {
+            await timeout(1000)
+            if (!window.confirm('آیا میخواهید ردیف های جدید بر اساس  آخرین صورت وضعیت ایجاد شود؟'))
+              return
+
             await setModelDataFromPreviousRows(0)
             setDateFromApi(createdRows)
             addToast({

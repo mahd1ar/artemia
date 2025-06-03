@@ -182,6 +182,34 @@ function startCronJob() {
 
         // Removed console.log(data)
       }
+
+      // remove all rows that are not part of any invoice or statement
+      (async () => {
+        const rowsBatchPayload = await keystoneContext.prisma.row.deleteMany({
+          where: {
+            approvalId: {
+              equals: null,
+            },
+            invoiceId: {
+              equals: null,
+            },
+            statementId: {
+              equals: null,
+            },
+            contractId: {
+              equals: null,
+            },
+          },
+        })
+
+        await keystoneContext.prisma.log.create({
+          data: {
+            action: 'REMOVE_UNREFERENCED_ROWS',
+            message: `deleted ${rowsBatchPayload.count} rows that are not part of anything`,
+            userId: null, // TODO: add user id
+          },
+        })
+      })()
     }, // onTick
     null, // onComplete
     true, // start
