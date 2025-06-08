@@ -346,6 +346,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
       defaultValue: 'temporary',
       ui: {
         displayMode: 'segmented-control',
+        views: './src/fa-fields/select',
       },
     }),
 
@@ -359,7 +360,7 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
         // },
       },
       ui: {
-
+        views: './src/fa-fields/text',
       },
     }),
 
@@ -560,6 +561,9 @@ export const Statement = list<Lists.Statement.TypeInfo<Session>>({
 
     physicalProgress: integer({
       label: 'درصد پیشرفت فیزیکی',
+      ui: {
+        views: './src/fa-fields/integer',
+      },
     }),
 
     notes: relationship({

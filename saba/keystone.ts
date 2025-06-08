@@ -202,13 +202,15 @@ function startCronJob() {
           },
         })
 
-        await keystoneContext.prisma.log.create({
-          data: {
-            action: 'REMOVE_UNREFERENCED_ROWS',
-            message: `deleted ${rowsBatchPayload.count} rows that are not part of anything`,
-            userId: null, // TODO: add user id
-          },
-        })
+        if (rowsBatchPayload.count) {
+          await keystoneContext.prisma.log.create({
+            data: {
+              action: 'REMOVE_UNREFERENCED_ROWS',
+              message: `deleted ${rowsBatchPayload.count} rows that are not part of anything`,
+              userId: null, // TODO: add user id
+            },
+          })
+        }
       })()
     }, // onTick
     null, // onComplete

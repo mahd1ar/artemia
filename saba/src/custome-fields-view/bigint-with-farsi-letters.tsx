@@ -139,8 +139,16 @@ export function Field({
   return (
 
     <FieldContainer>
-      <FieldLabel>{field.label}</FieldLabel>
-      <FieldDescription id={`${field.path}-description`}>{field.description}</FieldDescription>
+      <FieldLabel>
+        {' '}
+        <div dir="rtl">{field.label}</div>
+        {' '}
+      </FieldLabel>
+      <FieldDescription css={{ direction: 'rtl' }} id={`${field.path}-description`}>
+
+        {field.description}
+
+      </FieldDescription>
 
       {onChange
         ? (
@@ -168,14 +176,14 @@ export function Field({
               ' 0'
             )
           : (
-              <span dir="rtl">
+              <div dir="rtl">
                 {Intl.NumberFormat('ir-fa').format(+value.value.toString())}
                 <span style={{ fontSize: 12, display: +value.value.toString() ? 'inline' : 'none' }}>
 
                   ریال
                 </span>
 
-              </span>
+              </div>
             )}
 
     </FieldContainer>

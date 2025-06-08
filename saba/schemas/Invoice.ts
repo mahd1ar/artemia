@@ -99,6 +99,9 @@ export const Invoice = list<Lists.Invoice.TypeInfo<Session>>({
     title: text({
       label: 'عنوان',
       validation: { isRequired: true },
+      ui: {
+        views: './src/fa-fields/text',
+      },
     }),
     contractor: relationship({
       label: 'پیمانکار',

@@ -20,6 +20,9 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
     }),
     description: text({
       label: 'توضیحات',
+      ui: {
+        views: './src/fa-fields/text',
+      },
     }),
     unit: select({
       label: 'واحد',
@@ -102,11 +105,23 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
         },
 
       ],
+      ui: {
+        views: './src/fa-fields/select',
+      },
     }),
-    unitPrice: bigInt({ label: 'قیمت واحد', validation: { isRequired: true } }),
+    unitPrice: bigInt({
+      label: 'قیمت واحد',
+      validation: { isRequired: true },
+      ui: {
+        views: './src/fa-fields/bigInt',
+      },
+    }),
     quantity: float({
       label: 'مقدار',
       validation: { isRequired: true },
+      ui: {
+        views: './src/fa-fields/float',
+      },
     }),
     /**
      * deprecated: delete this field in future
@@ -116,10 +131,16 @@ export const Row = list<Lists.Row.TypeInfo<Session>>({
     percentageOfWorkDone: integer({
       label: 'درصد انجام کار',
       defaultValue: 100,
+      ui: {
+        views: './src/fa-fields/integer',
+      },
     }),
     tax: bigInt({
       defaultValue: 0n,
       label: 'مالیات و عوارض',
+      ui: {
+        views: './src/fa-fields/bigInt',
+      },
     }),
     total: virtual({
       label: 'جمع کل',

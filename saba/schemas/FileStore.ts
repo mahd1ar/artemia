@@ -140,6 +140,7 @@ export const FileStore = list<Lists.FileStore.TypeInfo<Session>>({
             return 'read'
           },
         },
+        views: './src/fa-fields/select',
       },
       hooks: {
         resolveInput(args) {
